@@ -1,0 +1,53 @@
+
+// Maven publishing
+
+apply plugin: 'maven-publish'
+
+
+
+ext {
+  deployRepoName = "libs-${project.version.endsWith('-SNAPSHOT') ? 'snapshot' : 'release'}-local"
+}
+
+
+task sourceJar(type: Jar) {
+  from sourceSets.main.allSource
+}
+
+
+publishing {
+  
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+      
+      artifact sourceJar {
+        classifier "sources"
+      }
+    }
+  }
+  
+  // Repository variables provided via ~/.gradle/gradle.properties
+  
+  repositories {
+    
+    maven {
+      url "$outfoxDevopsMavenRepoRoot/$deployRepoName"
+      credentials {
+        username outfoxDevopsMavenRepoUser
+        password outfoxDevopsMavenRepoPass
+      }
+      
+    }
+    
+    maven {
+      url "$outfoxDevopsMavenRepoRoot/$deployRepoName"
+      credentials {
+        username outfoxDevopsMavenRepoUser
+        password outfoxDevopsMavenRepoPass
+      }
+      
+    }
+  }
+  
+}
