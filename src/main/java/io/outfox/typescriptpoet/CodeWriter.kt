@@ -30,7 +30,7 @@ internal class CodeWriter constructor(
    * line of a statement is indented normally and subsequent wrapped lines are double-indented. This
    * is -1 when the currently-written line isn't part of a statement.
    */
-  var statementLine = -1
+  private var statementLine = -1
 
   fun indent(levels: Int = 1) = apply {
     indentLevel += levels
@@ -135,19 +135,9 @@ internal class CodeWriter constructor(
 
         "%N" -> emit(codeBlock.args[a++] as String)
 
-        "%S" -> {
-          val string = codeBlock.args[a++] as String?
-          // Emit null as a literal null: no quotes.
-          emit(if (string != null)
-                 stringLiteralWithQuotes(string)
-               else
-                 "null")
-        }
+        "%S" -> emitString(codeBlock.args[a++] as String?)
 
-        "%T" -> {
-          var typeName = codeBlock.args[a++] as TypeName
-          emit(typeName.reference(this))
-        }
+        "%T" -> emitTypeName(codeBlock.args[a++] as TypeName)
 
         "%%" -> emit("%")
 
@@ -155,18 +145,9 @@ internal class CodeWriter constructor(
 
         "%<" -> unindent()
 
-        "%[" -> {
-          check(statementLine == -1) { "statement enter %[ followed by statement enter %[" }
-          statementLine = 0
-        }
+        "%[" -> beginStatement()
 
-        "%]" -> {
-          check(statementLine != -1) { "statement exit %] has no matching statement enter %[" }
-          if (statementLine > 0) {
-            unindent(2) // End a multi-line statement. Decrease the indentation level.
-          }
-          statementLine = -1
-        }
+        "%]" -> endStatement()
 
         "%W" -> emitWrappingSpace()
 
@@ -178,8 +159,36 @@ internal class CodeWriter constructor(
     }
   }
 
-  fun emitWrappingSpace() = apply {
+  private fun beginStatement() {
+    check(statementLine == -1) { "statement enter %[ followed by statement enter %[" }
+
+    statementLine = 0
+  }
+
+  private fun endStatement() {
+    check(statementLine != -1) { "statement exit %] has no matching statement enter %[" }
+
+    if (statementLine > 0) {
+      unindent(2) // End a multi-line statement. Decrease the indentation level.
+    }
+
+    statementLine = -1
+  }
+
+  private fun emitWrappingSpace() = apply {
     out.wrappingSpace(indentLevel + 2)
+  }
+
+  private fun emitTypeName(typeName: TypeName) {
+    emit(typeName.reference(this))
+  }
+
+  private fun emitString(string: String?) {
+    // Emit null as a literal null: no quotes.
+    emit(if (string != null)
+           stringLiteralWithQuotes(string)
+         else
+           "null")
   }
 
   private fun emitLiteral(o: Any?) {
