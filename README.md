@@ -1,8 +1,8 @@
 
-[![codebeat badge](https://codebeat.co/badges/70f7939d-185e-42d7-b7a8-ea240840a121)](https://codebeat.co/projects/github-com-outfoxx-typescriptpoet-master)
-
 TypeScriptPoet
 ==========
+
+[![codebeat badge](https://codebeat.co/badges/70f7939d-185e-42d7-b7a8-ea240840a121)](https://codebeat.co/projects/github-com-outfoxx-typescriptpoet-master)
 
 `TypeScriptPoet` is a Kotlin and Java API for generating `.ts` source files.
 
@@ -73,14 +73,14 @@ Download [the latest .jar][dl] or depend via Maven:
 <dependency>
   <groupId>io.outfoxx</groupId>
   <artifactId>typescriptpoet</artifactId>
-  <version>1.0.0</version>
+  <version>0.1.0-SNAPSHOT</version>
 </dependency>
 ```
 
 or Gradle:
 
 ```groovy
-compile 'io.outfoxx:typescriptpoet:1.0.0'
+compile 'io.outfoxx:typescriptpoet:0.1.0-SNAPSHOT'
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].

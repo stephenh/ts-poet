@@ -2,21 +2,7 @@
 repositories {
   
   mavenLocal()
-  
-  maven {
-    url "$outfoxDevopsMavenRepoRoot/libs-snapshot"
-    credentials {
-      username outfoxDevopsMavenRepoUser
-      password outfoxDevopsMavenRepoPass
-    }
-  }
-  
-  maven {
-    url "$outfoxDevopsMavenRepoRoot/libs-release"
-    credentials {
-      username outfoxDevopsMavenRepoUser
-      password outfoxDevopsMavenRepoPass
-    }
-  }
+  mavenCentral()
+  jcenter()
   
 }

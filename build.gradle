@@ -5,16 +5,6 @@ buildscript {
     gradleFilesDir = "$rootDir/gradle"
   }
   
-  repositories {
-    mavenLocal()
-    mavenCentral()
-    jcenter()
-  }
-  
-  dependencies {
-    classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.3'
-  }
-  
 }
 
 
@@ -23,6 +13,7 @@ plugins {
   id 'org.jetbrains.kotlin.jvm' version '1.2.0'
   id 'com.palantir.git-version' version '0.10.0'
   id 'net.minecrell.licenser' version '0.3'
+  id 'ru.vyarus.pom' version '1.2.0'
 }
 
 
@@ -31,9 +22,9 @@ plugins {
 // Project Properties
 //
 
-group 'io.outfox'
-version '1.0-SNAPSHOT'
-
+group 'io.outfoxx'
+version '0.1.0-SNAPSHOT'
+description 'A Kotlin/Java API for generating .ts source files.'
 
 license {
   header = file('HEADER.txt')

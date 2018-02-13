@@ -2,11 +2,13 @@
 // Maven publishing
 
 apply plugin: 'maven-publish'
-
+apply plugin: 'signing'
 
 
 ext {
-  deployRepoName = "libs-${project.version.endsWith('-SNAPSHOT') ? 'snapshot' : 'release'}-local"
+  repositoryUrl = project.version.endsWith('-SNAPSHOT') ?
+      'https://oss.sonatype.org/content/repositories/snapshots/' :
+      'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
 }
 
 
@@ -15,39 +17,125 @@ task sourceJar(type: Jar) {
 }
 
 
-publishing {
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  from javadoc.destinationDir
+}
+
+
+artifacts {
+  archives jar, sourceJar, javadocJar
+}
+
+
+signing {
+  sign configurations.archives
+}
+
+
+pom {
   
-  publications {
-    mavenJava(MavenPublication) {
-      from components.java
-      
-      artifact sourceJar {
-        classifier "sources"
-      }
+  name 'TypeScript Poet'
+  
+  url 'https://github.com/outfoxx/typescriptpoet'
+  organization {
+    name 'Outfox, Inc.'
+    url 'https://outfoxx.io'
+  }
+  issueManagement {
+    system 'GitHub'
+    url 'https://github.com/outfoxx/typescriptpoet/issues'
+  }
+  licenses {
+    license {
+      name 'Apache License 2.0'
+      url 'https://raw.githubusercontent.com/outfoxx/typescriptpoet/master/LICENSE.txt'
+      distribution 'repo'
     }
   }
-  
-  // Repository variables provided via ~/.gradle/gradle.properties
-  
-  repositories {
-    
-    maven {
-      url "$outfoxDevopsMavenRepoRoot/$deployRepoName"
-      credentials {
-        username outfoxDevopsMavenRepoUser
-        password outfoxDevopsMavenRepoPass
-      }
-      
-    }
-    
-    maven {
-      url "$outfoxDevopsMavenRepoRoot/$deployRepoName"
-      credentials {
-        username outfoxDevopsMavenRepoUser
-        password outfoxDevopsMavenRepoPass
-      }
-      
+  scm {
+    url 'https://github.com/outfoxx/typescriptpoet'
+    connection 'scm:https://github.com/outfoxx/typescriptpoet.git'
+    developerConnection 'scm:git@github.com:outfoxx/typescriptpoet.git'
+  }
+  developers {
+    developer {
+      id 'kdubb0'
+      name 'Kevin Wooten'
+      email 'kevin@outfoxx.io'
     }
   }
   
 }
+
+
+publishing {
+  
+  publications {
+    
+    mavenJava(MavenPublication) {
+      from components.java
+  
+      // create the sign pom artifact
+      pom.withXml {
+        
+        def pomFile = file("${project.buildDir}/generated-pom.xml")
+        writeTo(pomFile)
+        
+        def pomAscFile = signing.sign(pomFile).signatureFiles[0]
+        artifact(pomAscFile) {
+          classifier = null
+          extension = 'pom.asc'
+        }
+        
+      }
+      
+      artifact(sourceJar) {
+        classifier = 'sources'
+      }
+      
+      artifact(javadocJar) {
+        classifier = 'javadoc'
+      }
+      
+      // create the signed artifacts
+      project.tasks.signArchives.signatureFiles.each {
+        artifact(it) {
+          def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+          if (matcher.find()) {
+            classifier = matcher.group(1)
+          } else {
+            classifier = null
+          }
+          extension = 'jar.asc'
+        }
+      }
+    }
+    
+  }
+  
+  repositories {
+    maven {
+      url repositoryUrl
+      credentials {
+        username ossrhUsername
+        password ossrhPassword
+      }
+    }
+  }
+  
+}
+
+
+model {
+  tasks.generatePomFileForMavenJavaPublication {
+    destination = file("$buildDir/generated-pom.xml")
+  }
+  tasks.publishMavenJavaPublicationToMavenLocal {
+    dependsOn project.tasks.signArchives
+  }
+  tasks.publishMavenJavaPublicationToMavenRepository {
+    dependsOn project.tasks.signArchives
+  }
+}
+
+
