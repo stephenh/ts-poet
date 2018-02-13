@@ -16,7 +16,6 @@
 
 package io.outfoxx.typescriptpoet.test
 
-import io.outfox.typescriptpoet.*
 import io.outfoxx.typescriptpoet.*
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.hasItems

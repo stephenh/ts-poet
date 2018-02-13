@@ -16,7 +16,6 @@
 
 package io.outfoxx.typescriptpoet.test
 
-import io.outfox.typescriptpoet.*
 import io.outfoxx.typescriptpoet.*
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
@@ -27,46 +26,6 @@ import java.io.StringWriter
 
 @DisplayName("ClassSpec Tests")
 class ClassSpecTests {
-
-  @Test
-  fun testGen() {
-    val observableTypeName = TypeName.importedType("@rxjs/Observable")
-    val testClass = ClassSpec.builder("Greeter")
-       .addProperty("name", TypeName.STRING, false, Modifier.PRIVATE)
-       .constructor(
-          FunctionSpec.constructorBuilder()
-             .addParameter("name", TypeName.STRING, false, Modifier.PRIVATE)
-             .build()
-       )
-       .addFunction(
-          FunctionSpec.builder("greet")
-             .returns(TypeName.parameterizedType(observableTypeName, TypeName.STRING))
-             .addCode("return %T.%N(`Hello \$name`)", observableTypeName, SymbolSpec.from("+rxjs/add/observable/from#Observable"))
-             .build()
-       )
-       .build()
-
-    val file = FileSpec.builder("Greeter")
-       .addClass(testClass)
-       .build()
-
-    val out = StringWriter()
-    file.writeTo(out)
-
-    assertThat(
-       out.toString(),
-       equalTo(
-          """
-            /**
-             * this is a comment
-             */
-            class Test {
-            }
-
-          """.trimIndent()
-       )
-    )
-  }
 
   @Test
   @DisplayName("Generates JavaDoc at before class definition")

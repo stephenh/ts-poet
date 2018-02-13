@@ -16,9 +16,9 @@
 
 package io.outfoxx.typescriptpoet
 
-import io.outfox.typescriptpoet.TypeName.TypeVariable.Bound
-import io.outfox.typescriptpoet.TypeName.TypeVariable.Bound.Combiner
-import io.outfox.typescriptpoet.TypeName.TypeVariable.Bound.Combiner.UNION
+import io.outfoxx.typescriptpoet.TypeName.TypeVariable.Bound
+import io.outfoxx.typescriptpoet.TypeName.TypeVariable.Bound.Combiner
+import io.outfoxx.typescriptpoet.TypeName.TypeVariable.Bound.Combiner.UNION
 
 
 /**

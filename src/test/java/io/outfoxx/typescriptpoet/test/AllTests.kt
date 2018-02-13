@@ -22,6 +22,6 @@ import org.junit.runner.RunWith
 
 
 @RunWith(JUnitPlatform::class)
-@SelectPackages("io.outfox.typescriptpoet.test")
+@SelectPackages("io.outfoxx.typescriptpoet.test")
 
 class AllTestSuite
