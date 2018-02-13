@@ -1,3 +1,6 @@
+
+[![codebeat badge](https://codebeat.co/badges/70f7939d-185e-42d7-b7a8-ea240840a121)](https://codebeat.co/projects/github-com-outfoxx-typescriptpoet-master)
+
 TypeScriptPoet
 ==========
 
@@ -7,48 +10,55 @@ Source file generation can be useful when doing things such as annotation proces
 with metadata files (e.g., database schemas, protocol formats). By generating code, you eliminate
 the need to write boilerplate while also keeping a single source of truth for the metadata.
 
-[![codebeat badge](https://codebeat.co/badges/70f7939d-185e-42d7-b7a8-ea240840a121)](https://codebeat.co/projects/github-com-outfoxx-typescriptpoet-master)
-
 
 ### Example
 
 Here's a `HelloWorld` file:
 
-```kotlin
-class Greeter(val name: String) {
-  fun greet() {
-    println("Hello, $name")
-  }
-}
+```typescript
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/from';
 
-fun main(vararg args: String) {
-  Greeter(args[0]).greet()
+
+class Greeter {
+
+  private name: string;
+
+  constructor(private name: string) {
+  }
+
+  greet(): Observable<string> {
+    return Observable.from(`Hello $name`)}
+
 }
 ```
 
 And this is the code to generate it with TypeScriptPoet:
 
 ```kotlin
-val greeterClass = ClassName("", "Greeter")
-val file = FileSpec.builder("", "HelloWorld")
-    .addType(TypeSpec.classBuilder("Greeter")
-        .primaryConstructor(FunSpec.constructorBuilder()
-            .addParameter("name", String::class)
-            .build())
-        .addProperty(PropertySpec.builder("name", String::class)
-            .initializer("name")
-            .build())
-        .addFunction(FunSpec.builder("greet")
-            .addStatement("println(%S)", "Hello, \$name")
-            .build())
-        .build())
-    .addFunction(FunSpec.builder("main")
-        .addParameter("args", String::class, VARARG)
-        .addStatement("%T(args[0]).greet()", greeterClass)
-        .build())
-    .build()
+val observableTypeName = TypeName.importedType("@rxjs/Observable")
 
-file.writeTo(System.out)
+val testClass = ClassSpec.builder("Greeter")
+   .addProperty("name", TypeName.STRING, false, Modifier.PRIVATE)
+   .constructor(
+      FunctionSpec.constructorBuilder()
+         .addParameter("name", TypeName.STRING, false, Modifier.PRIVATE)
+         .build()
+   )
+   .addFunction(
+      FunctionSpec.builder("greet")
+         .returns(TypeName.parameterizedType(observableTypeName, TypeName.STRING))
+         .addCode("return %T.%N(`Hello \$name`)", observableTypeName, SymbolSpec.from("+rxjs/add/observable/from#Observable"))
+         .build()
+   )
+   .build()
+
+val file = FileSpec.builder("Greeter")
+   .addClass(testClass)
+   .build()
+
+val out = StringWriter()
+file.writeTo(out)
 ```
 
 The [KDoc][kdoc] catalogs the complete TypeScriptPoet API, which is inspired by [JavaPoet][javapoet].
