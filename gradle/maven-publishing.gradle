@@ -72,7 +72,7 @@ publishing {
   
   publications {
     
-    mavenJava(MavenPublication) {
+    mavenJavaSigned(MavenPublication) {
       from components.java
   
       // create the sign pom artifact
@@ -110,15 +110,28 @@ publishing {
         }
       }
     }
+  
+    mavenJava(MavenPublication) {
+      from components.java
     
+      artifact(sourceJar) {
+        classifier = 'sources'
+      }
+    
+      artifact(javadocJar) {
+        classifier = 'javadoc'
+      }
+      
+    }
+  
   }
   
   repositories {
     maven {
       url repositoryUrl
       credentials {
-        username project.findProject('ossrhUsername') ?: ''
-        password project.findProject('ossrhPassword') ?: ''
+        username project.findProperty('ossrhUsername') ?: ''
+        password project.findProperty('ossrhPassword') ?: ''
       }
     }
   }
@@ -130,12 +143,10 @@ model {
   tasks.generatePomFileForMavenJavaPublication {
     destination = file("$buildDir/generated-pom.xml")
   }
-  tasks.publishMavenJavaPublicationToMavenLocal {
+  tasks.publishMavenJavaSignedPublicationToMavenLocal {
     dependsOn project.tasks.signArchives
   }
-  tasks.publishMavenJavaPublicationToMavenRepository {
+  tasks.publishMavenJavaSignedPublicationToMavenRepository {
     dependsOn project.tasks.signArchives
   }
 }
-
-
