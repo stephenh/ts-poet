@@ -63,7 +63,7 @@ jobs:
 
       - run:
           name: Build, Test & Publish
-          command: ./gradlew publish
+          command: ./gradlew -PossrhUsername=$OSSRH_USER -PossrhPassword=$OSSRH_PASS publish
 
 workflows:
   build:
