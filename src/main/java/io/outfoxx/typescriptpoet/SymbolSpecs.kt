@@ -29,9 +29,9 @@ sealed class SymbolSpec(
   companion object {
 
     private val fileNamePattern = """(?:[a-zA-Z0-9._\-]+)""".toRegex()
-    private val modulePattern = """@?(?:(?:!${fileNamePattern})|(?:${fileNamePattern}(?:/${fileNamePattern})*))""".toRegex()
+    private val modulePattern = """@?(?:(?:!$fileNamePattern)|(?:$fileNamePattern(?:/$fileNamePattern)*))""".toRegex()
     private val identPattern = """(?:(?:[a-zA-Z][_a-zA-Z0-9]*)|(?:[_a-zA-Z][_a-zA-Z0-9]+))""".toRegex()
-    private val importPattern = """(${identPattern})?([*@+])(${modulePattern})(?:#(${identPattern}))?""".toRegex()
+    private val importPattern = """($identPattern)?([*@+])($modulePattern)(?:#($identPattern))?""".toRegex()
 
     /**
      * Parses a symbol reference pattern to create a symbol. The pattern
@@ -39,23 +39,29 @@ sealed class SymbolSpec(
      * import variation. If the spec to parse does not follow the proper format
      * an implicit symbol is created from the unparsed spec.
      *
-     * Pattern: <symbol_name>? <import_type> <module_path> (#<augmented_symbol_name>)?
+     * Pattern: `<symbol_name>? <import_type> <module_path> (#<augmented_symbol_name>)?`
      *
-     * * symbol_name =
+     * * symbol_name = `[a-zA-Z0-9._]+`
+     *
      *        Any legal compound JS/TS symbol (e.g. symbol._member.member). If no symbol name is
      *        specified then the last component of the module path is used as the symbol name;
      *        allows easy use with libraries that follow normal conventions.
      *
-     * * import_type = @ | * | +
-     *        @ = Import named symbol from module (e.g. import { <symbol_name> } from '<module_name>')
-     *        * = Import all symbols from module (e.g. import * from '<module_name>')
-     *        * = Symbol is declared implicitly via import of the module (e.g. import '<module_name>')
+     * * import_type = `@ | * | +`
      *
-     * module_path = !<filename> | <filename>(/<filename)*
+     *        `@` = Import named symbol from module (e.g. `import { <symbol_name> } from '<module_name>'`)
+     *
+     *        `*` = Import all symbols from module (e.g. `import * from '<module_name>'`)
+     *
+     *        `+` = Symbol is declared implicitly via import of the module (e.g. `import '<module_name>'`)
+     *
+     * * module_path = `!<filename> | <filename>(/<filename)*`
+     *
      *        Path name specifying the module. If the module path begins with a `!` then it is considered
      *        to be a file being generated. This ensures the paths are output as relative imports.
      *
-     * augmented_symbol_name =
+     * * augmented_symbol_name = `[a-zA-Z0-9_]+`
+     *
      *        Any valid symbol name that represents the symbol that is being augmented. For example,
      *        the import `rxjs/add/observable/from` attaches the `from` method to the `Observable` class.
      *        To import it correctly the spec should be `+rxjs/add/observable/from#Observable`. Adding this
@@ -93,21 +99,54 @@ sealed class SymbolSpec(
       return implicit(spec)
     }
 
+    /**
+     * Creates an import of all the modules exported symbols as a single
+     * local named symbol
+     *
+     * e.g. `import * as Engine from 'templates';`
+     *
+     * @param localName The local name of the imported symbols
+     * @param from The module to import the symbols from
+     */
     @JvmStatic
     fun importsAll(localName: String, from: String): SymbolSpec {
       return ImportsAll(localName, from)
     }
 
+    /**
+     * Creates an import of a single named symbol from the module's exported
+     * symbols.
+     *
+     * e.g. `import { Engine } from 'templates';`
+     *
+     * @param exportedName The symbol that is both exported and imported
+     * @param from The module the symbol is exported from
+     */
     @JvmStatic
     fun importsName(exportedName: String, from: String): SymbolSpec {
       return ImportsName(exportedName, from)
     }
 
+    /**
+     * Creates a symbol that is brought in by a whole module import
+     * that "augments" an existing symbol.
+     *
+     * e.g. `import 'rxjs/add/operator/flatMap'`
+     *
+     * @param symbolName The augmented symbol to be imported
+     * @param from The entire import that does the augmentation
+     * @param target The symbol that is augmented
+     */
     @JvmStatic
     fun augmented(symbolName: String, from: String, target: String): SymbolSpec {
       return Augmented(symbolName, from, target)
     }
 
+    /**
+     * An implied symbol that does no tracking of imports
+     *
+     * @param name The implicit symbol name
+     */
     @JvmStatic
     fun implicit(name: String): SymbolSpec {
       return Implicit(name)
