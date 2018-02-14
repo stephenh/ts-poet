@@ -89,7 +89,6 @@ workflows:
               ignore:
                 - master
                 - develop
-                - gh-pages
       - build-deploy:
           filters:
             branches:

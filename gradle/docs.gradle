@@ -24,9 +24,12 @@ gitPublish {
   
   }
   
-  commitMessage = 'Publishing documentation'
+  preserve {
+    include '**'
+  }
+  
+  commitMessage = 'Publishing documentation [ci skip]'
 }
 
 
 gitPublishPush.dependsOn dokka
-
