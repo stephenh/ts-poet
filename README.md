@@ -2,6 +2,9 @@
 TypeScriptPoet
 ==========
 
+[![CircleCI branch](https://img.shields.io/circleci/project/github/outfoxx/typescriptpoet/develop.svg)]()
+[![Maven Central](https://img.shields.io/maven-central/v/io.outfoxx/typescriptpoet.svg)]()
+[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/io.outfoxx/typescriptpoet.svg)]()
 [![codebeat badge](https://codebeat.co/badges/70f7939d-185e-42d7-b7a8-ea240840a121)](https://codebeat.co/projects/github-com-outfoxx-typescriptpoet-master)
 
 `TypeScriptPoet` is a Kotlin and Java API for generating `.ts` source files.
