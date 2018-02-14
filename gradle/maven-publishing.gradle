@@ -22,11 +22,6 @@ task javadocJar(type: Jar, dependsOn: dokka) {
 }
 
 
-artifacts {
-  archives jar, sourceJar, javadocJar
-}
-
-
 signing {
   sign configurations.archives
 }
@@ -88,13 +83,13 @@ publishing {
         }
         
       }
-      
-      artifact(sourceJar) {
-        classifier = 'sources'
+  
+      artifact sourceJar {
+        classifier "sources"
       }
-      
-      artifact(javadocJar) {
-        classifier = 'javadoc'
+  
+      artifact javadocJar {
+        classifier 'javadoc'
       }
       
       // create the signed artifacts
@@ -113,13 +108,13 @@ publishing {
   
     mavenJava(MavenPublication) {
       from components.java
-    
-      artifact(sourceJar) {
-        classifier = 'sources'
+  
+      artifact sourceJar {
+        classifier "sources"
       }
     
-      artifact(javadocJar) {
-        classifier = 'javadoc'
+      artifact javadocJar {
+        classifier 'javadoc'
       }
       
     }
