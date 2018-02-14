@@ -5,6 +5,14 @@ buildscript {
     gradleFilesDir = "$rootDir/gradle"
   }
   
+  repositories {
+    jcenter()
+  }
+  
+  dependencies {
+    classpath 'org.jetbrains.dokka:dokka-gradle-plugin:0.9.13'
+  }
+  
 }
 
 
@@ -87,5 +95,6 @@ dependencies {
 apply from: "$gradleFilesDir/compile-java.gradle"
 apply from: "$gradleFilesDir/compile-kotlin.gradle"
 apply from: "$gradleFilesDir/code-coverage.gradle"
+apply from: "$gradleFilesDir/docs.gradle"
 apply from: "$gradleFilesDir/maven-publishing.gradle"
 apply from: "$gradleFilesDir/idea.gradle"

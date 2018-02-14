@@ -17,8 +17,8 @@ task sourceJar(type: Jar) {
 }
 
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-  from javadoc.destinationDir
+task javadocJar(type: Jar, dependsOn: dokka) {
+  from dokka.outputDirectory
 }
 
 
