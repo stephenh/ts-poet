@@ -117,8 +117,8 @@ publishing {
     maven {
       url repositoryUrl
       credentials {
-        username ossrhUsername
-        password ossrhPassword
+        username project.findProject('ossrhUsername') ?: ''
+        password project.findProject('ossrhPassword') ?: ''
       }
     }
   }
