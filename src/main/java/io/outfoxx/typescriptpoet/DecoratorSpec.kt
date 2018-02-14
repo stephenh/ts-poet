@@ -17,6 +17,7 @@
 package io.outfoxx.typescriptpoet
 
 
+/** A generated function or class decorator declaration. */
 class DecoratorSpec
 internal constructor(
    builder: Builder

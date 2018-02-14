@@ -17,7 +17,11 @@
 package io.outfoxx.typescriptpoet
 
 
-class FunctionSpec private constructor(builder: Builder) {
+/** A generated function declaration. */
+class FunctionSpec
+private constructor(
+   builder: Builder
+) {
   val name = builder.name
   val javaDoc = builder.javaDoc.build()
   val decorators = builder.decorators.toImmutableList()

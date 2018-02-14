@@ -17,6 +17,7 @@
 package io.outfoxx.typescriptpoet
 
 
+/** A generated `enum` declaration. */
 class EnumSpec
 private constructor(
    builder: Builder

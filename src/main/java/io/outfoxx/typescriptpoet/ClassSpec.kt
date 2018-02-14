@@ -17,6 +17,7 @@
 package io.outfoxx.typescriptpoet
 
 
+/** A generated `class` declaration. */
 class ClassSpec
 private constructor(
    builder: Builder

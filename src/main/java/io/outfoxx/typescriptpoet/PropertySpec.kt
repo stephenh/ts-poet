@@ -17,6 +17,7 @@
 package io.outfoxx.typescriptpoet
 
 
+/** A generated property declaration. */
 class PropertySpec
 private constructor(
    builder: Builder

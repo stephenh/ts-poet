@@ -17,6 +17,7 @@
 package io.outfoxx.typescriptpoet
 
 
+/** Available declaration modifiers. */
 enum class Modifier {
   EXPORT,
   PUBLIC,

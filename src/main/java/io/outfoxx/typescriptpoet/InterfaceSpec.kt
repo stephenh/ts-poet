@@ -17,6 +17,7 @@
 package io.outfoxx.typescriptpoet
 
 
+/** A generated `interface` declaration. */
 class InterfaceSpec
 private constructor(
    builder: Builder
