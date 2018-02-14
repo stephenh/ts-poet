@@ -109,5 +109,5 @@ License
 
  [dl]: https://search.maven.org/remote_content?g=io.outfoxx&a=typescriptpoet&v=LATEST
  [snap]: https://oss.sonatype.org/content/repositories/snapshots/io/outfoxx/typescriptpoet/
- [kdoc]: https://outfoxx.github.io/typescriptpoet/0.x/typescriptpoet/io.outfoxx.typescriptpoet/
+ [kdoc]: https://outfoxx.github.io/typescriptpoet/0.1.0-SNAPSHOT/typescriptpoet/io.outfoxx.typescriptpoet/
  [javapoet]: https://github.com/square/javapoet/
