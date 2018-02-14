@@ -22,6 +22,7 @@ plugins {
   id 'com.palantir.git-version' version '0.10.0'
   id 'net.minecrell.licenser' version '0.3'
   id 'ru.vyarus.pom' version '1.2.0'
+  id 'org.ajoberstar.git-publish' version '0.3.2'
 }
 
 

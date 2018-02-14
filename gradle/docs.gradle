@@ -8,3 +8,25 @@ dokka {
   outputDirectory "$buildDir/javadoc"
 
 }
+
+
+gitPublish {
+
+  repoUri = 'git@github.com:outfoxx/typescriptpoet.git'
+  
+  branch = 'gh-pages'
+  
+  contents {
+  
+    from(dokka) {
+      into "$project.version"
+    }
+  
+  }
+  
+  commitMessage = 'Publishing documentation'
+}
+
+
+gitPublishPush.dependsOn dokka
+

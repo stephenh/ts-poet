@@ -72,6 +72,10 @@ jobs:
           name: Publish
           command: ./gradlew -PossrhUsername=$OSSRH_USER -PossrhPassword=$OSSRH_PASS publishMavenJavaPublicationToMavenRepository
 
+      - run:
+          name: Update Documentation
+          command: ./gradlew gitPublishPush
+
       - store_test_results:
           path: build/test-results
 
@@ -85,6 +89,7 @@ workflows:
               ignore:
                 - master
                 - develop
+                - gh-pages
       - build-deploy:
           filters:
             branches:
