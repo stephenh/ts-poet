@@ -66,6 +66,7 @@ jobs:
           command: ./gradlew -PossrhUsername=$OSSRH_USER -PossrhPassword=$OSSRH_PASS publish
 
 workflows:
+  version: 2
   build:
     jobs:
       - deploy:
