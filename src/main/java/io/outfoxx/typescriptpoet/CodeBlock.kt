@@ -348,8 +348,11 @@ private constructor(
     private fun argToString(o: Any?) = o?.toString()
 
     private fun argToType(o: Any?) = when (o) {
-      is TypeName -> o
-      else -> throw IllegalArgumentException("expected type but was " + o)
+      is TypeName -> {
+        o.reference(this)
+        o
+      }
+      else -> throw IllegalArgumentException("expected type but was $o")
     }
 
     /**
