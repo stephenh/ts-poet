@@ -45,9 +45,7 @@ private constructor(
     codeWriter.emitCode(" %L", name)
     codeWriter.emitTypeVariables(typeVariables)
 
-    val superClass = if (superClass != null) CodeBlock.of("extends %T",
-                                                                                              superClass)
-    else CodeBlock.empty()
+    val superClass = if (superClass != null) CodeBlock.of("extends %T", superClass) else CodeBlock.empty()
     val mixins = mixins.map { CodeBlock.of("%T", it) }.let {
       if (it.isNotEmpty()) it.joinToCode(prefix = "implements ") else CodeBlock.empty()
     }
