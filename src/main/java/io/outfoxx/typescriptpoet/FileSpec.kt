@@ -105,12 +105,16 @@ private constructor(
     }
 
     val imports = codeWriter.requiredImports()
-    val augmentImports = codeWriter.requiredImports()
+    val augmentImports = imports
        .filterIsInstance<SymbolSpec.Augmented>()
        .groupBy { it.augmented }
+    val sideEffectImports = imports
+       .filterIsInstance<SymbolSpec.SideEffect>()
+       .groupBy { it.source }
 
     if (imports.isNotEmpty()) {
       imports
+         .filter { it !is SymbolSpec.Augmented || it !is SymbolSpec.SideEffect }
          .groupBy { FileModules.importPath(path, it.source) }
          .toSortedMap()
          .forEach { (sourceImportPath, imports) ->
@@ -148,6 +152,10 @@ private constructor(
               }
 
          }
+
+      sideEffectImports.forEach {
+        codeWriter.emitCode("%[import %S;\n%]", it.key)
+      }
 
       codeWriter.emit("\n")
     }

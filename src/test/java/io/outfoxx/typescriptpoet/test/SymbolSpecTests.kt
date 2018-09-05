@@ -120,6 +120,18 @@ class SymbolSpecTests {
   }
 
   @Test
+  @DisplayName("Parsing side effect import: exported symbol made available as side effect of import")
+  fun testParsingSymbolViaSideEffect() {
+
+    val parsed = SymbolSpec.from("describe+mocha")
+    assertThat(parsed, instanceOf(SymbolSpec.SideEffect::class.java))
+
+    val sym = parsed as SymbolSpec.SideEffect
+    assertThat(sym.value, equalTo("describe"))
+    assertThat(sym.source, equalTo("mocha"))
+  }
+
+  @Test
   @DisplayName("Parsing augmentation import: exported symbol implied by module path")
   fun testParsingImplicitAugmentationWithAssociatedSymbol() {
 

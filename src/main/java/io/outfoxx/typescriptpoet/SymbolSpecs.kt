@@ -88,10 +88,7 @@ sealed class SymbolSpec(
         return when (type) {
           "*" -> importsAll(symbolName, modulePath)
           "@" -> importsName(symbolName, modulePath)
-          "+" -> {
-            require(targetName != null) { "Augmenting imports require the name of the augmented symbol" }
-            augmented(symbolName, modulePath, targetName!!)
-          }
+          "+" -> if (targetName == null) sideEffect(symbolName, modulePath) else augmented(symbolName, modulePath, targetName)
           else -> throw IllegalArgumentException("Invalid type character")
         }
       }
@@ -140,6 +137,20 @@ sealed class SymbolSpec(
     @JvmStatic
     fun augmented(symbolName: String, from: String, target: String): SymbolSpec {
       return Augmented(symbolName, from, target)
+    }
+
+    /**
+     * Creates a symbol that is brought in as a side effect of
+     * an import.
+     *
+     * e.g. `import 'mocha'`
+     *
+     * @param symbolName The symbol to be imported
+     * @param from The entire import that does the augmentation
+     */
+    @JvmStatic
+    fun sideEffect(symbolName: String, from: String): SymbolSpec {
+      return SideEffect(symbolName, from)
     }
 
     /**
@@ -219,6 +230,18 @@ sealed class SymbolSpec(
      override val value: String,
      override val source: String,
      val augmented: String
+  ) : Imported(value, source)
+
+  /**
+   * A symbol that is brought in as a side effect of an
+   * import.
+   *
+   * e.g. `import 'mocha'`
+   */
+  data class SideEffect
+  internal constructor(
+     override val value: String,
+     override val source: String
   ) : Imported(value, source)
 
 }
