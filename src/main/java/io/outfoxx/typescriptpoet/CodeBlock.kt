@@ -208,7 +208,7 @@ private constructor(
           }
           val formatChar = matchResult.groupValues[TYPE_NAME].first()
           addArgument(format, formatChar, arguments[argumentName])
-          formatParts += "%" + formatChar
+          formatParts += "%$formatChar"
           p += matchResult.range.endInclusive + 1
         }
         else {
@@ -267,7 +267,7 @@ private constructor(
           require(indexStart == indexEnd) {
             "%%, %>, %<, %[, %], and %W may not have an index"
           }
-          formatParts += "%" + c
+          formatParts += "%$c"
           continue
         }
 
@@ -294,7 +294,7 @@ private constructor(
 
         addArgument(format, c, args[index])
 
-        formatParts += "%" + c
+        formatParts += "%$c"
       }
 
       if (hasRelative) {
@@ -333,7 +333,7 @@ private constructor(
       is PropertySpec -> o.name
       is FunctionSpec -> o.name
       is ClassSpec -> o.name
-      else -> throw IllegalArgumentException("expected name but was " + o)
+      else -> throw IllegalArgumentException("expected name but was $o")
     }
 
     private fun argToLiteral(o: Any?) = when (o) {
@@ -360,7 +360,7 @@ private constructor(
      *     Shouldn't contain braces or newline characters.
      */
     fun beginControlFlow(controlFlow: String, vararg args: Any?) = apply {
-      add(controlFlow + " {\n", *args)
+      add("$controlFlow {\n", *args)
       indent()
     }
 
@@ -447,6 +447,6 @@ private constructor(
 fun Collection<CodeBlock>.joinToCode(separator: CharSequence = ", ", prefix: CharSequence = "",
                                                                suffix: CharSequence = ""): CodeBlock {
   val blocks = toTypedArray()
-  val placeholders = Array(blocks.size, { "%L" })
+  val placeholders = Array(blocks.size) { "%L" }
   return CodeBlock.of(placeholders.joinToString(separator, prefix, suffix), *blocks)
 }
