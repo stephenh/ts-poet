@@ -160,7 +160,7 @@ private constructor(
       codeWriter.emit("\n")
     }
 
-    members.filterNot { it is ModuleSpec }.forEach { member ->
+    members.filterNot { it is ModuleSpec || it is CodeBlock }.forEach { member ->
       codeWriter.emit("\n")
       when (member) {
         is ModuleSpec -> member.emit(codeWriter)
@@ -172,6 +172,7 @@ private constructor(
         is PropertySpec -> member.emit(codeWriter, setOf(
            Modifier.PUBLIC), asStatement = true)
         is TypeAliasSpec -> member.emit(codeWriter)
+        is CodeBlock -> codeWriter.emitCode(member)
         else -> throw AssertionError()
       }
     }
@@ -181,6 +182,10 @@ private constructor(
       member.emit(codeWriter)
     }
 
+    members.filterIsInstance<CodeBlock>().forEach { member ->
+      codeWriter.emit("\n")
+      codeWriter.emitCode(member)
+    }
 
   }
 
@@ -275,6 +280,10 @@ private constructor(
 
     fun addTypeAlias(typeAliasSpec: TypeAliasSpec) = apply {
       members += typeAliasSpec
+    }
+
+    fun addCode(codeBlock: CodeBlock) = apply {
+      members += codeBlock
     }
 
     fun indent(indent: String) = apply {
