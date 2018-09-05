@@ -100,10 +100,7 @@ private constructor(
          Modifier.READONLY,
          Modifier.GET,
          Modifier.SET,
-         Modifier.STATIC,
-         Modifier.CONST,
-         Modifier.LET,
-         Modifier.VAR
+         Modifier.STATIC
       )
     }
 
