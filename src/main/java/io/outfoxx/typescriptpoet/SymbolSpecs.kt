@@ -30,7 +30,7 @@ sealed class SymbolSpec(
 
     private val fileNamePattern = """(?:[a-zA-Z0-9._\-]+)""".toRegex()
     private val modulePattern = """@?(?:(?:!$fileNamePattern)|(?:$fileNamePattern(?:/$fileNamePattern)*))""".toRegex()
-    private val identPattern = """(?:(?:[a-zA-Z][_a-zA-Z0-9]*)|(?:[_a-zA-Z][_a-zA-Z0-9]+))""".toRegex()
+    private val identPattern = """(?:(?:[a-zA-Z][_a-zA-Z0-9.]*)|(?:[_a-zA-Z][_a-zA-Z0-9.]+))""".toRegex()
     private val importPattern = """($identPattern)?([*@+])($modulePattern)(?:#($identPattern))?""".toRegex()
 
     /**
