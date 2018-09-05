@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ead411bc-6ee8-41e3-ae61-a43a8a5379cb" name="Default" comment="" />
+    <list default="true" id="ead411bc-6ee8-41e3-ae61-a43a8a5379cb" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/typescriptpoet.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/typescriptpoet.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/typescriptpoet_main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/typescriptpoet_main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/typescriptpoet_test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/typescriptpoet_test.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/CodeBlock.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/CodeBlock.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/DecoratorSpec.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/DecoratorSpec.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/FileSpec.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/FileSpec.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/ModuleSpec.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/ModuleSpec.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/SymbolSpecs.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/SymbolSpecs.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/io/outfoxx/typescriptpoet/test/SymbolSpecTests.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/io/outfoxx/typescriptpoet/test/SymbolSpecTests.kt" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,12 +49,6 @@
                 <item name="typescriptpoet" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
               </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="typescriptpoet" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="other" type="c8890929:TasksNode$1" />
-              </path>
             </expand>
             <select />
           </tree_state>
@@ -51,101 +56,53 @@
       </state>
     </system>
   </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="337483452">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="6" />
+          <entry key="project.open.time.13" value="1" />
+          <entry key="project.open.time.2" value="4" />
+          <entry key="project.open.time.3" value="1" />
+          <entry key="project.open.time.50" value="1" />
+          <entry key="project.opened" value="7" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="class" value="1" />
+          <entry key="gradle" value="3" />
+          <entry key="kotlin_builtins" value="1" />
+          <entry key="kt" value="13" />
+          <entry key="txt" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="CLASS" value="1" />
+          <entry key="Groovy" value="3" />
+          <entry key="Kotlin" value="13" />
+          <entry key="PLAIN_TEXT" value="1" />
+          <entry key="kotlin_builtins" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="gradle" value="2" />
+          <entry key="kt" value="1309" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Groovy" value="2" />
+          <entry key="Kotlin" value="1309" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.js.language.service.starts" />
+    </session>
+  </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/build.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="801">
-              <caret line="72" column="2" lean-forward="false" selection-start-line="72" selection-start-column="2" selection-end-line="72" selection-end-column="2" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AllTests.kt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/io/outfox/typescriptpoet/test/AllTests.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-              <folding>
-                <element signature="e#39#168#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="100" column="8" lean-forward="false" selection-start-line="100" selection-start-column="8" selection-end-line="100" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="code-coverage.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gradle/code-coverage.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="repositories.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gradle/repositories.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="20" column="2" lean-forward="false" selection-start-line="20" selection-start-column="2" selection-end-line="20" selection-end-column="2" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="maven-publishing.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gradle/maven-publishing.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="idea.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gradle/idea.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="compile-kotlin.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gradle/compile-kotlin.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="compile-java.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gradle/compile-java.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -158,37 +115,43 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>%[</find>
-      <find>.basicType</find>
-      <find>TypeName.basicType</find>
-      <find>TypeName.</find>
-      <find>:</find>
-      <find>typeName</find>
-      <find>.ts</find>
-      <find>READON</find>
-      <find>=</find>
-      <find>-&gt;</find>
-      <find>typealias</find>
-      <find>enum</find>
-      <find>hasNoBod</find>
-      <find>typeSpecs</find>
-      <find>annot</find>
       <find>kotlin</find>
-      <find>Kotlin</find>
-      <find>Kdoc</find>
-      <find>ClassSpec</find>
-      <find>class</find>
+      <find>nullable</find>
+      <find>packageName</find>
+      <find>package</find>
+      <find>delegated</find>
+      <find>Constructor</find>
+      <find>enum class</find>
+      <find>constructor(</find>
+      <find>bound</find>
+      <find>CodeBlock</find>
+      <find>isNested</find>
+      <find>emit</find>
+      <find>importedTypes</find>
+      <find>emitDefault</find>
+      <find>emit(</find>
+      <find>pushMod</find>
+      <find>NO_MODULE</find>
+      <find>.kt</find>
+      <find>topLevel</find>
+      <find>DeclaredTypeName.</find>
+      <find>testIface</find>
+      <find>body</find>
+      <find>typescript</find>
       <find>extends</find>
-      <find>addProperty</find>
-      <find>indexers</find>
-      <find>addJavaDoc</find>
-      <find>JavaDoc</find>
-      <find>testClass</find>
-      <find>split</find>
-      <find>toBuilder</find>
-      <find>assertThrows</find>
-      <find>out</find>
+      <find>%T</find>
+      <find>CodeBlock.of(format, args)</find>
+      <find>import</find>
+      <find>Augment</find>
+      <find>addState</find>
+      <find>Parsing side effect import</find>
     </findStrings>
+    <replaceStrings>
+      <replace>io.outfoxx.swiftpoet</replace>
+    </replaceStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$/src/main/java/io/outfoxx/switfpoet</dir>
+    </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -196,12 +159,12 @@
   <component name="GradleLocalSettings">
     <option name="myGradleHomes">
       <map>
-        <entry key="$PROJECT_DIR$" value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1" />
+        <entry key="$PROJECT_DIR$" value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1" />
       </map>
     </option>
     <option name="myGradleVersions">
       <map>
-        <entry key="$PROJECT_DIR$" value="4.1" />
+        <entry key="$PROJECT_DIR$" value="4.8.1" />
       </map>
     </option>
     <option name="availableProjects">
@@ -235,38 +198,9 @@
                 <option name="name" value="publishMavenJavaPublicationToMavenRepository" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Displays the components produced by root project 'typescriptpoet'. [incubating]" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="components" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Assembles and tests this project and all projects that depend on it." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="buildDependents" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Displays the sub-projects of root project 'typescriptpoet'." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="projects" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="sourceJar" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Assembles main classes." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="classes" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Displays the dependent components of components in root project 'typescriptpoet'. [incubating]" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="dependentComponents" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Displays all buildscript dependencies declared in root project 'typescriptpoet'." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="buildEnvironment" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Generates Gradle wrapper files." />
@@ -279,26 +213,6 @@
                 <option name="name" value="jacocoTestCoverageVerification" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Publishes Maven publication 'mavenJava' to Maven repository 'maven2'." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="publishMavenJavaPublicationToMaven2Repository" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Assembles test classes." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="testClasses" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Generates Javadoc API documentation for the main source code." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="javadoc" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Generates the Maven POM file for publication 'mavenJava'." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="generatePomFileForMavenJavaPublication" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Assembles a jar archive containing the main classes." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="jar" />
@@ -307,6 +221,11 @@
                 <option name="description" value="Displays the configuration model of root project 'typescriptpoet'. [incubating]" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="model" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Generates the Gradle metadata file for publication 'mavenJava'." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="generateMetadataFileForMavenJavaPublication" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Processes main resources." />
@@ -324,9 +243,9 @@
                 <option name="name" value="init" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Publishes Maven publication 'mavenJava' to the local Maven repository." />
+                <option name="description" value="Generates dokka documentation for Kotlin" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="publishMavenJavaPublicationToMavenLocal" />
+                <option name="name" value="dokka" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Runs the unit tests." />
@@ -344,6 +263,127 @@
                 <option name="name" value="compileJava" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Pushes changes to git." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="gitPublishPush" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="javadocJar" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Runs all checks." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="check" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Displays all dependencies declared in root project 'typescriptpoet'." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="dependencies" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="licenseFormat" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Processes test resources." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="processTestResources" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="updateLicenseTest" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Assembles and tests this project and all projects it depends on." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="buildNeeded" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Displays the components produced by root project 'typescriptpoet'. [incubating]" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="components" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Assembles and tests this project and all projects that depend on it." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="buildDependents" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="sourceJar" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="updateLicenses" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Assembles main classes." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="classes" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Displays the dependent components of components in root project 'typescriptpoet'. [incubating]" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="dependentComponents" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Displays all buildscript dependencies declared in root project 'typescriptpoet'." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="buildEnvironment" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Commits changes to be published to git." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="gitPublishCommit" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="updateLicenseMain" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Copy contents to be published to git." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="gitPublishCopy" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="licenseCheck" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Assembles test classes." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="testClasses" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Generates Javadoc API documentation for the main source code." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="javadoc" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Generates the Maven POM file for publication 'mavenJava'." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="generatePomFileForMavenJavaPublication" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="checkLicenseMain" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Publishes Maven publication 'mavenJava' to the local Maven repository." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="publishMavenJavaPublicationToMavenLocal" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepares a git repo for new content to be generated." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="gitPublishReset" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="checkLicenseTest" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="description" value="Compiles the source set 'test'.kotlin." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="compileTestKotlin" />
@@ -352,11 +392,6 @@
                 <option name="description" value="Displays the insight into a specific dependency in root project 'typescriptpoet'." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="dependencyInsight" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Runs all checks." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="check" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Generates code coverage report for the test task." />
@@ -379,16 +414,6 @@
                 <option name="name" value="compileTestJava" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Displays all dependencies declared in root project 'typescriptpoet'." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="dependencies" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Processes test resources." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="processTestResources" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Displays a help message." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="help" />
@@ -399,14 +424,18 @@
                 <option name="name" value="compileKotlin" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Signs all artifacts in the 'mavenJava' publication." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="signMavenJavaPublication" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="description" value="Assembles and tests this project." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="build" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Assembles and tests this project and all projects it depends on." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="buildNeeded" />
+                <option name="name" value="checkLicenses" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Publishes all publications produced by this project." />
@@ -430,10 +459,11 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$USER_HOME$/.gradle/gradle.properties" value="2328677893" />
-        <entry key="$PROJECT_DIR$" value="6047862127000" />
-        <entry key="$PROJECT_DIR$/build.gradle" value="4120091930" />
-        <entry key="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" value="918050071" />
+        <entry key="$USER_HOME$/.gradle/gradle.properties" value="3627242066" />
+        <entry key="$PROJECT_DIR$" value="7654583924000" />
+        <entry key="$PROJECT_DIR$/.gradle" value="0" />
+        <entry key="$PROJECT_DIR$/build.gradle" value="2168418394" />
+        <entry key="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" value="2077093676" />
         <entry key="$PROJECT_DIR$/settings.gradle" value="3336246160" />
       </map>
     </option>
@@ -449,57 +479,80 @@
                       <ExternalModuleBuildClasspathPojo>
                         <option name="entries">
                           <list>
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-gradle-plugin/1.0.3/e1a4c0cd60c989464be532a0278743be4c176112/junit-platform-gradle-plugin-1.0.3-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-gradle-plugin/1.0.3/23c564576904a7b1c7996360c521827b92eee2f1/junit-platform-gradle-plugin-1.0.3.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.dokka/dokka-gradle-plugin/0.9.13/2ddf02437abe5fbdaf1e3c29bafa13ee0934b9f8/dokka-gradle-plugin-0.9.13-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin/1.2.0/fe112f680c111f1d64517cf4da2517b0d99cb99/kotlin-gradle-plugin-1.2.0-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin/1.2.0/ff45cc456b96893e7dd0e41317f1c8b5e7086fc8/kotlin-gradle-plugin-1.2.0.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/gradle.plugin.com.palantir.gradle.gitversion/gradle-git-version/0.10.0/25c2f821b135a446ba5a40c733945dc5e87a8f87/gradle-git-version-0.10.0-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/gradle.plugin.com.palantir.gradle.gitversion/gradle-git-version/0.10.0/f9f0e3a18d65d63fb034c2c7caad26a45e3d7927/gradle-git-version-0.10.0.jar" />
-                            <option value="$MAVEN_REPOSITORY$/org/apiguardian/apiguardian-api/1.0.0/apiguardian-api-1.0.0-sources.jar" />
-                            <option value="$MAVEN_REPOSITORY$/org/apiguardian/apiguardian-api/1.0.0/apiguardian-api-1.0.0.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-console/1.0.3/c4b9950e3c52d1b5b9ae302a3949750e8a616ea8/junit-platform-console-1.0.3-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-console/1.0.3/39e2d8697f3244a16f9fafd58ad871918cb5a722/junit-platform-console-1.0.3.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-launcher/1.0.3/7f959672fed0b3bfd949930749ea5331e9fa881e/junit-platform-launcher-1.0.3-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-launcher/1.0.3/91d799c70c3a597631883b77117046e09d6a4419/junit-platform-launcher-1.0.3.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/gradle.plugin.net.minecrell/licenser/0.3/e9b7b360d2df63f9ac16794c3790abe1773ee020/licenser-0.3-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.vyarus/gradle-pom-plugin/1.2.0/b6fd92d645d3cb7a4c829f02ef4d432ac955b4f8/gradle-pom-plugin-1.2.0-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ajoberstar/gradle-git-publish/0.3.2/391304fa3e8bfd2e828290a6aafdce255415f276/gradle-git-publish-0.3.2-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin-api/1.2.0/ac51b29fc2500b0fee36e6abbdfba7c625c893b/kotlin-gradle-plugin-api-1.2.0-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin-api/1.2.0/c6865d01b8603cb702f3e828e098c43750d565d8/kotlin-gradle-plugin-api-1.2.0.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.2.0/180a4946e471f9f47d4b6139c5dbc5e7603a8424/kotlin-stdlib-1.2.0-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.2.0/25eb440d6eeb9fc60299121020fe726eb2100d03/kotlin-stdlib-1.2.0.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-compiler-embeddable/1.2.0/3c603e0ea4ba1668f91cc1b05146d0e3a0a59d1e/kotlin-compiler-embeddable-1.2.0-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-compiler-embeddable/1.2.0/17eefd45a8efe1fd7d537d3f8e981f6d76c5ae0e/kotlin-compiler-embeddable-1.2.0.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-annotation-processing-gradle/1.2.0/7585be69f6f3ff082b14e351705a113c9637e328/kotlin-annotation-processing-gradle-1.2.0-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-annotation-processing-gradle/1.2.0/d2cd3266a0bba63d34e9a7176e554571739c85d3/kotlin-annotation-processing-gradle-1.2.0.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-android-extensions/1.2.0/272e0d3e756341ba5622e88d70b42f0858e68157/kotlin-android-extensions-1.2.0-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-android-extensions/1.2.0/41b2a2ff56ce9abefb0d0d9d9750cdae749e9143/kotlin-android-extensions-1.2.0.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-compiler-runner/1.2.0/cbb71ab4053ec3fec531ef5243141357ab92ffa0/kotlin-compiler-runner-1.2.0-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-compiler-runner/1.2.0/23208cb3858304db32dbe2767c84cf349ce5813a/kotlin-compiler-runner-1.2.0.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jgit/org.eclipse.jgit/4.5.2.201704071617-r/ad713d18ed0fa71279b002e2c1340a35dfbefee7/org.eclipse.jgit-4.5.2.201704071617-r-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jgit/org.eclipse.jgit/4.5.2.201704071617-r/1352ebdefb10aab661b97413f651bd6ca3766ce/org.eclipse.jgit-4.5.2.201704071617-r.jar" />
-                            <option value="$MAVEN_REPOSITORY$/com/google/guava/guava/20.0/guava-20.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jgit/org.eclipse.jgit/4.11.0.201803080745-r/ad6f30f7b7f016a1390f8d289be7da2a9a1f47c5/org.eclipse.jgit-4.11.0.201803080745-r-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/20.0/9c8493c7991464839b612d7547d6c263adf08f75/guava-20.0-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ajoberstar/grgit/2.3.0/6f79309f2b2700eeef9caf250557d524a7f26e01/grgit-2.3.0-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.2.0/180a4946e471f9f47d4b6139c5dbc5e7603a8424/kotlin-stdlib-1.2.0-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/1.2.0/5c53162df36f79971b043a2df6e8293c2c9071a4/kotlin-script-runtime-1.2.0-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/1.2.0/269ab8b6a2d55c23dbf2e317a1af2b4c7e8d54b6/kotlin-script-runtime-1.2.0.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-reflect/1.2.0/7fb1210ceec26e7e5195894fa83e9e67ea4d2ba/kotlin-reflect-1.2.0-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-reflect/1.2.0/4bbda3b5425aa38a9f6960468a29c5ef3e8a28c9/kotlin-reflect-1.2.0.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-build-common/1.2.0/ddcd48c82f46a864936199a12a238f61f34ac18/kotlin-build-common-1.2.0-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-build-common/1.2.0/fe072643b006ec31ff52b06d3623e8f8208a03a1/kotlin-build-common-1.2.0.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-daemon-client/1.2.0/ff1cc47f92cd2929eae53c4f141fdd34f70ef457/kotlin-daemon-client-1.2.0-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch/0.1.54/91d6069df9be9e076bdb124e82fc2a9af9547616/jsch-0.1.54-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jzlib/1.1.1/dc910806edfb4c9a4b4c7e439a9cd3a3f0a090a9/jzlib-1.1.1-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.googlecode.javaewah/JavaEWAH/1.1.6/ca2745e91c6a51f8e6809d1579bda36ad83f1f58/JavaEWAH-1.1.6-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.2/b9f9e3e5255b6ddc3bf21be05428c7a60d00e042/httpclient-4.5.2-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.2/58d38f68d4a867d4552ae27960bb348d7eaa1297/slf4j-api-1.7.2-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jgit/org.eclipse.jgit.ui/4.11.0.201803080745-r/18a9630e6679d4e00b25883a91d2ca0b6a38baf7/org.eclipse.jgit.ui-4.11.0.201803080745-r-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch.agentproxy.core/0.0.9/dc8402ed7f647c7d44057189a49b5743b02a7262/jsch.agentproxy.core-0.0.9-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch.agentproxy.jsch/0.0.9/580aea5836a0b077c285f85c4d5f80cb7070619c/jsch.agentproxy.jsch-0.0.9-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch.agentproxy.pageant/0.0.9/a3865d329183d51cbd6e21023d19d3eebd5df70e/jsch.agentproxy.pageant-0.0.9-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch.agentproxy.sshagent/0.0.9/19cb8705d905d218655aff43305cc8361f232fd7/jsch.agentproxy.sshagent-0.0.9-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch.agentproxy.usocket-jna/0.0.9/2135bde834fb5fba3125c2f3aa14bcf472739c74/jsch.agentproxy.usocket-jna-0.0.9-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch.agentproxy.usocket-nc/0.0.9/bbfa3094c024cc1cffff1cef50be630d20ded605/jsch.agentproxy.usocket-nc-0.0.9-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/5991ca87ef1fb5544943d9abc5a9a37583fabe03/annotations-13.0-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.4/c5c19e3e6af6b452def290cde12a3ee4c35c893c/httpcore-4.4.4-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/ecf26c7507d67782a3bbd148d170b31dfad001aa/commons-logging-1.2-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.9/3f15fff45d57656685abfee9e8302bf14580044c/commons-codec-1.9-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/4.1.0/28a5d592b494fe54c120c64689087e779a7bf55b/jna-4.1.0-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna-platform/4.1.0/67d178949fe41ff82de6dbda7ef62d48f70e031c/jna-platform-4.1.0-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.dokka/dokka-gradle-plugin/0.9.13/ee46e2f932c971321d601e415f19f9a1c9fa9ce0/dokka-gradle-plugin-0.9.13.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin/1.2.0/ff45cc456b96893e7dd0e41317f1c8b5e7086fc8/kotlin-gradle-plugin-1.2.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/gradle.plugin.com.palantir.gradle.gitversion/gradle-git-version/0.10.0/f9f0e3a18d65d63fb034c2c7caad26a45e3d7927/gradle-git-version-0.10.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/gradle.plugin.net.minecrell/licenser/0.3/b5d7666d365a3fc52b96b15669207f065eec2d09/licenser-0.3.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.vyarus/gradle-pom-plugin/1.2.0/f970a5662b461efd812a78c156d79c73de6daacb/gradle-pom-plugin-1.2.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ajoberstar/gradle-git-publish/0.3.2/71cfaa0f68467eda76092c238f07be03dddcad34/gradle-git-publish-0.3.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin-api/1.2.0/c6865d01b8603cb702f3e828e098c43750d565d8/kotlin-gradle-plugin-api-1.2.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-compiler-embeddable/1.2.0/17eefd45a8efe1fd7d537d3f8e981f6d76c5ae0e/kotlin-compiler-embeddable-1.2.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-annotation-processing-gradle/1.2.0/d2cd3266a0bba63d34e9a7176e554571739c85d3/kotlin-annotation-processing-gradle-1.2.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-android-extensions/1.2.0/41b2a2ff56ce9abefb0d0d9d9750cdae749e9143/kotlin-android-extensions-1.2.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-compiler-runner/1.2.0/23208cb3858304db32dbe2767c84cf349ce5813a/kotlin-compiler-runner-1.2.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jgit/org.eclipse.jgit/4.11.0.201803080745-r/4ae44a6157e1bc4c5b373be0c274a8f1d9badd76/org.eclipse.jgit-4.11.0.201803080745-r.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/20.0/89507701249388e1ed5ddcf8c41f4ce1be7831ef/guava-20.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ajoberstar/grgit/2.3.0/5792c1488c1b271f20622b3f7887345b01410a98/grgit-2.3.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.2.0/25eb440d6eeb9fc60299121020fe726eb2100d03/kotlin-stdlib-1.2.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/1.2.0/269ab8b6a2d55c23dbf2e317a1af2b4c7e8d54b6/kotlin-script-runtime-1.2.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-reflect/1.2.0/4bbda3b5425aa38a9f6960468a29c5ef3e8a28c9/kotlin-reflect-1.2.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-build-common/1.2.0/fe072643b006ec31ff52b06d3623e8f8208a03a1/kotlin-build-common-1.2.0.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-daemon-client/1.2.0/6d6fdfd9e30d1f71927ddecf7aba88fe80e0243/kotlin-daemon-client-1.2.0.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch/0.1.53/791359d94d6edcace686a56d0727ee093a2f7c33/jsch-0.1.53-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch/0.1.53/658b682d5c817b27ae795637dfec047c63d29935/jsch-0.1.53.jar" />
-                            <option value="$MAVEN_REPOSITORY$/com/googlecode/javaewah/JavaEWAH/0.7.9/JavaEWAH-0.7.9.jar" />
-                            <option value="$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpclient/4.3.6/httpclient-4.3.6.jar" />
-                            <option value="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.2/slf4j-api-1.7.2.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-engine/1.0.3/b250bf811bb2bd2160bc6a6d9804453c389f502a/junit-platform-engine-1.0.3-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-engine/1.0.3/7028a17adabd876b6d7530e43523a7f4fd109e18/junit-platform-engine-1.0.3.jar" />
-                            <option value="$MAVEN_REPOSITORY$/org/jetbrains/annotations/13.0/annotations-13.0-sources.jar" />
-                            <option value="$MAVEN_REPOSITORY$/org/jetbrains/annotations/13.0/annotations-13.0.jar" />
-                            <option value="$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpcore/4.3.3/httpcore-4.3.3.jar" />
-                            <option value="$MAVEN_REPOSITORY$/commons-logging/commons-logging/1.1.3/commons-logging-1.1.3.jar" />
-                            <option value="$MAVEN_REPOSITORY$/commons-codec/commons-codec/1.6/commons-codec-1.6.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-commons/1.0.3/112d0f72ac2aa049c9004e1f76d05ec49a83e283/junit-platform-commons-1.0.3-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-commons/1.0.3/3663f3ddfe47df2a7bf363d5c0196f0c7a09820f/junit-platform-commons-1.0.3.jar" />
-                            <option value="$MAVEN_REPOSITORY$/org/opentest4j/opentest4j/1.0.0/opentest4j-1.0.0-sources.jar" />
-                            <option value="$MAVEN_REPOSITORY$/org/opentest4j/opentest4j/1.0.0/opentest4j-1.0.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch/0.1.54/da3584329a263616e277e15462b387addd1b208d/jsch-0.1.54.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jzlib/1.1.1/a1551373315ffc2f96130a0e5704f74e151777ba/jzlib-1.1.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.googlecode.javaewah/JavaEWAH/1.1.6/94ad16d728b374d65bd897625f3fbb3da223a2b6/JavaEWAH-1.1.6.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.2/733db77aa8d9b2d68015189df76ab06304406e50/httpclient-4.5.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.2/81d61b7f33ebeab314e07de0cc596f8e858d97/slf4j-api-1.7.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jgit/org.eclipse.jgit.ui/4.11.0.201803080745-r/3336eac89bb00b6c6772d49cb7c9b7a3da8554e/org.eclipse.jgit.ui-4.11.0.201803080745-r.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch.agentproxy.core/0.0.9/1af3741c3a83a71e29b8aa7637979791e50e538b/jsch.agentproxy.core-0.0.9.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch.agentproxy.jsch/0.0.9/26f5c718216f1668f674816e580aa7c92f2660ad/jsch.agentproxy.jsch-0.0.9.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch.agentproxy.pageant/0.0.9/7651361429af009ff18a6ea5c4e5d38ecff7f959/jsch.agentproxy.pageant-0.0.9.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch.agentproxy.sshagent/0.0.9/2ecca436463287682d16c3fa628bd7cca426cf6f/jsch.agentproxy.sshagent-0.0.9.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch.agentproxy.usocket-jna/0.0.9/100522438a57b4c0d15db112fc8a08d17f48080a/jsch.agentproxy.usocket-jna-0.0.9.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch.agentproxy.usocket-nc/0.0.9/926fd2eb5586c779b8d7827036ea8e06fe7744ba/jsch.agentproxy.usocket-nc-0.0.9.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.4/b31526a230871fbe285fbcbe2813f9c0839ae9b0/httpcore-4.4.4.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.9/9ce04e34240f674bc72680f8b843b1457383161a/commons-codec-1.9.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/4.1.0/1c12d070e602efd8021891cdd7fd18bc129372d4/jna-4.1.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna-platform/4.1.0/23457ad1cf75c2c16763330de5565a0e67b4bc0a/jna-platform-4.1.0.jar" />
                           </list>
                         </option>
                         <option name="path" value="$PROJECT_DIR$" />
@@ -511,149 +564,159 @@
               <option name="name" value="typescriptpoet" />
               <option name="projectBuildClasspath">
                 <list>
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/announce" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/antlr" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/base-services" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/base-services-groovy" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/build-cache-http" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/build-comparison" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/build-init" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/cli" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/code-quality" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/composite-builds" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/core" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/dependency-management" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/diagnostics" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/ear" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/ide" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/ide-native" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/ide-play" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/installation-beacon" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/internal-android-performance-testing" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/internal-integ-testing" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/internal-performance-testing" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/internal-testing" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/ivy" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/jacoco" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/javascript" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/jvm-services" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/language-groovy" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/language-java" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/language-jvm" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/language-native" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/language-scala" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/launcher" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/logging" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/maven" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/messaging" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/model-core" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/model-groovy" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/native" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/osgi" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/platform-base" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/platform-jvm" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/platform-native" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/platform-play" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/plugin-development" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/plugin-use" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/plugins" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/process-services" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/publish" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/reporting" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/resources" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/resources-http" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/resources-s3" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/resources-sftp" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/scala" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/signing" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/test-kit" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/testing-base" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/testing-jvm" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/testing-native" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/tooling-api" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/tooling-api-builders" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/workers" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/src/wrapper" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/ant-1.9.6.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/ant-launcher-1.9.6.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-base-services-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-base-services-groovy-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-cli-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-core-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-docs-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-installation-beacon-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-jvm-services-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-kotlin-dsl-0.10.3.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-kotlin-dsl-compiler-plugin-0.10.3.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-kotlin-dsl-tooling-builders-0.10.3.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-kotlin-dsl-tooling-models-0.10.3.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-launcher-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-logging-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-messaging-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-model-core-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-model-groovy-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-native-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-process-services-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-resources-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-runtime-api-info-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-tooling-api-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/gradle-wrapper-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/groovy-all-2.4.11.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-announce-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-antlr-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-build-cache-http-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-build-comparison-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-build-init-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-code-quality-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-composite-builds-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-dependency-management-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-diagnostics-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-ear-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-ide-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-ide-native-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-ide-play-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-ivy-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-jacoco-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-javascript-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-language-groovy-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-language-java-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-language-jvm-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-language-native-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-language-scala-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-maven-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-osgi-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-platform-base-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-platform-jvm-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-platform-native-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-platform-play-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-plugin-development-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-plugin-use-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-plugins-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-publish-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-reporting-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-resources-http-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-resources-s3-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-resources-sftp-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-scala-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-signing-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-test-kit-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-testing-base-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-testing-jvm-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-testing-native-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-tooling-api-builders-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/gradle-workers-4.1.jar" />
-                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.1-all/bzyivzo6n839fup2jbap0tjew/gradle-4.1/lib/plugins/ivy-2.2.0.jar" />
-                  <option value="$PROJECT_DIR$/buildSrc/src/main/java" />
-                  <option value="$PROJECT_DIR$/buildSrc/src/main/groovy" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/announce" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/antlr" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/base-services" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/base-services-groovy" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/build-cache" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/build-cache-http" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/build-comparison" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/build-init" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/build-option" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/cli" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/code-quality" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/composite-builds" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/core" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/core-api" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/dependency-management" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/diagnostics" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/ear" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/ide" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/ide-native" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/ide-play" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/installation-beacon" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/internal-android-performance-testing" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/internal-integ-testing" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/internal-performance-testing" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/internal-testing" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/ivy" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/jacoco" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/javascript" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/jvm-services" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/language-groovy" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/language-java" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/language-jvm" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/language-native" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/language-scala" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/launcher" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/logging" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/maven" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/messaging" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/model-core" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/model-groovy" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/native" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/osgi" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/persistent-cache" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/platform-base" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/platform-jvm" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/platform-native" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/platform-play" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/plugin-development" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/plugin-use" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/plugins" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/process-services" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/publish" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/reporting" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/resources" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/resources-gcs" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/resources-http" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/resources-s3" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/resources-sftp" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/scala" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/signing" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/test-kit" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/testing-base" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/testing-junit-platform" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/testing-jvm" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/testing-native" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/tooling-api" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/tooling-api-builders" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/version-control" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/workers" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/src/wrapper" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/ant-1.9.11.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/ant-launcher-1.9.11.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-base-services-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-base-services-groovy-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-build-cache-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-build-option-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-cli-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-core-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-core-api-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-docs-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-installation-beacon-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-jvm-services-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-kotlin-dsl-0.17.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-kotlin-dsl-provider-plugins-0.17.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-kotlin-dsl-provider-spi-0.17.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-kotlin-dsl-tooling-builders-0.17.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-kotlin-dsl-tooling-models-0.17.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-launcher-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-logging-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-messaging-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-model-core-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-model-groovy-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-native-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-persistent-cache-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-process-services-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-resources-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-runtime-api-info-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-tooling-api-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/gradle-wrapper-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/groovy-all-2.4.12.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-announce-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-antlr-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-build-cache-http-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-build-comparison-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-build-init-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-code-quality-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-composite-builds-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-dependency-management-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-diagnostics-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-ear-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-ide-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-ide-native-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-ide-play-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-ivy-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-jacoco-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-javascript-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-language-groovy-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-language-java-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-language-jvm-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-language-native-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-language-scala-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-maven-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-osgi-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-platform-base-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-platform-jvm-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-platform-native-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-platform-play-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-plugin-development-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-plugin-use-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-plugins-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-publish-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-reporting-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-resources-gcs-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-resources-http-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-resources-s3-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-resources-sftp-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-scala-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-signing-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-test-kit-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-testing-base-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-testing-junit-platform-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-testing-jvm-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-testing-native-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-tooling-api-builders-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-version-control-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/gradle-workers-4.8.1.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-4.8.1-all/6fmj4nezasjg1b7kkmy10xgo2/gradle-4.8.1/lib/plugins/ivy-2.2.0.jar" />
                 </list>
               </option>
             </ExternalProjectBuildClasspathPojo>
           </value>
         </entry>
       </map>
-    </option>
-    <option name="externalProjectsViewState">
-      <projects_view />
     </option>
     <option name="projectSyncType">
       <map>
@@ -664,57 +727,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/tspoet/DecoratorSpec.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/tspoet/Utils.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/tspoet/InterfaceSpec.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/tspoet/TypeNames.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/tspoet/CodeBlock.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/tspoet/CodeWriter.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/tspoet/Modules.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/tspoet/FileModule.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/tspoet/FileModules.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/tspoet/ModuleContainer.ts" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/tspoet/MemberContainer.ts" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/tspoet/MemberContainer.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/tspoet/FileSpec.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/tspoet/ModuleSpec.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/io/outfox/tspoet/test/TypeRefTests.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/tspoet/SymbolSpecs.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/Utils.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/ModuleTests.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/Modifier.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/DecoratorSpec.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/DecoratorTests.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/DecoratorSpecTests.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/EnumSpecTests.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/FileModuleSpecTests.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/TypeAliasSpecTests.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/TypeAliasSpec.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/TypeRefTests.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/EnumSpec.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/FileModules.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/SymbolSpecs.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/FileModuleTests.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/SymbolSpecTests.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/TypeNameTests.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/FileSpec.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/CodeWriter.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/CodeBlock.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/TypeNames.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/PropertySpec.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/InterfaceSpec.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/InterfaceSpecTests.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/ModuleSpec.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/FunctionSpec.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/FunctionSpecTests.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/ParameterSpec.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/ClassSpecTests.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/ClassSpec.kt" />
-        <option value="$PROJECT_DIR$/gradle/repositories.gradle" />
-        <option value="$PROJECT_DIR$/gradle/testing.gradle" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/PoetSpec.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/AnnotationSpec.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/ClassName.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/WildcardTypeName.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/FunSpec.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/KModifier.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/TypeAliasSpec.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/Util.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/LambdaTypeName.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/UnionSpec.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/UnionTypeName.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/Import.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/Attributed.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/ImportSpec.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/AttributeSpec.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/DeclaredTypeName.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/TupleTypeName.kt" />
+        <option value="$PROJECT_DIR$/src/test/java/io/outfoxx/typescriptpoet/test/EnumSpecTests.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/CodeWriter.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/TypeVariableName.kt" />
+        <option value="$PROJECT_DIR$/src/test/java/io/outfoxx/typescriptpoet/test/InterfaceSpecTests.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/ComposedTypeName.kt" />
+        <option value="$PROJECT_DIR$/src/test/java/io/outfoxx/typescriptpoet/test/FileSpecTests.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/ParameterSpec.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/FileSpec.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/ExtensionSpec.kt" />
+        <option value="$PROJECT_DIR$/src/test/java/io/outfoxx/typescriptpoet/test/FunctionSpecTests.kt" />
+        <option value="$PROJECT_DIR$/src/test/java/io/outfoxx/typescriptpoet/test/ClassSpecTests.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/CodeBlock.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/FunctionSpec.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/Modifier.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/PropertySpec.kt" />
+        <option value="$PROJECT_DIR$/src/test/java/io/outfoxx/typescriptpoet/test/ProtocolSpecTests.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/TypeSpec.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/ParameterizedTypeName.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/swiftpoet/TypeName.kt" />
+        <option value="$PROJECT_DIR$/src/test/java/io/outfoxx/typescriptpoet/test/TypeAliasSpecTests.kt" />
+        <option value="$PROJECT_DIR$/gradle/docs.gradle" />
+        <option value="$PROJECT_DIR$/src/test/java/io/outfoxx/swiftpoet/test/TypeAliasSpecTests.kt" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/settings.gradle" />
+        <option value="$PROJECT_DIR$/gradle/maven-publishing.gradle" />
+        <option value="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/ClassSpec.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/CodeBlock.kt" />
         <option value="$PROJECT_DIR$/build.gradle" />
-        <option value="$PROJECT_DIR$/src/test/java/io/outfox/typescriptpoet/test/AllTests.kt" />
-        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/TypeNames.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/SymbolSpecs.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/FileSpec.kt" />
+        <option value="$PROJECT_DIR$/src/test/java/io/outfoxx/typescriptpoet/test/SymbolSpecTests.kt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/ModuleSpec.kt" />
       </list>
     </option>
   </component>
@@ -736,27 +799,14 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="NodeModulesDirectoryManager">
-    <handled-path value="$PROJECT_DIR$/generated/node_modules" />
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="y" value="684" />
-    <option name="width" value="80" />
-    <option name="height" value="22" />
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="2560" />
+    <option name="height" value="1368" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
-      <flattenPackages />
-      <showMembers />
-      <showModules />
-      <showLibraryContents />
-      <hideEmptyPackages />
-      <abbreviatePackageNames />
-      <autoscrollToSource />
-      <autoscrollFromSource />
-      <sortByType />
-      <manualOrder />
+    <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
@@ -771,64 +821,28 @@
             <path>
               <item name="typescriptpoet" type="b2602c69:ProjectViewProjectNode" />
               <item name="typescriptpoet" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="build" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="typescriptpoet" type="b2602c69:ProjectViewProjectNode" />
-              <item name="typescriptpoet" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="gradle" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="typescriptpoet" type="b2602c69:ProjectViewProjectNode" />
-              <item name="typescriptpoet" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="typescriptpoet" type="b2602c69:ProjectViewProjectNode" />
-              <item name="typescriptpoet" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="typescriptpoet" type="b2602c69:ProjectViewProjectNode" />
-              <item name="typescriptpoet" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="typescriptpoet" type="b2602c69:ProjectViewProjectNode" />
-              <item name="typescriptpoet" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="typescriptpoet" type="b2602c69:ProjectViewProjectNode" />
-              <item name="typescriptpoet" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scratches" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="reference.settings.ide.settings.webservices" />
-    <property name="nodejs_interpreter_path" value="/usr/local/bin/node" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536098765592" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/src/test/kotlin" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.tslint" value="" />
+    <property name="nodejs_interpreter_path" value="/usr/local/bin/node" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="last_directory_selection" value="$PROJECT_DIR$/src/test/kotlin" />
-    <property name="node.js.path.for.package.tslint" value="project" />
-    <property name="node.js.detected.package.tslint" value="true" />
-    <property name="node.js.selected.package.tslint" value="" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
   </component>
   <component name="RecentsManager">
     <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
@@ -851,226 +865,137 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.All Tests">
+  <component name="RunManager" selected="JUnit.SymbolSpecTests.testParsingSymbolViaSideEffect">
     <configuration default="true" type="Applet" factoryName="Applet">
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <module />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="" />
-      <envs />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration name="All Tests" type="JUnit" factoryName="JUnit">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="typescriptpoet_test" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="io.outfox.typescriptpoet.test" />
       <option name="MAIN_CLASS_NAME" value="" />
       <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
-      <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
-    <configuration name="ClassSpecTests.testGenConstructorShorthandProperties" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+    <configuration name="ClassSpecTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="typescriptpoet_test" />
+      <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="io.outfox.typescriptpoet.test.*" />
+          <option name="PATTERN" value="io.outfoxx.typescriptpoet.test.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <module name="typescriptpoet_test" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="io.outfox.typescriptpoet.test" />
-      <option name="MAIN_CLASS_NAME" value="io.outfox.typescriptpoet.test.ClassSpecTests" />
-      <option name="METHOD_NAME" value="testGenConstructorShorthandProperties" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
+      <option name="PACKAGE_NAME" value="io.outfoxx.typescriptpoet.test" />
+      <option name="MAIN_CLASS_NAME" value="io.outfoxx.typescriptpoet.test.ClassSpecTests" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
-    <configuration name="FileModuleTests.testRelativeImportPathGenerationSiblingsNoParent" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+    <configuration name="FunctionSpecTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="typescriptpoet_test" />
+      <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="io.outfox.typescriptpoet.test.*" />
+          <option name="PATTERN" value="io.outfoxx.typescriptpoet.test.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <module name="typescriptpoet_test" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="io.outfox.typescriptpoet.test" />
-      <option name="MAIN_CLASS_NAME" value="io.outfox.typescriptpoet.test.FileModuleTests" />
-      <option name="METHOD_NAME" value="testRelativeImportPathGenerationSiblingsNoParent" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
+      <option name="PACKAGE_NAME" value="io.outfoxx.typescriptpoet.test" />
+      <option name="MAIN_CLASS_NAME" value="io.outfoxx.typescriptpoet.test.FunctionSpecTests" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
-    <configuration name="SymbolSpecTests.testParsingExplicitAugmentationWithAssociatedSymbol" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+    <configuration name="ProtocolSpecTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="typescriptpoet_test" />
+      <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="io.outfox.typescriptpoet.test.*" />
+          <option name="PATTERN" value="io.outfoxx.typescriptpoet.test.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <module name="typescriptpoet_test" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="io.outfox.typescriptpoet.test" />
-      <option name="MAIN_CLASS_NAME" value="io.outfox.typescriptpoet.test.SymbolSpecTests" />
-      <option name="METHOD_NAME" value="testParsingExplicitAugmentationWithAssociatedSymbol" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
+      <option name="PACKAGE_NAME" value="io.outfoxx.typescriptpoet.test" />
+      <option name="MAIN_CLASS_NAME" value="io.outfoxx.typescriptpoet.test.ProtocolSpecTests" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
-    <configuration name="SymbolSpecTests.testParsingImplicitImportNamedGeneratedModule" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+    <configuration name="SymbolSpecTests.testParsingSymbolViaSideEffect" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="typescriptpoet_test" />
+      <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="io.outfox.typescriptpoet.test.*" />
+          <option name="PATTERN" value="io.outfoxx.typescriptpoet.test.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <module name="typescriptpoet_test" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="io.outfox.typescriptpoet.test" />
-      <option name="MAIN_CLASS_NAME" value="io.outfox.typescriptpoet.test.SymbolSpecTests" />
-      <option name="METHOD_NAME" value="testParsingImplicitImportNamedGeneratedModule" />
+      <option name="PACKAGE_NAME" value="io.outfoxx.typescriptpoet.test" />
+      <option name="MAIN_CLASS_NAME" value="io.outfoxx.typescriptpoet.test.SymbolSpecTests" />
+      <option name="METHOD_NAME" value="testParsingSymbolViaSideEffect" />
       <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
-    <configuration name="TypeNameTests.testParsingNestedImport" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+    <configuration name="TypeAliasSpecTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="typescriptpoet_test" />
+      <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="io.outfox.typescriptpoet.test.*" />
+          <option name="PATTERN" value="io.outfoxx.typescriptpoet.test.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <module name="typescriptpoet_test" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="io.outfox.typescriptpoet.test" />
-      <option name="MAIN_CLASS_NAME" value="io.outfox.typescriptpoet.test.TypeNameTests" />
-      <option name="METHOD_NAME" value="testParsingNestedImport" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
+      <option name="PACKAGE_NAME" value="io.outfoxx.typescriptpoet.test" />
+      <option name="MAIN_CLASS_NAME" value="io.outfoxx.typescriptpoet.test.TypeAliasSpecTests" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
-    <configuration default="true" type="Remote" factoryName="Remote">
-      <option name="USE_SOCKET_TRANSPORT" value="true" />
-      <option name="SERVER_MODE" value="false" />
-      <option name="SHMEM_ADDRESS" value="javadebug" />
-      <option name="HOST" value="localhost" />
-      <option name="PORT" value="5005" />
-    </configuration>
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
-      <module name="" />
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
-      <option name="PROGRAM_PARAMETERS" />
-      <predefined_log_file id="idea.log" enabled="true" />
-    </configuration>
-    <configuration name="&lt;template&gt;" type="TestNG" default="true" selected="false">
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
+    <configuration default="true" type="TestNG" factoryName="TestNG">
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
-    <list size="6">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.All Tests" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.SymbolSpecTests.testParsingExplicitAugmentationWithAssociatedSymbol" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.FileModuleTests.testRelativeImportPathGenerationSiblingsNoParent" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.SymbolSpecTests.testParsingImplicitImportNamedGeneratedModule" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.TypeNameTests.testParsingNestedImport" />
-      <item index="5" class="java.lang.String" itemvalue="JUnit.ClassSpecTests.testGenConstructorShorthandProperties" />
+    <list>
+      <item itemvalue="JUnit.All Tests" />
+      <item itemvalue="JUnit.FunctionSpecTests" />
+      <item itemvalue="JUnit.ProtocolSpecTests" />
+      <item itemvalue="JUnit.ClassSpecTests" />
+      <item itemvalue="JUnit.TypeAliasSpecTests" />
+      <item itemvalue="JUnit.SymbolSpecTests.testParsingSymbolViaSideEffect" />
     </list>
     <recent_temporary>
-      <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.ClassSpecTests.testGenConstructorShorthandProperties" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.TypeNameTests.testParsingNestedImport" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.SymbolSpecTests.testParsingImplicitImportNamedGeneratedModule" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.FileModuleTests.testRelativeImportPathGenerationSiblingsNoParent" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.SymbolSpecTests.testParsingExplicitAugmentationWithAssociatedSymbol" />
+      <list>
+        <item itemvalue="JUnit.SymbolSpecTests.testParsingSymbolViaSideEffect" />
+        <item itemvalue="JUnit.TypeAliasSpecTests" />
+        <item itemvalue="JUnit.ProtocolSpecTests" />
+        <item itemvalue="JUnit.ClassSpecTests" />
+        <item itemvalue="JUnit.FunctionSpecTests" />
       </list>
     </recent_temporary>
   </component>
@@ -1079,9 +1004,6 @@
     <option name="externalProjectsViewState">
       <projects_view />
     </option>
-  </component>
-  <component name="ShelveChangesManager" show_recycled="false">
-    <option name="remove_strategy" value="false" />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -1121,613 +1043,304 @@
       <workItem from="1507704244671" duration="517000" />
       <workItem from="1507783308192" duration="599000" />
       <workItem from="1518229364339" duration="8738000" />
+      <workItem from="1528413046170" duration="1769000" />
+      <workItem from="1528435811927" duration="1115000" />
+      <workItem from="1528482961907" duration="4184000" />
+      <workItem from="1528506574908" duration="34565000" />
+      <workItem from="1528765742909" duration="20765000" />
+      <workItem from="1528822019080" duration="31485000" />
+      <workItem from="1528864366759" duration="26953000" />
+      <workItem from="1528935442820" duration="11000" />
+      <workItem from="1531272107134" duration="1589000" />
+      <workItem from="1531274031682" duration="4819000" />
+      <workItem from="1535153544511" duration="4312000" />
+      <workItem from="1535343369463" duration="601000" />
+      <workItem from="1535494588238" duration="632000" />
+      <workItem from="1535674088210" duration="8014000" />
+      <workItem from="1536025046284" duration="3532000" />
+      <workItem from="1536100039893" duration="709000" />
+      <workItem from="1536122196728" duration="793000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="All_Tests - 2017.10.09 at 19h 15m 05s.xml">
-      <configuration name="All Tests" configurationId="JUnit" />
+    <history-entry file="ProtocolSpecTests - 2018.06.13 at 16h 29m 13s.xml">
+      <configuration name="ProtocolSpecTests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_Tests - 2017.10.09 at 19h 29m 46s.xml">
-      <configuration name="All Tests" configurationId="JUnit" />
+    <history-entry file="ProtocolSpecTests - 2018.06.13 at 16h 31m 58s.xml">
+      <configuration name="ProtocolSpecTests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_Tests - 2017.10.09 at 19h 31m 24s.xml">
-      <configuration name="All Tests" configurationId="JUnit" />
+    <history-entry file="ProtocolSpecTests - 2018.06.13 at 16h 32m 31s.xml">
+      <configuration name="ProtocolSpecTests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ClassSpecTests_testGenConstructorShorthandProperties - 2017.10.07 at 23h 54m 36s.xml">
-      <configuration name="ClassSpecTests.testGenConstructorShorthandProperties" configurationId="JUnit" />
+    <history-entry file="TypeAliasSpecTests - 2018.06.13 at 16h 42m 52s.xml">
+      <configuration name="TypeAliasSpecTests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ClassSpecTests_testGenConstructorShorthandProperties - 2017.10.09 at 19h 13m 45s.xml">
-      <configuration name="ClassSpecTests.testGenConstructorShorthandProperties" configurationId="JUnit" />
+    <history-entry file="TypeAliasSpecTests - 2018.06.13 at 16h 43m 21s.xml">
+      <configuration name="TypeAliasSpecTests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SymbolSpecTests_testParsingImplicitImportNamedGeneratedModule - 2017.10.01 at 09h 39m 26s.xml">
-      <configuration name="SymbolSpecTests.testParsingImplicitImportNamedGeneratedModule" configurationId="JUnit" />
+    <history-entry file="TypeAliasSpecTests - 2018.06.13 at 16h 43m 35s.xml">
+      <configuration name="TypeAliasSpecTests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TypeAliasSpecTests_testToBuilder - 2017.09.25 at 11h 42m 05s.xml">
-      <configuration name="TypeAliasSpecTests.testToBuilder" configurationId="JUnit" />
+    <history-entry file="TypeAliasSpecTests - 2018.06.13 at 16h 43m 51s.xml">
+      <configuration name="TypeAliasSpecTests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TypeAliasSpecTests_testToBuilder - 2017.09.25 at 11h 42m 57s.xml">
-      <configuration name="TypeAliasSpecTests.testToBuilder" configurationId="JUnit" />
+    <history-entry file="SymbolSpecTests_testParsingSymbolViaSideEffect - 2018.08.30 at 22h 42m 15s.xml">
+      <configuration name="SymbolSpecTests.testParsingSymbolViaSideEffect" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TypeNameTests_testParsingNestedImport - 2017.10.01 at 09h 39m 30s.xml">
-      <configuration name="TypeNameTests.testParsingNestedImport" configurationId="JUnit" />
+    <history-entry file="SymbolSpecTests_testParsingSymbolViaSideEffect - 2018.08.30 at 22h 42m 45s.xml">
+      <configuration name="SymbolSpecTests.testParsingSymbolViaSideEffect" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TypeNameTests_testParsingNestedImport - 2017.10.01 at 09h 39m 44s.xml">
-      <configuration name="TypeNameTests.testParsingNestedImport" configurationId="JUnit" />
+    <history-entry file="SymbolSpecTests_testParsingSymbolViaSideEffect - 2018.08.30 at 22h 54m 04s.xml">
+      <configuration name="SymbolSpecTests.testParsingSymbolViaSideEffect" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="303944000" />
+    <option name="totallyTimeSpent" value="450448000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="2560" height="1363" extended-state="6" />
-    <editor active="true" />
+    <frame x="0" y="23" width="2560" height="1368" extended-state="0" />
     <layout>
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Tool Output" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.48570293" order="14" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.5015886" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.48093724" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="CheckStyle" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.329653" sideWeight="0.49841145" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18625894" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="ANTLR Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16322479" sideWeight="0.49529412" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39984226" sideWeight="0.48570293" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24980143" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1838761" sideWeight="0.5047059" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21366164" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Designer" order="2" />
+      <window_info id="JRebel" order="3" side_tool="true" />
+      <window_info id="Image Layers" order="4" />
+      <window_info id="UI Designer" order="5" />
+      <window_info id="Capture Tool" order="6" />
+      <window_info id="Favorites" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32836992" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4805401" weight="0.32836992" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49166006" weight="0.39890283" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Tool Output" order="7" weight="0.329653" />
+      <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="JRebel Executor" order="9" />
+      <window_info anchor="bottom" id="JRebel Console" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5194599" side_tool="true" weight="0.32887492" />
+      <window_info anchor="bottom" id="ANTLR Preview" order="12" weight="0.329653" />
+      <window_info anchor="bottom" id="Version Control" order="13" />
+      <window_info anchor="bottom" id="CheckStyle" order="14" weight="0.329653" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="15" sideWeight="0.49841145" visible="true" weight="0.32836992" />
+      <window_info anchor="bottom" id="TypeScript" order="16" />
+      <window_info anchor="bottom" id="Messages" order="17" sideWeight="0.48570293" weight="0.32836992" />
+      <window_info anchor="bottom" id="Build" order="18" weight="0.32887492" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24980143" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Capture Analysis" order="4" />
+      <window_info anchor="right" id="Maven Projects" order="5" />
+      <window_info anchor="right" id="Theme Preview" order="6" />
+      <window_info anchor="right" id="Database" order="7" />
+      <window_info anchor="right" id="Gradle" order="8" sideWeight="0.49529412" weight="0.16322479" />
+      <window_info anchor="right" id="Palette&#9;" order="9" />
+      <window_info anchor="right" id="Coverage" order="10" sideWeight="0.5047059" side_tool="true" visible="true" weight="0.1838761" />
+      <window_info anchor="right" id="JRebel Setup Guide" order="11" visible="true" weight="0.18665607" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
-    <option name="exactExcludedFiles">
-      <list>
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/tests/AdminAPI.test.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/tests/AdminAPI.test.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/tests/AdminAPI.test.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/tests/vars.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/tests/vars.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/tests/vars.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/index.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/index.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/index.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UpdateAccountCertificateAuthorityParams.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/SystemRole.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/PushServiceType.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/DeviceAddress.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/MessagePriority.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/Device.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UpdateDeviceCertificatesParams.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/DeviceAPI.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/CreateDeviceParams.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/AccountAPI.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/User.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/MessageBatch.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/Account.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/IdType.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/AdminAPI.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/PushServiceType.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/AccountAPI.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/TenantAPI.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UpdateDeviceCertificatesParams.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/LookupActiveDevicesResponse.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/MessageSendParams.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/TenantPushService.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/MessageBatch.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/CreateDeviceParams.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/MessageSendResult.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/DeviceAPI.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/LookupActiveDevicesResponse.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/IdType.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UserAPI.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/Device.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/Device.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/MessagePriority.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/AdminAPI.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/SystemRole.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/TenantPushService.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/DelegateParams.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/AuthKey.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/MessageSendParams.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UpdateActivePushServiceParams.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/Account.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/CreateTenantParams.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/MessageSendParams.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/CreateAuthKeyParams.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/MessageSendResult.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/DevicePushService.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/Tenant.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UpdateTenantParams.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/DelegateResponse.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/DelegateParams.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UpdateAccountCertificateAuthorityParams.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/IdType.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UserDelegateParams.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UserAPI.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UpdateActivePushServiceParams.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/ConfigTenantPushServiceParams.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/CreateAccountParams.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/TenantUsage.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/TenantUsage.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/AddActiveAliasParams.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/MessageSummary.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/DevicePushService.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/Account.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/PushServicePriority.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UpdateDeviceCertificatesParams.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/AddActiveAliasParams.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UpdateTenantParams.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UserDelegateParams.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/User.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/CreateAuthKeyParams.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/TenantPushService.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/AddActiveAliasParams.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UserDelegateResponse.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/AuthKey.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/Tenant.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UpdateTenantParams.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/AuthKey.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/DeviceAddress.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/PushServicePriority.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/Tenant.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/MessageSummary.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/MessageBatch.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/CreateAccountParams.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/CreateTenantParams.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/MessageSendResult.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/TenantAPI.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/PushServicePriority.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/DeviceAddress.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/CreateAuthKeyParams.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/AddAliasParams.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UserDelegateResponse.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/MessagePriority.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/PushServiceType.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/DeviceAPI.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/CreateDeviceParams.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/TenantAPI.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UpdateActivePushServiceParams.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/ConfigTenantPushServiceParams.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/DelegateResponse.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/TenantUsage.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/CreateTenantParams.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UserAPI.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/SystemRole.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/ConfigTenantPushServiceParams.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/AccountAPI.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UserDelegateResponse.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UpdateAccountCertificateAuthorityParams.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/UserDelegateParams.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/AddAliasParams.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/DevicePushService.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/DelegateParams.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/CreateAccountParams.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/DelegateResponse.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/MessageSummary.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/AdminAPI.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/LookupActiveDevicesResponse.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/User.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/api/AddAliasParams.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/json.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/config.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/environ.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/environ.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/json.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/config.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/json.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/errors.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/base64.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/base.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/base64.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/base.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/base64.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/errors.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/errors.d.ts" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/environ.js.map" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/base.js" />
-        <option value="$PROJECT_DIR$/../retxt-cloud/apiclientjs/src/util/config.d.ts" />
-      </list>
-    </option>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <option name="time" value="92" />
-    </breakpoint-manager>
-    <watches-manager />
-  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/LineWrapper.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/Modifier.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="2" lean-forward="false" selection-start-line="8" selection-start-column="2" selection-end-line="8" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-api/5.0.0/fadbe39cb1fd01b65e5114b0e0d140af0621a8ac/junit-jupiter-api-5.0.0-sources.jar!/org/junit/jupiter/api/TestTemplate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="61" column="18" lean-forward="false" selection-start-line="61" selection-start-column="18" selection-end-line="61" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-api/5.0.0/fadbe39cb1fd01b65e5114b0e0d140af0621a8ac/junit-jupiter-api-5.0.0-sources.jar!/org/junit/jupiter/api/Test.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="51" column="18" lean-forward="false" selection-start-line="51" selection-start-column="18" selection-end-line="51" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/SymbolReferenceContainer.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="6" lean-forward="false" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/DecoratorSpec.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="65" column="36" lean-forward="true" selection-start-line="65" selection-start-column="36" selection-end-line="65" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/EnumSpecTests.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="13" column="18" lean-forward="false" selection-start-line="13" selection-start-column="18" selection-end-line="13" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/TypeAliasSpecTests.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1710">
-          <caret line="123" column="0" lean-forward="false" selection-start-line="123" selection-start-column="0" selection-end-line="123" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/TypeAliasSpec.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="0" lean-forward="true" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/EnumSpec.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="62" column="31" lean-forward="false" selection-start-line="62" selection-start-column="31" selection-end-line="62" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/Utils.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="35" column="13" lean-forward="false" selection-start-line="35" selection-start-column="13" selection-end-line="35" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/src.zip!/java/util/Comparator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4620">
-          <caret line="338" column="39" lean-forward="false" selection-start-line="338" selection-start-column="39" selection-end-line="338" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.1.4-3/kotlin-stdlib-1.1.4-3-sources.jar!/kotlin/text/Strings.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12015">
-          <caret line="815" column="24" lean-forward="false" selection-start-line="815" selection-start-column="24" selection-end-line="815" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/TypeRefTests.kt" />
-    <entry file="file://$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/SymbolSpecTests.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="42" column="40" lean-forward="false" selection-start-line="42" selection-start-column="40" selection-end-line="42" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/src.zip!/java/nio/file/StandardOpenOption.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1140">
-          <caret line="99" column="19" lean-forward="false" selection-start-line="99" selection-start-column="4" selection-end-line="99" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gradlew">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/CodeWriter.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1905">
-          <caret line="127" column="0" lean-forward="false" selection-start-line="127" selection-start-column="0" selection-end-line="127" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/TypeNameTests.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/FileModuleTests.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="47" column="0" lean-forward="false" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/SymbolSpecs.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1020">
-          <caret line="68" column="6" lean-forward="false" selection-start-line="68" selection-start-column="6" selection-end-line="68" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.1.4-3/kotlin-stdlib-1.1.4-3-sources.jar!/kotlin/Collections.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1860">
-          <caret line="138" column="17" lean-forward="false" selection-start-line="138" selection-start-column="17" selection-end-line="138" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/FileModules.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="10" column="6" lean-forward="false" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/CodeBlock.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1680">
-          <caret line="112" column="5" lean-forward="false" selection-start-line="112" selection-start-column="5" selection-end-line="112" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/TypeNames.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2430">
-          <caret line="164" column="0" lean-forward="false" selection-start-line="164" selection-start-column="0" selection-end-line="164" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.1.4-3/kotlin-stdlib-1.1.4-3-sources.jar!/generated/_Collections.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12600">
-          <caret line="840" column="53" lean-forward="false" selection-start-line="840" selection-start-column="53" selection-end-line="840" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/FileSpec.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3180">
-          <caret line="218" column="0" lean-forward="false" selection-start-line="218" selection-start-column="0" selection-end-line="218" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/InterfaceSpec.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="59" lean-forward="false" selection-start-line="27" selection-start-column="59" selection-end-line="27" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/FunctionSpecTests.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3705">
-          <caret line="253" column="0" lean-forward="false" selection-start-line="230" selection-start-column="0" selection-end-line="253" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/DecoratorSpecTests.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="14" column="33" lean-forward="false" selection-start-line="14" selection-start-column="33" selection-end-line="14" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/InterfaceSpecTests.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1515">
-          <caret line="107" column="27" lean-forward="false" selection-start-line="107" selection-start-column="27" selection-end-line="107" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/ParameterSpec.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1710">
-          <caret line="114" column="0" lean-forward="false" selection-start-line="113" selection-start-column="0" selection-end-line="114" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/PropertySpec.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1275">
-          <caret line="85" column="12" lean-forward="false" selection-start-line="85" selection-start-column="12" selection-end-line="85" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/FunctionSpec.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1620">
-          <caret line="108" column="12" lean-forward="false" selection-start-line="108" selection-start-column="12" selection-end-line="108" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/ModuleSpec.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/ClassSpec.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="72" column="0" lean-forward="false" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build/classes/kotlin/main/io/outfox/typescriptpoet/ClassSpec.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="4" lean-forward="false" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gradle/packaging.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gradle/maven-publishing.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/CodeWriter.kt" />
+    <entry file="file://$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/TypeNameTests.kt" />
+    <entry file="file://$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/FileModuleTests.kt" />
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/SymbolSpecs.kt" />
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.1.4-3/kotlin-stdlib-1.1.4-3-sources.jar!/kotlin/Collections.kt" />
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/FileModules.kt" />
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/CodeBlock.kt" />
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/TypeNames.kt" />
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.1.4-3/kotlin-stdlib-1.1.4-3-sources.jar!/generated/_Collections.kt" />
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/FileSpec.kt" />
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/InterfaceSpec.kt" />
+    <entry file="file://$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/FunctionSpecTests.kt" />
+    <entry file="file://$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/DecoratorSpecTests.kt" />
+    <entry file="file://$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/InterfaceSpecTests.kt" />
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/ParameterSpec.kt" />
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/PropertySpec.kt" />
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/FunctionSpec.kt" />
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/ModuleSpec.kt" />
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/io/outfox/typescriptpoet/ClassSpec.kt" />
+    <entry file="file://$PROJECT_DIR$/build/classes/kotlin/main/io/outfox/typescriptpoet/ClassSpec.class" />
+    <entry file="file://$PROJECT_DIR$/gradle/packaging.gradle" />
     <entry file="file://$PROJECT_DIR$/gradle/idea.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/gradle/code-coverage.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="465">
-          <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-          <folding />
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/ClassSpecTests.kt" />
+    <entry file="file://$PROJECT_DIR$/gradle/compile-kotlin.gradle">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gradle/compile-java.gradle">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gradle/testing.gradle" />
+    <entry file="file://$PROJECT_DIR$/build/test-results/test/TEST-ClassSpec#20Tests.xml" />
+    <entry file="file://$PROJECT_DIR$/src/test/java/io/outfox/typescriptpoet/test/AllTests.kt" />
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="100" column="8" selection-start-line="100" selection-start-column="8" selection-end-line="100" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.circleci/config.yml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gradle/repositories.gradle">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gradle/docs.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="36" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/ClassSpec.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="585">
+          <caret line="53" column="20" selection-start-line="53" selection-start-column="20" selection-end-line="53" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LICENSE.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/settings.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
+        <state>
+          <caret column="30" selection-start-column="30" selection-end-column="30" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/kotlin/io/outfox/typescriptpoet/test/ClassSpecTests.kt">
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/TypeNames.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3690">
-          <caret line="251" column="18" lean-forward="false" selection-start-line="251" selection-start-column="18" selection-end-line="251" selection-end-column="18" />
-          <folding />
+        <state relative-caret-position="1170">
+          <caret line="94" column="5" selection-start-line="94" selection-start-column="5" selection-end-line="94" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gradle/repositories.gradle">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.2.0/kotlin-stdlib-1.2.0.jar!/kotlin/kotlin.kotlin_builtins">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="2" lean-forward="false" selection-start-line="20" selection-start-column="2" selection-end-line="20" selection-end-column="2" />
-          <folding />
+        <state relative-caret-position="705">
+          <caret line="47" column="11" selection-start-line="47" selection-start-column="11" selection-end-line="47" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gradle/compile-kotlin.gradle">
+    <entry file="file://$PROJECT_DIR$/gradle/maven-publishing.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="855">
+          <caret line="57" column="1" selection-start-line="57" selection-start-column="1" selection-end-line="57" selection-end-column="1" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gradle/compile-java.gradle">
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/CodeWriter.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gradle/testing.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="1860">
+          <caret line="138" column="14" selection-start-line="138" selection-start-column="14" selection-end-line="138" selection-end-column="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="801">
-          <caret line="72" column="2" lean-forward="false" selection-start-line="72" selection-start-column="2" selection-end-line="72" selection-end-column="2" />
-          <folding />
+        <state relative-caret-position="480">
+          <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build/test-results/test/TEST-ClassSpec#20Tests.xml">
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/ModuleSpec.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="1320">
+          <caret line="102" column="24" lean-forward="true" selection-start-line="102" selection-start-column="24" selection-end-line="102" selection-end-column="24" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/io/outfox/typescriptpoet/test/AllTests.kt">
+    <entry file="file://$PROJECT_DIR$/src/test/java/io/outfoxx/typescriptpoet/test/AllTests.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+        <state relative-caret-position="120">
+          <caret line="24" column="6" selection-start-line="24" selection-start-column="6" selection-end-line="24" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/FileSpec.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="155" column="30" selection-start-line="155" selection-start-column="30" selection-end-line="155" selection-end-column="30" />
           <folding>
-            <element signature="e#39#168#0" expanded="true" />
+            <element signature="e#631#838#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/FileModules.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="100" column="8" lean-forward="false" selection-start-line="100" selection-start-column="8" selection-end-line="100" selection-end-column="8" />
-          <folding />
+        <state>
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/CodeBlock.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="381" column="16" selection-start-line="381" selection-start-column="8" selection-end-line="381" selection-end-column="16" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/hamcrest/hamcrest-all/1.3/hamcrest-all-1.3.jar!/org/hamcrest/CoreMatchers.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="753">
+          <caret line="106" column="31" selection-start-line="106" selection-start-column="31" selection-end-line="106" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/io/outfoxx/typescriptpoet/test/SymbolSpecTests.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="131" column="3" selection-start-line="131" selection-start-column="3" selection-end-line="131" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/SymbolSpecs.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="240" column="13" selection-start-line="240" selection-start-column="13" selection-end-line="240" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/outfoxx/typescriptpoet/DecoratorSpec.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="20" column="6" selection-start-line="20" selection-start-column="6" selection-end-line="20" selection-end-column="6" />
         </state>
       </provider>
     </entry>
