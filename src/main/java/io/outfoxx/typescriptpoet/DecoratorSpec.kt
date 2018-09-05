@@ -80,7 +80,7 @@ internal constructor(
     }
 
     fun addParameter(name: String? = null, format: String, vararg args: Any?) = apply {
-      parameters += name to CodeBlock.of(format, args)
+      parameters += name to CodeBlock.of(format, *args)
     }
 
     fun addParameter(name: String? = null, codeBlock: CodeBlock) = apply {
