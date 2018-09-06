@@ -17,8 +17,12 @@
 package io.outfoxx.typescriptpoet.test
 
 import io.outfoxx.typescriptpoet.TypeName
-import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.CoreMatchers.notNullValue
+import io.outfoxx.typescriptpoet.TypeName.Anonymous.Member
+import io.outfoxx.typescriptpoet.TypeName.Companion.BOOLEAN
+import io.outfoxx.typescriptpoet.TypeName.Companion.DATE
+import io.outfoxx.typescriptpoet.TypeName.Companion.NUMBER
+import io.outfoxx.typescriptpoet.TypeName.Companion.STRING
+import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -30,11 +34,34 @@ class TypeNameTests {
   @DisplayName("Parsing nested type import only imports root symbol while referencing fully nested import")
   fun testParsingNestedImport() {
 
-    val typeName = TypeName.Companion.anyType("This.Is.Nested@!Api")
+    val typeName = TypeName.anyType("This.Is.Nested@!Api")
 
     assertThat(typeName.usage, equalTo("This.Is.Nested"))
     assertThat(typeName.imported, notNullValue())
     assertThat(typeName.imported!!.value, equalTo("This"))
+  }
+
+  @Test
+  @DisplayName("Anonymous type names produce valid syntax")
+  fun testAnonymousNameGen() {
+
+    val typeName = TypeName.anonymousType("a" to STRING, "b" to NUMBER, "C" to BOOLEAN)
+
+    assertThat(typeName.members, hasItems(Member("a", STRING, false),
+                                          Member("b", NUMBER, false),
+                                          Member("C", BOOLEAN, false)))
+    assertThat(typeName.reference(null), equalTo("{ a: string, b: number, C: boolean }"))
+
+    val typeName2 = TypeName.anonymousType(arrayListOf(
+       Member("a", NUMBER, true),
+       Member("B", STRING, false),
+       Member("c", DATE, true)
+    ))
+
+    assertThat(typeName2.members, hasItems(Member("a", NUMBER, true),
+                                           Member("B", STRING, false),
+                                           Member("c", DATE, true)))
+    assertThat(typeName2.reference(null), equalTo("{ a?: number, B: string, c?: Date }"))
   }
 
 }

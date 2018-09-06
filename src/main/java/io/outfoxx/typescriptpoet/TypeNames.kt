@@ -108,12 +108,18 @@ sealed class TypeName {
 
     data class Member(
        val name: String,
-       val type: TypeName
+       val type: TypeName,
+       val optional: Boolean
     )
 
     override fun reference(trackedBy: SymbolReferenceTracker?): String {
-      val typeRequirements = members.associate({ it.name to it.type.reference(trackedBy) })
-      return "{ ${typeRequirements.entries.joinToString(", ") { "'${it.key}': ${it.value}" }} }"
+      val entries = members.joinToString(", ") {
+        val name = it.name
+        val opt = if (it.optional) "?" else ""
+        val type = it.type.reference(trackedBy)
+        "$name$opt: $type"
+      }
+      return "{ $entries }"
     }
 
   }
@@ -256,7 +262,8 @@ sealed class TypeName {
     /**
      * Type name for the generic Map type
      *
-     * @param elementType Element type of the map
+     * @param keyType Key type of the map
+     * @param valueType Value type of the map
      * @return Type name of the new map type
      */
     @JvmStatic
@@ -340,8 +347,7 @@ sealed class TypeName {
      */
     @JvmStatic
     fun intersectBound(type: TypeName, keyOf: Boolean = false): Bound {
-      return bound(type, Combiner.INTERSECT,
-                                                                if (keyOf) Bound.Modifier.KEY_OF else null)
+      return bound(type, Combiner.INTERSECT, if (keyOf) Bound.Modifier.KEY_OF else null)
     }
 
     /**
@@ -351,9 +357,19 @@ sealed class TypeName {
      * @return Type name representing the anonymous type
      */
     @JvmStatic
+    fun anonymousType(members: List<Anonymous.Member>): Anonymous {
+      return Anonymous(members)
+    }
+
+    /**
+     * Anonymous type name (e.g. `{ length?: number, name: string }`)
+     *
+     * @param members Member pairs to define the anonymous type (all properties are required)
+     * @return Type name representing the anonymous type
+     */
+    @JvmStatic
     fun anonymousType(vararg members: Pair<String, TypeName>): Anonymous {
-      return Anonymous(
-         members.map { Anonymous.Member(it.first, it.second) })
+      return anonymousType(members.map { Anonymous.Member(it.first, it.second, false) })
     }
 
     /**
@@ -370,7 +386,7 @@ sealed class TypeName {
     /**
      * Intersection type name (e.g. `Person & Serializable & Loggable`)
      *
-     * @param typeRequirments Requirements of the intersection as individual type names
+     * @param typeRequirements Requirements of the intersection as individual type names
      * @return Type name representing the intersection type
      */
     @JvmStatic
