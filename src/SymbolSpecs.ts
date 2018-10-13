@@ -1,4 +1,10 @@
+import _ from 'lodash';
 import {SymbolReferenceTracker} from "./SymbolReferenceContainer";
+
+const fileNamePattern = '(?:[a-zA-Z0-9._\-]+)'
+const modulePattern = `@?(?:(?:!${fileNamePattern})|(?:${fileNamePattern}(?:/${fileNamePattern})*))`
+const identPattern = `(?:(?:[a-zA-Z][_a-zA-Z0-9.]*)|(?:[_a-zA-Z][_a-zA-Z0-9.]+))`
+const importPattern = `^(${identPattern})?([*@+])(${modulePattern})(?:#(${identPattern}))?`
 
 /**
  * Specifies a symbol and its related origin, either via import or implicit/local declaration.
@@ -7,7 +13,63 @@ import {SymbolReferenceTracker} from "./SymbolReferenceContainer";
  */
 export class SymbolSpec {
 
-  constructor(public value: string) {
+  /**
+   * Parses a symbol reference pattern to create a symbol. The pattern
+   * allows the simple definition of all symbol types including any possible
+   * import variation. If the spec to parse does not follow the proper format
+   * an implicit symbol is created from the unparsed spec.
+   *
+   * Pattern: `<symbol_name>? <import_type> <module_path> (#<augmented_symbol_name>)?`
+   *
+   * * symbol_name = `[a-zA-Z0-9._]+`
+   *
+   *        Any legal compound JS/TS symbol (e.g. symbol._member.member). If no symbol name is
+   *        specified then the last component of the module path is used as the symbol name;
+   *        allows easy use with libraries that follow normal conventions.
+   *
+   * * import_type = `@ | * | +`
+   *
+   *        `@` = Import named symbol from module (e.g. `import { <symbol_name> } from '<module_name>'`)
+   *
+   *        `*` = Import all symbols from module (e.g. `import * from '<module_name>'`)
+   *
+   *        `+` = Symbol is declared implicitly via import of the module (e.g. `import '<module_name>'`)
+   *
+   * * module_path = `!<filename> | <filename>(/<filename)*`
+   *
+   *        Path name specifying the module. If the module path begins with a `!` then it is considered
+   *        to be a file being generated. This ensures the paths are output as relative imports.
+   *
+   * * augmented_symbol_name = `[a-zA-Z0-9_]+`
+   *
+   *        Any valid symbol name that represents the symbol that is being augmented. For example,
+   *        the import `rxjs/add/observable/from` attaches the `from` method to the `Observable` class.
+   *        To import it correctly the spec should be `+rxjs/add/observable/from#Observable`. Adding this
+   *        parameter to augmented imports ensures they are output only when the symbol being augmented
+   *        is actually used.
+   *
+   *
+   * @param spec Symbol spec to parse.
+   * @return Parsed symbol specification
+   */
+  static from(spec: string): SymbolSpec {
+    const matched = spec.match(importPattern)
+    if (matched != null) {
+      const modulePath = matched[3];
+      const type = matched[2] || "@";
+      const symbolName = matched[1] || (_.last(modulePath.split('/')) || "").replace("!", "");
+      const targetName = matched[4]
+      switch(type) {
+        case "*": return importsAll(symbolName, modulePath);
+        case "@": return importsName(symbolName, modulePath);
+        case "+": return targetName ? augmented(symbolName, modulePath, targetName) : sideEffect(symbolName, modulePath)
+        default: throw "Invalid type character";
+      }
+    }
+    return implicit(spec);
+  }
+
+  protected constructor(public value: string) {
   }
 
   reference(trackedBy?: SymbolReferenceTracker): string {
@@ -19,9 +81,72 @@ export class SymbolSpec {
 }
 
 /**
+ * Creates an import of all the modules exported symbols as a single
+ * local named symbol
+ *
+ * e.g. `import * as Engine from 'templates';`
+ *
+ * @param localName The local name of the imported symbols
+ * @param from The module to import the symbols from
+ */
+export function importsAll(localName: string, from: string): SymbolSpec {
+  return new ImportsAll(localName, from);
+}
+
+/**
+ * Creates an import of a single named symbol from the module's exported
+ * symbols.
+ *
+ * e.g. `import { Engine } from 'templates';`
+ *
+ * @param exportedName The symbol that is both exported and imported
+ * @param from The module the symbol is exported from
+ */
+export function importsName(exportedName: string, from: string): SymbolSpec {
+  return new ImportsName(exportedName, from);
+}
+
+/**
+ * Creates a symbol that is brought in by a whole module import
+ * that "augments" an existing symbol.
+ *
+ * e.g. `import 'rxjs/add/operator/flatMap'`
+ *
+ * @param symbolName The augmented symbol to be imported
+ * @param from The entire import that does the augmentation
+ * @param target The symbol that is augmented
+ */
+export function augmented(symbolName: string, from: string, target: string): SymbolSpec {
+  return new Augmented(symbolName, from, target);
+}
+
+/**
+ * Creates a symbol that is brought in as a side effect of
+ * an import.
+ *
+ * e.g. `import 'mocha'`
+ *
+ * @param symbolName The symbol to be imported
+ * @param from The entire import that does the augmentation
+ */
+export function sideEffect(symbolName: string, from: string): SymbolSpec {
+  return new SideEffect(symbolName, from);
+}
+
+/**
+ * An implied symbol that does no tracking of imports
+ *
+ * @param name The implicit symbol name
+ */
+export function implicit(name: string): SymbolSpec {
+  return new Implicit(name);
+}
+
+
+/**
  * Non-imported symbol
  */
-class Implicit extends SymbolSpec {
+export class Implicit extends SymbolSpec {
   constructor(value: string) {
     super(value);
   }
@@ -34,8 +159,8 @@ class Implicit extends SymbolSpec {
 /**
  * Common base class for imported symbols
  */
-abstract class Imported extends SymbolSpec {
-  constructor(public value: string, source: string) {
+export abstract class Imported extends SymbolSpec {
+  protected constructor(public value: string, public source: string) {
     super(source);
   }
 }
@@ -46,7 +171,7 @@ abstract class Imported extends SymbolSpec {
  *
  * e.g. `import { Engine } from 'templates';`
  */
-class ImportsName extends Imported {
+export class ImportsName extends Imported {
   constructor(value: string, source: string) {
     super(value, source);
   }
@@ -58,7 +183,7 @@ class ImportsName extends Imported {
  *
  * e.g. `import * as Engine from 'templates';`
  */
-class ImportsAll extends Imported {
+export class ImportsAll extends Imported {
   constructor(value: string, source: string) {
     super(value, source);
   }
@@ -70,8 +195,8 @@ class ImportsAll extends Imported {
  *
  * e.g. `import 'rxjs/add/operator/flatMap'`
  */
-class Augmented extends Imported {
-  constructor(value: string, source: string) {
+export class Augmented extends Imported {
+  constructor(value: string, source: string, public augmented: string) {
     super(value, source);
   }
 }
@@ -82,7 +207,7 @@ class Augmented extends Imported {
  *
  * e.g. `import 'mocha'`
  */
-class SideEffect extends Imported {
+export class SideEffect extends Imported {
   constructor(value: string, source: string) {
     super(value, source);
   }

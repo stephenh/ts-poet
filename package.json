@@ -13,6 +13,7 @@
   "license": "Apache 2",
   "devDependencies": {
     "@types/jest": "^23.3.2",
+    "@types/lodash": "^4.14.117",
     "jest": "^23.6.0",
     "nodemon": "^1.18.3",
     "prettier": "^1.14.3",
@@ -22,5 +23,7 @@
     "tslint-immutable": "^4.7.0",
     "typescript": "^3.0.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "lodash": "^4.17.11"
+  }
 }
