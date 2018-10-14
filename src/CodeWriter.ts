@@ -4,7 +4,7 @@ import { LineWrapper } from "./LineWrapper";
 import { StringBuffer } from "./StringBuffer";
 import { SymbolReferenceTracker } from "./SymbolReferenceContainer";
 import { Imported, SymbolSpec } from "./SymbolSpecs";
-import { check, stringLiteralWithQuotes } from "./test/utils";
+import { check, stringLiteralWithQuotes } from "./utils";
 
 /**
  * Converts a [FileSpec] to a string suitable to both human- and tsc-consumption. This honors

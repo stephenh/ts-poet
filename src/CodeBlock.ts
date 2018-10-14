@@ -2,7 +2,7 @@ import { CodeWriter } from "./CodeWriter";
 import { StringBuffer } from "./StringBuffer";
 import { SymbolReferenceTracker } from "./SymbolReferenceContainer";
 import { SymbolSpec } from "./SymbolSpecs";
-import { check } from "./test/utils";
+import { check } from "./utils";
 
 const NAMED_ARGUMENT = /^%([\w_]+):([\w]).*$/;
 const LOWERCASE = /^[a-z]+[\w_]*$/;

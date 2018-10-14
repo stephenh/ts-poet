@@ -1,4 +1,4 @@
-import { StringBuffer } from "../StringBuffer";
+import { StringBuffer } from "./StringBuffer";
 
 export function check(b: boolean, message: string) {
   if (!b) {
