@@ -65,7 +65,7 @@ export class CodeBlock {
   /** A heterogeneous list containing string literals and value placeholders.  */
 
   isEmpty() {
-    return this.formatParts.length == 0;
+    return this.formatParts.length === 0;
   }
 
   isNotEmpty() {
@@ -89,10 +89,10 @@ export class CodeBlock {
     // Walk through the formatParts of prefix to confirm that it's a of this.
     for (let index = 0; index < prefix.formatParts.length; index++) {
       const formatPart = prefix.formatParts[index];
-      if (this.formatParts[index] != formatPart) {
+      if (this.formatParts[index] !== formatPart) {
         // We've found a format part that doesn't match. If this is the very last format part check
         // for a string prefix match. If that doesn't match, we're done.
-        if (index == prefix.formatParts.length - 1 && this.formatParts[index].startsWith(formatPart)) {
+        if (index === prefix.formatParts.length - 1 && this.formatParts[index].startsWith(formatPart)) {
           firstFormatPart = this.formatParts[index].substring(formatPart.length)
         } else {
           return undefined;
@@ -102,7 +102,7 @@ export class CodeBlock {
       // If the matching format part has an argument, check that too.
       if (formatPart.startsWith("%") && !isNoArgPlaceholder(
          formatPart[1])) {
-        if (this.args[prefixArgCount] != prefix.args[prefixArgCount]) {
+        if (this.args[prefixArgCount] !== prefix.args[prefixArgCount]) {
           return undefined; // Argument doesn't match.
         }
         prefixArgCount++;
@@ -211,12 +211,12 @@ export class Builder implements SymbolReferenceTracker {
     let p = 0;
     while (p < format.length) {
       const nextP = format.indexOf("%", p);
-      if (nextP == -1) {
+      if (nextP === -1) {
         this.formatParts.push(format.substring(p, format.length));
         break;
       }
 
-      if (p != nextP) {
+      if (p !== nextP) {
         this.formatParts.push(format.substring(p, nextP));
         p = nextP;
       }
