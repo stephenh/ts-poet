@@ -1,26 +1,27 @@
-import {SymbolSpec} from "./SymbolSpecs";
+import { StringBuffer } from "sb-js";
 import {SymbolReferenceTracker} from "./SymbolReferenceContainer";
+import {SymbolSpec} from "./SymbolSpecs";
+import { check } from "./test/utils";
+import { CodeWriter } from "./CodeWriter";
 
-const NAMED_ARGUMENT = /^%([\\w_]+):([\\w]).*$/;
-const LOWERCASE = /[a-z]+[\\w_]*/;
+const NAMED_ARGUMENT = /^%([\w_]+):([\w]).*$/;
+const LOWERCASE = /^[a-z]+[\w_]*$/;
 const ARG_NAME = 1;
 const TYPE_NAME = 2;
 const NO_ARG_PLACEHOLDERS = ["%W", "%>", "%<", "%[", "%]"];
 
 class TypeName {
-  reference(o: any): string {
+  public reference(o: any): string {
     return "";
   }
 }
 
-type Dictionary<T> = { [key: string]: T };
+interface Dictionary<T> {
+  [key: string]: T;
+}
 
 function isNoArgPlaceholder(c: string): boolean {
   return ['%', '>', '<', '[', ']', 'W'].indexOf(c) > -1;
-}
-
-function check(b: boolean, message: string) {
-  if (!b) throw new Error(message);
 }
 
 
@@ -146,8 +147,9 @@ export class CodeBlock {
   }
 
   toString(): string {
-     // = buildstring { CodeWriter(this).emitCode(this@CodeBlock) }
-    return "";
+    const buffer = new StringBuffer("");
+    new CodeWriter(buffer).emitCodeBlock(this);
+    return buffer.toString();
   }
 
   toBuilder(): Builder {
@@ -159,7 +161,7 @@ export class CodeBlock {
   }
 
   static of(format: string, ...args: any[]): CodeBlock {
-    return new Builder().add(format, args).build();
+    return new Builder().add(format, ...args).build();
   }
 
   static builder(): Builder {
@@ -201,8 +203,11 @@ class Builder implements SymbolReferenceTracker {
    * `java.lang.Integer.class` in the argument map.
    */
   addNamed(format: string, args: Dictionary<any>): this {
-    /* for (argument in arguments.keys) {
-      require(LOWERCASE matches argument) { "argument '$argument' must start with a lowercase character" } } */
+    Object.keys(args).forEach(arg => {
+      check(
+        arg.match(LOWERCASE) !== null,
+        `argument '${arg}' must start with a lowercase character`);
+    });
     let p = 0;
     while (p < format.length) {
       const nextP = format.indexOf("%", p);
@@ -218,7 +223,7 @@ class Builder implements SymbolReferenceTracker {
 
       let matchResult: RegExpMatchArray | null = null;
       const colon = format.indexOf(':', p);
-      if (colon != -1) {
+      if (colon !== -1) {
         const endIndex = Math.min(colon + 2, format.length);
         matchResult = format.substring(p, endIndex).match(NAMED_ARGUMENT);
       }
@@ -228,10 +233,14 @@ class Builder implements SymbolReferenceTracker {
         const formatChar = matchResult[TYPE_NAME].charAt(0);
         this.addArgument(format, formatChar, args[argumentName]);
         this.formatParts.push(`%${formatChar}`);
-        p += matchResult.length + 1;
+        // ugly copy/paste from earlier line
+        const endIndex = Math.min(colon + 2, format.length);
+        p = endIndex;
       } else {
         check(p < format.length - 1, "dangling % at end");
-        // require(isNoArgPlaceholder(format[p + 1])) { "unknown format %${format[p + 1]} at ${p + 1} in '$format'" }
+        check(
+          isNoArgPlaceholder(format[p + 1]),
+          `unknown format %${format[p + 1]} at ${p + 1} in '${format}'`);
         this.formatParts.push(format.substring(p, p + 2));
         p += 2;
       }
@@ -260,9 +269,11 @@ class Builder implements SymbolReferenceTracker {
 
     let p = 0;
     while (p < format.length) {
-      if (format[p] != '%') {
+      if (format[p] !== '%') {
         let nextP = format.indexOf('%', p + 1);
-        if (nextP == -1) nextP = format.length;
+        if (nextP === -1) {
+          nextP = format.length;
+        }
         this.formatParts.push(format.substring(p, nextP));
         p = nextP;
         continue;
@@ -271,17 +282,18 @@ class Builder implements SymbolReferenceTracker {
 
       // Consume zero or more digits, leaving 'c' as the first non-digit char after the '%'.
       const indexStart = p;
+      check(p < format.length, `dangling format characters in '${format}'`);
       let c = format[p++];
-      while (p < format.length - 1 && format[p + 1].match(/[0-9]/)) {
-        // require(p < format.length) { "dangling format characters in '$format'" }
+      while (c.match(/[0-9]/)) {
+        check(p < format.length, `dangling format characters in '${format}'`);
         c = format[p++];
       }
       const indexEnd = p - 1;
 
       // If 'c' doesn't take an argument, we're done.
       if (isNoArgPlaceholder(c)) {
-        // require(indexStart == indexEnd) { "%%, %>, %<, %[, %], and %W may not have an index" }
-        this.formatParts.push("%$c");
+        check(indexStart === indexEnd, "%%, %>, %<, %[, %], and %W may not have an index");
+        this.formatParts.push(`%${c}`);
         continue;
       }
 
@@ -299,17 +311,16 @@ class Builder implements SymbolReferenceTracker {
         relativeParameterCount++;
       }
 
-      /*
-require(index >= 0 && index < args.length) {
-  "index ${index + 1} for '${format.substring(indexStart - 1,
-  indexEnd + 1)}' not in range (received ${args.length} arguments)"
-}
-require(!hasIndexed || !hasRelative) { "cannot mix indexed and positional parameters" }
-*/
+      check(
+        index >= 0 && index < args.length,
+        `index ${index + 1} for '${format.substring(indexStart - 1, indexEnd + 1)}' not in range (received ${args.length} arguments)`);
+      check(
+        !hasIndexed || !hasRelative,
+        "cannot mix indexed and positional parameters");
 
       this.addArgument(format, c, args[index]);
 
-      this.formatParts.push("%$c");
+      this.formatParts.push(`%${c}`);
     }
 
     if (hasRelative) {
@@ -321,12 +332,12 @@ require(!hasIndexed || !hasRelative) { "cannot mix indexed and positional parame
     if (hasIndexed) {
       const unused: string[] = [];
       for (let i = 0; i < args.length; i++) {
-        if (indexedParameterCount[i] == 0) {
+        if (indexedParameterCount[i] === 0) {
           unused.push("%" + (i + 1));
         }
       }
-      const s = (unused.length == 1) ? "" : "s";
-      check(unused.length == 0, `unused argument${s}: ${unused.join(", ")}`);
+      const s = (unused.length === 1) ? "" : "s";
+      check(unused.length === 0, `unused argument${s}: ${unused.join(", ")}`);
     }
 
     return this;
