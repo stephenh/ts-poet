@@ -2987,11 +2987,6 @@ path-type@^1.0.0:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
 
-path@~0.11.14:
-  version "0.11.14"
-  resolved "https://registry.yarnpkg.com/path/-/path-0.11.14.tgz#cbc7569355cb3c83afeb4ace43ecff95231e5a7d"
-  integrity sha1-y8dWk1XLPIOv60rOQ+z/lSMeWn0=
-
 pause-stream@^0.0.11:
   version "0.0.11"
   resolved "https://registry.yarnpkg.com/pause-stream/-/pause-stream-0.0.11.tgz#fe5a34b0cbce12b5aa6a2b403ee2e73b602f1445"
@@ -3385,13 +3380,6 @@ sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
-
-sb-js@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/sb-js/-/sb-js-0.3.0.tgz#4d7e361f722079b6cb1b0e92cfb0712dee1b1141"
-  integrity sha1-TX42H3IgebbLGw6Sz7BxLe4bEUE=
-  dependencies:
-    path "~0.11.14"
 
 semver-diff@^2.0.0:
   version "2.1.0"

@@ -1,8 +1,8 @@
-import { StringBuffer } from "sb-js";
-import {SymbolReferenceTracker} from "./SymbolReferenceContainer";
-import {SymbolSpec} from "./SymbolSpecs";
-import { check } from "./test/utils";
 import { CodeWriter } from "./CodeWriter";
+import { StringBuffer } from "./StringBuffer";
+import { SymbolReferenceTracker } from "./SymbolReferenceContainer";
+import { SymbolSpec } from "./SymbolSpecs";
+import { check } from "./test/utils";
 
 const NAMED_ARGUMENT = /^%([\w_]+):([\w]).*$/;
 const LOWERCASE = /^[a-z]+[\w_]*$/;
@@ -147,7 +147,7 @@ export class CodeBlock {
   }
 
   toString(): string {
-    const buffer = new StringBuffer("");
+    const buffer = new StringBuffer();
     new CodeWriter(buffer).emitCodeBlock(this);
     return buffer.toString();
   }

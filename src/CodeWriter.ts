@@ -1,7 +1,7 @@
 
-import { StringBuffer } from "sb-js";
 import { CodeBlock } from "./CodeBlock";
 import { LineWrapper } from "./LineWrapper";
+import { StringBuffer } from "./StringBuffer";
 import { SymbolReferenceTracker } from "./SymbolReferenceContainer";
 import { Imported, SymbolSpec } from "./SymbolSpecs";
 import { check, stringLiteralWithQuotes } from "./test/utils";

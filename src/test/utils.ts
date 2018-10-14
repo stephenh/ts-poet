@@ -1,4 +1,4 @@
-import { StringBuffer } from "sb-js";
+import { StringBuffer } from "../StringBuffer";
 
 export function check(b: boolean, message: string) {
   if (!b) {
@@ -9,31 +9,28 @@ export function check(b: boolean, message: string) {
 // Based on original javapoet code; it looks like typescriptpoet has
 // an extra branch to cover multi-line strings; haven't handled that yet.
 export function stringLiteralWithQuotes(value: string, indent: string = "  "): string {
-  const result = new StringBuffer("");
-  result.add('"');
+  const result = new StringBuffer();
+  result.append('"');
   for (let i = 0; i < value.length; i++) {
     const c = value.charAt(i);
     // trivial case: single quote must not be escaped
     if (c === '\'') {
-      result.add("'");
+      result.append("'");
       continue;
     }
     // trivial case: double quotes must be escaped
     if (c === '"') {
-      result.add("\\\"");
+      result.append("\\\"");
       continue;
     }
     // default case: just let character literal do its work
-    result.add(characterLiteralWithoutSingleQuotes(c));
+    result.append(characterLiteralWithoutSingleQuotes(c));
     // need to append indent after linefeed?
     if (c === '\n' && i + 1 < value.length) {
-      result.add("\"\n");
-      result.add(indent);
-      result.add(indent);
-      result.add("+ \"");
+      result.append("\"\n").append(indent).append(indent).append("+ \"");
     }
   }
-  result.add('"');
+  result.append('"');
   return result.toString();
 }
 

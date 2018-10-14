@@ -1,10 +1,10 @@
-import {StringBuffer} from "sb-js/lib/sb-js";
-import {LineWrapper} from "../LineWrapper";
+import { LineWrapper } from "../LineWrapper";
+import { StringBuffer } from "../StringBuffer";
 
 describe("LineWrapper", () => {
 
   it("wrap", () => {
-    const out = new StringBuffer("");
+    const out = new StringBuffer();
     const lineWrapper = new LineWrapper(out, "  ", 10);
     lineWrapper.append("abcde");
     lineWrapper.wrappingSpace(2);
@@ -14,7 +14,7 @@ describe("LineWrapper", () => {
   });
 
   it("noWrap", () => {
-    const out = new StringBuffer("");
+    const out = new StringBuffer();
     const lineWrapper = new LineWrapper(out, "  ", 10);
     lineWrapper.append("abcde");
     lineWrapper.wrappingSpace(2);
@@ -24,7 +24,7 @@ describe("LineWrapper", () => {
   });
 
   it("zeroWidthNoWrap", () => {
-    const out = new StringBuffer("");
+    const out = new StringBuffer();
     const lineWrapper = new LineWrapper(out, "  ", 10);
     lineWrapper.append("abcde");
     lineWrapper.zeroWidthSpace(2);
@@ -34,7 +34,7 @@ describe("LineWrapper", () => {
   });
 
   it("nospaceWrapMax", () => {
-    const out = new StringBuffer("");
+    const out = new StringBuffer();
     const lineWrapper = new LineWrapper(out, "  ", 10);
     lineWrapper.append("abcde");
     lineWrapper.zeroWidthSpace(2);
@@ -44,7 +44,7 @@ describe("LineWrapper", () => {
   });
 
   it("multipleWrite", () => {
-    const out = new StringBuffer("");
+    const out = new StringBuffer();
     const lineWrapper = new LineWrapper(out, "  ", 10);
     lineWrapper.append("ab");
     lineWrapper.wrappingSpace(1);
@@ -68,7 +68,7 @@ describe("LineWrapper", () => {
   });
 
   it("fencepost", () => {
-    const out = new StringBuffer("");
+    const out = new StringBuffer();
     const lineWrapper = new LineWrapper(out, "  ", 10);
     lineWrapper.append("abcde");
     lineWrapper.append("fghij");
@@ -80,7 +80,7 @@ describe("LineWrapper", () => {
   });
 
   it("fencepostZeroWidth", () => {
-    const out = new StringBuffer("");
+    const out = new StringBuffer();
     const lineWrapper = new LineWrapper(out, "  ", 10);
     lineWrapper.append("abcde");
     lineWrapper.append("fghij");
@@ -92,7 +92,7 @@ describe("LineWrapper", () => {
   });
 
   it("overlyLongLinesWithoutLeadingSpace", () => {
-    const out = new StringBuffer("");
+    const out = new StringBuffer();
     const lineWrapper = new LineWrapper(out, "  ", 10);
     lineWrapper.append("abcdefghijkl");
     lineWrapper.close();
@@ -100,7 +100,7 @@ describe("LineWrapper", () => {
   });
 
   it("overlyLongLinesWithLeadingSpace", () => {
-    const out = new StringBuffer("");
+    const out = new StringBuffer();
     const lineWrapper = new LineWrapper(out, "  ", 10);
     lineWrapper.wrappingSpace(2);
     lineWrapper.append("abcdefghijkl");
@@ -109,7 +109,7 @@ describe("LineWrapper", () => {
   });
 
   it("overlyLongLinesWithLeadingZeroWidth", () => {
-    const out = new StringBuffer("");
+    const out = new StringBuffer();
     const lineWrapper = new LineWrapper(out, "  ", 10);
     lineWrapper.zeroWidthSpace(2);
     lineWrapper.append("abcdefghijkl");
@@ -118,7 +118,7 @@ describe("LineWrapper", () => {
   });
 
   it("noWrapEmbeddedNewlines", () => {
-    const out = new StringBuffer("");
+    const out = new StringBuffer();
     const lineWrapper = new LineWrapper(out, "  ", 10);
     lineWrapper.append("abcde");
     lineWrapper.wrappingSpace(2);
@@ -129,7 +129,7 @@ describe("LineWrapper", () => {
   });
 
   it("wrapEmbeddedNewlines", () => {
-    const out = new StringBuffer("");
+    const out = new StringBuffer();
     const lineWrapper = new LineWrapper(out, "  ", 10);
     lineWrapper.append("abcde");
     lineWrapper.wrappingSpace(2);
@@ -140,7 +140,7 @@ describe("LineWrapper", () => {
   });
 
   it("noWrapEmbeddedNewlines_ZeroWidth", () => {
-    const out = new StringBuffer("");
+    const out = new StringBuffer();
     const lineWrapper = new LineWrapper(out, "  ", 10);
     lineWrapper.append("abcde");
     lineWrapper.zeroWidthSpace(2);
@@ -151,7 +151,7 @@ describe("LineWrapper", () => {
   });
 
   it("wrapEmbeddedNewlines_ZeroWidth", () => {
-    const out = new StringBuffer("");
+    const out = new StringBuffer();
     const lineWrapper = new LineWrapper(out, "  ", 10);
     lineWrapper.append("abcde");
     lineWrapper.zeroWidthSpace(2);
@@ -162,7 +162,7 @@ describe("LineWrapper", () => {
   });
 
   it("noWrapMultipleNewlines", () => {
-    const out = new StringBuffer("");
+    const out = new StringBuffer();
     const lineWrapper = new LineWrapper(out, "  ", 10);
     lineWrapper.append("abcde");
     lineWrapper.wrappingSpace(2);
@@ -174,7 +174,7 @@ describe("LineWrapper", () => {
   });
 
   it("wrapMultipleNewlines", () => {
-    const out = new StringBuffer("");
+    const out = new StringBuffer();
     const lineWrapper = new LineWrapper(out, "  ", 10);
     lineWrapper.append("abcde");
     lineWrapper.wrappingSpace(2);

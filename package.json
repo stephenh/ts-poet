@@ -24,7 +24,6 @@
     "typescript": "^3.0.1"
   },
   "dependencies": {
-    "lodash": "^4.17.11",
-    "sb-js": "^0.3.0"
+    "lodash": "^4.17.11"
   }
 }
