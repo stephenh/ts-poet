@@ -10,7 +10,7 @@
   },
   "keywords": [],
   "author": "Stephen Haberman",
-  "license": "Apache 2",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@types/jest": "^23.3.2",
     "@types/lodash": "^4.14.117",
