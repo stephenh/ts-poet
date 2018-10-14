@@ -16,7 +16,7 @@ class TypeName {
   }
 }
 
-interface Dictionary<T> {
+export interface Dictionary<T> {
   [key: string]: T;
 }
 
@@ -174,7 +174,7 @@ export class CodeBlock {
 
 }
 
-class Builder implements SymbolReferenceTracker {
+export class Builder implements SymbolReferenceTracker {
   readonly formatParts: string[] = [];
   readonly args: any[] = [];
   readonly referencedSymbols: Set<SymbolSpec> = new Set();
