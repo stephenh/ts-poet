@@ -1,7 +1,9 @@
 
+import { ClassSpec } from "./ClassSpec";
 import { CodeBlock } from "./CodeBlock";
 import { DecoratorSpec } from "./DecoratorSpec";
 import { EnumSpec } from "./EnumSpec";
+import { InterfaceSpec } from "./InterfaceSpec";
 import { LineWrapper } from "./LineWrapper";
 import { Modifier, ModifierOrder } from "./Modifier";
 import { StringBuffer } from "./StringBuffer";
@@ -9,7 +11,6 @@ import { SymbolReferenceTracker } from "./SymbolReferenceContainer";
 import { Imported, SymbolSpec } from "./SymbolSpecs";
 import { TypeName, TypeVariable } from "./TypeNames";
 import { check, stringLiteralWithQuotes } from "./utils";
-import { InterfaceSpec } from "./InterfaceSpec";
 
 /**
  * Converts a [FileSpec] to a string suitable to both human- and tsc-consumption. This honors
@@ -200,9 +201,9 @@ export class CodeWriter implements SymbolReferenceTracker {
   }
 
   private emitLiteral(o?: any): void {
-    // TODO
-    // is ClassSpec -> o.emit(this)
-    if (o instanceof InterfaceSpec) {
+    if (o instanceof ClassSpec) {
+      return o.emit(this);
+    } else if (o instanceof InterfaceSpec) {
       return o.emit(this);
     } else if (o instanceof EnumSpec) {
       return o.emit(this);

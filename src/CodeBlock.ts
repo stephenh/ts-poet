@@ -68,6 +68,9 @@ export class CodeBlock {
     separator: string = ", ",
     prefix: string = "",
     suffix: string = ""): CodeBlock {
+    if (blocks.length === 0) {
+      return CodeBlock.empty();
+    }
     const placeholders = blocks.map(_ => "%L");
     return CodeBlock.of(prefix + placeholders.join(separator) + suffix, ...blocks);
   }
@@ -80,11 +83,11 @@ export class CodeBlock {
 
   /** A heterogeneous list containing string literals and value placeholders.  */
 
-  isEmpty() {
+  public isEmpty() {
     return this.formatParts.length === 0;
   }
 
-  isNotEmpty() {
+  public isNotEmpty() {
     return !this.isEmpty();
   }
 
