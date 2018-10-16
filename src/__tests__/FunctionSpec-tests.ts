@@ -151,11 +151,13 @@ function test() {
 
   it("generates parameters with default values", () => {
     const testClass = FunctionSpec.builder("test")
-      .addParameter("a", TypeName.NUMBER, false, CodeBlock.of("10"))
+      .addParameter("a", TypeName.NUMBER, false, [], CodeBlock.of("10"))
       .build();
-    expect(emit(testClass)).toMatchInlineSnapshot();
-    //            function test(a: number = 10) {
-    //           }
+    expect(emit(testClass)).toMatchInlineSnapshot(`
+"function test(a: number = 10) {
+}
+"
+`);
   });
 
   it("generates parameter decorators", () => {
@@ -178,12 +180,10 @@ function test() {
       )
       .build();
     expect(emit(testClass)).toMatchInlineSnapshot(`
-"function test(@required @size(/* min */ 10, /* max */ 100) @logged a) {
+"function test(@required @size(/* min */ 10, /* max */ 100) @logged() a: number) {
 }
 "
 `);
-    //            function test(@required @size(/* min */ 10, /* max */ 100) @logged() a: number) {
-    //           }
   });
 
   it("ToBuilder copies all fields", () => {

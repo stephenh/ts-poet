@@ -212,7 +212,7 @@ export class FunctionSpecBuilder {
     return this;
   }
 
-  public addParameter(name: string, type: TypeName, optional?: boolean, ...modifiers: Modifier[]): this
+  public addParameter(name: string, type: TypeName, optional?: boolean, modifiers?: Modifier[], initializer?: CodeBlock): this
   public addParameter(parameterSpec: ParameterSpec): this
   public addParameter(parameterSpec: ParameterSpec | string): this {
     if (typeof parameterSpec === 'string') {
@@ -220,7 +220,8 @@ export class FunctionSpecBuilder {
       const type: TypeName = arguments[1] || TypeNames.ANY;
       const optional: boolean = arguments[2] || false;
       const modifiers: Modifier[] = arguments[3] || [];
-      this.parameters.push(ParameterSpec.builder(name, type, optional, ...modifiers).build());
+      const initializer: CodeBlock | undefined = arguments[4];
+      this.parameters.push(ParameterSpec.builder(name, type, optional, ...modifiers).defaultValueBlock(initializer).build());
 
     } else {
       this.parameters.push(parameterSpec);

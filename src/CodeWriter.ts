@@ -1,14 +1,14 @@
 
 import { CodeBlock } from "./CodeBlock";
+import { DecoratorSpec } from "./DecoratorSpec";
+import { EnumSpec } from "./EnumSpec";
 import { LineWrapper } from "./LineWrapper";
+import { Modifier, ModifierOrder } from "./Modifier";
 import { StringBuffer } from "./StringBuffer";
 import { SymbolReferenceTracker } from "./SymbolReferenceContainer";
 import { Imported, SymbolSpec } from "./SymbolSpecs";
-import { check, stringLiteralWithQuotes } from "./utils";
-import { Modifier, ModifierOrder } from "./Modifier";
-import { DecoratorSpec } from "./DecoratorSpec";
 import { TypeName, TypeVariable } from "./TypeNames";
-import { EnumSpec } from "./EnumSpec";
+import { check, stringLiteralWithQuotes } from "./utils";
 
 /**
  * Converts a [FileSpec] to a string suitable to both human- and tsc-consumption. This honors

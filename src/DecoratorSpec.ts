@@ -47,8 +47,8 @@ export class DecoratorSpec {
         codeWriter.emit("\n");
       }
       codeWriter.emit(")");
-    // } else if (factory ?: parameters.isNotEmpty()) {
-    //  codeWriter.emit("()");
+    } else if (this.factory) {
+      codeWriter.emit("()");
     }
   }
 

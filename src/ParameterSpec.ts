@@ -4,7 +4,6 @@ import { DecoratorSpec } from "./DecoratorSpec";
 import { Modifier } from "./Modifier";
 import { SymbolSpec } from "./SymbolSpecs";
 import { TypeName } from "./TypeNames";
-import { check } from "./utils";
 
 export class ParameterSpec {
 
@@ -63,7 +62,7 @@ export class ParameterSpec {
    this.decorators = builder.decorators;
    this.modifiers = builder.modifiers;
    this.type = builder.type;
-   this.defaultValue = builder.defValue;
+   this.defaultValue = builder.defaultValueField;
  }
 
    public emit(
@@ -96,7 +95,7 @@ export class ParameterSpec {
      const builder = new ParameterSpecBuilder(name, type, this.optional);
      builder.decorators.push(...this.decorators);
      builder.modifiers.push(...this.modifiers);
-     builder.defValue = this.defaultValue;
+     builder.defaultValueField = this.defaultValue;
      return builder;
    }
  }
@@ -104,7 +103,7 @@ export class ParameterSpec {
 export class ParameterSpecBuilder {
   public readonly decorators: DecoratorSpec[] = [];
   public readonly modifiers: Modifier[] = [];
-  public defValue?: CodeBlock;
+  public defaultValueField?: CodeBlock;
 
    constructor(
      public name: string,
@@ -134,9 +133,9 @@ export class ParameterSpecBuilder {
      return this.defaultValueBlock(CodeBlock.of(format, ...args));
   }
 
-  public defaultValueBlock(codeBlock: CodeBlock): this {
-    check(this.defValue === null, "initializer was already set");
-    this.defValue = codeBlock;
+  public defaultValueBlock(codeBlock?: CodeBlock): this {
+    // check(this.defValue === null, "initializer was already set");
+    this.defaultValueField = codeBlock;
     return this;
   }
 

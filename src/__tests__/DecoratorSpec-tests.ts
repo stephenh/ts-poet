@@ -36,7 +36,7 @@ describe("DecoratorSpec", () => {
     const testDec = DecoratorSpec.builder("test")
       .asFactory()
       .build();
-    expect(emit(testDec)).toMatchInlineSnapshot(`"@test"`);
+    expect(emit(testDec)).toMatchInlineSnapshot(`"@test()"`);
   });
 
   it("ToBuilder copies all fields", () => {

@@ -51,6 +51,27 @@ function isNoArgPlaceholder(c: string): boolean {
 
 export class CodeBlock {
 
+  public static of(format: string, ...args: any[]): CodeBlock {
+    return new CodeBlockBuilder().add(format, ...args).build();
+  }
+
+  public static builder(): CodeBlockBuilder {
+    return new CodeBlockBuilder();
+  }
+
+  public static empty(): CodeBlock {
+    return CodeBlock.builder().build();
+  }
+
+  public static joinToCode(
+    blocks: CodeBlock[],
+    separator: string = ", ",
+    prefix: string = "",
+    suffix: string = ""): CodeBlock {
+    const placeholders = blocks.map(_ => "%L");
+    return CodeBlock.of(prefix + placeholders.join(separator) + suffix, ...blocks);
+  }
+
   constructor(
      public formatParts: string[],
      public args: any[],
@@ -153,18 +174,6 @@ export class CodeBlock {
     builder.args.push(...this.args);
     this.referencedSymbols.forEach(s => builder.referencedSymbols.add(s));
     return builder;
-  }
-
-  public static of(format: string, ...args: any[]): CodeBlock {
-    return new CodeBlockBuilder().add(format, ...args).build();
-  }
-
-  public static builder(): CodeBlockBuilder {
-    return new CodeBlockBuilder();
-  }
-
-  public static empty(): CodeBlock {
-    return CodeBlock.builder().build();
   }
 
 }
@@ -469,13 +478,3 @@ export class CodeBlockBuilder implements SymbolReferenceTracker {
   }
 
 }
-
-/*
-@JvmOverloads
-fun Collection<CodeBlock>.joinToCode(separator: CharSequence = ", ", prefix: CharSequence = "",
-                                                               suffix: CharSequence = ""): CodeBlock {
-  const blocks = toTypedArray()
-  const placeholders = Array(blocks.length) { "%L" }
-  return CodeBlock.of(placeholders.joinTostring(separator, prefix, suffix), *blocks)
-}
-*/
