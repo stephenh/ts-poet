@@ -1,10 +1,10 @@
 
-import { anonymousType, anyType, BOOLEAN, DATE, Member, NUMBER, STRING } from "../TypeNames";
+import { Member, TypeName, TypeNames } from "../TypeNames";
 
 describe("TypeNameTests", () => {
 
   it("testParsingNestedImport", () => {
-    const typeName = anyType("This.Is.Nested@!Api");
+    const typeName = TypeNames.anyType("This.Is.Nested@!Api");
 
     expect(typeName.usage).toEqual("This.Is.Nested");
     expect(typeName.imported).toBeDefined();
@@ -14,23 +14,26 @@ describe("TypeNameTests", () => {
   });
 
   it ("testAnonymousNameGen", () => {
-    const typeName = anonymousType(["a", STRING], ["b", NUMBER], ["C", BOOLEAN]);
+    const typeName = TypeNames.anonymousType(
+      ["a", TypeNames.STRING],
+      ["b", TypeNames.NUMBER],
+      ["C", TypeNames.BOOLEAN]);
     expect(typeName.members).toEqual([
-      new Member("a", STRING, false),
-      new Member("b", NUMBER, false),
-      new Member("C", BOOLEAN, false),
+      new Member("a", TypeNames.STRING, false),
+      new Member("b", TypeNames.NUMBER, false),
+      new Member("C", TypeNames.BOOLEAN, false),
     ]);
     expect(typeName.reference()).toEqual("{ a: string, b: number, C: boolean }");
 
-    const typeName2 = anonymousType(
-       new Member("a", NUMBER, true),
-       new Member("B", STRING, false),
-       new Member("c", DATE, true),
+    const typeName2 = TypeNames.anonymousType(
+       new Member("a", TypeNames.NUMBER, true),
+       new Member("B", TypeNames.STRING, false),
+       new Member("c", TypeNames.DATE, true),
     );
     expect(typeName2.members).toEqual([
-      new Member("a", NUMBER, true),
-      new Member("B", STRING, false),
-      new Member("c", DATE, true),
+      new Member("a", TypeNames.NUMBER, true),
+      new Member("B", TypeNames.STRING, false),
+      new Member("c", TypeNames.DATE, true),
     ]);
     expect(typeName2.reference()).toEqual("{ a?: number, B: string, c?: Date }");
   });

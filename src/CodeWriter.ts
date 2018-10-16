@@ -5,7 +5,10 @@ import { StringBuffer } from "./StringBuffer";
 import { SymbolReferenceTracker } from "./SymbolReferenceContainer";
 import { Imported, SymbolSpec } from "./SymbolSpecs";
 import { check, stringLiteralWithQuotes } from "./utils";
-import { Modifier } from "./Modifier";
+import { Modifier, ModifierOrder } from "./Modifier";
+import { DecoratorSpec } from "./DecoratorSpec";
+import { TypeName, TypeVariable } from "./TypeNames";
+import { EnumSpec } from "./EnumSpec";
 
 /**
  * Converts a [FileSpec] to a string suitable to both human- and tsc-consumption. This honors
@@ -74,14 +77,12 @@ export class CodeWriter implements SymbolReferenceTracker {
     this.emit(" */\n");
   }
 
-  /* TODO
-  fun emitDecorators(decorators: List<DecoratorSpec>, inline: Boolean) {
-    for (decoratorSpec in decorators) {
-      decoratorSpec.emit(this, inline)
-      emit(if (inline) " " else "\n")
-    }
+  public emitDecorators(decorators: DecoratorSpec[], inline: boolean) {
+    decorators.forEach(decoratorSpec => {
+      decoratorSpec.emit(this, inline);
+      this.emit(inline ? " " : "\n");
+    });
   }
-  */
 
   /**
    * Emits `modifiers` in the standard order. Modifiers in `implicitModifiers` will not
@@ -91,8 +92,8 @@ export class CodeWriter implements SymbolReferenceTracker {
     if (modifiers.length === 0) {
       return;
     }
-    modifiers.forEach(m => {
-      if (implicitModifiers.indexOf(m) === -1) {
+    ModifierOrder.forEach(m => {
+      if (modifiers.indexOf(m) !== -1 && implicitModifiers.indexOf(m) === -1) {
         this.emit(m).emit(" ");
       }
     });
@@ -103,30 +104,38 @@ export class CodeWriter implements SymbolReferenceTracker {
    *
    * This should only be used when declaring type variables; everywhere else bounds are omitted.
    */
-  /* TODO
-  fun emitTypeVariables(typeVariables: List<TypeName.TypeVariable>) {
-    if (typeVariables.isEmpty()) return
-
-    emit("<")
-    typeVariables.forEachIndexed { index, typeVariable ->
-      if (index > 0) emit(", ")
-      emitCode(buildString {
-        append(typeVariable.name)
-        if (typeVariable.bounds.isNotEmpty()) {
-          val parts = mutableListOf<String>()
-          parts.add(" extends")
-          typeVariable.bounds.forEachIndexed { index, bound ->
-            if (index > 0) parts.add(bound.combiner.symbol)
-            bound.modifier?.let { parts.add(it.keyword) }
-            parts.add(bound.type.reference(this@CodeWriter))
-          }
-          append(parts.joinToString(" "))
-        }
-      })
+  public emitTypeVariables(typeVariables: TypeVariable[]): void {
+    if (typeVariables.length === 0) {
+      return;
     }
-    emit(">")
+    this.emit("<");
+    let index = 0;
+    typeVariables.forEach(typeVariable => {
+      if (index > 0) {
+        this.emit(", ");
+      }
+      let code = typeVariable.name;
+      if (typeVariable.bounds.length > 0) {
+        const parts: string[] = [];
+        parts.push(" extends");
+        let j = 0;
+        typeVariable.bounds.forEach(bound => {
+          if (j > 0) {
+            parts.push(bound.combiner);
+          }
+          if (bound.modifier) {
+            parts.push(bound.modifier);
+          }
+          parts.push(bound.type.reference(this));
+          j++;
+        });
+        code += parts.join(" ");
+      }
+      this.emit(code);
+      index++;
+    });
+    this.emit(">");
   }
-  */
 
   /* TODO
   public emitCode(s: string): void {
@@ -148,8 +157,7 @@ export class CodeWriter implements SymbolReferenceTracker {
         case "%L": this.emitLiteral(codeBlock.args[a++]); break;
         case "%N": this.emit(codeBlock.args[a++] as string); break;
         case "%S": this.emitString(codeBlock.args[a++] as string); break;
-        // TODO
-        // case "%T": this.emitTypeName(codeBlock.args[a++] as TypeName); break;
+        case "%T": this.emitTypeName(codeBlock.args[a++] as TypeName); break;
         case "%%": this.emit("%"); break;
         case "%>": this.indent(); break;
         case "%<": this.unindent(); break;
@@ -181,11 +189,9 @@ export class CodeWriter implements SymbolReferenceTracker {
     return this;
   }
 
-  /* TODO
   private emitTypeName(typeName: TypeName) {
-    emit(typeName.reference(this))
+    this.emit(typeName.reference(this));
   }
-  */
 
   private emitString(s?: string): void {
     // Emit null as a literal null: no quotes.
@@ -196,9 +202,11 @@ export class CodeWriter implements SymbolReferenceTracker {
     // TODO
     // is ClassSpec -> o.emit(this)
     // is InterfaceSpec -> o.emit(this)
-    // is EnumSpec -> o.emit(this)
-    // is DecoratorSpec -> o.emit(this, inline = true, asParameter = true)
-    if (o instanceof CodeBlock) {
+    if (o instanceof EnumSpec) {
+      return o.emit(this);
+    } else if (o instanceof DecoratorSpec) {
+      return o.emit(this, true, true);
+    } else if (o instanceof CodeBlock) {
       this.emitCodeBlock(o);
     } else if (o) {
       // TODO Check if `if o` is right

@@ -2,6 +2,7 @@ import { CodeWriter } from "./CodeWriter";
 import { StringBuffer } from "./StringBuffer";
 import { SymbolReferenceTracker } from "./SymbolReferenceContainer";
 import { SymbolSpec } from "./SymbolSpecs";
+import { TypeName } from "./TypeNames";
 import { check } from "./utils";
 
 const NAMED_ARGUMENT = /^%([\w_]+):([\w]).*$/;
@@ -9,12 +10,6 @@ const LOWERCASE = /^[a-z]+[\w_]*$/;
 const ARG_NAME = 1;
 const TYPE_NAME = 2;
 const NO_ARG_PLACEHOLDERS = ["%W", "%>", "%<", "%[", "%]"];
-
-class TypeName {
-  public reference(o: any): string {
-    return "";
-  }
-}
 
 export interface Dictionary<T> {
   [key: string]: T;
@@ -152,29 +147,29 @@ export class CodeBlock {
     return buffer.toString();
   }
 
-  toBuilder(): Builder {
-    const builder = new Builder()
+  public toBuilder(): CodeBlockBuilder {
+    const builder = new CodeBlockBuilder()
     builder.formatParts.push(...this.formatParts);
     builder.args.push(...this.args);
     this.referencedSymbols.forEach(s => builder.referencedSymbols.add(s));
     return builder;
   }
 
-  static of(format: string, ...args: any[]): CodeBlock {
-    return new Builder().add(format, ...args).build();
+  public static of(format: string, ...args: any[]): CodeBlock {
+    return new CodeBlockBuilder().add(format, ...args).build();
   }
 
-  static builder(): Builder {
-    return new Builder();
+  public static builder(): CodeBlockBuilder {
+    return new CodeBlockBuilder();
   }
 
-  static empty(): CodeBlock {
+  public static empty(): CodeBlock {
     return CodeBlock.builder().build();
   }
 
 }
 
-export class Builder implements SymbolReferenceTracker {
+export class CodeBlockBuilder implements SymbolReferenceTracker {
   readonly formatParts: string[] = [];
   readonly args: any[] = [];
   readonly referencedSymbols: Set<SymbolSpec> = new Set();

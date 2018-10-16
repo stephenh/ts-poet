@@ -15,3 +15,20 @@ export enum Modifier {
   LET = "let",
   VAR = "var",
 }
+
+// should try a tsc transformer
+export const ModifierOrder = [
+  Modifier.EXPORT,
+  Modifier.PUBLIC,
+  Modifier.PROTECTED,
+  Modifier.PRIVATE,
+  Modifier.READONLY,
+  Modifier.GET,
+  Modifier.SET,
+  Modifier.STATIC,
+  Modifier.ABSTRACT,
+  Modifier.DECLARE,
+  Modifier.CONST,
+  Modifier.LET,
+  Modifier.VAR,
+];

@@ -52,7 +52,7 @@ export class SymbolSpec {
    * @param spec Symbol spec to parse.
    * @return Parsed symbol specification
    */
-  static from(spec: string): SymbolSpec {
+  public static from(spec: string): SymbolSpec {
     const matched = spec.match(importPattern)
     if (matched != null) {
       const modulePath = matched[3];
@@ -67,6 +67,10 @@ export class SymbolSpec {
       }
     }
     return implicit(spec);
+  }
+
+  public static fromMaybeString(spec: string | SymbolSpec): SymbolSpec {
+    return typeof spec === 'string' ? SymbolSpec.from(spec) : spec;
   }
 
   protected constructor(public value: string) {
