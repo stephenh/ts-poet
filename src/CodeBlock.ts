@@ -156,7 +156,7 @@ export class CodeBlock {
     const builder = new Builder()
     builder.formatParts.push(...this.formatParts);
     builder.args.push(...this.args);
-    this.referencedSymbols.forEach(builder.referencedSymbols.add);
+    this.referencedSymbols.forEach(s => builder.referencedSymbols.add(s));
     return builder;
   }
 
@@ -376,7 +376,7 @@ export class Builder implements SymbolReferenceTracker {
     if (o instanceof SymbolSpec) {
       return o.reference(this);
     } else if (o instanceof CodeBlock) {
-      o.referencedSymbols.forEach(this.referencedSymbols.add);
+      o.referencedSymbols.forEach(s => this.referencedSymbols.add(s));
       return o.toString();
     } else if (o) {
       return o.toString();
@@ -432,10 +432,10 @@ export class Builder implements SymbolReferenceTracker {
     return this;
   }
 
-  addCode(codeBlock: CodeBlock): this {
-    this.formatParts.concat(codeBlock.formatParts);
-    this.args.concat(codeBlock.args);
-    codeBlock.referencedSymbols.forEach(this.referencedSymbols.add);
+  public addCode(codeBlock: CodeBlock): this {
+    this.formatParts.push(...codeBlock.formatParts);
+    this.args.push(...codeBlock.args);
+    codeBlock.referencedSymbols.forEach(s => this.referencedSymbols.add(s));
     return this;
   }
 

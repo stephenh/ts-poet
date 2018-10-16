@@ -1,6 +1,6 @@
 import { StringBuffer } from "./StringBuffer";
 
-export function check(b: boolean, message: string) {
+export function check(b: boolean, message: string = "check failed") {
   if (!b) {
     throw new Error(message);
   }

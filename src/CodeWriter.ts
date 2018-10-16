@@ -5,6 +5,7 @@ import { StringBuffer } from "./StringBuffer";
 import { SymbolReferenceTracker } from "./SymbolReferenceContainer";
 import { Imported, SymbolSpec } from "./SymbolSpecs";
 import { check, stringLiteralWithQuotes } from "./utils";
+import { Modifier } from "./Modifier";
 
 /**
  * Converts a [FileSpec] to a string suitable to both human- and tsc-consumption. This honors
@@ -86,18 +87,16 @@ export class CodeWriter implements SymbolReferenceTracker {
    * Emits `modifiers` in the standard order. Modifiers in `implicitModifiers` will not
    * be emitted.
    */
-  /* TODO
-  fun emitModifiers(
-     modifiers: Set<Modifier>,
-     implicitModifiers: Set<Modifier> = emptySet()) {
-    if (modifiers.isEmpty()) return
-    for (modifier in EnumSet.copyOf(modifiers)) {
-      if (implicitModifiers.contains(modifier)) continue
-      emit(modifier.keyword)
-      emit(" ")
+  public emitModifiers(modifiers: Modifier[], implicitModifiers: Modifier[] = []) {
+    if (modifiers.length === 0) {
+      return;
     }
+    modifiers.forEach(m => {
+      if (implicitModifiers.indexOf(m) === -1) {
+        this.emit(m).emit(" ");
+      }
+    });
   }
-  */
 
   /**
    * Emit type variables with their bounds.
@@ -212,7 +211,7 @@ export class CodeWriter implements SymbolReferenceTracker {
    * [CodeWriter.out] does it through here, since we emit indentation lazily in order to avoid
    * unnecessary trailing whitespace.
    */
-  emit(s: string): this {
+  public emit(s: string): this {
     let first = true;
     s.split('\n').forEach(line => {
       // Emit a newline character. Make sure blank lines in KDoc & comments look good.
