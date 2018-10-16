@@ -9,6 +9,7 @@ import { SymbolReferenceTracker } from "./SymbolReferenceContainer";
 import { Imported, SymbolSpec } from "./SymbolSpecs";
 import { TypeName, TypeVariable } from "./TypeNames";
 import { check, stringLiteralWithQuotes } from "./utils";
+import { InterfaceSpec } from "./InterfaceSpec";
 
 /**
  * Converts a [FileSpec] to a string suitable to both human- and tsc-consumption. This honors
@@ -201,8 +202,9 @@ export class CodeWriter implements SymbolReferenceTracker {
   private emitLiteral(o?: any): void {
     // TODO
     // is ClassSpec -> o.emit(this)
-    // is InterfaceSpec -> o.emit(this)
-    if (o instanceof EnumSpec) {
+    if (o instanceof InterfaceSpec) {
+      return o.emit(this);
+    } else if (o instanceof EnumSpec) {
       return o.emit(this);
     } else if (o instanceof DecoratorSpec) {
       return o.emit(this, true, true);
