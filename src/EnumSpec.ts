@@ -7,10 +7,10 @@ import { CodeWriter } from "./CodeWriter";
 
 export class EnumSpec {
 
-  private readonly name: string;
-  private readonly javaDoc: CodeBlock;
-  private readonly modifiers: Modifier[];
-  private readonly constants: Map<string, CodeBlock | undefined>;
+  public readonly name: string;
+  public readonly javaDoc: CodeBlock;
+  public readonly modifiers: Modifier[];
+  public readonly constants: Map<string, CodeBlock | undefined>;
 
   public constructor(private builder: EnumSpecBuilder) {
     this.name = builder.name;

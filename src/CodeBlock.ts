@@ -165,7 +165,7 @@ export class CodeBlock {
     }
   }
 
-  toString(): string {
+  public toString(): string {
     const buffer = new StringBuffer();
     new CodeWriter(buffer).emitCodeBlock(this);
     return buffer.toString();
@@ -182,19 +182,20 @@ export class CodeBlock {
 }
 
 export class CodeBlockBuilder implements SymbolReferenceTracker {
-  readonly formatParts: string[] = [];
-  readonly args: any[] = [];
-  readonly referencedSymbols: Set<SymbolSpec> = new Set();
 
-  isEmpty(): boolean {
+  public readonly formatParts: string[] = [];
+  public readonly args: any[] = [];
+  public readonly referencedSymbols: Set<SymbolSpec> = new Set();
+
+  public isEmpty(): boolean {
     return this.formatParts.length === 0;
   }
 
-  isNotEmpty(): boolean {
+  public isNotEmpty(): boolean {
     return !this.isEmpty();
   }
 
-  referenced(symbol: SymbolSpec) {
+  public referenced(symbol: SymbolSpec) {
     this.referencedSymbols.add(symbol);
   }
 
@@ -209,7 +210,7 @@ export class CodeBlockBuilder implements SymbolReferenceTracker {
    * format string containing `%clazz:T` and include the key `clazz` with value
    * `java.lang.Integer.class` in the argument map.
    */
-  addNamed(format: string, args: Dictionary<any>): this {
+  public addNamed(format: string, args: Dictionary<any>): this {
     Object.keys(args).forEach(arg => {
       check(
         arg.match(LOWERCASE) !== null,
@@ -266,7 +267,7 @@ export class CodeBlockBuilder implements SymbolReferenceTracker {
    * Mixing relative and positional arguments in a call to add is invalid and will result in an
    * error.
    */
-  add(format: string, ...args: any[]): this {
+  public add(format: string, ...args: any[]): this {
     let hasRelative = false;
     let hasIndexed = false;
 

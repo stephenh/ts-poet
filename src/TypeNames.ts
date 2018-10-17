@@ -171,7 +171,7 @@ export class TypeNames {
   public static anyType(name: string, imported?: SymbolSpec): Any {
     if (imported === undefined) {
       const match = name.match(/[\*@\+]/);
-      if (match && match.index) {
+      if (match && match.index !== undefined) {
         const idx = match.index;
         const usage = name.substring(0, idx);
         imported = SymbolSpec.from(

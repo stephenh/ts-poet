@@ -36,7 +36,7 @@ export class CodeWriter implements SymbolReferenceTracker {
     private indentString: string = "  ",
     referencedSymbols: Set<SymbolSpec> = new Set()) {
     this.out = new LineWrapper(out, indentString, 100);
-    referencedSymbols.forEach(this.referencedSymbols.add);
+    referencedSymbols.forEach(sym => this.referencedSymbols.add(sym));
   }
 
   public referenced(symbol: SymbolSpec): void {
@@ -145,13 +145,14 @@ export class CodeWriter implements SymbolReferenceTracker {
   }
   */
 
-  public emitCode(format: string, ...args: any[]): void {
+  public emitCode(format: string, ...args: any[]): this {
     this.emitCodeBlock(CodeBlock.of(format, ...args));
+    return this;
   }
 
   public emitCodeBlock(codeBlock: CodeBlock): this {
     // Transfer all symbols referenced in the code block
-    codeBlock.referencedSymbols.forEach(this.referencedSymbols.add);
+    codeBlock.referencedSymbols.forEach(sym => this.referencedSymbols.add(sym));
 
     let a = 0;
     codeBlock.formatParts.forEach(part => {

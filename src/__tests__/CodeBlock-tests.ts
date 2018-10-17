@@ -1,24 +1,7 @@
 import {CodeBlock} from "../CodeBlock";
+import { TypeNames } from "../TypeNames";
 
 describe("CodeBlockTest", () => {
-
-//  1. /@Test
-//  2. qf 3dw i it(" <esc> e a ",<sp> <esc> f)la => <esc> l%a ); <esc>nq
-//              ____           ______            __           __
-//  3. @f
-
-  /*
-  it("equalsAndHashCode", () => {
-    let a = CodeBlock.builder().build();
-    let b = CodeBlock.builder().build();
-    expect(a.equals(b)).toBeTruthy();
-    expect(a.hashCode()).toEqual(b.hashCode());
-    a = CodeBlock.builder().add("$L", "taco").build();
-    b = CodeBlock.builder().add("$L", "taco").build();
-    expect(a.equals(b)).toBeTruthy();
-    expect(a.hashCode()).toEqual(b.hashCode());
-  });
-  */
 
   it("of", () => {
     const a = CodeBlock.of("%L taco", "delicious");
@@ -81,7 +64,7 @@ describe("CodeBlockTest", () => {
   });
 
   it("typeFormatCanBeIndexed", () => {
-    const block = CodeBlock.builder().add("%1T", Map).build();
+    const block = CodeBlock.builder().add("%1T", TypeNames.MAP).build();
     expect(block.toString()).toEqual("Map");
   });
 
@@ -192,9 +175,9 @@ describe("CodeBlockTest", () => {
 
   it("sameIndexCanBeUsedWithDifferentFormats", () => {
     const block = CodeBlock.builder()
-        .add("%1T.println(%1S)", Map)
+        .add("%1T.println(%1S)", TypeNames.MAP)
         .build();
-    expect(block.toString()).toEqual("Map.println(\"Map\")");
+    expect(block.toString()).toEqual("Map.println(\"[object Object]\")");
   });
 
   it("tooManyStatementEnters", () => {
@@ -213,45 +196,30 @@ describe("CodeBlockTest", () => {
     }).toThrow("statement exit %] has no matching statement enter %[");
   });
 
-  /*
   it("join", () => {
-    let codeBlocks: CodeBlock[] = [];
-    codeBlocks.push(CodeBlock.of("$S", "hello"));
-    codeBlocks.push(CodeBlock.of("$T", ClassName.get("world", "World")));
+    const codeBlocks: CodeBlock[] = [];
+    codeBlocks.push(CodeBlock.of("%S", "hello"));
+    codeBlocks.push(CodeBlock.of("%T", TypeNames.ANY));
     codeBlocks.push(CodeBlock.of("need tacos"));
-
-    CodeBlock joined = CodeBlock.join(codeBlocks, " || ");
-    expect(joined.toString()).toEqual("\"hello\" || world.World || need tacos");
-  });
-
-  it("joining", () => {
-    let codeBlocks: CodeBlock[] = [];
-    codeBlocks.add(CodeBlock.of("$S", "hello"));
-    codeBlocks.add(CodeBlock.of("$T", ClassName.get("world", "World")));
-    codeBlocks.add(CodeBlock.of("need tacos"));
-
-    CodeBlock joined = codeBlocks.stream().collect(CodeBlock.joining(" || "));
-    expect(joined.toString()).toEqual("\"hello\" || world.World || need tacos");
+    const joined = CodeBlock.joinToCode(codeBlocks, " || ");
+    expect(joined.toString()).toEqual("\"hello\" || any || need tacos");
   });
 
   it("joiningSingle", () => {
-    let codeBlocks: CodeBlock[] = [];
-    codeBlocks.add(CodeBlock.of("$S", "hello"));
-
-    CodeBlock joined = codeBlocks.stream().collect(CodeBlock.joining(" || "));
+    const codeBlocks: CodeBlock[] = [];
+    codeBlocks.push(CodeBlock.of("%S", "hello"));
+    const joined = CodeBlock.joinToCode(codeBlocks, " || ");
     expect(joined.toString()).toEqual("\"hello\"");
   });
 
   it("joiningWithPrefixAndSuffix", () => {
-    let codeBlocks: CodeBlock[] = [];
-    codeBlocks.push(CodeBlock.of("$S", "hello"));
-    codeBlocks.push(CodeBlock.of("$T", ClassName.get("world", "World")));
+    const codeBlocks: CodeBlock[] = [];
+    codeBlocks.push(CodeBlock.of("%S", "hello"));
+    codeBlocks.push(CodeBlock.of("%T", TypeNames.MAP));
     codeBlocks.push(CodeBlock.of("need tacos"));
-
-    CodeBlock joined = codeBlocks.stream().collect(CodeBlock.joining(" || ", "start {", "} end"));
-    expect(joined.toString()).toEqual("start {\"hello\" || world.World || need tacos} end");
+    const joined = CodeBlock.joinToCode(codeBlocks, " || ", "start {", "} end");
+    expect(joined.toString()).toEqual("start {\"hello\" || Map || need tacos} end");
   });
-  */
 
 });
 

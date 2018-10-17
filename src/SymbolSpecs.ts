@@ -60,13 +60,13 @@ export class SymbolSpec {
       const symbolName = matched[1] || (_.last(modulePath.split('/')) || "").replace("!", "");
       const targetName = matched[4]
       switch(type) {
-        case "*": return importsAll(symbolName, modulePath);
-        case "@": return importsName(symbolName, modulePath);
-        case "+": return targetName ? augmented(symbolName, modulePath, targetName) : sideEffect(symbolName, modulePath)
-        default: throw "Invalid type character";
+        case "*": return SymbolSpecs.importsAll(symbolName, modulePath);
+        case "@": return SymbolSpecs.importsName(symbolName, modulePath);
+        case "+": return targetName ? SymbolSpecs.augmented(symbolName, modulePath, targetName) : SymbolSpecs.sideEffect(symbolName, modulePath)
+        default: throw new Error("Invalid type character");
       }
     }
-    return implicit(spec);
+    return SymbolSpecs.implicit(spec);
   }
 
   public static fromMaybeString(spec: string | SymbolSpec): SymbolSpec {
@@ -76,7 +76,7 @@ export class SymbolSpec {
   protected constructor(public value: string) {
   }
 
-  reference(trackedBy?: SymbolReferenceTracker): string {
+  public reference(trackedBy?: SymbolReferenceTracker): string {
     if (trackedBy) {
       trackedBy.referenced(this);
     }
@@ -84,66 +84,68 @@ export class SymbolSpec {
   }
 }
 
-/**
- * Creates an import of all the modules exported symbols as a single
- * local named symbol
- *
- * e.g. `import * as Engine from 'templates';`
- *
- * @param localName The local name of the imported symbols
- * @param from The module to import the symbols from
- */
-export function importsAll(localName: string, from: string): SymbolSpec {
-  return new ImportsAll(localName, from);
-}
+export class SymbolSpecs {
+  /**
+   * Creates an import of all the modules exported symbols as a single
+   * local named symbol
+   *
+   * e.g. `import * as Engine from 'templates';`
+   *
+   * @param localName The local name of the imported symbols
+   * @param from The module to import the symbols from
+   */
+  public static importsAll(localName: string, from: string): SymbolSpec {
+    return new ImportsAll(localName, from);
+  }
 
-/**
- * Creates an import of a single named symbol from the module's exported
- * symbols.
- *
- * e.g. `import { Engine } from 'templates';`
- *
- * @param exportedName The symbol that is both exported and imported
- * @param from The module the symbol is exported from
- */
-export function importsName(exportedName: string, from: string): SymbolSpec {
-  return new ImportsName(exportedName, from);
-}
+  /**
+   * Creates an import of a single named symbol from the module's exported
+   * symbols.
+   *
+   * e.g. `import { Engine } from 'templates';`
+   *
+   * @param exportedName The symbol that is both exported and imported
+   * @param from The module the symbol is exported from
+   */
+  public static importsName(exportedName: string, from: string): SymbolSpec {
+    return new ImportsName(exportedName, from);
+  }
 
-/**
- * Creates a symbol that is brought in by a whole module import
- * that "augments" an existing symbol.
- *
- * e.g. `import 'rxjs/add/operator/flatMap'`
- *
- * @param symbolName The augmented symbol to be imported
- * @param from The entire import that does the augmentation
- * @param target The symbol that is augmented
- */
-export function augmented(symbolName: string, from: string, target: string): SymbolSpec {
-  return new Augmented(symbolName, from, target);
-}
+  /**
+   * Creates a symbol that is brought in by a whole module import
+   * that "augments" an existing symbol.
+   *
+   * e.g. `import 'rxjs/add/operator/flatMap'`
+   *
+   * @param symbolName The augmented symbol to be imported
+   * @param from The entire import that does the augmentation
+   * @param target The symbol that is augmented
+   */
+  public static augmented(symbolName: string, from: string, target: string): SymbolSpec {
+    return new Augmented(symbolName, from, target);
+  }
 
-/**
- * Creates a symbol that is brought in as a side effect of
- * an import.
- *
- * e.g. `import 'mocha'`
- *
- * @param symbolName The symbol to be imported
- * @param from The entire import that does the augmentation
- */
-export function sideEffect(symbolName: string, from: string): SymbolSpec {
-  return new SideEffect(symbolName, from);
-}
+  /**
+   * Creates a symbol that is brought in as a side effect of
+   * an import.
+   *
+   * e.g. `import 'mocha'`
+   *
+   * @param symbolName The symbol to be imported
+   * @param from The entire import that does the augmentation
+   */
+  public static sideEffect(symbolName: string, from: string): SymbolSpec {
+    return new SideEffect(symbolName, from);
+  }
 
-/**
- * An implied symbol that does no tracking of imports
- *
- * @param name The implicit symbol name
- */
-export function implicit(name: string): SymbolSpec {
-  return new Implicit(name);
+  /**
+   * An implied symbol that does no tracking of imports
+   *
+   * @param name The implicit symbol name
+   */
+  public static implicit(name: string): SymbolSpec {
+    return new Implicit(name);
+  }
 }
 
 
@@ -155,7 +157,7 @@ export class Implicit extends SymbolSpec {
     super(value);
   }
 
-  reference(trackedBy?: SymbolReferenceTracker): string {
+  public reference(trackedBy?: SymbolReferenceTracker): string {
     return this.value;
   }
 }
