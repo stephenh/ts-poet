@@ -7,7 +7,7 @@ import { InterfaceSpec } from "./InterfaceSpec";
 import { LineWrapper } from "./LineWrapper";
 import { Modifier, ModifierOrder } from "./Modifier";
 import { StringBuffer } from "./StringBuffer";
-import { SymbolReferenceTracker } from "./SymbolReferenceContainer";
+import { SymbolReferenceTracker } from "./SymbolReferenceTracker";
 import { Imported, SymbolSpec } from "./SymbolSpecs";
 import { TypeName, TypeVariable } from "./TypeNames";
 import { check, stringLiteralWithQuotes } from "./utils";

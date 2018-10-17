@@ -1,6 +1,6 @@
 import { CodeWriter } from "./CodeWriter";
 import { StringBuffer } from "./StringBuffer";
-import { SymbolReferenceTracker } from "./SymbolReferenceContainer";
+import { SymbolReferenceTracker } from "./SymbolReferenceTracker";
 import { SymbolSpec } from "./SymbolSpecs";
 import { TypeName } from "./TypeNames";
 import { check } from "./utils";

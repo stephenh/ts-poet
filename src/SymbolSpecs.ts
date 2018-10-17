@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {SymbolReferenceTracker} from "./SymbolReferenceContainer";
+import {SymbolReferenceTracker} from "./SymbolReferenceTracker";
 
 const fileNamePattern = '(?:[a-zA-Z0-9._\-]+)'
 const modulePattern = `@?(?:(?:!${fileNamePattern})|(?:${fileNamePattern}(?:/${fileNamePattern})*))`

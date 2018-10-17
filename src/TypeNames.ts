@@ -1,4 +1,4 @@
-import { SymbolReferenceTracker } from "./SymbolReferenceContainer";
+import { SymbolReferenceTracker } from "./SymbolReferenceTracker";
 import { SymbolSpec } from "./SymbolSpecs";
 
 /**
