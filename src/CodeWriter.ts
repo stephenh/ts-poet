@@ -173,51 +173,6 @@ export class CodeWriter implements SymbolReferenceTracker {
     });
     return this;
   }
-
-  private beginStatement(): void {
-    check(this.statementLine === -1, "statement enter %[ followed by statement enter %[");
-    this.statementLine = 0;
-  }
-
-  private endStatement(): void {
-    check(this.statementLine !== -1, "statement exit %] has no matching statement enter %[");
-    if (this.statementLine > 0) {
-      this.unindent(2); // End a multi-line statement. Decrease the indentation level.
-    }
-    this.statementLine = -1;
-  }
-
-  private emitWrappingSpace(): this {
-    this.out.wrappingSpace(this.indentLevel + 2);
-    return this;
-  }
-
-  private emitTypeName(typeName: TypeName) {
-    this.emit(typeName.reference(this));
-  }
-
-  private emitString(s?: string): void {
-    // Emit null as a literal null: no quotes.
-    this.emit(s ? stringLiteralWithQuotes(s) : "null");
-  }
-
-  private emitLiteral(o?: any): void {
-    if (o instanceof ClassSpec) {
-      return o.emit(this);
-    } else if (o instanceof InterfaceSpec) {
-      return o.emit(this);
-    } else if (o instanceof EnumSpec) {
-      return o.emit(this);
-    } else if (o instanceof DecoratorSpec) {
-      return o.emit(this, true, true);
-    } else if (o instanceof CodeBlock) {
-      this.emitCodeBlock(o);
-    } else if (o) {
-      // TODO Check if `if o` is right
-      this.emit(o.toString());
-    }
-  }
-
   /**
    * Emits `s` with indentation as required. It's important that all code that writes to
    * [CodeWriter.out] does it through here, since we emit indentation lazily in order to avoid
@@ -264,12 +219,6 @@ export class CodeWriter implements SymbolReferenceTracker {
     return this;
   }
 
-  private emitIndentation(): void {
-    for (let j = 0; j < this.indentLevel; j++) {
-      this.out.append(this.indentString);
-    }
-  }
-
   /**
    * Returns the symbols that are required to be imported for this code. If there were any simple name
    * collisions, that symbol's first use is imported; which may cause compilation issues.
@@ -282,5 +231,55 @@ export class CodeWriter implements SymbolReferenceTracker {
       }
     });
     return imported;
+  }
+
+  private emitIndentation(): void {
+    for (let j = 0; j < this.indentLevel; j++) {
+      this.out.append(this.indentString);
+    }
+  }
+
+  private beginStatement(): void {
+    check(this.statementLine === -1, "statement enter %[ followed by statement enter %[");
+    this.statementLine = 0;
+  }
+
+  private endStatement(): void {
+    check(this.statementLine !== -1, "statement exit %] has no matching statement enter %[");
+    if (this.statementLine > 0) {
+      this.unindent(2); // End a multi-line statement. Decrease the indentation level.
+    }
+    this.statementLine = -1;
+  }
+
+  private emitWrappingSpace(): this {
+    this.out.wrappingSpace(this.indentLevel + 2);
+    return this;
+  }
+
+  private emitTypeName(typeName: TypeName) {
+    this.emit(typeName.reference(this));
+  }
+
+  private emitString(s?: string): void {
+    // Emit null as a literal null: no quotes.
+    this.emit(s ? stringLiteralWithQuotes(s) : "null");
+  }
+
+  private emitLiteral(o?: any): void {
+    if (o instanceof ClassSpec) {
+      return o.emit(this);
+    } else if (o instanceof InterfaceSpec) {
+      return o.emit(this);
+    } else if (o instanceof EnumSpec) {
+      return o.emit(this);
+    } else if (o instanceof DecoratorSpec) {
+      return o.emit(this, true, true);
+    } else if (o instanceof CodeBlock) {
+      this.emitCodeBlock(o);
+    } else if (o) {
+      // TODO Check if `if o` is right
+      this.emit(o.toString());
+    }
   }
 }

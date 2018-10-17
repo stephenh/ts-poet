@@ -26,7 +26,7 @@ export class LineWrapper {
   }
 
   /** Emit `s`. This may be buffered to permit line wraps to be inserted.  */
-  append(s: string): void {
+  public append(s: string): void {
     if (this.closed) { throw new Error("closed"); }
 
     if (this.nextFlush) {
@@ -51,7 +51,7 @@ export class LineWrapper {
   }
 
   /** Emit either a space or a newline character.  */
-  wrappingSpace(indentLevel: number): void {
+  public wrappingSpace(indentLevel: number): void {
     if (this.closed) { throw new Error("closed"); }
     if (this.nextFlush) { this.flush(this.nextFlush); }
     this.column++;
@@ -60,7 +60,7 @@ export class LineWrapper {
   }
 
   /** Emit a newline character if the line will exceed it's limit, otherwise do nothing. */
-  zeroWidthSpace(indentLevel: number): void {
+  public zeroWidthSpace(indentLevel: number): void {
     if (this.closed) { throw new Error("closed"); }
     if (this.column === 0) { return; }
     if (this.nextFlush) { this.flush(this.nextFlush); }
@@ -69,9 +69,15 @@ export class LineWrapper {
   }
 
   /** Flush any outstanding text and forbid future writes to this line wrapper.  */
-  close(): void {
-    if (this.nextFlush) this.flush(this.nextFlush);
+  public close(): void {
+    if (this.nextFlush) {
+      this.flush(this.nextFlush);
+    }
     this.closed = true;
+  }
+
+  public toString(): string {
+    return this.out.toString();
   }
 
   /** Write the space followed by any buffered text that follows it.  */
@@ -95,10 +101,6 @@ export class LineWrapper {
     this.buffer = new StringBuffer();
     this.indentLevel = -1;
     this.nextFlush = undefined;
-  }
-
-  toString(): string {
-    return this.out.toString();
   }
 }
 
