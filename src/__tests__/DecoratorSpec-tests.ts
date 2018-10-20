@@ -5,20 +5,18 @@ import { SymbolSpec } from "../SymbolSpecs";
 
 describe("DecoratorSpec", () => {
   it("generate inline", () => {
-    const testDec = DecoratorSpec.builder("test")
+    const testDec = DecoratorSpec.create("test")
       .addParameter("value", "100")
-      .addParameter("value2", "20")
-      .build();
+      .addParameter("value2", "20");
     expect(emit(testDec, true)).toMatchInlineSnapshot(
       `"@test(/* value */ 100, /* value2 */ 20)"`
     );
   });
 
   it("generate expanded", () => {
-    const testDec = DecoratorSpec.builder("test")
+    const testDec = DecoratorSpec.create("test")
       .addParameter("value", "100")
-      .addParameter("value2", "20")
-      .build();
+      .addParameter("value2", "20");
     expect(emit(testDec)).toMatchInlineSnapshot(`
 "@test(
   /* value */ 100,
@@ -28,31 +26,13 @@ describe("DecoratorSpec", () => {
   });
 
   it("generate with no-argument", () => {
-    const testDec = DecoratorSpec.builder("test").build();
+    const testDec = DecoratorSpec.create("test");
     expect(emit(testDec)).toMatchInlineSnapshot(`"@test"`);
   });
 
   it("generate factory with no-argument", () => {
-    const testDec = DecoratorSpec.builder("test")
-      .asFactory()
-      .build();
+    const testDec = DecoratorSpec.create("test").asFactory();
     expect(emit(testDec)).toMatchInlineSnapshot(`"@test()"`);
-  });
-
-  it("ToBuilder copies all fields", () => {
-    const testDecBldr = DecoratorSpec.builder("test")
-      .addParameter("value", "100")
-      .addParameter("value2", "20")
-      .asFactory()
-      .build()
-      .toBuilder();
-    expect(testDecBldr.name).toEqual(SymbolSpec.from("test"));
-    // CodeBlock equality throws this off
-    // expect(testDecBldr.parameters).toEqual([
-    //   ["value", CodeBlock.of("100")],
-    //   ["value2", CodeBlock.of("20")]
-    // ]);
-    expect(testDecBldr.factory).toEqual(true);
   });
 });
 

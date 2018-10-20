@@ -27,10 +27,9 @@ class Test {
   it("generates decorators formatted", () => {
     const testClass = ClassSpec.builder("Test")
       .addDecorator(
-        DecoratorSpec.builder("decorate")
+        DecoratorSpec.create("decorate")
           .addParameter(undefined, "true")
           .addParameter("targetType", "Test2")
-          .build()
       )
       .build();
     expect(emit(testClass)).toMatchInlineSnapshot(`
@@ -271,23 +270,18 @@ class Test {
       .addProperty(
         PropertySpec.create("value4", TypeNames.NUMBER, false, Modifier.PUBLIC)
           .addDecorator(
-            DecoratorSpec.builder("limited")
+            DecoratorSpec.create("limited")
               .addParameter("min", "5")
               .addParameter("max", "100")
-              .build()
           )
       )
       .addProperty(
         PropertySpec.create("value5", TypeNames.NUMBER, false, Modifier.PUBLIC)
-          .addDecorator(DecoratorSpec.builder("dynamic").build())
+          .addDecorator(DecoratorSpec.create("dynamic"))
       )
       .addProperty(
         PropertySpec.create("value5", TypeNames.NUMBER, false, Modifier.PUBLIC)
-          .addDecorator(
-            DecoratorSpec.builder("logged")
-              .asFactory()
-              .build()
-          )
+          .addDecorator(DecoratorSpec.create("logged").asFactory())
       )
       .build();
     expect(emit(testClass)).toMatchInlineSnapshot(`
@@ -347,10 +341,9 @@ class Test {
       .addFunction(
         FunctionSpec.builder("test2")
           .addDecorator(
-            DecoratorSpec.builder("validated")
+            DecoratorSpec.create("validated")
               .addParameter("strict", "true")
               .addParameter("name", "test2")
-              .build()
           )
           .addCode("")
           .build()
@@ -391,10 +384,9 @@ class Test {
     const testClassBlder = ClassSpec.builder("Test")
       .addJavadoc("this is a comment\n")
       .addDecorator(
-        DecoratorSpec.builder("decorate")
+        DecoratorSpec.create("decorate")
           .addParameter(undefined, "true")
           .addParameter("targetType", "Test2")
-          .build()
       )
       .addModifiers(Modifier.ABSTRACT, Modifier.EXPORT)
       .addTypeVariable(TypeNames.typeVariable("X", TypeNames.bound("Test2")))

@@ -31,10 +31,9 @@ function test() {
   it("generates decorators formatted", () => {
     const testFunc = FunctionSpec.builder("test")
       .addDecorator(
-        DecoratorSpec.builder("decorate")
+        DecoratorSpec.create("decorate")
           .addParameter(undefined, "true")
           .addParameter("targetType", "Test2")
-          .build()
       )
       .build();
     expect(emit(testFunc)).toMatchInlineSnapshot(`
@@ -164,18 +163,13 @@ function test() {
     const testClass = FunctionSpec.builder("test")
       .addParameter(
         ParameterSpec.create("a", TypeName.NUMBER)
-          .addDecorator(DecoratorSpec.builder("required").build())
+          .addDecorator(DecoratorSpec.create("required"))
           .addDecorator(
-            DecoratorSpec.builder("size")
+            DecoratorSpec.create("size")
               .addParameter("min", "10")
               .addParameter("max", "100")
-              .build()
           )
-          .addDecorator(
-            DecoratorSpec.builder("logged")
-              .asFactory()
-              .build()
-          )
+          .addDecorator(DecoratorSpec.create("logged").asFactory())
       )
       .build();
     expect(emit(testClass)).toMatchInlineSnapshot(`
@@ -189,10 +183,9 @@ function test() {
     const testFuncBlder = FunctionSpec.builder("Test")
       .addJavadoc("this is a comment\n")
       .addDecorator(
-        DecoratorSpec.builder("decorate")
+        DecoratorSpec.create("decorate")
           .addParameter(undefined, "true")
           .addParameter("targetType", "Test2")
-          .build()
       )
       .addModifiers(Modifier.EXPORT)
       .addTypeVariable(TypeName.typeVariable("X", TypeName.bound("Test2")))

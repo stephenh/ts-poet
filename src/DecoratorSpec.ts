@@ -1,23 +1,22 @@
+import { imm, Imm } from "ts-imm";
 import { CodeBlock } from "./CodeBlock";
 import { CodeWriter } from "./CodeWriter";
 import { SymbolSpec } from "./SymbolSpecs";
 
 /** A generated function or class decorator declaration. */
-export class DecoratorSpec {
+export class DecoratorSpec extends Imm<DecoratorSpec> {
 
-  public static builder(name: string | SymbolSpec): DecoratorSpecBuilder {
-    return new DecoratorSpecBuilder(SymbolSpec.fromMaybeString(name));
+  public static create(name: string | SymbolSpec): DecoratorSpec {
+    return new DecoratorSpec({
+      name: SymbolSpec.fromMaybeString(name),
+      parameters: [],
+      factory: false,
+    });
   }
 
-  private readonly name: SymbolSpec;
-  private readonly parameters: Array<[string | undefined, CodeBlock]> = [];
-  private readonly factory: boolean;
-
-  constructor(builder: DecoratorSpecBuilder) {
-    this.name = builder.name;
-    this.parameters.push(...builder.parameters);
-    this.factory = builder.factory || false;
-  }
+  @imm public readonly name!: SymbolSpec;
+  @imm public readonly parameters!: Array<[string | undefined, CodeBlock]>;
+  @imm public readonly factory!: boolean;
 
   public emit(codeWriter: CodeWriter, inline: boolean, asParameter: boolean = false) {
     codeWriter.emitCode("@%N", this.name);
@@ -52,39 +51,22 @@ export class DecoratorSpec {
     }
   }
 
-  public toBuilder(): DecoratorSpecBuilder {
-    const builder = new DecoratorSpecBuilder(this.name);
-    builder.parameters.push(...this.parameters);
-    builder.factory = this.factory;
-    return builder;
-  }
-
-}
-
-export class DecoratorSpecBuilder {
-
-  public readonly parameters: Array<[string | undefined, CodeBlock]> = [];
-  public factory?: boolean;
-
-  constructor(public name: SymbolSpec) {}
-
   public asFactory(): this {
-    this.factory = true;
-    return this;
+    return this.copy({
+      factory: true,
+    });
   }
 
   public addParameter(name: string | undefined, format: string, ...args: any[]): this {
-    this.parameters.push([name, CodeBlock.of(format, args)]);
-    return this;
+    return this.copy({
+      parameters: [...this.parameters, [name, CodeBlock.of(format, args)]]
+    });
   }
 
   public addParameterBlock(name: string | undefined, codeBlock: CodeBlock): this {
-    this.parameters.push([name, codeBlock]);
-    return this;
-  }
-
-  public build(): DecoratorSpec {
-    return new DecoratorSpec(this);
+    return this.copy({
+      parameters: [...this.parameters, [name, codeBlock]],
+    });
   }
 }
 

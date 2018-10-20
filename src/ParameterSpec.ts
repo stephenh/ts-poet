@@ -97,7 +97,7 @@ export class ParameterSpec extends Imm<ParameterSpec> {
 
   public addDecorator(decoratorSpec: DecoratorSpec | SymbolSpec): this {
     const decorator = decoratorSpec instanceof SymbolSpec
-      ? DecoratorSpec.builder(decoratorSpec).build()
+      ? DecoratorSpec.create(decoratorSpec)
       : decoratorSpec;
     return this.copy({
       decorators: [...this.decorators, decorator],
