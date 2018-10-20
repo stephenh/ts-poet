@@ -178,26 +178,4 @@ function test() {
 "
 `);
   });
-
-  it("ToBuilder copies all fields", () => {
-    const testFuncBlder = FunctionSpec.builder("Test")
-      .addJavadoc("this is a comment\n")
-      .addDecorator(
-        DecoratorSpec.create("decorate")
-          .addParameter(undefined, "true")
-          .addParameter("targetType", "Test2")
-      )
-      .addModifiers(Modifier.EXPORT)
-      .addTypeVariable(TypeName.typeVariable("X", TypeName.bound("Test2")))
-      .addCode("val;\n")
-      .build()
-      .toBuilder();
-    // expect(testFuncBlder.javaDoc.formatParts).hasItems("this is a comment\n");
-    // expect(testFuncBlder.decorators.size).toEqual(1);
-    // expect(testFuncBlder.decorators[0].name).toEqual(SymbolSpec.from("decorate"));
-    // expect(testFuncBlder.decorators[0].parameters.size).toEqual(2);
-    // expect(testFuncBlder.modifiers).toEqual([Modifier.EXPORT]);
-    // expect(testFuncBlder.typeVariables.size).toEqual(1);
-    // expect(testFuncBlder.body.formatParts).hasItems("val;\n");
-  });
 });
