@@ -1,3 +1,4 @@
+import { imm, Imm } from "ts-imm";
 import { CodeBlock } from "./CodeBlock";
 import { CodeWriter } from "./CodeWriter";
 import { DecoratorSpec } from "./DecoratorSpec";
@@ -5,11 +6,18 @@ import { Modifier } from "./Modifier";
 import { SymbolSpec } from "./SymbolSpecs";
 import { TypeName } from "./TypeNames";
 
-export class ParameterSpec {
+export class ParameterSpec extends Imm<ParameterSpec> {
 
-  public static builder(name: string, type: TypeName, optional: boolean = false, ...modifiers: Modifier[]): ParameterSpecBuilder {
+  public static create(name: string, type: TypeName, optional: boolean = false, ...modifiers: Modifier[]): ParameterSpec {
     // require(name.isName) { "not a valid name: $name" }
-    return new ParameterSpecBuilder(name, type, optional).addModifiers(...modifiers);
+    return new ParameterSpec({
+      name,
+      type,
+      optional,
+      decorators: [],
+      modifiers,
+      defaultValueField: undefined,
+    });
   }
 
   public static emitAll(
@@ -49,84 +57,57 @@ export class ParameterSpec {
       }
     }
 
-  public readonly name: string;
-  public readonly optional: boolean;
-  public readonly decorators: DecoratorSpec[];
-  public readonly modifiers: Modifier[];
-  public readonly type: TypeName;
-  public readonly defaultValue: CodeBlock | undefined;
+  @imm public readonly name!: string;
+  @imm public readonly type!: TypeName;
+  @imm public readonly optional!: boolean;
+  @imm public readonly decorators!: DecoratorSpec[];
+  @imm public readonly modifiers!: Modifier[];
+  @imm public readonly defaultValueField!: CodeBlock | undefined;
 
- constructor(builder: ParameterSpecBuilder) {
-   this.name = builder.name;
-   this.optional = builder.optional;
-   this.decorators = builder.decorators;
-   this.modifiers = builder.modifiers;
-   this.type = builder.type;
-   this.defaultValue = builder.defaultValueField;
- }
+  public emit(
+    codeWriter: CodeWriter,
+    includeType: boolean = true,
+    isRest: boolean = false) {
+    codeWriter.emitDecorators(this.decorators, true);
+    codeWriter.emitModifiers(this.modifiers);
+    if (isRest) {
+      codeWriter.emitCode("... ");
+    }
+    codeWriter.emitCode("%L", this.name);
+    if (this.optional) {
+      codeWriter.emitCode("?");
+    }
+    if (includeType) {;
+      codeWriter.emitCode(": %T", this.type);
+    }
+    this.emitDefaultValue(codeWriter);
+  }
 
-   public emit(
-     codeWriter: CodeWriter,
-     includeType: boolean = true,
-     isRest: boolean = false) {
-     codeWriter.emitDecorators(this.decorators, true);
-     codeWriter.emitModifiers(this.modifiers);
-     if (isRest) {
-       codeWriter.emitCode("... ");
-     }
-     codeWriter.emitCode("%L", this.name);
-     if (this.optional) {
-       codeWriter.emitCode("?");
-     }
-     if (includeType) {;
-       codeWriter.emitCode(": %T", this.type);
-     }
-     this.emitDefaultValue(codeWriter);
-   }
-
-   public emitDefaultValue(codeWriter: CodeWriter) {
-     if (this.defaultValue) {
-       codeWriter.emitCode(" = %[%L%]", this.defaultValue);
-     }
-   }
-
-
-   public toBuilder(name: string = this.name, type: TypeName = this.type): ParameterSpecBuilder {
-     const builder = new ParameterSpecBuilder(name, type, this.optional);
-     builder.decorators.push(...this.decorators);
-     builder.modifiers.push(...this.modifiers);
-     builder.defaultValueField = this.defaultValue;
-     return builder;
-   }
- }
-
-export class ParameterSpecBuilder {
-  public readonly decorators: DecoratorSpec[] = [];
-  public readonly modifiers: Modifier[] = [];
-  public defaultValueField?: CodeBlock;
-
-   constructor(
-     public name: string,
-     public type: TypeName,
-     public optional: boolean = false,
-  ) {}
+  public emitDefaultValue(codeWriter: CodeWriter) {
+    if (this.defaultValueField) {
+      codeWriter.emitCode(" = %[%L%]", this.defaultValueField);
+    }
+  }
 
   public addDecorators(...decoratorSpecs: DecoratorSpec[]): this {
-    this.decorators.push(...decoratorSpecs);
-    return this;
+    return this.copy({
+      decorators: [...this.decorators, ...decoratorSpecs],
+    });
   }
 
   public addDecorator(decoratorSpec: DecoratorSpec | SymbolSpec): this {
-    this.decorators.push(
-      decoratorSpec instanceof SymbolSpec
-        ? DecoratorSpec.builder(decoratorSpec).build()
-        : decoratorSpec);
-    return this;
+    const decorator = decoratorSpec instanceof SymbolSpec
+      ? DecoratorSpec.builder(decoratorSpec).build()
+      : decoratorSpec;
+    return this.copy({
+      decorators: [...this.decorators, decorator],
+    });
   }
 
   public addModifiers(...modifiers: Modifier[]): this {
-    this.modifiers.push(...modifiers);
-    return this;
+    return this.copy({
+      modifiers: [...this.modifiers, ...modifiers],
+    });
   }
 
   public defaultValue(format: string, ...args: any[]): this {
@@ -135,12 +116,9 @@ export class ParameterSpecBuilder {
 
   public defaultValueBlock(codeBlock?: CodeBlock): this {
     // check(this.defValue === null, "initializer was already set");
-    this.defaultValueField = codeBlock;
-    return this;
-  }
-
-  public build(): ParameterSpec {
-    return new ParameterSpec(this);
+    return this.copy({
+      defaultValueField: codeBlock,
+    });
   }
 }
 

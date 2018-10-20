@@ -163,7 +163,7 @@ function test() {
   it("generates parameter decorators", () => {
     const testClass = FunctionSpec.builder("test")
       .addParameter(
-        ParameterSpec.builder("a", TypeName.NUMBER)
+        ParameterSpec.create("a", TypeName.NUMBER)
           .addDecorator(DecoratorSpec.builder("required").build())
           .addDecorator(
             DecoratorSpec.builder("size")
@@ -176,7 +176,6 @@ function test() {
               .asFactory()
               .build()
           )
-          .build()
       )
       .build();
     expect(emit(testClass)).toMatchInlineSnapshot(`

@@ -221,8 +221,7 @@ export class FunctionSpecBuilder {
       const optional: boolean = arguments[2] || false;
       const modifiers: Modifier[] = arguments[3] || [];
       const initializer: CodeBlock | undefined = arguments[4];
-      this.parameters.push(ParameterSpec.builder(name, type, optional, ...modifiers).defaultValueBlock(initializer).build());
-
+      this.parameters.push(ParameterSpec.create(name, type, optional, ...modifiers).defaultValueBlock(initializer));
     } else {
       this.parameters.push(parameterSpec);
     }
@@ -244,7 +243,7 @@ export class FunctionSpecBuilder {
     if (typeof parameterSpec === 'string') {
       const name = parameterSpec;
       const type: TypeName = arguments[1] || TypeNames.ANY;
-      this.restParameter = ParameterSpec.builder(name, type).build();
+      this.restParameter = ParameterSpec.create(name, type);
     } else {
       this.restParameter = parameterSpec;
     }
