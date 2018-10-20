@@ -260,38 +260,34 @@ class Test {
       .addProperty2("value", TypeNames.NUMBER, false, Modifier.PRIVATE)
       .addProperty2("value2", TypeNames.STRING, false, Modifier.PUBLIC)
       .addProperty(
-        PropertySpec.builder(
+        PropertySpec.create(
           "value3",
           TypeNames.BOOLEAN,
           false,
           Modifier.PUBLIC
         )
           .initializer("true")
-          .build()
       )
       .addProperty(
-        PropertySpec.builder("value4", TypeNames.NUMBER, false, Modifier.PUBLIC)
+        PropertySpec.create("value4", TypeNames.NUMBER, false, Modifier.PUBLIC)
           .addDecorator(
             DecoratorSpec.builder("limited")
               .addParameter("min", "5")
               .addParameter("max", "100")
               .build()
           )
-          .build()
       )
       .addProperty(
-        PropertySpec.builder("value5", TypeNames.NUMBER, false, Modifier.PUBLIC)
+        PropertySpec.create("value5", TypeNames.NUMBER, false, Modifier.PUBLIC)
           .addDecorator(DecoratorSpec.builder("dynamic").build())
-          .build()
       )
       .addProperty(
-        PropertySpec.builder("value5", TypeNames.NUMBER, false, Modifier.PUBLIC)
+        PropertySpec.create("value5", TypeNames.NUMBER, false, Modifier.PUBLIC)
           .addDecorator(
             DecoratorSpec.builder("logged")
               .asFactory()
               .build()
           )
-          .build()
       )
       .build();
     expect(emit(testClass)).toMatchInlineSnapshot(`

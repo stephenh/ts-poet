@@ -93,7 +93,7 @@ export class ClassSpec {
             return [Modifier.PUBLIC, Modifier.PRIVATE, Modifier.PROTECTED, Modifier.READONLY].indexOf(m) > -1;
           })) {
             // Add default public modifier
-            property = property.toBuilder().addModifiers(Modifier.PUBLIC).build();
+            property = property.addModifiers(Modifier.PUBLIC);
           }
           property.emit(codeWriter, [], false);
           param.emitDefaultValue(codeWriter);
@@ -270,7 +270,7 @@ export class ClassSpecBuilder {
   }
 
   public addProperty2(name: string, type: TypeName, optional: boolean = false, ...modifiers: Modifier[]): this {
-    return this.addProperty(PropertySpec.builder(name, type, optional, ...modifiers).build());
+    return this.addProperty(PropertySpec.create(name, type, optional, ...modifiers));
   }
 
   public addFunctions(...functionSpecs: FunctionSpec[]): this {

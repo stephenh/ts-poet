@@ -1,9 +1,9 @@
 import { CodeBlock } from "./CodeBlock";
 import { CodeWriter } from "./CodeWriter";
-import { Modifier } from "./Modifier";
-import { TypeName, TypeVariable } from "./TypeNames";
 import { FunctionSpec } from "./FunctionSpec";
+import { Modifier } from "./Modifier";
 import { PropertySpec } from "./PropertySpec";
+import { TypeName, TypeVariable } from "./TypeNames";
 
 /** A generated `interface` declaration. */
 export class InterfaceSpec {
@@ -67,13 +67,13 @@ export class InterfaceSpec {
 
     // Properties.
     this.propertySpecs.forEach(propertySpec => {
-      codeWriter.emit("\n")
+      codeWriter.emit("\n");
       propertySpec.emit(codeWriter, [Modifier.PUBLIC], true);
     });
 
     // Indexables
     this.indexableSpecs.forEach(funSpec => {
-      codeWriter.emit("\n")
+      codeWriter.emit("\n");
       funSpec.emit(codeWriter, undefined, [Modifier.PUBLIC, Modifier.ABSTRACT]);
     });
 
@@ -112,7 +112,7 @@ export class InterfaceSpec {
 
 export class InterfaceSpecBuilder {
 
-  public javaDoc = CodeBlock.empty()
+  public javaDoc = CodeBlock.empty();
   public modifiers: Modifier[] = [];
   public typeVariables: TypeVariable[] = [];
   public superInterfaces: TypeName[] = [];
@@ -172,7 +172,7 @@ export class InterfaceSpecBuilder {
   }
 
   public addProperty2(name: string, type: TypeName, optional: boolean = false, ...modifiers: Modifier[]): this {
-    return this.addProperty(PropertySpec.builder(name, type, optional, ...modifiers).build());
+    return this.addProperty(PropertySpec.create(name, type, optional, ...modifiers));
   }
 
   public addFunctions(...functionSpecs: FunctionSpec[]): this {
