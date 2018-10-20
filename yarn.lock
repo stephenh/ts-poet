@@ -3812,7 +3812,7 @@ trim-right@^1.0.1:
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
   integrity sha1-yy4SAwZ+DI3h9hQJS5/kVwTqYAM=
 
-ts-imm@^0.3.0:
+ts-imm@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/ts-imm/-/ts-imm-0.3.0.tgz#3177401798828658407db57f555632387e7ce184"
   integrity sha512-L2ZE2QGxwrra06OHu05Vzi1aTMVeLr4o3ETBaBo4iw+fd95KAr3R2bI+JHuVGcdCli1dMPbzixF6QgWevaPv4w==

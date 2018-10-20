@@ -26,6 +26,6 @@
   "dependencies": {
     "immutable": "^4.0.0-rc.10",
     "lodash": "^4.17.11",
-    "ts-imm": "^0.3.0"
+    "ts-imm": "0.3.0"
   }
 }
