@@ -15,9 +15,8 @@ function emit(spec: FunctionSpec): string {
 
 describe("FunctionSpec", () => {
   it("generates JavaDoc at before class definition", () => {
-    const testFunc = FunctionSpec.builder("test")
-      .addJavadoc("this is a comment\n")
-      .build();
+    const testFunc = FunctionSpec.create("test")
+      .addJavadoc("this is a comment\n");
     expect(emit(testFunc)).toMatchInlineSnapshot(`
 "/**
  * this is a comment
@@ -29,13 +28,12 @@ function test() {
   });
 
   it("generates decorators formatted", () => {
-    const testFunc = FunctionSpec.builder("test")
+    const testFunc = FunctionSpec.create("test")
       .addDecorator(
         DecoratorSpec.create("decorate")
           .addParameter(undefined, "true")
           .addParameter("targetType", "Test2")
-      )
-      .build();
+      );
     expect(emit(testFunc)).toMatchInlineSnapshot(`
 "@decorate(
   true,
@@ -48,10 +46,9 @@ function test() {
   });
 
   it("generates modifiers in order", () => {
-    const testClass = FunctionSpec.builder("test")
+    const testClass = FunctionSpec.create("test")
       .addModifiers(Modifier.PRIVATE, Modifier.GET, Modifier.EXPORT)
-      .addCode("")
-      .build();
+      .addCode("");
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "export private get function test() {
 }
@@ -60,9 +57,8 @@ function test() {
   });
 
   it("generates no block when abstract", () => {
-    const testClass = FunctionSpec.builder("test")
-      .addModifiers(Modifier.PRIVATE, Modifier.ABSTRACT)
-      .build();
+    const testClass = FunctionSpec.create("test")
+      .addModifiers(Modifier.PRIVATE, Modifier.ABSTRACT);
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "private abstract function test();
 "
@@ -70,7 +66,7 @@ function test() {
   });
 
   it("generates type variables", () => {
-    const testClass = FunctionSpec.builder("test")
+    const testClass = FunctionSpec.create("test")
       .addTypeVariable(TypeName.typeVariable("X", TypeName.bound("Test2")))
       .addTypeVariable(
         TypeName.typeVariable(
@@ -85,8 +81,7 @@ function test() {
           TypeName.bound("Test5"),
           TypeName.unionBound("Test6", true)
         )
-      )
-      .build();
+      );
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "function test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6>() {
 }
@@ -95,9 +90,8 @@ function test() {
   });
 
   it("generates return type", () => {
-    const testClass = FunctionSpec.builder("test")
+    const testClass = FunctionSpec.create("test")
       .returns(TypeName.anyType("Value"))
-      .build();
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "function test(): Value {
 }
@@ -106,9 +100,7 @@ function test() {
   });
 
   it("generates no return type when void", () => {
-    const testClass = FunctionSpec.builder("test")
-      .returns(TypeName.VOID)
-      .build();
+    const testClass = FunctionSpec.create("test").returns(TypeName.VOID);
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "function test() {
 }
@@ -117,7 +109,7 @@ function test() {
   });
 
   it("generates no return type when not set", () => {
-    const testClass = FunctionSpec.builder("test").build();
+    const testClass = FunctionSpec.create("test");
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "function test() {
 }
@@ -126,9 +118,7 @@ function test() {
   });
 
   it("generates parameters", () => {
-    const testClass = FunctionSpec.builder("test")
-      .addParameter("b", TypeName.STRING)
-      .build();
+    const testClass = FunctionSpec.create("test").addParameter("b", TypeName.STRING);
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "function test(b: string) {
 }
@@ -137,10 +127,9 @@ function test() {
   });
 
   it("generates parameters with rest", () => {
-    const testClass = FunctionSpec.builder("test")
+    const testClass = FunctionSpec.create("test")
       .addParameter("b", TypeName.STRING)
-      .rest("c", TypeName.arrayType(TypeName.STRING))
-      .build();
+      .rest("c", TypeName.arrayType(TypeName.STRING));
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "function test(b: string, ... c: Array<string>) {
 }
@@ -149,9 +138,8 @@ function test() {
   });
 
   it("generates parameters with default values", () => {
-    const testClass = FunctionSpec.builder("test")
-      .addParameter("a", TypeName.NUMBER, false, [], CodeBlock.of("10"))
-      .build();
+    const testClass = FunctionSpec.create("test")
+      .addParameter("a", TypeName.NUMBER, false, [], CodeBlock.of("10"));
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "function test(a: number = 10) {
 }
@@ -160,7 +148,7 @@ function test() {
   });
 
   it("generates parameter decorators", () => {
-    const testClass = FunctionSpec.builder("test")
+    const testClass = FunctionSpec.create("test")
       .addParameter(
         ParameterSpec.create("a", TypeName.NUMBER)
           .addDecorator(DecoratorSpec.create("required"))
@@ -170,8 +158,7 @@ function test() {
               .addParameter("max", "100")
           )
           .addDecorator(DecoratorSpec.create("logged").asFactory())
-      )
-      .build();
+      );
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "function test(@required @size(/* min */ 10, /* max */ 100) @logged() a: number) {
 }

@@ -10,9 +10,8 @@ import { TypeNames } from "../TypeNames";
 
 describe("ClassSpec", () => {
   it("generates JavaDoc at before class definition", () => {
-    const testClass = ClassSpec.builder("Test")
-      .addJavadoc("this is a comment\n")
-      .build();
+    const testClass = ClassSpec.create("Test")
+      .addJavadoc("this is a comment\n");
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "/**
  * this is a comment
@@ -25,13 +24,12 @@ class Test {
   });
 
   it("generates decorators formatted", () => {
-    const testClass = ClassSpec.builder("Test")
+    const testClass = ClassSpec.create("Test")
       .addDecorator(
         DecoratorSpec.create("decorate")
           .addParameter(undefined, "true")
           .addParameter("targetType", "Test2")
-      )
-      .build();
+      );
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "@decorate(
   true,
@@ -45,9 +43,8 @@ class Test {
   });
 
   it("generates modifiers in order", () => {
-    const testClass = ClassSpec.builder("Test")
-      .addModifiers(Modifier.ABSTRACT, Modifier.EXPORT)
-      .build();
+    const testClass = ClassSpec.create("Test")
+      .addModifiers(Modifier.ABSTRACT, Modifier.EXPORT);
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "export abstract class Test {
 
@@ -57,7 +54,7 @@ class Test {
   });
 
   it("generates type variables", () => {
-    const testClass = ClassSpec.builder("Test")
+    const testClass = ClassSpec.create("Test")
       .addTypeVariable(TypeNames.typeVariable("X", TypeNames.bound("Test2")))
       .addTypeVariable(
         TypeNames.typeVariable(
@@ -72,8 +69,7 @@ class Test {
           TypeNames.bound("Test5"),
           TypeNames.unionBound("Test6", true)
         )
-      )
-      .build();
+      );
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6> {
 
@@ -83,9 +79,7 @@ class Test {
   });
 
   it("generates super class", () => {
-    const testClass = ClassSpec.builder("Test")
-      .superClass(TypeNames.anyType("Test2"))
-      .build();
+    const testClass = ClassSpec.create("Test").superClass("Test2");
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test extends Test2 {
 
@@ -95,10 +89,7 @@ class Test {
   });
 
   it("generates mixins", () => {
-    const testClass = ClassSpec.builder("Test")
-      .addMixin(TypeNames.anyType("Test2"))
-      .addMixin(TypeNames.anyType("Test3"))
-      .build();
+    const testClass = ClassSpec.create("Test").addMixin("Test2").addMixin("Test3");
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test implements Test2, Test3 {
 
@@ -108,11 +99,10 @@ class Test {
   });
 
   it("generates super class & mixins properly formatted", () => {
-    const testClass = ClassSpec.builder("Test")
-      .superClass(TypeNames.anyType("Test2"))
-      .addMixin(TypeNames.anyType("Test3"))
-      .addMixin(TypeNames.anyType("Test4"))
-      .build();
+    const testClass = ClassSpec.create("Test")
+      .superClass("Test2")
+      .addMixin("Test3")
+      .addMixin("Test4");
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test extends Test2 implements Test3, Test4 {
 
@@ -122,7 +112,7 @@ class Test {
   });
 
   it("generates type vars, super class & mixins properly formatted", () => {
-    const testClass = ClassSpec.builder("Test")
+    const testClass = ClassSpec.create("Test")
       .addTypeVariable(
         TypeNames.typeVariable(
           "Y",
@@ -130,10 +120,9 @@ class Test {
           TypeNames.intersectBound("Test4")
         )
       )
-      .superClass(TypeNames.anyType("Test2"))
-      .addMixin(TypeNames.anyType("Test3"))
-      .addMixin(TypeNames.anyType("Test4"))
-      .build();
+      .superClass("Test2")
+      .addMixin("Test3")
+      .addMixin("Test4");
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test<Y extends Test3 & Test4> extends Test2 implements Test3, Test4 {
 
@@ -143,13 +132,11 @@ class Test {
   });
 
   it("generates constructor", () => {
-    const testClass = ClassSpec.builder("Test")
+    const testClass = ClassSpec.create("Test")
       .cstr(
         FunctionSpec.constructorBuilder()
           .addParameter("value", TypeNames.NUMBER)
-          .build()
-      )
-      .build();
+      );
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test {
 
@@ -168,14 +155,12 @@ class Test {
   });
 
   it("generates constructor with rest parameter", () => {
-    const testClass = ClassSpec.builder("Test")
+    const testClass = ClassSpec.create("Test")
       .cstr(
         FunctionSpec.constructorBuilder()
           .addParameter("value", TypeNames.NUMBER)
           .rest("all", TypeNames.arrayType(TypeNames.STRING))
-          .build()
-      )
-      .build();
+      );
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test {
 
@@ -203,7 +188,7 @@ class Test {
   });
 
   it("generates constructor with shorthand properties", () => {
-    const testClass = ClassSpec.builder("Test")
+    const testClass = ClassSpec.create("Test")
       .addProperty2("value", TypeNames.NUMBER, false, Modifier.PRIVATE)
       .addProperty2("value2", TypeNames.STRING, false, Modifier.PUBLIC)
       .addProperty2("value3", TypeNames.BOOLEAN, true, Modifier.PUBLIC)
@@ -219,9 +204,7 @@ class Test {
               .addStatement("this.value2 = value2")
               .addStatement("this.value3 = value3 || testing == ''")
           )
-          .build()
-      )
-      .build();
+      );
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test {
 
@@ -255,7 +238,7 @@ class Test {
   });
 
   it("generates property declarations", () => {
-    const testClass = ClassSpec.builder("Test")
+    const testClass = ClassSpec.create("Test")
       .addProperty2("value", TypeNames.NUMBER, false, Modifier.PRIVATE)
       .addProperty2("value2", TypeNames.STRING, false, Modifier.PUBLIC)
       .addProperty(
@@ -282,8 +265,7 @@ class Test {
       .addProperty(
         PropertySpec.create("value5", TypeNames.NUMBER, false, Modifier.PUBLIC)
           .addDecorator(DecoratorSpec.create("logged").asFactory())
-      )
-      .build();
+      );
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test {
 
@@ -308,47 +290,20 @@ class Test {
 }
 "
 `);
-    // class Test {
-    //
-    //   private value: number;
-    //
-    //   value2: string;
-    //
-    //   value3: boolean = true;
-    //
-    //   @limited(
-    //     /* min */ 5,
-    //     /* max */ 100
-    //   )
-    //   value4: number;
-    //
-    //   @dynamic
-    //   value5: number;
-    //
-    //   @logged()
-    //   value5: number;
-    //
-    // }
   });
 
   it("generates method definitions", () => {
-    const testClass = ClassSpec.builder("Test")
+    const testClass = ClassSpec.create("Test")
+      .addFunction(FunctionSpec.create("test1").addCode(""))
       .addFunction(
-        FunctionSpec.builder("test1")
+        FunctionSpec.create("test2")
           .addCode("")
-          .build()
-      )
-      .addFunction(
-        FunctionSpec.builder("test2")
           .addDecorator(
             DecoratorSpec.create("validated")
               .addParameter("strict", "true")
               .addParameter("name", "test2")
           )
-          .addCode("")
-          .build()
-      )
-      .build();
+      );
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test {
 
@@ -365,60 +320,6 @@ class Test {
 }
 "
 `);
-    // class Test {
-    //
-    //   test1() {
-    //   }
-    //
-    //   @validated(
-    //     /* strict */ true,
-    //     /* name */ test2
-    //   )
-    //   test2() {
-    //   }
-    //
-    // }
-  });
-
-  it("ToBuilder copies all fields", () => {
-    const testClassBlder = ClassSpec.builder("Test")
-      .addJavadoc("this is a comment\n")
-      .addDecorator(
-        DecoratorSpec.create("decorate")
-          .addParameter(undefined, "true")
-          .addParameter("targetType", "Test2")
-      )
-      .addModifiers(Modifier.ABSTRACT, Modifier.EXPORT)
-      .addTypeVariable(TypeNames.typeVariable("X", TypeNames.bound("Test2")))
-      .superClass(TypeNames.anyType("Test2"))
-      .addMixin(TypeNames.anyType("Test3"))
-      .cstr(
-        FunctionSpec.constructorBuilder()
-          .addParameter("value", TypeNames.NUMBER)
-          .build()
-      )
-      .addProperty2("value", TypeNames.NUMBER, false, Modifier.PRIVATE)
-      .addProperty2("value2", TypeNames.STRING, false, Modifier.PUBLIC)
-      .addFunction(
-        FunctionSpec.builder("test1")
-          .addCode("")
-          .build()
-      )
-      .build()
-      .toBuilder();
-    // expect(testClassBlder.javaDoc.formatParts, hasItems("this is a comment\n"))
-    // expect(testClassBlder.decorators.size, equalTo(1))
-    // expect(testClassBlder.decorators[0].name, equalTo(SymbolSpec.from("decorate")))
-    // expect(testClassBlder.decorators[0].parameters.size, equalTo(2))
-    // expect(testClassBlder.modifiers.toImmutableSet(), equalTo(setOf(Modifier.ABSTRACT, Modifier.EXPORT)))
-    // expect(testClassBlder.typeVariables.size, equalTo(1))
-    // expect(testClassBlder.superClass, equalTo<TypeName>(
-    //    TypeNames.anyType("Test2")))
-    // expect(testClassBlder.mixins, hasItems<TypeName>(
-    //    TypeNames.anyType("Test3")))
-    // expect(testClassBlder.propertySpecs.map { it.name }, hasItems("value", "value2"))
-    // expect(testClassBlder.constructor, notNullValue())
-    // expect(testClassBlder.functionSpecs.map { it.name }, hasItems("test1"))
   });
 });
 

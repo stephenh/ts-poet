@@ -1,4 +1,4 @@
-/** A generated `class` declaration. */
+import { imm, Imm } from "ts-imm";
 import { CodeBlock } from "./CodeBlock";
 import { CodeWriter } from "./CodeWriter";
 import { DecoratorSpec } from "./DecoratorSpec";
@@ -6,37 +6,36 @@ import { FunctionSpec } from "./FunctionSpec";
 import { Modifier } from "./Modifier";
 import { ParameterSpec } from "./ParameterSpec";
 import { PropertySpec } from "./PropertySpec";
-import { TypeName, TypeVariable } from "./TypeNames";
+import {TypeName, TypeNames, TypeVariable} from "./TypeNames";
 
-export class ClassSpec {
+/** A generated `class` declaration. */
+export class ClassSpec extends Imm<ClassSpec> {
 
-  public static builder(name: string | TypeName): ClassSpecBuilder {
-    return new ClassSpecBuilder(typeof name === 'string' ? name : name.reference());
+  public static create(name: string | TypeName): ClassSpec {
+    return new ClassSpec({
+      name: typeof name === 'string' ? name : name.reference(),
+      javaDoc: CodeBlock.empty(),
+      decorators: [],
+      modifiers: [],
+      typeVariables: [],
+      superClassField: undefined,
+      mixins: [],
+      propertySpecs: [],
+      cstrField: undefined,
+      functionSpecs: [],
+    });
   }
 
-  public readonly name: string;
-  public readonly javaDoc: CodeBlock;
-  public readonly decorators: DecoratorSpec[] = [];
-  public readonly modifiers: Modifier[] = [];
-  public readonly typeVariables: TypeVariable[] = [];
-  public readonly superClass?: TypeName;
-  public readonly mixins: TypeName[] = [];
-  public readonly propertySpecs: PropertySpec[] = [];
-  public readonly cstr?: FunctionSpec;
-  public readonly functionSpecs: FunctionSpec[] = [];
-
-  public constructor(public builder: ClassSpecBuilder) {
-    this.name = builder.name;
-    this.javaDoc = builder.javaDoc;
-    this.decorators.push(...builder.decorators);
-    this.modifiers.push(...builder.modifiers);
-    this.typeVariables.push(...builder.typeVariables);
-    this.superClass = builder.superClassField;
-    this.mixins.push(...builder.mixins);
-    this.propertySpecs.push(...builder.propertySpecs);
-    this.cstr = builder.cstrField;
-    this.functionSpecs.push(...builder.functionSpecs);
-  }
+  @imm public readonly name!: string;
+  @imm public readonly javaDoc!: CodeBlock;
+  @imm public readonly decorators!: DecoratorSpec[];
+  @imm public readonly modifiers!: Modifier[];
+  @imm public readonly typeVariables!: TypeVariable[];
+  @imm public readonly superClassField?: TypeName;
+  @imm public readonly mixins!: TypeName[];
+  @imm public readonly propertySpecs!: PropertySpec[];
+  @imm public readonly cstrField?: FunctionSpec;
+  @imm public readonly functionSpecs!: FunctionSpec[];
 
   public emit(codeWriter: CodeWriter): void {
     const constructorProperties: Map<string, PropertySpec> = this.constructorProperties();
@@ -48,7 +47,7 @@ export class ClassSpec {
     codeWriter.emitCode(" %L", this.name);
     codeWriter.emitTypeVariables(this.typeVariables);
 
-    const sc = this.superClass ? CodeBlock.of("extends %T", this.superClass) : CodeBlock.empty();
+    const sc = this.superClassField ? CodeBlock.of("extends %T", this.superClassField) : CodeBlock.empty();
     const mixins = CodeBlock.joinToCode(
       this.mixins.map(it => CodeBlock.of("%T", it)), ", ", "implements ");
     if (sc.isNotEmpty() && mixins.isNotEmpty()) {
@@ -70,9 +69,9 @@ export class ClassSpec {
 
     // Write the constructor manually, allowing the replacement
     // of property specs with constructor parameters
-    if (this.cstr) {
+    if (this.cstrField) {
       codeWriter.emit("\n");
-      const it = this.cstr;
+      const it = this.cstrField;
       if (it.decorators.length > 0) {
         codeWriter.emit(" ");
         codeWriter.emitDecorators(it.decorators, true);
@@ -114,7 +113,7 @@ export class ClassSpec {
 
     // Constructors.
     this.functionSpecs.forEach(funSpec => {
-      if (funSpec.isConstructor) {
+      if (funSpec.isConstructor()) {
         codeWriter.emit("\n");
         funSpec.emit(codeWriter, this.name, [Modifier.PUBLIC]);
       }
@@ -122,7 +121,7 @@ export class ClassSpec {
 
     // Functions (static and non-static).
     this.functionSpecs.forEach(funSpec => {
-      if (!funSpec.isConstructor) {
+      if (!funSpec.isConstructor()) {
         codeWriter.emit("\n");
         funSpec.emit(codeWriter, this.name, [Modifier.PUBLIC]);
       }
@@ -136,23 +135,107 @@ export class ClassSpec {
     codeWriter.emit("}\n");
   }
 
-  public toBuilder(): ClassSpecBuilder {
-    const builder = new ClassSpecBuilder(this.name);
-    // builder.javaDoc.add(javaDoc)
-    // builder.decorators += decorators
-    // builder.modifiers += modifiers
-    // builder.typeVariables += typeVariables
-    // builder.superClass = superClass
-    // builder.mixins += mixins
-    // builder.propertySpecs += propertySpecs
-    // builder.constructor = constructor
-    // builder.functionSpecs += functionSpecs
-    return builder;
+  public addJavadoc(format: string, ...args: any[]): this {
+    return this.copy({
+      javaDoc: this.javaDoc.add(format, ...args),
+    });
+  }
+
+  public addJavadocBlock(block: CodeBlock): this {
+    return this.copy({
+      javaDoc: this.javaDoc.addCode(block),
+    });
+  }
+
+  public addDecorators(...decoratorSpecs: DecoratorSpec[]): this {
+    return this.copy({
+      decorators: [...this.decorators, ...decoratorSpecs],
+    });
+  }
+
+  public addDecorator(decoratorSpec: DecoratorSpec): this {
+    return this.copy({
+      decorators: [...this.decorators, decoratorSpec],
+    });
+  }
+
+  public addModifiers(...modifiers: Modifier[]): this {
+    return this.copy({
+      modifiers: [...this.modifiers, ...modifiers],
+    });
+  }
+
+  public addTypeVariables(...typeVariables: TypeVariable[]): this {
+    return this.copy({
+      typeVariables: [...this.typeVariables, ...typeVariables],
+    });
+  }
+
+  public addTypeVariable(typeVariable: TypeVariable): this {
+    return this.copy({
+      typeVariables: [...this.typeVariables, typeVariable],
+    });
+  }
+
+  public superClass(superClass: TypeName | string): this {
+    // check(this.superClass == null) { "superclass already set to ${this.superClass}" }
+    return this.copy({
+      superClassField: TypeNames.anyTypeMaybeString(superClass),
+    });
+  }
+
+  public addMixins(mixins: TypeName[]): this {
+    return this.copy({
+      mixins: [...this.mixins, ...mixins],
+    });
+  }
+
+  public addMixin(mixin: TypeName | string): this {
+    return this.copy({
+      mixins: [...this.mixins, TypeNames.anyTypeMaybeString(mixin)],
+    });
+  }
+
+  public cstr(cstr?: FunctionSpec): this {
+    if (cstr) {
+      // require(constructor.isConstructor) { "expected a constructor but was ${constructor.name}; use FunctionSpec.constructorBuilder when building"
+    }
+    return this.copy({
+      cstrField: cstr,
+    });
+  }
+
+  public addProperties(...propertySpecs: PropertySpec[]): this {
+    return this.copy({
+      propertySpecs: [...this.propertySpecs, ...propertySpecs],
+    });
+  }
+
+  public addProperty(propertySpec: PropertySpec): this {
+    return this.copy({
+      propertySpecs: [...this.propertySpecs, propertySpec],
+    });
+  }
+
+  public addProperty2(name: string, type: TypeName, optional: boolean = false, ...modifiers: Modifier[]): this {
+    return this.addProperty(PropertySpec.create(name, type, optional, ...modifiers));
+  }
+
+  public addFunctions(...functionSpecs: FunctionSpec[]): this {
+    functionSpecs.forEach(it => this.addFunction(it));
+    return this;
+  }
+
+  public addFunction(functionSpec: FunctionSpec): this {
+    // require(!functionSpec.isConstructor) { "Use the 'constructor' method for the constructor" }
+    return this.copy({
+      functionSpecs: [...this.functionSpecs, functionSpec],
+    });
   }
 
   /** Returns the properties that can be declared inline as constructor parameters. */
   private constructorProperties(): Map<string, PropertySpec> {
-    const cstr = this.cstr;
+    const cstr = this.cstrField;
     if (!cstr || !cstr.body) {
       return new Map();
     }
@@ -183,113 +266,6 @@ export class ClassSpec {
       }
     }
     return this.constructor === undefined && this.functionSpecs.length === 0;
-  }
-}
-
-export class ClassSpecBuilder {
-
-  public javaDoc = CodeBlock.empty();
-  public decorators: DecoratorSpec[] = [];
-  public modifiers: Modifier[] = [];
-  public typeVariables: TypeVariable[] = [];
-  public superClassField?: TypeName;
-  public mixins: TypeName[] = [];
-  public propertySpecs: PropertySpec[] = [];
-  public cstrField?: FunctionSpec;
-  public functionSpecs: FunctionSpec[] = [];
-
-  constructor(public name: string) {}
-
-  public addJavadoc(format: string, ...args: any[]): this {
-    this.javaDoc = this.javaDoc.add(format, ...args);
-    return this;
-  }
-
-  public addJavadocBlock(block: CodeBlock): this {
-    this.javaDoc = this.javaDoc.addCode(block);
-    return this;
-  }
-
-  public addDecorators(...decoratorSpecs: DecoratorSpec[]): this {
-    this.decorators.push(...decoratorSpecs);
-    return this;
-  }
-
-  public addDecorator(decoratorSpec: DecoratorSpec): this {
-    this.decorators.push(decoratorSpec);
-    return this;
-  }
-
-  public addModifiers(...modifiers: Modifier[]): this {
-    this.modifiers.push(...modifiers);
-    return this;
-  }
-
-  public addTypeVariables(...typeVariables: TypeVariable[]): this {
-    this.typeVariables.push(...typeVariables);
-    return this;
-  }
-
-  public addTypeVariable(typeVariable: TypeVariable): this {
-    this.typeVariables.push(typeVariable);
-    return this;
-  }
-
-  public superClass(superClass: TypeName): this {
-    // check(this.superClass == null) { "superclass already set to ${this.superClass}" }
-    this.superClassField = superClass;
-    return this;
-  }
-
-  public addMixins(mixins: TypeName[]): this {
-    this.mixins.push(...mixins);
-    return this;
-  }
-
-  public addMixin(mixin: TypeName): this {
-    this.mixins.push(mixin);
-    return this;
-  }
-
-  public cstr(cstr?: FunctionSpec): this {
-    if (cstr) {
-      // require(constructor.isConstructor) { "expected a constructor but was ${constructor.name}; use FunctionSpec.constructorBuilder when building"
-    }
-    this.cstrField = cstr;
-    return this;
-  }
-
-  public addProperties(...propertySpecs: PropertySpec[]): this {
-    this.propertySpecs.push(...propertySpecs);
-    return this;
-  }
-
-  public addProperty(propertySpec: PropertySpec): this {
-    this.propertySpecs.push(propertySpec);
-    return this;
-  }
-
-  public addProperty2(name: string, type: TypeName, optional: boolean = false, ...modifiers: Modifier[]): this {
-    return this.addProperty(PropertySpec.create(name, type, optional, ...modifiers));
-  }
-
-  public addFunctions(...functionSpecs: FunctionSpec[]): this {
-    functionSpecs.forEach(it => this.addFunction(it));
-    return this;
-  }
-
-  public addFunction(functionSpec: FunctionSpec): this {
-    // require(!functionSpec.isConstructor) { "Use the 'constructor' method for the constructor" }
-    this.functionSpecs.push(functionSpec);
-    return this;
-  }
-
-  public build(): ClassSpec {
-    const isAbstract = this.modifiers.indexOf(Modifier.ABSTRACT) > -1;
-    // for (functionSpec in functionSpecs) {
-    //   require(isAbstract || !functionSpec.modifiers.contains(Modifier.ABSTRACT)) { "non-abstract type $name cannot declare abstract function ${functionSpec.name}" }
-    // }
-    return new ClassSpec(this);
   }
 }
 

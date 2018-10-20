@@ -1,4 +1,4 @@
-/** A generated function declaration. */
+import { imm, Imm } from "ts-imm";
 import { CodeBlock, Dictionary } from "./CodeBlock";
 import { CodeWriter } from "./CodeWriter";
 import { DecoratorSpec } from "./DecoratorSpec";
@@ -10,45 +10,44 @@ const CONSTRUCTOR = "constructor()";
 const CALLABLE = "callable()";
 const INDEXABLE = "indexable()";
 
-export class FunctionSpec {
+/** A generated function declaration. */
+export class FunctionSpec extends Imm<FunctionSpec> {
 
-  public static builder(name: string) {
-    return new FunctionSpecBuilder(name);
+  public static create(name: string) {
+    return new FunctionSpec({
+      name,
+      javaDoc: CodeBlock.empty(),
+      decorators: [],
+      modifiers: [],
+      typeVariables: [],
+      returnType: undefined,
+      parameters: [],
+      restParameter: undefined,
+      body: CodeBlock.empty(),
+    });
   }
 
   public static constructorBuilder() {
-    return new FunctionSpecBuilder(CONSTRUCTOR);
+    return FunctionSpec.create(CONSTRUCTOR);
   }
 
   public static callableBuilder() {
-    return new FunctionSpecBuilder(CALLABLE);
+    return FunctionSpec.create(CALLABLE);
   }
 
   public static indexableBuilder() {
-    return new FunctionSpecBuilder(INDEXABLE);
+    return FunctionSpec.create(INDEXABLE);
   }
 
-  public readonly name: string;
-  public readonly javaDoc: CodeBlock;
-  public readonly decorators: DecoratorSpec[] = [];
-  public readonly modifiers: Modifier[] = [];
-  public readonly typeVariables: TypeVariable[] = [];
-  public readonly returnType?: TypeName;
-  public readonly parameters: ParameterSpec[] = [];
-  public readonly restParameter: ParameterSpec | undefined;
-  public readonly body: CodeBlock;
-
-  public constructor(builder: FunctionSpecBuilder) {
-    this.name = builder.name;
-    this.javaDoc = builder.javaDoc;
-    this.decorators.push(...builder.decorators);
-    this.modifiers.push(...builder.modifiers);
-    this.typeVariables.push(...builder.typeVariables);
-    this.returnType = builder.returnType;
-    this.parameters.push(...builder.parameters);
-    this.restParameter = builder.restParameter;
-    this.body = builder.body;
-  }
+  @imm public readonly name!: string;
+  @imm public readonly javaDoc!: CodeBlock;
+  @imm public readonly decorators!: DecoratorSpec[];
+  @imm public readonly modifiers!: Modifier[];
+  @imm public readonly typeVariables!: TypeVariable[];
+  @imm public readonly returnType?: TypeName;
+  @imm public readonly parameters!: ParameterSpec[];
+  @imm public readonly restParameter!: ParameterSpec | undefined;
+  @imm public readonly body!: CodeBlock;
 
   /*
   init {
@@ -59,11 +58,10 @@ export class FunctionSpec {
   */
 
   public abstract(): FunctionSpec {
-    return FunctionSpec.builder(this.name)
+    return FunctionSpec.create(this.name)
       .addModifiers(Modifier.ABSTRACT)
       .addTypeVariables(...this.typeVariables)
       .addParameters(...this.parameters)
-      .build();
   }
 
   public parameter(name: string): ParameterSpec | undefined {
@@ -77,7 +75,7 @@ export class FunctionSpec {
 
     this.emitSignature(codeWriter, enclosingName);
 
-    const isEmptyConstructor = this.isConstructor && this.body.isEmpty();
+    const isEmptyConstructor = this.isConstructor() && this.body.isEmpty();
     if (this.modifiers.indexOf(Modifier.ABSTRACT) > -1 || isEmptyConstructor) {
       codeWriter.emit(";\n");
       return
@@ -90,142 +88,78 @@ export class FunctionSpec {
     codeWriter.emit("}\n");
   }
 
-  public toBuilder(): FunctionSpecBuilder {
-    const builder = new FunctionSpecBuilder(this.name);
-    // builder.javaDoc.add(javaDoc)
-    // builder.decorators += decorators
-    // builder.modifiers += modifiers
-    // builder.typeVariables += typeVariables
-    // builder.returnType = returnType
-    // builder.parameters += parameters
-    // builder.body.add(body)
-    return builder;
-  }
-
-  private emitSignature(codeWriter: CodeWriter, enclosingName?: string) {
-    if (this.isConstructor) {
-      codeWriter.emitCode("constructor");
-    } else if (this.isCallable) {
-      codeWriter.emitCode("");
-    } else if (this.isIndexable) {
-      codeWriter.emitCode("[");
-    } else {
-      if (enclosingName === undefined) {
-        codeWriter.emit("function ");
-      }
-      codeWriter.emitCode("%L", this.name);
-    }
-    if (this.typeVariables.length > 0) {
-      codeWriter.emitTypeVariables(this.typeVariables);
-    }
-    ParameterSpec.emitAll(
-      this.parameters,
-      codeWriter,
-      !this.isIndexable,
-      this.restParameter,
-      undefined);
-    if (this.isIndexable) {
-      codeWriter.emitCode("]")
-    }
-    if (this.returnType !== undefined && this.returnType !== TypeNames.VOID) {
-      codeWriter.emitCode(": %T", this.returnType);
-    }
-  }
-
-  get isConstructor(): boolean {
-    return this.name === CONSTRUCTOR;
-  }
-
-  get isAccessor(): boolean {
-    return this.modifiers.indexOf(Modifier.GET) > -1 || this.modifiers.indexOf(Modifier.SET) > -1;
-  }
-
-  get isCallable(): boolean {
-    return this.name === CALLABLE;
-  }
-
-  get isIndexable(): boolean {
-    return this.name === INDEXABLE;
-  }
-}
-
-export class FunctionSpecBuilder {
-
-  public javaDoc: CodeBlock = CodeBlock.empty();
-  public decorators: DecoratorSpec[] = [];
-  public modifiers: Modifier[] = [];
-  public typeVariables: TypeVariable[] = [];
-  public returnType: TypeName | undefined = undefined;
-  public parameters: ParameterSpec[] = [];
-  public restParameter: ParameterSpec | undefined;
-  public body: CodeBlock = CodeBlock.empty();
-
-  constructor(public name: string) {}
-
-    // init {
-    //   require(name.isConstructor || name.isName) { "not a valid name: $name" }
-    // }
-
   public addJavadoc(format: string, ...args: any[]): this {
-    this.javaDoc = this.javaDoc.add(format, ...args);
-    return this;
+    return this.copy({
+      javaDoc: this.javaDoc.add(format, ...args),
+    });
   }
 
   public addJavadocBlock(block: CodeBlock): this {
-    this.javaDoc = this.javaDoc.addCode(block);
-    return this;
+    return this.copy({
+      javaDoc: this.javaDoc.addCode(block),
+    });
   }
 
   public addDecorators(...decoratorSpecs: DecoratorSpec[]): this {
-    this.decorators.push(...decoratorSpecs);
-    return this;
+    return this.copy({
+      decorators: [...this.decorators, ...decoratorSpecs],
+    });
   }
 
   public addDecorator(decoratorSpec: DecoratorSpec): this {
-    this.decorators.push(decoratorSpec);
-    return this;
+    return this.copy({
+      decorators: [...this.decorators, decoratorSpec],
+    });
   }
 
   public addModifiers(...modifiers: Modifier[]): this {
-    this.modifiers.push(...modifiers);
-    return this;
+    return this.copy({
+      modifiers: [...this.modifiers, ...modifiers],
+    });
   }
 
   public addTypeVariables(...typeVariables: TypeVariable[]): this {
-    this.typeVariables.push(...typeVariables);
-    return this;
+    return this.copy({
+      typeVariables: [...this.typeVariables, ...typeVariables],
+    });
   }
 
   public addTypeVariable(typeVariable: TypeVariable): this {
-    this.typeVariables.push(typeVariable);
-    return this;
+    return this.copy({
+      typeVariables: [...this.typeVariables, typeVariable],
+    });
   }
 
-  public returns(returnType: TypeName): this {
+  public returns(returnType: TypeName | string): this {
     // check(!name.isConstructor) { "$name cannot have a return type" }
-    this.returnType = returnType;
-    return this;
+    return this.copy({
+      returnType: TypeNames.anyTypeMaybeString(returnType),
+    });
   }
 
   public addParameters(...parameterSpecs: ParameterSpec[]): this {
-    this.parameters.push(...parameterSpecs);
-    return this;
+    return this.copy({
+      parameters: [...this.parameters, ...parameterSpecs],
+    });
   }
 
   public addParameter(name: string, type: TypeName, optional?: boolean, modifiers?: Modifier[], initializer?: CodeBlock): this
   public addParameter(parameterSpec: ParameterSpec): this
   public addParameter(parameterSpec: ParameterSpec | string): this {
+    let param: ParameterSpec;
     if (typeof parameterSpec === 'string') {
       const name = parameterSpec;
       const type: TypeName = arguments[1] || TypeNames.ANY;
       const optional: boolean = arguments[2] || false;
       const modifiers: Modifier[] = arguments[3] || [];
       const initializer: CodeBlock | undefined = arguments[4];
-      this.parameters.push(ParameterSpec.create(name, type, optional, ...modifiers).defaultValueBlock(initializer));
+      param = ParameterSpec.create(name, type, optional, ...modifiers).defaultValueBlock(initializer);
     } else {
-      this.parameters.push(parameterSpec);
+      param = parameterSpec;
     }
-    return this;
+    return this.copy({
+      parameters: [...this.parameters, param],
+    });
   }
 
   /*
@@ -240,37 +174,44 @@ export class FunctionSpecBuilder {
   public rest(name: string, type: TypeName): this
   public rest(parameterSpec: ParameterSpec): this
   public rest(parameterSpec: ParameterSpec | string): this {
+    let param: ParameterSpec;
     if (typeof parameterSpec === 'string') {
       const name = parameterSpec;
       const type: TypeName = arguments[1] || TypeNames.ANY;
-      this.restParameter = ParameterSpec.create(name, type);
+      param = ParameterSpec.create(name, type);
     } else {
-      this.restParameter = parameterSpec;
+      param = parameterSpec;
     }
-    return this;
+    return this.copy({
+      restParameter: param,
+    });
   }
 
   public addCode(format: string, ...args: any[]): this {
     // modifiers -= Modifier.ABSTRACT
-    this.body = this.body.add(format, ...args);
-    return this;
+    return this.copy({
+      body: this.body.add(format, ...args),
+    });
   }
 
   public addNamedCode(format: string, args: Dictionary<any>): this {
     // modifiers -= Modifier.ABSTRACT
-    this.body = this.body.addNamed(format, args);
-    return this;
+    return this.copy({
+      body: this.body.addNamed(format, args),
+    });
   }
 
   public addCodeBlock(codeBlock: CodeBlock): this {
     // modifiers -= Modifier.ABSTRACT
-    this.body = this.body.addCode(codeBlock);
-    return this;
+    return this.copy({
+      body: this.body.addCode(codeBlock),
+    });
   }
 
   public addComment(format: string, ...args: any[]): this {
-    this.body = this.body.add("// " + format + "\n", ...args);
-    return this;
+    return this.copy({
+      body: this.body.add("// " + format + "\n", ...args),
+    });
   }
 
   /**
@@ -279,8 +220,9 @@ export class FunctionSpecBuilder {
    */
   public beginControlFlow(controlFlow: string, ...args: any[]): this {
     // modifiers -= Modifier.ABSTRACT
-    this.body = this.body.beginControlFlow(controlFlow, ...args);
-    return this;
+    return this.copy({
+      body: this.body.beginControlFlow(controlFlow, ...args),
+    });
   }
 
   /**
@@ -289,23 +231,68 @@ export class FunctionSpecBuilder {
    */
   public nextControlFlow(controlFlow: string, ...args: any[]): this {
     // modifiers -= Modifier.ABSTRACT
-    this.body = this.body.nextControlFlow(controlFlow, ...args);
-    return this;
+    return this.copy({
+      body: this.body.nextControlFlow(controlFlow, ...args),
+    });
   }
 
   public endControlFlow(): this {
     // modifiers -= Modifier.ABSTRACT
-    this.body = this.body.endControlFlow();
-    return this;
+    return this.copy({
+      body: this.body.endControlFlow(),
+    });
   }
 
   public addStatement(format: string, ...args: any[]): this {
     // modifiers -= Modifier.ABSTRACT
-    this.body = this.body.addStatement(format, ...args);
-    return this;
+    return this.copy({
+      body: this.body.addStatement(format, ...args),
+    });
   }
 
-  public build(): FunctionSpec {
-    return new FunctionSpec(this);
+  public isConstructor(): boolean {
+    return this.name === CONSTRUCTOR;
+  }
+
+  public isAccessor(): boolean {
+    return this.modifiers.indexOf(Modifier.GET) > -1 || this.modifiers.indexOf(Modifier.SET) > -1;
+  }
+
+  public isCallable(): boolean {
+    return this.name === CALLABLE;
+  }
+
+  public isIndexable(): boolean {
+    return this.name === INDEXABLE;
+  }
+
+  private emitSignature(codeWriter: CodeWriter, enclosingName?: string) {
+    if (this.isConstructor()) {
+      codeWriter.emitCode("constructor");
+    } else if (this.isCallable()) {
+      codeWriter.emitCode("");
+    } else if (this.isIndexable()) {
+      codeWriter.emitCode("[");
+    } else {
+      if (enclosingName === undefined) {
+        codeWriter.emit("function ");
+      }
+      codeWriter.emitCode("%L", this.name);
+    }
+    if (this.typeVariables.length > 0) {
+      codeWriter.emitTypeVariables(this.typeVariables);
+    }
+    ParameterSpec.emitAll(
+      this.parameters,
+      codeWriter,
+      !this.isIndexable(),
+      this.restParameter,
+      undefined);
+    if (this.isIndexable()) {
+      codeWriter.emitCode("]")
+    }
+    if (this.returnType !== undefined && this.returnType !== TypeNames.VOID) {
+      codeWriter.emitCode(": %T", this.returnType);
+    }
   }
 }

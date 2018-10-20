@@ -1,3 +1,4 @@
+import { imm, Imm } from "ts-imm";
 import { CodeBlock } from "./CodeBlock";
 import { CodeWriter } from "./CodeWriter";
 import { FunctionSpec } from "./FunctionSpec";
@@ -6,10 +7,20 @@ import { PropertySpec } from "./PropertySpec";
 import { TypeName, TypeVariable } from "./TypeNames";
 
 /** A generated `interface` declaration. */
-export class InterfaceSpec {
+export class InterfaceSpec extends Imm<InterfaceSpec> {
 
-  public static builder(name: string): InterfaceSpecBuilder {
-    return new InterfaceSpecBuilder(name);
+  public static create(name: string): InterfaceSpec {
+    return new InterfaceSpec({
+      name,
+      javaDoc: CodeBlock.empty(),
+      modifiers: [],
+      typeVariables: [],
+      superInterfaces: [],
+      propertySpecs: [],
+      functionSpecs: [],
+      indexableSpecs: [],
+      callableField: undefined,
+    });
   }
 
   /*
@@ -22,27 +33,15 @@ export class InterfaceSpec {
   }
   */
 
-  public readonly name: string;
-  public readonly javaDoc: CodeBlock;
-  public readonly modifiers: Modifier[] = [];
-  public readonly typeVariables: TypeVariable[] = [];
-  public readonly superInterfaces: TypeName[] = [];
-  public readonly propertySpecs: PropertySpec[] = [];
-  public readonly functionSpecs: FunctionSpec[] = [];
-  public readonly indexableSpecs: FunctionSpec[] = [];
-  public readonly callable?: FunctionSpec;
-
-  constructor(builder: InterfaceSpecBuilder) {
-    this.name = builder.name;
-    this.javaDoc = builder.javaDoc;
-    this.modifiers.push(...builder.modifiers);
-    this.typeVariables.push(...builder.typeVariables);
-    this.superInterfaces.push(...builder.superInterfaces);
-    this.propertySpecs.push(...builder.propertySpecs);
-    this.functionSpecs.push(...builder.functionSpecs);
-    this.indexableSpecs.push(...builder.indexableSpecs);
-    this.callable = builder.callableField;
-  }
+  @imm public readonly name!: string;
+  @imm public readonly javaDoc!: CodeBlock;
+  @imm public readonly modifiers!: Modifier[];
+  @imm public readonly typeVariables!: TypeVariable[];
+  @imm public readonly superInterfaces!: TypeName[];
+  @imm public readonly propertySpecs!: PropertySpec[];
+  @imm public readonly functionSpecs!: FunctionSpec[];
+  @imm public readonly indexableSpecs!: FunctionSpec[];
+  @imm public readonly callableField?: FunctionSpec;
 
   public emit(codeWriter: CodeWriter): void {
     codeWriter.emitJavaDoc(this.javaDoc);
@@ -60,9 +59,9 @@ export class InterfaceSpec {
     codeWriter.indent();
 
     // Callable
-    if (this.callable) {
+    if (this.callableField) {
       codeWriter.emitCode("\n");
-      this.callable.emit(codeWriter, undefined, [Modifier.ABSTRACT]);
+      this.callableField.emit(codeWriter, undefined, [Modifier.ABSTRACT]);
     }
 
     // Properties.
@@ -79,7 +78,7 @@ export class InterfaceSpec {
 
     // Functions.
     this.functionSpecs.forEach(funSpec => {
-      if (!funSpec.isConstructor) {
+      if (!funSpec.isConstructor()) {
         codeWriter.emit("\n");
         funSpec.emit(codeWriter, this.name, [Modifier.PUBLIC, Modifier.ABSTRACT]);
       }
@@ -93,82 +92,63 @@ export class InterfaceSpec {
     codeWriter.emit("}\n");
   }
 
-  public toBuilder(): InterfaceSpecBuilder {
-    return new InterfaceSpecBuilder(this.name)
-      .addJavadocBlock(this.javaDoc)
-      .addModifiers(...this.modifiers)
-      .addTypeVariables(...this.typeVariables)
-      .addSuperInterfaces(...this.superInterfaces)
-      .addProperties(...this.propertySpecs)
-      .addFunctions(...this.functionSpecs)
-      .addIndexables(...this.indexableSpecs)
-      .callable(this.callable);
-  }
-
-  private get hasNoBody(): boolean {
-    return this.propertySpecs.length === 0 && this.functionSpecs.length === 0 && this.indexableSpecs.length === 0 && this.callable === undefined;
-  }
-}
-
-export class InterfaceSpecBuilder {
-
-  public javaDoc = CodeBlock.empty();
-  public modifiers: Modifier[] = [];
-  public typeVariables: TypeVariable[] = [];
-  public superInterfaces: TypeName[] = [];
-  public propertySpecs: PropertySpec[] = [];
-  public functionSpecs: FunctionSpec[] = [];
-  public indexableSpecs: FunctionSpec[] = [];
-  public callableField?: FunctionSpec;
-
-  constructor(public readonly name: string) {
-  }
-
   public addJavadoc(format: string, ...args: any[]): this {
-    this.javaDoc = this.javaDoc.add(format, ...args);
-    return this;
+    return this.copy({
+      javaDoc: this.javaDoc.add(format, ...args),
+    });
   }
 
   public addJavadocBlock(block: CodeBlock): this {
-    this.javaDoc = this.javaDoc.addCode(block);
-    return this;
+    return this.copy({
+      javaDoc: this.javaDoc.addCode(block),
+    });
   }
 
   public addModifiers(...modifiers: Modifier[]): this {
-    this.modifiers.push(...modifiers);
-    return this;
+    return this.copy({
+      modifiers: [...this.modifiers, ...modifiers],
+    });
   }
 
   public addTypeVariables(...typeVariables: TypeVariable[]): this {
-    this.typeVariables.push(...typeVariables);
-    return this;
+    return this.copy({
+      typeVariables: [...this.typeVariables, ...typeVariables],
+    });
   }
 
   public addTypeVariable(typeVariable: TypeVariable): this {
-    this.typeVariables.push(typeVariable);
-    return this;
+    return this.copy({
+      typeVariables: [...this.typeVariables, typeVariable],
+    });
   }
 
   public addSuperInterfaces(...superInterfaces: TypeName[]): this {
-    this.superInterfaces.push(...superInterfaces);
-    return this;
+    return this.copy({
+      superInterfaces: [...this.superInterfaces, ...superInterfaces],
+    });
   }
 
   public addSuperInterface(superClass: TypeName): this {
-    this.superInterfaces.push(superClass);
-    return this;
+    return this.copy({
+      superInterfaces: [...this.superInterfaces, superClass],
+    });
   }
 
   public addProperties(...propertySpecs: PropertySpec[]): this {
-    propertySpecs.forEach(it => this.addProperty(it));
-    return this;
+    // tslint:disable-next-line
+    let curr = this;
+    propertySpecs.forEach(it => {
+      curr = curr.addProperty(it);
+    });
+    return curr;
   }
 
   public addProperty(propertySpec: PropertySpec): this {
     // require(propertySpec.decorators.isEmpty()) { "Interface properties cannot have decorators" }
     // require(propertySpec.initializer == null) { "Interface properties cannot have initializers" }
-    this.propertySpecs.push(propertySpec);
-    return this;
+    return this.copy({
+      propertySpecs: [...this.propertySpecs, propertySpec],
+    });
   }
 
   public addProperty2(name: string, type: TypeName, optional: boolean = false, ...modifiers: Modifier[]): this {
@@ -176,8 +156,12 @@ export class InterfaceSpecBuilder {
   }
 
   public addFunctions(...functionSpecs: FunctionSpec[]): this {
-    functionSpecs.forEach(it => this.addFunction(it));
-    return this;
+    // tslint:disable-next-line
+    let curr = this;
+    functionSpecs.forEach(it => {
+      curr = curr.addFunction(it);
+    });
+    return curr;
   }
 
   public addFunction(functionSpec: FunctionSpec): this {
@@ -185,19 +169,25 @@ export class InterfaceSpecBuilder {
     // require(functionSpec.body.isEmpty()) { "Interface methods cannot have code" }
     // require(!functionSpec.isConstructor) { "Interfaces cannot have a constructor" }
     // require(functionSpec.decorators.isEmpty()) { "Interface functions cannot have decorators" }
-    this.functionSpecs.push(functionSpec);
-    return this;
+    return this.copy({
+      functionSpecs: [...this.functionSpecs, functionSpec],
+    });
   }
 
   public addIndexables(...indexableSpecs: FunctionSpec[]): this {
-    indexableSpecs.forEach(it => this.addIndexable(it));
-    return this;
+    // tslint:disable-next-line
+    let curr = this;
+    indexableSpecs.forEach(it => {
+      curr = curr.addIndexable(it);
+    });
+    return curr;
   }
 
   public addIndexable(functionSpec: FunctionSpec): this {
     // require(functionSpec.modifiers.contains(Modifier.ABSTRACT)) { "Indexables must be ABSTRACT" }
-    this.indexableSpecs.push(functionSpec);
-    return this;
+    return this.copy({
+      indexableSpecs: [...this.indexableSpecs, functionSpec],
+    });
   }
 
   public callable(callable?: FunctionSpec): this {
@@ -205,11 +195,12 @@ export class InterfaceSpecBuilder {
       // require(callable.isCallable) { "expected a callable signature but was ${callable.name}; use FunctionSpec.callableBuilder when building" }
       // require(callable.modifiers == setOf(Modifier.ABSTRACT)) { "Callable must be ABSTRACT and nothing else" }
     }
-    this.callableField = callable;
-    return this;
+    return this.copy({
+      callableField: callable,
+    });
   }
 
-  public build(): InterfaceSpec {
-    return new InterfaceSpec(this);
+  private get hasNoBody(): boolean {
+    return this.propertySpecs.length === 0 && this.functionSpecs.length === 0 && this.indexableSpecs.length === 0 && this.callableField === undefined;
   }
 }

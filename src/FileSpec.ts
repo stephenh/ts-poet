@@ -1,17 +1,18 @@
 import _ from "lodash";
+import { imm, Imm } from "ts-imm";
 import { ClassSpec } from "./ClassSpec";
 import { CodeBlock } from "./CodeBlock";
 import { CodeWriter } from "./CodeWriter";
 import { EnumSpec } from "./EnumSpec";
-import { TypeName, TypeNames } from "./TypeNames";
-import { Augmented, ImportsAll, ImportsName, SideEffect, SymbolSpec, SymbolSpecs } from "./SymbolSpecs";
-import { ModuleSpec } from "./ModuleSpec";
-import { InterfaceSpec } from "./InterfaceSpec";
 import { FunctionSpec } from "./FunctionSpec";
-import { PropertySpec } from "./PropertySpec";
-import { TypeAliasSpec } from "./TypeAliasSpec";
-import { StringBuffer } from "./StringBuffer";
+import { InterfaceSpec } from "./InterfaceSpec";
 import { Modifier } from "./Modifier";
+import { ModuleSpec } from "./ModuleSpec";
+import { PropertySpec } from "./PropertySpec";
+import { StringBuffer } from "./StringBuffer";
+import { Augmented, ImportsAll, ImportsName, SideEffect, SymbolSpec, SymbolSpecs } from "./SymbolSpecs";
+import { TypeAliasSpec } from "./TypeAliasSpec";
+import { TypeName, TypeNames } from "./TypeNames";
 
 /**
  * A TypeScript file containing top level objects like classes, objects, functions, properties, and type
@@ -22,27 +23,25 @@ import { Modifier } from "./Modifier";
  * - Imports
  * - Members
  */
-export class FileSpec {
+export class FileSpec extends Imm<FileSpec> {
 
-  public static builder(file: string | ModuleSpec): FileSpecBuilder {
-    const builder = new FileSpecBuilder(typeof file === 'string' ? file : file.name);
+  public static create(file: string | ModuleSpec): FileSpec {
+    const spec = new FileSpec({
+      path: typeof file === 'string' ? file : file.name,
+      comment: CodeBlock.empty(),
+      members: [],
+      indentField: "  ",
+    });
     if (file instanceof ModuleSpec) {
-      builder.members.push(...file.members);
+      // builder.members.push(...file.members);
     }
-    return builder;
+    return spec;
   }
 
-  public readonly path: string;
-  public readonly comment: CodeBlock;
-  public readonly members: any[] = [];
-  public readonly indent: string;
-
-  constructor(builder: FileSpecBuilder) {
-    this.path = builder.path;
-    this.comment = builder.comment;
-    this.members.push(...builder.members);
-    this.indent = builder.indentField;
-  }
+  @imm public readonly path!: string;
+  @imm public readonly comment!: CodeBlock;
+  @imm public readonly members!: any[];
+  @imm public readonly indentField!: string;
 
   public exportType(typeName: string): TypeName | undefined {
     const typeNameParts = typeName.split('.');
@@ -79,11 +78,11 @@ export class FileSpec {
 
   public emit(out: StringBuffer) {
     // First pass: emit the entire class, just to collect the types we'll need to import.
-    const importsCollector = new CodeWriter(new StringBuffer(), this.indent);
+    const importsCollector = new CodeWriter(new StringBuffer(), this.indentField);
     this.emitToWriter(importsCollector);
     const requiredImports = importsCollector.requiredImports();
     // Second pass: write the code, taking advantage of the imports.
-    const codeWriter = new CodeWriter(out, this.indent, new Set(requiredImports));
+    const codeWriter = new CodeWriter(out, this.indentField, new Set(requiredImports));
     this.emitToWriter(codeWriter);
   }
 
@@ -95,12 +94,73 @@ export class FileSpec {
     return !this.isEmpty();
   }
 
-  public toBuilder(): FileSpecBuilder {
-    const builder = new FileSpecBuilder(this.path);
-    // builder.comment.add(comment)
-    // builder.members.addAll(this.members)
-    // builder.indent = indent
-    return builder;
+  public addComment(format: string, ...args: any[]): this {
+    return this.copy({
+      comment: this.comment.add(format, ...args),
+    });
+  }
+
+  public addModule(moduleSpec: ModuleSpec): this {
+    return this.copy({
+      members: [...this.members, moduleSpec],
+    });
+  }
+
+  public addClass(classSpec: ClassSpec): this {
+    checkMemberModifiers(classSpec.modifiers);
+    return this.copy({
+      members: [...this.members, classSpec],
+    });
+  }
+
+  public addInterface(ifaceSpec: InterfaceSpec): this {
+    checkMemberModifiers(ifaceSpec.modifiers);
+    return this.copy({
+      members: [...this.members, ifaceSpec],
+    });
+  }
+
+  public addEnum(enumSpec: EnumSpec): this {
+    checkMemberModifiers(enumSpec.modifiers)
+    return this.copy({
+      members: [...this.members, enumSpec],
+    });
+  }
+
+  public addFunction(functionSpec: FunctionSpec): this {
+    // require(!functionSpec.isConstructor) { "cannot add ${functionSpec.name} to file $path" }
+    // require(functionSpec.decorators.isEmpty()) { "decorators on module functions are not allowed" }
+    checkMemberModifiers(functionSpec.modifiers);
+    return this.copy({
+      members: [...this.members, functionSpec],
+    });
+  }
+
+  public addProperty(propertySpec: PropertySpec): this {
+    // requireExactlyOneOf(propertySpec.modifiers, Modifier.CONST, Modifier.LET, Modifier.VAR)
+    // require(propertySpec.decorators.isEmpty()) { "decorators on file properties are not allowed" }
+    checkMemberModifiers(propertySpec.modifiers);
+    return this.copy({
+      members: [...this.members, propertySpec],
+    });
+  }
+
+  public addTypeAlias(typeAliasSpec: TypeAliasSpec): this {
+    return this.copy({
+      members: [...this.members, typeAliasSpec],
+    });
+  }
+
+  public addCode(codeBlock: CodeBlock): this {
+    return this.copy({
+      members: [...this.members, codeBlock],
+    });
+  }
+
+  public indent(indent: string): this {
+    return this.copy({
+      indentField: indent,
+    });
   }
 
   private emitToWriter(codeWriter: CodeWriter) {
@@ -215,99 +275,18 @@ function filterInstances<T, U>(list: T[], t: Constructor<U>): U[] {
     // /** Writes this to `directory` as UTF-8 using the standard directory structure.  */
     // public writeTo(directory: File) = writeTo(directory.toPath())
 
-export class FileSpecBuilder {
-
-  public comment = CodeBlock.empty();
-  public indentField = "  ";
-  public readonly members: any[] = [];
-
-  constructor(public path: string) {
-  }
-
-  public addComment(format: string, ...args: any[]): this {
-    this.comment = this.comment.add(format, ...args);
-    return this;
-  }
-
-  public addModule(moduleSpec: ModuleSpec): this {
-    this.members.push(moduleSpec);
-    return this;
-  }
-
-  public addClass(classSpec: ClassSpec): this {
-    this.checkMemberModifiers(classSpec.modifiers);
-    this.members.push(classSpec);
-    return this;
-  }
-
-  public addInterface(ifaceSpec: InterfaceSpec): this {
-    this.checkMemberModifiers(ifaceSpec.modifiers);
-    this.members.push(ifaceSpec);
-    return this;
-  }
-
-  public addEnum(enumSpec: EnumSpec): this {
-    this.checkMemberModifiers(enumSpec.modifiers)
-    this.members.push(enumSpec);
-    return this;
-  }
-
-  public addFunction(functionSpec: FunctionSpec): this {
-    // require(!functionSpec.isConstructor) { "cannot add ${functionSpec.name} to file $path" }
-    // require(functionSpec.decorators.isEmpty()) { "decorators on module functions are not allowed" }
-    this.checkMemberModifiers(functionSpec.modifiers);
-    this.members.push(functionSpec);
-    return this;
-  }
-
-  public addProperty(propertySpec: PropertySpec): this {
-    // requireExactlyOneOf(propertySpec.modifiers, Modifier.CONST, Modifier.LET, Modifier.VAR)
-    // require(propertySpec.decorators.isEmpty()) { "decorators on file properties are not allowed" }
-    this.checkMemberModifiers(propertySpec.modifiers);
-    this.members.push(propertySpec);
-    return this;
-  }
-
-  public addTypeAlias(typeAliasSpec: TypeAliasSpec): this {
-    this.members.push(typeAliasSpec);
-    return this;
-  }
-
-  public addCode(codeBlock: CodeBlock): this {
-    this.members.push(codeBlock);
-    return this;
-  }
-
-  public indent(indent: string): this {
-    this.indentField = indent;
-    return this;
-  }
-
-  public isEmpty(): boolean {
-    return this.members.length === 0;
-  }
-
-  public isNotEmpty(): boolean {
-    return !this.isEmpty();
-  }
-
-  public build(): FileSpec {
-    return new FileSpec(this);
-  }
-
-  private checkMemberModifiers(modifiers: Modifier[]) {
-    // requireNoneOf(
-    //   modifiers,
-    //   Modifier.PUBLIC,
-    //   Modifier.PROTECTED,
-    //   Modifier.PRIVATE,
-    //   Modifier.READONLY,
-    //   Modifier.GET,
-    //   Modifier.SET,
-    //   Modifier.STATIC,
-    //   Modifier.CONST,
-    //   Modifier.LET,
-    //   Modifier.VAR
-    // )
-  }
+function checkMemberModifiers(modifiers: Modifier[]): void {
+  // requireNoneOf(
+  //   modifiers,
+  //   Modifier.PUBLIC,
+  //   Modifier.PROTECTED,
+  //   Modifier.PRIVATE,
+  //   Modifier.READONLY,
+  //   Modifier.GET,
+  //   Modifier.SET,
+  //   Modifier.STATIC,
+  //   Modifier.CONST,
+  //   Modifier.LET,
+  //   Modifier.VAR
+  // )
 }
