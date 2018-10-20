@@ -6,9 +6,8 @@ import { TypeNames } from "../TypeNames";
 
 describe("TypeAliasSpec", () => {
   it("generates JavaDoc at before class definition", () => {
-    const testAlias = TypeAliasSpec.builder("Integer", TypeNames.NUMBER)
-      .addJavadoc("this is a comment\n")
-      .build();
+    const testAlias = TypeAliasSpec.create("Integer", TypeNames.NUMBER)
+      .addJavadoc("this is a comment\n");
     expect(emit(testAlias)).toMatchInlineSnapshot(`
 "/**
  * this is a comment
@@ -19,9 +18,9 @@ type Integer = number;
   });
 
   it("generates modifiers in order", () => {
-    const testAlias = TypeAliasSpec.builder("Integer", TypeNames.NUMBER)
-      .addModifiers(Modifier.EXPORT)
-      .build();
+    const testAlias = TypeAliasSpec
+      .create("Integer", TypeNames.NUMBER)
+      .addModifiers(Modifier.EXPORT);
     expect(emit(testAlias)).toMatchInlineSnapshot(`
 "export type Integer = number;
 "
@@ -29,10 +28,7 @@ type Integer = number;
   });
 
   it("generates simple alias", () => {
-    const testAlias = TypeAliasSpec.builder(
-      "Integer",
-      TypeNames.NUMBER
-    ).build();
+    const testAlias = TypeAliasSpec.create("Integer", TypeNames.NUMBER);
     expect(emit(testAlias)).toMatchInlineSnapshot(`
 "type Integer = number;
 "
@@ -44,32 +40,15 @@ type Integer = number;
       "A",
       TypeNames.bound(TypeNames.anyType("Test"))
     );
-    const testAlias = TypeAliasSpec.builder(
+    const testAlias = TypeAliasSpec.create(
       "StringMap",
       TypeNames.mapType(TypeNames.STRING, typeVar)
     )
-      .addTypeVariable(typeVar)
-      .build();
+      .addTypeVariable(typeVar);
     expect(emit(testAlias)).toMatchInlineSnapshot(`
 "type StringMap<A extends Test> = Map<string, A>;
 "
 `);
-  });
-
-  it("ToBuilder copies all fields", () => {
-    const testAliasBldr = TypeAliasSpec.builder("Test", TypeNames.NUMBER)
-      .addJavadoc("this is a comment\n")
-      .addModifiers(Modifier.EXPORT)
-      .addTypeVariable(
-        TypeNames.typeVariable("A", TypeNames.bound(TypeNames.anyType("Test")))
-      )
-      .build()
-      .toBuilder();
-    // assertThat(testAliasBldr.name, equalTo("Test"))
-    // assertThat(testAliasBldr.type, equalTo<TypeName>(TypeName.NUMBER))
-    // assertThat(testAliasBldr.javaDoc.formatParts, hasItems("this is a comment\n"))
-    // assertThat(testAliasBldr.modifiers, hasItems(Modifier.EXPORT))
-    // assertThat(testAliasBldr.typeVariables.map { it.name }, hasItems("A"))
   });
 });
 

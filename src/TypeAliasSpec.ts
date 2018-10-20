@@ -1,28 +1,27 @@
+import { imm, Imm } from "ts-imm";
 import { CodeBlock } from "./CodeBlock";
 import { CodeWriter } from "./CodeWriter";
 import { Modifier } from "./Modifier";
 import { TypeName, TypeVariable } from "./TypeNames";
 
 /** A generated typealias declaration */
-export class TypeAliasSpec {
+export class TypeAliasSpec extends Imm<TypeAliasSpec> {
 
-  public static builder(name: string, type: TypeName): TypeAliasSpecBuilder {
-    return new TypeAliasSpecBuilder(name, type);
+  public static create(name: string, type: TypeName): TypeAliasSpec {
+    return new TypeAliasSpec({
+      name,
+      type,
+      javaDoc: CodeBlock.empty(),
+      modifiers: [],
+      typeVariables: [],
+    });
   }
 
-  public readonly name: string;
-  public readonly type: TypeName;
-  public readonly javaDoc: CodeBlock;
-  public readonly modifiers: Modifier[] = [];
-  public readonly typeVariables: TypeVariable[] = [];
-
-  constructor(builder: TypeAliasSpecBuilder) {
-    this.name = builder.name;
-    this.type = builder.type;
-    this.javaDoc = builder.javaDoc;
-    this.modifiers.push(...builder.modifiers);
-    this.typeVariables.push(...builder.typeVariables);
-  }
+  @imm public readonly name!: string;
+  @imm public readonly type!: TypeName;
+  @imm public readonly javaDoc!: CodeBlock;
+  @imm public readonly modifiers!: Modifier[];
+  @imm public readonly typeVariables!: TypeVariable[];
 
   public emit(codeWriter: CodeWriter) {
     codeWriter.emitJavaDoc(this.javaDoc);
@@ -33,58 +32,44 @@ export class TypeAliasSpec {
     codeWriter.emit(";\n");
   }
 
-  public toBuilder(): TypeAliasSpecBuilder {
-    return new TypeAliasSpecBuilder(this.name, this.type)
-      .addJavadocBlock(this.javaDoc)
-      .addModifiers(...this.modifiers)
-      .addTypeVariables(...this.typeVariables);
-  }
-}
-
-class TypeAliasSpecBuilder {
-
-  public javaDoc = CodeBlock.empty()
-  public modifiers: Modifier[] = [];
-  public typeVariables: TypeVariable[] = [];
-
-  constructor(
-     public name: string,
-     public type: TypeName) {}
-   // require(name.isName) { "not a valid name: $name" }
-
   public addJavadoc(format: string, ...args: any[]): this {
-    this.javaDoc = this.javaDoc.add(format, ...args);
-    return this;
+    return this.copy({
+      javaDoc: this.javaDoc.add(format, ...args)
+    });
   }
 
   public addJavadocBlock(block: CodeBlock): this {
-    this.javaDoc = this.javaDoc.addCode(block);
-    return this;
+    return this.copy({
+      javaDoc: this.javaDoc.addCode(block),
+    });
   }
 
   public addModifiers(...modifiers: Modifier[]): this {
-    modifiers.forEach(it => this.addModifier(it));
-    return this;
+    // tslint:disable-next-line
+    let curr = this;
+    modifiers.forEach(it => {
+      curr = curr.addModifier(it);
+    });
+    return curr;
   }
 
   public addModifier(modifier: Modifier): this {
     // require(modifier in setOf(Modifier.EXPORT)) { "unexpected typealias modifier $modifier"
-    this.modifiers.push(modifier);
-    return this;
+    return this.copy({
+      modifiers: [...this.modifiers, modifier],
+    });
   }
 
   public addTypeVariables(...typeVariables: TypeVariable[]): this {
-    this.typeVariables.push(...typeVariables);
-    return this;
+    return this.copy({
+      typeVariables: [...this.typeVariables, ...typeVariables],
+    });
   }
 
   public addTypeVariable(typeVariable: TypeVariable): this {
-    this.typeVariables.push(typeVariable);
-    return this;
-  }
-
-  public build(): TypeAliasSpec {
-    return new TypeAliasSpec(this);
+    return this.copy({
+      typeVariables: [...this.typeVariables, typeVariable],
+    });
   }
 }
 
