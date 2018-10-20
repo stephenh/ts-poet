@@ -106,9 +106,9 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     });
   }
 
-  public addDecorator(decoratorSpec: DecoratorSpec): this {
+  public addDecorator(decorator: DecoratorSpec | string): this {
     return this.copy({
-      decorators: [...this.decorators, decoratorSpec],
+      decorators: [...this.decorators, DecoratorSpec.fromMaybeString(decorator)],
     });
   }
 
@@ -143,13 +143,13 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     });
   }
 
-  public addParameter(name: string, type: TypeName, optional?: boolean, modifiers?: Modifier[], initializer?: CodeBlock): this
+  public addParameter(name: string, type: TypeName | string, optional?: boolean, modifiers?: Modifier[], initializer?: CodeBlock): this
   public addParameter(parameterSpec: ParameterSpec): this
   public addParameter(parameterSpec: ParameterSpec | string): this {
     let param: ParameterSpec;
     if (typeof parameterSpec === 'string') {
       const name = parameterSpec;
-      const type: TypeName = arguments[1] || TypeNames.ANY;
+      const type: TypeName = TypeNames.anyTypeMaybeString(arguments[1]);
       const optional: boolean = arguments[2] || false;
       const modifiers: Modifier[] = arguments[3] || [];
       const initializer: CodeBlock | undefined = arguments[4];
@@ -171,13 +171,13 @@ export class FunctionSpec extends Imm<FunctionSpec> {
      = addParameter(ParameterSpec.builder(name, type, optional, *modifiers).build())
      */
 
-  public rest(name: string, type: TypeName): this
+  public rest(name: string, type: TypeName | string): this
   public rest(parameterSpec: ParameterSpec): this
   public rest(parameterSpec: ParameterSpec | string): this {
     let param: ParameterSpec;
     if (typeof parameterSpec === 'string') {
       const name = parameterSpec;
-      const type: TypeName = arguments[1] || TypeNames.ANY;
+      const type: TypeName = TypeNames.anyTypeMaybeString(arguments[1]);
       param = ParameterSpec.create(name, type);
     } else {
       param = parameterSpec;

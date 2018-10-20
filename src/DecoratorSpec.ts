@@ -14,6 +14,10 @@ export class DecoratorSpec extends Imm<DecoratorSpec> {
     });
   }
 
+  public static fromMaybeString(decorator: DecoratorSpec | string): DecoratorSpec {
+    return typeof decorator === 'string' ? DecoratorSpec.create(decorator) : decorator;
+  }
+
   @imm public readonly name!: SymbolSpec;
   @imm public readonly parameters!: Array<[string | undefined, CodeBlock]>;
   @imm public readonly factory!: boolean;

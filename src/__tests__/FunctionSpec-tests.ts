@@ -45,6 +45,16 @@ function test() {
 `);
   });
 
+  it("generates decorators with string overload", () => {
+    const testFunc = FunctionSpec.create("test").addDecorator("decorate");
+    expect(emit(testFunc)).toMatchInlineSnapshot(`
+"@decorate
+function test() {
+}
+"
+`);
+  });
+
   it("generates modifiers in order", () => {
     const testClass = FunctionSpec.create("test")
       .addModifiers(Modifier.PRIVATE, Modifier.GET, Modifier.EXPORT)
@@ -126,12 +136,30 @@ function test() {
 `);
   });
 
+  it("generates parameters with string overload", () => {
+    const testClass = FunctionSpec.create("test").addParameter("b", "number");
+    expect(emit(testClass)).toMatchInlineSnapshot(`
+"function test(b: number) {
+}
+"
+`);
+  });
+
   it("generates parameters with rest", () => {
     const testClass = FunctionSpec.create("test")
       .addParameter("b", TypeName.STRING)
       .rest("c", TypeName.arrayType(TypeName.STRING));
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "function test(b: string, ...c: Array<string>) {
+}
+"
+`);
+  });
+
+  it("generates parameters with rest with string overload", () => {
+    const testClass = FunctionSpec.create("test").rest("c", "string[]");
+    expect(emit(testClass)).toMatchInlineSnapshot(`
+"function test(...c: string[]) {
 }
 "
 `);
