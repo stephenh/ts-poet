@@ -17,7 +17,6 @@ describe("ClassSpec", () => {
  * this is a comment
  */
 class Test {
-
 }
 "
 `);
@@ -36,7 +35,6 @@ class Test {
   /* targetType */ Test2
 )
 class Test {
-
 }
 "
 `);
@@ -47,7 +45,6 @@ class Test {
       .addModifiers(Modifier.ABSTRACT, Modifier.EXPORT);
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "export abstract class Test {
-
 }
 "
 `);
@@ -72,7 +69,6 @@ class Test {
       );
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6> {
-
 }
 "
 `);
@@ -82,7 +78,6 @@ class Test {
     const testClass = ClassSpec.create("Test").superClass("Test2");
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test extends Test2 {
-
 }
 "
 `);
@@ -92,7 +87,6 @@ class Test {
     const testClass = ClassSpec.create("Test").addMixin("Test2").addMixin("Test3");
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test implements Test2, Test3 {
-
 }
 "
 `);
@@ -105,7 +99,6 @@ class Test {
       .addMixin("Test4");
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test extends Test2 implements Test3, Test4 {
-
 }
 "
 `);
@@ -125,7 +118,6 @@ class Test {
       .addMixin("Test4");
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test<Y extends Test3 & Test4> extends Test2 implements Test3, Test4 {
-
 }
 "
 `);
@@ -140,18 +132,12 @@ class Test {
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test {
 
-  constructor(value) {
+  constructor(value: number) {
   }
 
 }
 "
 `);
-    // class Test {
-    //
-    //   constructor(value: number) {
-    //   }
-    //
-    // }
   });
 
   it("generates constructor with rest parameter", () => {
@@ -164,27 +150,12 @@ class Test {
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test {
 
-  constructor(value, all: Array<string>) {
+  constructor(value: number, ...all: Array<string>) {
   }
 
 }
 "
 `);
-    expect(emit(testClass)).toMatchInlineSnapshot(`
-"class Test {
-
-  constructor(value, all: Array<string>) {
-  }
-
-}
-"
-`);
-    // class Test {
-    //
-    //   constructor(value: number, ... all: Array<string>) {
-    //   }
-    //
-    // }
   });
 
   it("generates constructor with shorthand properties", () => {
@@ -199,7 +170,8 @@ class Test {
           .addParameter("value3", TypeNames.BOOLEAN, true)
           .addCodeBlock(
             CodeBlock.empty()
-              .add("const testing = 'need other code'; this.value = value\n")
+              .add("const testing = 'need other code';\n")
+              .addStatement("this.value = value")
               .addStatement("anotherTestStatement()")
               .addStatement("this.value2 = value2")
               .addStatement("this.value3 = value3 || testing == ''")
@@ -208,16 +180,11 @@ class Test {
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test {
 
-  private value: number;
-
-  value2: string;
-
   value3?: boolean;
 
-  constructor(value, value2, value3?) {
-    const testing = 'need other code'; this.value = value
+  constructor(private value: number, public value2: string, value3?: boolean) {
+    const testing = 'need other code';
     anotherTestStatement();
-    this.value2 = value2;
     this.value3 = value3 || testing == '';
   }
 

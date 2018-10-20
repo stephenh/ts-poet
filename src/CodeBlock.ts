@@ -1,13 +1,12 @@
-import {List, Set} from "immutable";
-import {imm, Imm, Properties} from "ts-imm";
+import { imm, Imm } from "ts-imm";
 import { CodeWriter } from "./CodeWriter";
+import { ParameterSpec } from "./ParameterSpec";
+import { PropertySpec } from "./PropertySpec";
 import { StringBuffer } from "./StringBuffer";
 import { SymbolReferenceTracker } from "./SymbolReferenceTracker";
 import { SymbolSpec } from "./SymbolSpecs";
 import { TypeName } from "./TypeNames";
 import { check } from "./utils";
-import {ParameterSpec} from "./ParameterSpec";
-import {PropertySpec} from "./PropertySpec";
 
 const NAMED_ARGUMENT = /^%([\w_]+):([\w]).*$/;
 const LOWERCASE = /^[a-z]+[\w_]*$/;
@@ -61,9 +60,9 @@ export class CodeBlock extends Imm<CodeBlock> {
 
   public static empty(): CodeBlock {
     return new CodeBlock({
-      args: List(),
-      formatParts: List(),
-      referencedSymbols: Set(),
+      formatParts: [],
+      args: [],
+      referencedSymbols: new Set(),
     });
   }
 
@@ -80,19 +79,19 @@ export class CodeBlock extends Imm<CodeBlock> {
   }
 
   /** A heterogeneous list containing string literals and value placeholders.  */
-  @imm public readonly formatParts!: List<string>;
-  @imm public readonly args!: List<any>;
+  @imm public readonly formatParts!: string[];
+  @imm public readonly args!: any[];
   @imm public readonly referencedSymbols!: Set<SymbolSpec>;
 
   public indent(): this {
     return this.copy({
-      formatParts: this.formatParts.push("%>")
+      formatParts: [...this.formatParts, "%>"]
     });
   }
 
   public unindent(): this {
     return this.copy({
-      formatParts: this.formatParts.push("%<")
+      formatParts: [...this.formatParts, "%<"]
     });
   }
 
@@ -122,9 +121,9 @@ export class CodeBlock extends Imm<CodeBlock> {
 
   public addCode(codeBlock: CodeBlock): this {
     return this.copy({
-      args: this.args.merge(codeBlock.args),
-      formatParts: this.formatParts.merge(codeBlock.formatParts),
-      referencedSymbols: this.referencedSymbols.merge(codeBlock.referencedSymbols),
+      formatParts: [...this.formatParts, ...codeBlock.formatParts],
+      args: [...this.args, ...codeBlock.args],
+      referencedSymbols: new Set([...this.referencedSymbols, ...codeBlock.referencedSymbols]),
     });
     return this;
   }
@@ -228,9 +227,9 @@ export class CodeBlock extends Imm<CodeBlock> {
     }
 
     return this.copy({
-      args: this.args.merge(newArgs),
-      formatParts: this.formatParts.merge(newFormatParts),
-      referencedSymbols: this.referencedSymbols.merge(newSymbols),
+      formatParts: [...this.formatParts, ...newFormatParts],
+      args: [...this.args, ...newArgs],
+      referencedSymbols: new Set([...this.referencedSymbols, ...newSymbols]),
     });
   }
 
@@ -297,35 +296,31 @@ export class CodeBlock extends Imm<CodeBlock> {
     }
 
     return this.copy({
-      args: this.args.merge(newArgs),
-      formatParts: this.formatParts.merge(newFormatParts),
-      referencedSymbols: this.referencedSymbols.merge(newSymbols),
+      formatParts: [...this.formatParts, ...newFormatParts],
+      args: [...this.args, ...newArgs],
+      referencedSymbols: new Set([...this.referencedSymbols, ...newSymbols]),
     });
   }
 
-  // TODO this method seems wrong
   public remove(matching: RegExp): this {
-    const parts: string[] = [];
-    let i = 0;
-    while (i < this.formatParts.size) {
-      const s = this.formatParts.get(i) || "";
-      if (s.match(matching)) {
-        // if (parts.lastOrNull() == "%[" && formatParts.getOrNull(i + 1) == ";\n" && formatParts.getOrNull(i + 2) == "%]") {
-        //   parts.removeAt(i - 1);
-        //   i += 2;
-        // }
-      } else {
-        // parts.add(s.replace(matching) { it.groups[2]!!.value } )
+    let newFormatParts: string[] = [];
+    this.formatParts.forEach(part => {
+      part = part.replace(matching, "");
+      if (part.length > 0) {
+        newFormatParts.push(part);
       }
-      i += 1;
+    });
+    for (let i = 0; i < newFormatParts.length - 3; i++) {
+      if (newFormatParts[i] === "%[" && newFormatParts[i + 1] === ";\n" && newFormatParts[i + 2] === "%]") {
+        newFormatParts = newFormatParts.slice(0, i).concat(newFormatParts.slice(i + 3));
+        i--;
+      }
     }
-    const newFormatParts: string[] = [];
-    parts.forEach(p => this.formatParts.push(p));
-    return this.copy({ formatParts: List(newFormatParts) });
+    return this.copy({ formatParts: newFormatParts });
   }
 
   public isEmpty() {
-    return this.formatParts.size === 0;
+    return this.formatParts.length === 0;
   }
 
   public isNotEmpty() {
@@ -346,20 +341,20 @@ export class CodeBlock extends Imm<CodeBlock> {
    * could offer something more lenient if necessary.
    */
   private withoutPrefix(prefix: CodeBlock): CodeBlock | undefined {
-    if (this.formatParts.size < prefix.formatParts.size || this.args.size < prefix.args.size) {
+    if (this.formatParts.length < prefix.formatParts.length || this.args.length < prefix.args.length) {
       return undefined;
     }
 
     let prefixArgCount = 0;
     let firstFormatPart: string | undefined;
     // Walk through the formatParts of prefix to confirm that it's a of this.
-    for (let index = 0; index < prefix.formatParts.size; index++) {
-      const theirPart = prefix.formatParts.get(index) || "";
-      const ourPart = this.formatParts.get(index) || "";
+    for (let index = 0; index < prefix.formatParts.length; index++) {
+      const theirPart = prefix.formatParts[index] || "";
+      const ourPart = this.formatParts[index] || "";
       if (ourPart !== theirPart) {
         // We've found a format part that doesn't match. If this is the very last format part check
         // for a string prefix match. If that doesn't match, we're done.
-        if (index === prefix.formatParts.size - 1 && ourPart.startsWith(theirPart)) {
+        if (index === prefix.formatParts.length - 1 && ourPart.startsWith(theirPart)) {
           firstFormatPart = ourPart.substring(theirPart.length)
         } else {
           return undefined;
@@ -367,7 +362,7 @@ export class CodeBlock extends Imm<CodeBlock> {
       }
       // If the matching format part has an argument, check that too.
       if (theirPart.startsWith("%") && !isNoArgPlaceholder(theirPart[1])) {
-        if (this.args.get(prefixArgCount) !== prefix.args.get(prefixArgCount)) {
+        if (this.args[prefixArgCount] !== prefix.args[prefixArgCount]) {
           return undefined; // Argument doesn't match.
         }
         prefixArgCount++;
@@ -379,18 +374,17 @@ export class CodeBlock extends Imm<CodeBlock> {
     if (firstFormatPart) {
       resultFormatParts.push(firstFormatPart);
     }
-    for (let i = prefix.formatParts.size; i < this.formatParts.size; i++) {
-      resultFormatParts.push(this.formatParts.get(i) || "");
+    for (let i = prefix.formatParts.length; i < this.formatParts.length; i++) {
+      resultFormatParts.push(this.formatParts[i] || "");
     }
     const resultArgs: any[] = [];
-    for (let i = prefix.args.size; i < this.args.size; i++) {
-      resultArgs.push(this.args.get(i) || "");
+    for (let i = prefix.args.length; i < this.args.length; i++) {
+      resultArgs.push(this.args[i] || "");
     }
 
     return this.copy({
-      args: List(resultArgs),
-      formatParts: List(resultFormatParts),
-      referencedSymbols: this.referencedSymbols
+      formatParts: resultFormatParts,
+      args: resultArgs,
     });
   }
 
@@ -400,9 +394,9 @@ export class CodeBlock extends Imm<CodeBlock> {
    */
   private trim(): CodeBlock {
     let start = 0;
-    let end = this.formatParts.size;
+    let end = this.formatParts.length;
     const isNoArg = (i: number): boolean => {
-      const arg = this.formatParts.get(i);
+      const arg = this.formatParts[i];
       return arg !== undefined && NO_ARG_PLACEHOLDERS.includes(arg);
     };
     while (start < end && isNoArg(start)) {
@@ -411,7 +405,7 @@ export class CodeBlock extends Imm<CodeBlock> {
     while (start < end && isNoArg(end)) {
       end--;
     }
-    if (start > 0 || end < this.formatParts.size) {
+    if (start > 0 || end < this.formatParts.length) {
       return this.copy({
         args: this.args,
         formatParts: this.formatParts.slice(start, end),
@@ -465,7 +459,7 @@ function argToLiteral(o?: any): [string, SymbolSpec[]] {
   if (o instanceof SymbolSpec) {
     return toTuple(o);
   } else if (o instanceof CodeBlock) {
-    return [o.toString(), o.referencedSymbols.toArray()];
+    return [o.toString(), [...o.referencedSymbols.values()]];
   } else if (o) {
     return [o.toString(), []];
   } else {

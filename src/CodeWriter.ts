@@ -95,7 +95,7 @@ export class CodeWriter implements SymbolReferenceTracker {
       return;
     }
     ModifierOrder.forEach(m => {
-      if (modifiers.indexOf(m) !== -1 && implicitModifiers.indexOf(m) === -1) {
+      if (modifiers.includes(m) && !implicitModifiers.includes(m)) {
         this.emit(m).emit(" ");
       }
     });
@@ -157,10 +157,10 @@ export class CodeWriter implements SymbolReferenceTracker {
     let a = 0;
     codeBlock.formatParts.forEach(part => {
       switch (part) {
-        case "%L": this.emitLiteral(codeBlock.args.get(a++)); break;
-        case "%N": this.emit(codeBlock.args.get(a++) as string); break;
-        case "%S": this.emitString(codeBlock.args.get(a++) as string); break;
-        case "%T": this.emitTypeName(codeBlock.args.get(a++) as TypeName); break;
+        case "%L": this.emitLiteral(codeBlock.args[a++]); break;
+        case "%N": this.emit(codeBlock.args[a++] as string); break;
+        case "%S": this.emitString(codeBlock.args[a++] as string); break;
+        case "%T": this.emitTypeName(codeBlock.args[a++] as TypeName); break;
         case "%%": this.emit("%"); break;
         case "%>": this.indent(); break;
         case "%<": this.unindent(); break;

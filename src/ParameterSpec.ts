@@ -71,7 +71,7 @@ export class ParameterSpec extends Imm<ParameterSpec> {
     codeWriter.emitDecorators(this.decorators, true);
     codeWriter.emitModifiers(this.modifiers);
     if (isRest) {
-      codeWriter.emitCode("... ");
+      codeWriter.emitCode("...");
     }
     codeWriter.emitCode("%L", this.name);
     if (this.optional) {

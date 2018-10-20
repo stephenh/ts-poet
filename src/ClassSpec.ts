@@ -88,9 +88,9 @@ export class ClassSpec extends Imm<ClassSpec> {
         let property = constructorProperties.get(param.name);
         if (property && !isRest) {
           // Ensure the parameter always has a modifier (that makes it a property in TS)
-          if (!property.modifiers.find(m => {
-            return [Modifier.PUBLIC, Modifier.PRIVATE, Modifier.PROTECTED, Modifier.READONLY].indexOf(m) > -1;
-          })) {
+          if (!property.modifiers.find(m =>
+            [Modifier.PUBLIC, Modifier.PRIVATE, Modifier.PROTECTED, Modifier.READONLY].includes(m)
+          )) {
             // Add default public modifier
             property = property.addModifiers(Modifier.PUBLIC);
           }
@@ -100,7 +100,7 @@ export class ClassSpec extends Imm<ClassSpec> {
           // Remove initializing statements
           body = body.remove(this.constructorPropertyInitSearch(property.name));
         } else {
-          param.emit(codeWriter, isRest);
+          param.emit(codeWriter, true, isRest);
         }
       });
 
@@ -239,22 +239,27 @@ export class ClassSpec extends Imm<ClassSpec> {
     if (!cstr || !cstr.body) {
       return new Map();
     }
-    const body = cstr.body.toString();
     const result: Map<string, PropertySpec> = new Map();
     this.propertySpecs.forEach(property => {
       const parameter = cstr.parameter(property.name);
       if (!parameter) return;
       if (parameter.type !== property.type) return;
       if (parameter.optional !== property.optional) return;
-      if (property.initializer !== null) return;
-      if (!body.match(this.constructorPropertyInitSearch(property.name))) return;
+      if (property.initializerField !== undefined) return;
+      const found = cstr.body.formatParts.find(p =>
+        p.match(this.constructorPropertyInitSearch(property.name)) !== null);
+      if (!found) return;
       result.set(property.name, property);
     });
     return result;
   }
 
   private constructorPropertyInitSearch(n: string): RegExp {
-    return /`(\A|\n|;)\s*\Qthis.${n} = ${n}\E[ \t\x0B\f\r]*(\n|;|\z)`/;
+    // the outfoxx code was a lot fancier than this, but for now do the simple thing
+    // and only match on standalone lines that are exactly `this.foo = foo` (we assume
+    // any indentation and
+    const pattern = `^this\\.${n}\\s*=\\s*${n}$`;
+    return new RegExp(pattern);
   }
 
   private get hasNoBody(): boolean {
@@ -265,7 +270,7 @@ export class ClassSpec extends Imm<ClassSpec> {
         return false;
       }
     }
-    return this.constructor === undefined && this.functionSpecs.length === 0;
+    return this.cstrField === undefined && this.functionSpecs.length === 0;
   }
 }
 
