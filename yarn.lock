@@ -1495,6 +1495,11 @@ ignore-walk@^3.0.1:
   dependencies:
     minimatch "^3.0.4"
 
+immutable@4.0.0-rc.10, immutable@^4.0.0-rc.10:
+  version "4.0.0-rc.10"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.0.0-rc.10.tgz#0c97cd272bbae51861cb2311edbbe548b2fc4ef7"
+  integrity sha512-tIdM/FgCQKvsOW29sorYe0VCW+MMyV7Yw/5Mx87GELY5vUiAeZSvl0HKZEBbhX0QnoGiFl8YMO8ZVHN3FXoDnA==
+
 import-lazy@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/import-lazy/-/import-lazy-2.1.0.tgz#05698e3d45c88e8d7e9d92cb0584e77f096f3e43"
@@ -3806,6 +3811,13 @@ trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
   integrity sha1-yy4SAwZ+DI3h9hQJS5/kVwTqYAM=
+
+ts-imm@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/ts-imm/-/ts-imm-0.3.0.tgz#3177401798828658407db57f555632387e7ce184"
+  integrity sha512-L2ZE2QGxwrra06OHu05Vzi1aTMVeLr4o3ETBaBo4iw+fd95KAr3R2bI+JHuVGcdCli1dMPbzixF6QgWevaPv4w==
+  dependencies:
+    immutable "4.0.0-rc.10"
 
 ts-jest@^23.10.2:
   version "23.10.4"

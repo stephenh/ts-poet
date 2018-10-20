@@ -214,12 +214,11 @@ class Test {
           .addParameter("value2", TypeNames.STRING)
           .addParameter("value3", TypeNames.BOOLEAN, true)
           .addCodeBlock(
-            CodeBlock.builder()
+            CodeBlock.empty()
               .add("const testing = 'need other code'; this.value = value\n")
               .addStatement("anotherTestStatement()")
               .addStatement("this.value2 = value2")
               .addStatement("this.value3 = value3 || testing == ''")
-              .build()
           )
           .build()
       )

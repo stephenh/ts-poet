@@ -23,7 +23,7 @@ export class PropertySpec {
   constructor(builder: PropertySpecBuilder) {
     this.name = builder.name;
     this.type = builder.type;
-    this.javaDoc = builder.javaDoc.build();
+    this.javaDoc = builder.javaDoc;
     this.decorators.push(...builder.decorators);
     this.modifiers.push(...builder.modifiers);
     this.initializer = builder.initializerField;
@@ -69,7 +69,7 @@ class PropertySpecBuilder {
     public optional: boolean = false) {
   }
 
-  public javaDoc = CodeBlock.builder();
+  public javaDoc = CodeBlock.empty();
   public decorators: DecoratorSpec[] = [];
   public modifiers: Modifier[] = [];
   public initializerField?: CodeBlock;

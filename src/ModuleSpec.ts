@@ -23,7 +23,7 @@ export class ModuleSpec {
 
   constructor(builder: ModuleSpecBuilder) {
     this.name = builder.name;
-    this.javaDoc = builder.javaDoc.build();
+    this.javaDoc = builder.javaDoc;
     this.modifiers.push(...builder.modifiers);
     this.members.push(...builder.members);
   }
@@ -95,19 +95,19 @@ export class ModuleSpec {
 
 export class ModuleSpecBuilder {
 
-  public javaDoc = CodeBlock.builder();
+  public javaDoc = CodeBlock.empty();
   public modifiers: Modifier[] = [];
   public members: any[] = [];
 
   constructor(public name: string) {}
 
   public addJavadoc(format: string, ...args: any[]): this {
-    this.javaDoc.add(format, ...args);
+    this.javaDoc = this.javaDoc.add(format, ...args);
     return this;
   }
 
   public addJavadocBlock(block: CodeBlock): this {
-    this.javaDoc.addCode(block);
+    this.javaDoc = this.javaDoc.addCode(block);
     return this;
   }
 

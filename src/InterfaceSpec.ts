@@ -34,7 +34,7 @@ export class InterfaceSpec {
 
   constructor(builder: InterfaceSpecBuilder) {
     this.name = builder.name;
-    this.javaDoc = builder.javaDoc.build();
+    this.javaDoc = builder.javaDoc;
     this.modifiers.push(...builder.modifiers);
     this.typeVariables.push(...builder.typeVariables);
     this.superInterfaces.push(...builder.superInterfaces);
@@ -112,7 +112,7 @@ export class InterfaceSpec {
 
 export class InterfaceSpecBuilder {
 
-  public javaDoc = CodeBlock.builder()
+  public javaDoc = CodeBlock.empty()
   public modifiers: Modifier[] = [];
   public typeVariables: TypeVariable[] = [];
   public superInterfaces: TypeName[] = [];
@@ -125,12 +125,12 @@ export class InterfaceSpecBuilder {
   }
 
   public addJavadoc(format: string, ...args: any[]): this {
-    this.javaDoc.add(format, ...args);
+    this.javaDoc = this.javaDoc.add(format, ...args);
     return this;
   }
 
   public addJavadocBlock(block: CodeBlock): this {
-    this.javaDoc.addCode(block);
+    this.javaDoc = this.javaDoc.addCode(block);
     return this;
   }
 

@@ -1,29 +1,30 @@
+import { imm, Imm } from 'ts-imm';
 import { CodeBlock } from "./CodeBlock";
+import { CodeWriter } from "./CodeWriter";
 import { Modifier } from "./Modifier";
 import { check } from "./utils";
-import { TypeName } from "./TypeNames";
-import { CodeWriter } from "./CodeWriter";
 
 
-export class EnumSpec {
+export class EnumSpec extends Imm<EnumSpec> {
 
-  public readonly name: string;
-  public readonly javaDoc: CodeBlock;
-  public readonly modifiers: Modifier[];
-  public readonly constants: Map<string, CodeBlock | undefined>;
-
-  public constructor(private builder: EnumSpecBuilder) {
-    this.name = builder.name;
-    this.javaDoc = builder.javaDoc.build();
-    this.modifiers = builder.modifiers;
-    this.constants = builder.constants;
+  public static create(name: string): EnumSpec {
+    return new EnumSpec({
+      name,
+      javaDoc: CodeBlock.empty(),
+      modifiers: [],
+      constants: new Map(),
+    });
   }
+
+  @imm public readonly name!: string;
+  @imm public readonly javaDoc!: CodeBlock;
+  @imm public readonly modifiers!: Modifier[];
+  @imm public readonly constants!: Map<string, CodeBlock | undefined>;
 
   public emit(codeWriter: CodeWriter) {
     codeWriter.emitJavaDoc(this.javaDoc);
     codeWriter.emitModifiers(this.modifiers);
     codeWriter.emitCode("enum %L {\n", this.name);
-
     codeWriter.indent();
     let left = this.constants.size;
     this.constants.forEach((value, key) => {
@@ -38,46 +39,20 @@ export class EnumSpec {
         codeWriter.emit("\n");
       }
     });
-
     codeWriter.unindent();
     codeWriter.emit("}\n");
   }
 
-  public toBuilder(): EnumSpecBuilder {
-    const builder = new EnumSpecBuilder(this.name);
-    builder.javaDoc.addCode(this.javaDoc);
-    builder.modifiers.push(...this.modifiers);
-    this.constants.forEach((v, k) => builder.constants.set(k, v));
-    return builder;
-  }
-
-  private hasNoBody(): boolean {
-    return this.constants.size === 0;
-  }
-
-}
-
-export class EnumSpecBuilder {
-  public static builder(name: string | TypeName): EnumSpecBuilder {
-    return new EnumSpecBuilder(name instanceof TypeName ? name.reference() : name);
-  }
-
-  public javaDoc = CodeBlock.builder();
-  public modifiers: Modifier[] = [];
-
-  constructor(
-    public name: string,
-    public constants: Map<string, CodeBlock | undefined> = new Map()) {
-  }
-
   public addJavadoc(format: string, ...args: any[]): this {
-    this.javaDoc.add(format, ...args);
-    return this;
+    return this.copy({
+      javaDoc: this.javaDoc.add(format, ...args),
+    })
   }
 
   public addJavadocBlock(block: CodeBlock): this {
-    this.javaDoc.addCode(block);
-    return this;
+    return this.copy({
+      javaDoc: this.javaDoc.addCode(block)
+    });
   }
 
   public addModifiers(...modifiers: Modifier[]): this {
@@ -92,7 +67,8 @@ export class EnumSpecBuilder {
     return this;
   }
 
-  public build(): EnumSpec {
-    return new EnumSpec(this);
+  private hasNoBody(): boolean {
+    return this.constants.size === 0;
   }
 }
+

@@ -5,6 +5,8 @@
     // TODO: allow devDependencies only in **/*.spec.ts files:
     // waiting on https://github.com/palantir/tslint/pull/3708
     "no-implicit-dependencies": [true, "dev"],
-    "max-classes-per-file": false
+    "max-classes-per-file": false,
+    // doesn't make sense for copy constructors
+    "object-literal-sort-keys": false
   }
 }

@@ -9,179 +9,174 @@ describe("CodeBlockTest", () => {
   });
 
   it("isEmpty", () => {
-    expect(CodeBlock.builder().isEmpty()).toBeTruthy();
-    expect(CodeBlock.builder().add("").isEmpty()).toBeTruthy();
-    expect(CodeBlock.builder().add(" ").isEmpty()).toBeFalsy();
+    expect(CodeBlock.empty().isEmpty()).toBeTruthy();
+    expect(CodeBlock.empty().add("").isEmpty()).toBeTruthy();
+    expect(CodeBlock.empty().add(" ").isEmpty()).toBeFalsy();
   });
 
   it("indentCannotBeIndexed", () => {
     expect(() => {
-      CodeBlock.builder().add("%1>", "taco").build();
+      CodeBlock.empty().add("%1>", "taco");
     }).toThrow("%%, %>, %<, %[, %], and %W may not have an index");
   });
 
   it("deindentCannotBeIndexed", () => {
     expect(() => {
-      CodeBlock.builder().add("%1<", "taco").build();
-      fail();
+      CodeBlock.empty().add("%1<", "taco");
     }).toThrow("%%, %>, %<, %[, %], and %W may not have an index");
   });
 
   it("percentSignEscapeCannotBeIndexed", () => {
     expect(() => {
-      CodeBlock.builder().add("%1%", "taco").build();
-      fail();
+      CodeBlock.empty().add("%1%", "taco");
     }).toThrow("%%, %>, %<, %[, %], and %W may not have an index");
   });
 
   it("statementBeginningCannotBeIndexed", () => {
     expect(() => {
-      CodeBlock.builder().add("%1[", "taco").build();
-      fail();
+      CodeBlock.empty().add("%1[", "taco");
     }).toThrow("%%, %>, %<, %[, %], and %W may not have an index");
   });
 
   it("statementEndingCannotBeIndexed", () => {
     expect(() => {
-      CodeBlock.builder().add("%1]", "taco").build();
-      fail();
+      CodeBlock.empty().add("%1]", "taco");
     }).toThrow("%%, %>, %<, %[, %], and %W may not have an index");
   });
 
   it("nameFormatCanBeIndexed", () => {
-    const block = CodeBlock.builder().add("%1N", "taco").build();
+    const block = CodeBlock.empty().add("%1N", "taco");
     expect(block.toString()).toEqual("taco");
   });
 
   it("literalFormatCanBeIndexed", () => {
-    const block = CodeBlock.builder().add("%1L", "taco").build();
+    const block = CodeBlock.empty().add("%1L", "taco");
     expect(block.toString()).toEqual("taco");
   });
 
   it("stringFormatCanBeIndexed", () => {
-    const block = CodeBlock.builder().add("%1S", "taco").build();
+    const block = CodeBlock.empty().add("%1S", "taco");
     expect(block.toString()).toEqual("\"taco\"");
   });
 
   it("typeFormatCanBeIndexed", () => {
-    const block = CodeBlock.builder().add("%1T", TypeNames.MAP).build();
+    const block = CodeBlock.empty().add("%1T", TypeNames.MAP);
     expect(block.toString()).toEqual("Map");
   });
 
   it("simpleNamedArgument", () => {
     const map = { text: "taco" };
-    const block = CodeBlock.builder().addNamed("%text:S", map).build();
+    const block = CodeBlock.empty().addNamed("%text:S", map);
     expect(block.toString()).toEqual("\"taco\"");
   });
 
   it("repeatedNamedArgument", () => {
     const map = { text: "tacos" };
-    const block = CodeBlock.builder()
+    const block = CodeBlock.empty()
         .addNamed("\"I like \" + %text:S + \". Do you like \" + %text:S + \"?\"", map)
-        .build();
+        ;
     expect(block.toString()).toEqual(
         "\"I like \" + \"tacos\" + \". Do you like \" + \"tacos\" + \"?\"");
   });
 
   it("namedAndNoArgFormat", () => {
     const map = { text: "tacos" };
-    const block = CodeBlock.builder()
-        .addNamed("%>\n%text:L for %%3.50", map).build();
+    const block = CodeBlock.empty()
+        .addNamed("%>\n%text:L for %%3.50", map);
     expect(block.toString()).toEqual("\n  tacos for %3.50");
   });
 
   it("missingNamedArgument", () => {
     expect(() => {
-      CodeBlock.builder().addNamed("%text:S", {}).build();
+      CodeBlock.empty().addNamed("%text:S", {});
     }).toThrow("Missing named argument for %text");
   });
 
   it("lowerCaseNamed", () => {
     expect(() => {
       const map = { Text: "tacos" };
-      CodeBlock.builder().addNamed("%Text:S", map).build();
+      CodeBlock.empty().addNamed("%Text:S", map);
     }).toThrow("argument 'Text' must start with a lowercase character");
   });
 
   it("multipleNamedArguments", () => {
     const map = { text: "tacos", pipe: "String" };
-    const block = CodeBlock.builder()
+    const block = CodeBlock.empty()
         .addNamed("%pipe:L.println(\"Let's eat some %text:L\");", map)
-        .build();
+        ;
     expect(block.toString()).toEqual(
         "String.println(\"Let's eat some tacos\");");
   });
 
   it("namedNewline", () => {
     const map = { text: "tacos" };
-    const block = CodeBlock.builder().addNamed("%text:L\n", map).build();
+    const block = CodeBlock.empty().addNamed("%text:L\n", map);
     expect(block.toString()).toEqual("tacos\n");
   });
 
   it("danglingNamed", () => {
     const map = { text: "tacos" };
     expect(() => {
-      CodeBlock.builder().addNamed("%text:S%", map).build();
+      CodeBlock.empty().addNamed("%text:S%", map);
     }).toThrow("dangling % at end");
   });
 
   it("indexTooHigh", () => {
     expect(() => {
-      CodeBlock.builder().add("%2T", Map).build();
+      CodeBlock.empty().add("%2T", Map);
     }).toThrow("index 2 for '%2T' not in range (received 1 arguments)");
   });
 
   it("indexIsZero", () => {
     expect(() => {
-      CodeBlock.builder().add("%0T", Map).build();
+      CodeBlock.empty().add("%0T", Map);
     }).toThrow("index 0 for '%0T' not in range (received 1 arguments)");
   });
 
   it("indexIsNegative", () => {
     expect(() => {
-      CodeBlock.builder().add("%-1T", Map).build();
+      CodeBlock.empty().add("%-1T", Map);
     }).toThrow("invalid format string: '%-1T'");
   });
 
   it("indexWithoutFormatType", () => {
     expect(() => {
-      CodeBlock.builder().add("%1", Map).build();
+      CodeBlock.empty().add("%1", Map);
     }).toThrow("dangling format characters in '%1'");
   });
 
   it("indexWithoutFormatTypeNotAtStringEnd", () => {
     expect(() => {
-      CodeBlock.builder().add("%1 taco", Map).build();
+      CodeBlock.empty().add("%1 taco", Map);
     }).toThrow("invalid format string: '%1 taco'");
   });
 
   it("indexButNoArguments", () => {
     expect(() => {
-      CodeBlock.builder().add("%1T").build();
+      CodeBlock.empty().add("%1T");
     }).toThrow("index 1 for '%1T' not in range (received 0 arguments)");
   });
 
   it("formatIndicatorAlone", () => {
     expect(() => {
-      CodeBlock.builder().add("%", Map).build();
+      CodeBlock.empty().add("%", Map);
     }).toThrow("dangling format characters in '%'");
   });
 
   it("formatIndicatorWithoutIndexOrFormatType", () => {
     expect(() => {
-      CodeBlock.builder().add("% tacoString", Map).build();
+      CodeBlock.empty().add("% tacoString", Map);
     }).toThrow("invalid format string: '% tacoString'");
   });
 
   it("sameIndexCanBeUsedWithDifferentFormats", () => {
-    const block = CodeBlock.builder()
-        .add("%1T.println(%1S)", TypeNames.MAP)
-        .build();
+    const block = CodeBlock.empty()
+        .add("%1T.println(%1S)", TypeNames.MAP);
     expect(block.toString()).toEqual("Map.println(\"[object Object]\")");
   });
 
   it("tooManyStatementEnters", () => {
-    const codeBlock = CodeBlock.builder().add("%[%[").build();
+    const codeBlock = CodeBlock.empty().add("%[%[");
     expect(() => {
       // We can't report this error until rendering type because code blocks might be composed.
       codeBlock.toString();
@@ -189,7 +184,7 @@ describe("CodeBlockTest", () => {
   });
 
   it("statementExitWithoutStatementEnter", () => {
-    const codeBlock = CodeBlock.builder().add("%]").build();
+    const codeBlock = CodeBlock.empty().add("%]");
     expect(() => {
       // We can't report this error until rendering type because code blocks might be composed.
       codeBlock.toString();

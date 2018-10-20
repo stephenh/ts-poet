@@ -1,13 +1,12 @@
 import { CodeWriter } from "../CodeWriter";
-import { EnumSpecBuilder } from "../EnumSpec";
+import { EnumSpec } from "../EnumSpec";
 import { Modifier } from "../Modifier";
 import { StringBuffer } from "../StringBuffer";
 
 describe("EnumSpec", () => {
   it("testGenJavaDoc", () => {
-    const testClass = EnumSpecBuilder.builder("Test")
-      .addJavadoc("this is a comment\n")
-      .build();
+    const testClass = EnumSpec.create("Test")
+      .addJavadoc("this is a comment\n");
     const out = new StringBuffer();
     testClass.emit(new CodeWriter(out));
     expect(out.toString()).toMatchInlineSnapshot(`
@@ -21,9 +20,8 @@ enum Test {
   });
 
   it("testGenModifiersInOrder", () => {
-    const testClass = EnumSpecBuilder.builder("Test")
-      .addModifiers(Modifier.EXPORT)
-      .build();
+    const testClass = EnumSpec.create("Test")
+      .addModifiers(Modifier.EXPORT);
     const out = new StringBuffer();
     testClass.emit(new CodeWriter(out));
     expect(out.toString()).toMatchInlineSnapshot(`
@@ -34,11 +32,10 @@ enum Test {
   });
 
   it("testGenConstants", () => {
-    const testClass = EnumSpecBuilder.builder("Test")
+    const testClass = EnumSpec.create("Test")
       .addConstant("A", "10")
       .addConstant("B", "20")
-      .addConstant("C", "30")
-      .build();
+      .addConstant("C", "30");
     const out = new StringBuffer();
     testClass.emit(new CodeWriter(out));
     expect(out.toString()).toMatchInlineSnapshot(`
@@ -49,18 +46,5 @@ enum Test {
 }
 "
 `);
-  });
-
-  it("testToBuilder", () => {
-    const testEnumBldr = EnumSpecBuilder.builder("Test")
-      .addJavadoc("this is a comment\n")
-      .addModifiers(Modifier.EXPORT)
-      .addConstant("A", "10")
-      .build()
-      .toBuilder();
-    expect(testEnumBldr.name).toEqual("Test");
-    expect(testEnumBldr.javaDoc.formatParts).toContain("this is a comment\n");
-    expect(testEnumBldr.modifiers).toContain(Modifier.EXPORT);
-    expect(testEnumBldr.constants.keys()).toContain("A");
   });
 });

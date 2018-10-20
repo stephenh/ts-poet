@@ -1,9 +1,13 @@
+import {List, Set} from "immutable";
+import {imm, Imm, Properties} from "ts-imm";
 import { CodeWriter } from "./CodeWriter";
 import { StringBuffer } from "./StringBuffer";
 import { SymbolReferenceTracker } from "./SymbolReferenceTracker";
 import { SymbolSpec } from "./SymbolSpecs";
 import { TypeName } from "./TypeNames";
 import { check } from "./utils";
+import {ParameterSpec} from "./ParameterSpec";
+import {PropertySpec} from "./PropertySpec";
 
 const NAMED_ARGUMENT = /^%([\w_]+):([\w]).*$/;
 const LOWERCASE = /^[a-z]+[\w_]*$/;
@@ -49,18 +53,18 @@ function isNoArgPlaceholder(c: string): boolean {
  *  * `%]` ends a statement.
  */
 
-export class CodeBlock {
+export class CodeBlock extends Imm<CodeBlock> {
 
   public static of(format: string, ...args: any[]): CodeBlock {
-    return new CodeBlockBuilder().add(format, ...args).build();
-  }
-
-  public static builder(): CodeBlockBuilder {
-    return new CodeBlockBuilder();
+    return CodeBlock.empty().add(format, ...args);
   }
 
   public static empty(): CodeBlock {
-    return CodeBlock.builder().build();
+    return new CodeBlock({
+      args: List(),
+      formatParts: List(),
+      referencedSymbols: Set(),
+    });
   }
 
   public static joinToCode(
@@ -75,184 +79,53 @@ export class CodeBlock {
     return CodeBlock.of(prefix + placeholders.join(separator) + suffix, ...blocks);
   }
 
-  constructor(
-     public formatParts: string[],
-     public args: any[],
-     public referencedSymbols: Set<SymbolSpec>
-  ) {}
-
   /** A heterogeneous list containing string literals and value placeholders.  */
+  @imm public readonly formatParts!: List<string>;
+  @imm public readonly args!: List<any>;
+  @imm public readonly referencedSymbols!: Set<SymbolSpec>;
 
-  public isEmpty() {
-    return this.formatParts.length === 0;
-  }
-
-  public isNotEmpty() {
-    return !this.isEmpty();
-  }
-
-  /**
-   * Returns a code block with `prefix` stripped off, or null if this code block doesn't start with
-   * `prefix`.
-   *
-   * This is a pretty anyType implementation that might not cover cases like mismatched whitespace. We
-   * could offer something more lenient if necessary.
-   */
-  private withoutPrefix(prefix: CodeBlock): CodeBlock | undefined {
-    if (this.formatParts.length < prefix.formatParts.length) return undefined;
-    if (this.args.length < prefix.args.length) return undefined;
-
-    let prefixArgCount = 0;
-    let firstFormatPart: string | undefined;
-
-    // Walk through the formatParts of prefix to confirm that it's a of this.
-    for (let index = 0; index < prefix.formatParts.length; index++) {
-      const formatPart = prefix.formatParts[index];
-      if (this.formatParts[index] !== formatPart) {
-        // We've found a format part that doesn't match. If this is the very last format part check
-        // for a string prefix match. If that doesn't match, we're done.
-        if (index === prefix.formatParts.length - 1 && this.formatParts[index].startsWith(formatPart)) {
-          firstFormatPart = this.formatParts[index].substring(formatPart.length)
-        } else {
-          return undefined;
-        }
-      }
-
-      // If the matching format part has an argument, check that too.
-      if (formatPart.startsWith("%") && !isNoArgPlaceholder(
-         formatPart[1])) {
-        if (this.args[prefixArgCount] !== prefix.args[prefixArgCount]) {
-          return undefined; // Argument doesn't match.
-        }
-        prefixArgCount++;
-      }
-    }
-
-    // We found a prefix. Prepare the suffix as a result.
-    const resultFormatParts: string[] = [];
-    if (firstFormatPart) {
-      resultFormatParts.push(firstFormatPart);
-    }
-    for (let i = prefix.formatParts.length; i < this.formatParts.length; i++) {
-      resultFormatParts.push(this.formatParts[i]);
-    }
-
-    const resultArgs: any[] = [];
-    for (let i = prefix.args.length; i < this.args.length; i++) {
-      resultArgs.push(this.args[i]);
-    }
-
-    return new CodeBlock(resultFormatParts, resultArgs, this.referencedSymbols);
-  }
-
-  /**
-   * Returns a copy of the code block without leading and trailing no-arg placeholders
-   * (`%W`, `%<`, `%>`, `%[`, `%]`).
-   */
-  private trim(): CodeBlock {
-    let start = 0;
-    let end = this.formatParts.length;
-    while (start < end && NO_ARG_PLACEHOLDERS.indexOf(this.formatParts[start]) > -1) {
-      start++;
-    }
-    while (start < end && NO_ARG_PLACEHOLDERS.indexOf(this.formatParts[end - 1]) > -1) {
-      end--;
-    }
-    if (start > 0 || end < this.formatParts.length) {
-      return new CodeBlock(this.formatParts.slice(start, end), this.args, this.referencedSymbols);
-    } else {
-      return this;
-    }
-  }
-
-  public toString(): string {
-    const buffer = new StringBuffer();
-    new CodeWriter(buffer).emitCodeBlock(this);
-    return buffer.toString();
-  }
-
-  public toBuilder(): CodeBlockBuilder {
-    const builder = new CodeBlockBuilder()
-    builder.formatParts.push(...this.formatParts);
-    builder.args.push(...this.args);
-    this.referencedSymbols.forEach(s => builder.referencedSymbols.add(s));
-    return builder;
-  }
-
-}
-
-export class CodeBlockBuilder implements SymbolReferenceTracker {
-
-  public readonly formatParts: string[] = [];
-  public readonly args: any[] = [];
-  public readonly referencedSymbols: Set<SymbolSpec> = new Set();
-
-  public isEmpty(): boolean {
-    return this.formatParts.length === 0;
-  }
-
-  public isNotEmpty(): boolean {
-    return !this.isEmpty();
-  }
-
-  public referenced(symbol: SymbolSpec) {
-    this.referencedSymbols.add(symbol);
-  }
-
-  /**
-   * Adds code using named arguments.
-   *
-   * Named arguments specify their name after the '%' followed by : and the corresponding type
-   * character. Argument names consist of characters in `a-z, A-Z, 0-9, and _` and must start
-   * with a lowercase character.
-   *
-   * For example, to refer to the type [java.lang.Integer] with the argument name `clazz` use a
-   * format string containing `%clazz:T` and include the key `clazz` with value
-   * `java.lang.Integer.class` in the argument map.
-   */
-  public addNamed(format: string, args: Dictionary<any>): this {
-    Object.keys(args).forEach(arg => {
-      check(
-        arg.match(LOWERCASE) !== null,
-        `argument '${arg}' must start with a lowercase character`);
+  public indent(): this {
+    return this.copy({
+      formatParts: this.formatParts.push("%>")
     });
-    let p = 0;
-    while (p < format.length) {
-      const nextP = format.indexOf("%", p);
-      if (nextP === -1) {
-        this.formatParts.push(format.substring(p, format.length));
-        break;
-      }
+  }
 
-      if (p !== nextP) {
-        this.formatParts.push(format.substring(p, nextP));
-        p = nextP;
-      }
+  public unindent(): this {
+    return this.copy({
+      formatParts: this.formatParts.push("%<")
+    });
+  }
 
-      let matchResult: RegExpMatchArray | null = null;
-      const colon = format.indexOf(':', p);
-      if (colon !== -1) {
-        const endIndex = Math.min(colon + 2, format.length);
-        matchResult = format.substring(p, endIndex).match(NAMED_ARGUMENT);
-      }
-      if (matchResult) {
-        const argumentName = matchResult[ARG_NAME];
-        check(args.hasOwnProperty(argumentName), `Missing named argument for %${argumentName}`);
-        const formatChar = matchResult[TYPE_NAME].charAt(0);
-        this.addArgument(format, formatChar, args[argumentName]);
-        this.formatParts.push(`%${formatChar}`);
-        // ugly copy/paste from earlier line
-        const endIndex = Math.min(colon + 2, format.length);
-        p = endIndex;
-      } else {
-        check(p < format.length - 1, "dangling % at end");
-        check(
-          isNoArgPlaceholder(format[p + 1]),
-          `unknown format %${format[p + 1]} at ${p + 1} in '${format}'`);
-        this.formatParts.push(format.substring(p, p + 2));
-        p += 2;
-      }
-    }
+  /**
+   * @param controlFlow the control flow construct and its code, such as "if (foo == 5)".
+   *     Shouldn't contain braces or newline characters.
+   */
+  public beginControlFlow(controlFlow: string, ...args: any[]): this {
+    return this.add(`${controlFlow} {\n`, ...args).indent();
+  }
+
+  /**
+   * @param controlFlow the control flow construct and its code, such as "else if (foo == 10)".
+   *     Shouldn't contain braces or newline characters.
+   */
+  public nextControlFlow(controlFlow: string, ...args: any[]): this {
+    return this.unindent().add(`}\n$controlFlow {\n`, ...args).indent();
+  }
+
+  public endControlFlow(): this {
+    return this.unindent().add("}\n");
+  }
+
+  public addStatement(format: string, ...args: any[]): this {
+    return this.add("%[").add(format, ...args).add(";\n%]");
+  }
+
+  public addCode(codeBlock: CodeBlock): this {
+    return this.copy({
+      args: this.args.merge(codeBlock.args),
+      formatParts: this.formatParts.merge(codeBlock.formatParts),
+      referencedSymbols: this.referencedSymbols.merge(codeBlock.referencedSymbols),
+    });
     return this;
   }
 
@@ -268,6 +141,11 @@ export class CodeBlockBuilder implements SymbolReferenceTracker {
    * error.
    */
   public add(format: string, ...args: any[]): this {
+    // keep some mutable state so we don't have to completely gut this
+    const newFormatParts: string[] = [];
+    const newArgs: string[] = [];
+    const newSymbols: SymbolSpec[] = [];
+
     let hasRelative = false;
     let hasIndexed = false;
 
@@ -282,7 +160,7 @@ export class CodeBlockBuilder implements SymbolReferenceTracker {
         if (nextP === -1) {
           nextP = format.length;
         }
-        this.formatParts.push(format.substring(p, nextP));
+        newFormatParts.push(format.substring(p, nextP));
         p = nextP;
         continue;
       }
@@ -301,7 +179,7 @@ export class CodeBlockBuilder implements SymbolReferenceTracker {
       // If 'c' doesn't take an argument, we're done.
       if (isNoArgPlaceholder(c)) {
         check(indexStart === indexEnd, "%%, %>, %<, %[, %], and %W may not have an index");
-        this.formatParts.push(`%${c}`);
+        newFormatParts.push(`%${c}`);
         continue;
       }
 
@@ -326,9 +204,10 @@ export class CodeBlockBuilder implements SymbolReferenceTracker {
         !hasIndexed || !hasRelative,
         "cannot mix indexed and positional parameters");
 
-      this.addArgument(format, c, args[index]);
-
-      this.formatParts.push(`%${c}`);
+      const [newArg, symbols] = formatToArgAndSymbols(format, c, args[index]);
+      newArgs.push(newArg);
+      newFormatParts.push(`%${c}`);
+      newSymbols.push(...symbols);
     }
 
     if (hasRelative) {
@@ -348,110 +227,88 @@ export class CodeBlockBuilder implements SymbolReferenceTracker {
       check(unused.length === 0, `unused argument${s}: ${unused.join(", ")}`);
     }
 
-    return this;
-  }
-
-
-  private addArgument(format: string, c: string, arg: any) {
-    switch (c) {
-      case 'N': this.args.push(this.argToName(arg)); break;
-      case 'L': this.args.push(this.argToLiteral(arg)); break;
-      case 'S': this.args.push(this.argToString(arg)); break;
-      case 'T': this.args.push(this.argToType(arg)); break;
-      default: throw new Error(`invalid format string: '${format}'`);
-    }
-  }
-
-  private argToName(o?: any): string {
-    if (typeof o === 'string') {
-      return o;
-    } else if (o instanceof SymbolSpec) {
-      return o.reference(this);
-    } else if (o instanceof TypeName) {
-      return o.reference(this);
-      /*
-    } else if (o instanceof ParameterSpec) {
-      return o.name;
-    } else if (o instanceof PropertySpec) {
-      return o.name;
-      */
-    } else {
-      throw new Error(`expected name but was ${o}`);
-    }
-  }
-
-  private argToLiteral(o?: any): string {
-    if (o instanceof SymbolSpec) {
-      return o.reference(this);
-    } else if (o instanceof CodeBlock) {
-      o.referencedSymbols.forEach(s => this.referencedSymbols.add(s));
-      return o.toString();
-    } else if (o) {
-      return o.toString();
-    } else {
-      throw new Error("not sure");
-    }
-  }
-
-  private argToString(o?: any): string {
-    return (o || "").toString();
-  }
-
-  private argToType(o?: any): TypeName {
-    if (o instanceof TypeName) {
-      o.reference(this);
-      return o;
-    } else {
-      throw new Error(`expected type but was ${o}`)
-    }
+    return this.copy({
+      args: this.args.merge(newArgs),
+      formatParts: this.formatParts.merge(newFormatParts),
+      referencedSymbols: this.referencedSymbols.merge(newSymbols),
+    });
   }
 
   /**
-   * @param controlFlow the control flow construct and its code, such as "if (foo == 5)".
-   *     Shouldn't contain braces or newline characters.
+   * Adds code using named arguments.
+   *
+   * Named arguments specify their name after the '%' followed by : and the corresponding type
+   * character. Argument names consist of characters in `a-z, A-Z, 0-9, and _` and must start
+   * with a lowercase character.
+   *
+   * For example, to refer to the type [java.lang.Integer] with the argument name `clazz` use a
+   * format string containing `%clazz:T` and include the key `clazz` with value
+   * `java.lang.Integer.class` in the argument map.
    */
-  beginControlFlow(controlFlow: string, ...args: any[]): this {
-    this.add(`${controlFlow} {\n`, ...args);
-    this.indent();
-    return this;
+  public addNamed(format: string, args: Dictionary<any>): this {
+    // keep some mutable state so we don't have to completely gut this
+    const newFormatParts: string[] = [];
+    const newArgs: string[] = [];
+    const newSymbols: SymbolSpec[] = [];
+
+    Object.keys(args).forEach(arg => {
+      check(
+        arg.match(LOWERCASE) !== null,
+        `argument '${arg}' must start with a lowercase character`);
+    });
+
+    let p = 0;
+    while (p < format.length) {
+      const nextP = format.indexOf("%", p);
+      if (nextP === -1) {
+        newFormatParts.push(format.substring(p, format.length));
+        break;
+      }
+      if (p !== nextP) {
+        newFormatParts.push(format.substring(p, nextP));
+        p = nextP;
+      }
+
+      let matchResult: RegExpMatchArray | null = null;
+      const colon = format.indexOf(':', p);
+      if (colon !== -1) {
+        const endIndex = Math.min(colon + 2, format.length);
+        matchResult = format.substring(p, endIndex).match(NAMED_ARGUMENT);
+      }
+      if (matchResult) {
+        const argumentName = matchResult[ARG_NAME];
+        check(args.hasOwnProperty(argumentName), `Missing named argument for %${argumentName}`);
+        const formatChar = matchResult[TYPE_NAME].charAt(0);
+        const [arg, symbols] = formatToArgAndSymbols(format, formatChar, args[argumentName]);
+        newArgs.push(arg);
+        newFormatParts.push(`%${formatChar}`);
+        newSymbols.push(...symbols);
+        // ugly copy/paste from earlier line
+        const endIndex = Math.min(colon + 2, format.length);
+        p = endIndex;
+      } else {
+        check(p < format.length - 1, "dangling % at end");
+        check(
+          isNoArgPlaceholder(format[p + 1]),
+          `unknown format %${format[p + 1]} at ${p + 1} in '${format}'`);
+        newFormatParts.push(format.substring(p, p + 2));
+        p += 2;
+      }
+    }
+
+    return this.copy({
+      args: this.args.merge(newArgs),
+      formatParts: this.formatParts.merge(newFormatParts),
+      referencedSymbols: this.referencedSymbols.merge(newSymbols),
+    });
   }
 
-  /**
-   * @param controlFlow the control flow construct and its code, such as "else if (foo == 10)".
-   *     Shouldn't contain braces or newline characters.
-   */
-  nextControlFlow(controlFlow: string, ...args: any[]): this {
-    this.unindent();
-    this.add(`}\n$controlFlow {\n`, ...args);
-    this.indent();
-    return this;
-  }
-
-  endControlFlow(): this {
-    this.unindent();
-    this.add("}\n");
-    return this;
-  }
-
-  addStatement(format: string, ...args: any[]): this {
-    this.add("%[");
-    this.add(format, ...args);
-    this.add(";\n%]");
-    return this;
-  }
-
-  public addCode(codeBlock: CodeBlock): this {
-    this.formatParts.push(...codeBlock.formatParts);
-    this.args.push(...codeBlock.args);
-    codeBlock.referencedSymbols.forEach(s => this.referencedSymbols.add(s));
-    return this;
-  }
-
-  remove(matching: RegExp): this {
+  // TODO this method seems wrong
+  public remove(matching: RegExp): this {
     const parts: string[] = [];
     let i = 0;
-    while (i < this.formatParts.length) {
-      const s = this.formatParts[i];
+    while (i < this.formatParts.size) {
+      const s = this.formatParts.get(i) || "";
       if (s.match(matching)) {
         // if (parts.lastOrNull() == "%[" && formatParts.getOrNull(i + 1) == ";\n" && formatParts.getOrNull(i + 2) == "%]") {
         //   parts.removeAt(i - 1);
@@ -462,23 +319,168 @@ export class CodeBlockBuilder implements SymbolReferenceTracker {
       }
       i += 1;
     }
-    this.formatParts.length = 0;
+    const newFormatParts: string[] = [];
     parts.forEach(p => this.formatParts.push(p));
-    return this;
+    return this.copy({ formatParts: List(newFormatParts) });
   }
 
-  indent(): this {
-    this.formatParts.push("%>");
-    return this;
+  public isEmpty() {
+    return this.formatParts.size === 0;
   }
 
-  unindent(): this {
-    this.formatParts.push("%<");
-    return this;
+  public isNotEmpty() {
+    return !this.isEmpty();
   }
 
-  build(): CodeBlock {
-    return new CodeBlock(this.formatParts, this.args, this.referencedSymbols);
+  public toString(): string {
+    const buffer = new StringBuffer();
+    new CodeWriter(buffer).emitCodeBlock(this);
+    return buffer.toString();
   }
 
+  /**
+   * Returns a code block with `prefix` stripped off, or null if this code block doesn't start with
+   * `prefix`.
+   *
+   * This is a pretty anyType implementation that might not cover cases like mismatched whitespace. We
+   * could offer something more lenient if necessary.
+   */
+  private withoutPrefix(prefix: CodeBlock): CodeBlock | undefined {
+    if (this.formatParts.size < prefix.formatParts.size || this.args.size < prefix.args.size) {
+      return undefined;
+    }
+
+    let prefixArgCount = 0;
+    let firstFormatPart: string | undefined;
+    // Walk through the formatParts of prefix to confirm that it's a of this.
+    for (let index = 0; index < prefix.formatParts.size; index++) {
+      const theirPart = prefix.formatParts.get(index) || "";
+      const ourPart = this.formatParts.get(index) || "";
+      if (ourPart !== theirPart) {
+        // We've found a format part that doesn't match. If this is the very last format part check
+        // for a string prefix match. If that doesn't match, we're done.
+        if (index === prefix.formatParts.size - 1 && ourPart.startsWith(theirPart)) {
+          firstFormatPart = ourPart.substring(theirPart.length)
+        } else {
+          return undefined;
+        }
+      }
+      // If the matching format part has an argument, check that too.
+      if (theirPart.startsWith("%") && !isNoArgPlaceholder(theirPart[1])) {
+        if (this.args.get(prefixArgCount) !== prefix.args.get(prefixArgCount)) {
+          return undefined; // Argument doesn't match.
+        }
+        prefixArgCount++;
+      }
+    }
+
+    // We found a prefix. Prepare the suffix as a result.
+    const resultFormatParts: string[] = [];
+    if (firstFormatPart) {
+      resultFormatParts.push(firstFormatPart);
+    }
+    for (let i = prefix.formatParts.size; i < this.formatParts.size; i++) {
+      resultFormatParts.push(this.formatParts.get(i) || "");
+    }
+    const resultArgs: any[] = [];
+    for (let i = prefix.args.size; i < this.args.size; i++) {
+      resultArgs.push(this.args.get(i) || "");
+    }
+
+    return this.copy({
+      args: List(resultArgs),
+      formatParts: List(resultFormatParts),
+      referencedSymbols: this.referencedSymbols
+    });
+  }
+
+  /**
+   * Returns a copy of the code block without leading and trailing no-arg placeholders
+   * (`%W`, `%<`, `%>`, `%[`, `%]`).
+   */
+  private trim(): CodeBlock {
+    let start = 0;
+    let end = this.formatParts.size;
+    const isNoArg = (i: number): boolean => {
+      const arg = this.formatParts.get(i);
+      return arg !== undefined && NO_ARG_PLACEHOLDERS.includes(arg);
+    };
+    while (start < end && isNoArg(start)) {
+      start++;
+    }
+    while (start < end && isNoArg(end)) {
+      end--;
+    }
+    if (start > 0 || end < this.formatParts.size) {
+      return this.copy({
+        args: this.args,
+        formatParts: this.formatParts.slice(start, end),
+        referencedSymbols: this.referencedSymbols
+      });
+    } else {
+      return this;
+    }
+  }
+}
+
+// And ugly gyration to turn the side-effect reference into a tuple
+function toTuple(o: { reference(trackedBy?: SymbolReferenceTracker): string }): [string, SymbolSpec[]] {
+  const symbols: SymbolSpec[] = [];
+  const name = o.reference(new class implements SymbolReferenceTracker {
+    public referenced(symbol: SymbolSpec): void {
+      symbols.push(symbol);
+    }
+  });;
+  return [name, symbols];
+}
+
+/** Look at `c` to tell what arg + related symbols we should add. */
+function formatToArgAndSymbols(format: string, c: string, arg: any): [any, SymbolSpec[]] {
+  switch (c) {
+    case 'N': return argToName(arg);
+    case 'L': return argToLiteral(arg);
+    case 'S': return argToString(arg);
+    case 'T': return argToType(arg);
+    default: throw new Error(`invalid format string: '${format}'`);
+  }
+}
+
+function argToName(o?: any): [string, SymbolSpec[]] {
+  if (typeof o === 'string') {
+    return [o, []];
+  } else if (o instanceof SymbolSpec) {
+    return toTuple(o);
+  } else if (o instanceof TypeName) {
+    return toTuple(o);
+  } else if (o instanceof ParameterSpec) {
+    return [o.name, []];
+  } else if (o instanceof PropertySpec) {
+    return [o.name, []];
+  } else {
+    throw new Error(`expected name but was ${o}`);
+  }
+}
+
+function argToLiteral(o?: any): [string, SymbolSpec[]] {
+  if (o instanceof SymbolSpec) {
+    return toTuple(o);
+  } else if (o instanceof CodeBlock) {
+    return [o.toString(), o.referencedSymbols.toArray()];
+  } else if (o) {
+    return [o.toString(), []];
+  } else {
+    throw new Error("not sure");
+  }
+}
+
+function argToString(o?: any): [string, SymbolSpec[]] {
+  return [(o || "").toString(), []];
+}
+
+function argToType(o?: any): [TypeName, SymbolSpec[]] {
+  if (o instanceof TypeName) {
+    return [o, toTuple(o)[1]];
+  } else {
+    throw new Error(`expected type but was ${o}`)
+  }
 }

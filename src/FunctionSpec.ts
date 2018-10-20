@@ -1,5 +1,5 @@
 /** A generated function declaration. */
-import { CodeBlock, CodeBlockBuilder, Dictionary } from "./CodeBlock";
+import { CodeBlock, Dictionary } from "./CodeBlock";
 import { CodeWriter } from "./CodeWriter";
 import { DecoratorSpec } from "./DecoratorSpec";
 import { Modifier } from "./Modifier";
@@ -40,14 +40,14 @@ export class FunctionSpec {
 
   public constructor(builder: FunctionSpecBuilder) {
     this.name = builder.name;
-    this.javaDoc = builder.javaDoc.build();
+    this.javaDoc = builder.javaDoc;
     this.decorators.push(...builder.decorators);
     this.modifiers.push(...builder.modifiers);
     this.typeVariables.push(...builder.typeVariables);
     this.returnType = builder.returnType;
     this.parameters.push(...builder.parameters);
     this.restParameter = builder.restParameter;
-    this.body = builder.body.build();
+    this.body = builder.body;
   }
 
   /*
@@ -151,14 +151,14 @@ export class FunctionSpec {
 
 export class FunctionSpecBuilder {
 
-  public javaDoc: CodeBlockBuilder = CodeBlock.builder();
+  public javaDoc: CodeBlock = CodeBlock.empty();
   public decorators: DecoratorSpec[] = [];
   public modifiers: Modifier[] = [];
   public typeVariables: TypeVariable[] = [];
   public returnType: TypeName | undefined = undefined;
   public parameters: ParameterSpec[] = [];
   public restParameter: ParameterSpec | undefined;
-  public body: CodeBlockBuilder = CodeBlock.builder();
+  public body: CodeBlock = CodeBlock.empty();
 
   constructor(public name: string) {}
 
@@ -167,12 +167,12 @@ export class FunctionSpecBuilder {
     // }
 
   public addJavadoc(format: string, ...args: any[]): this {
-    this.javaDoc.add(format, ...args);
+    this.javaDoc = this.javaDoc.add(format, ...args);
     return this;
   }
 
   public addJavadocBlock(block: CodeBlock): this {
-    this.javaDoc.addCode(block);
+    this.javaDoc = this.javaDoc.addCode(block);
     return this;
   }
 
@@ -253,24 +253,24 @@ export class FunctionSpecBuilder {
 
   public addCode(format: string, ...args: any[]): this {
     // modifiers -= Modifier.ABSTRACT
-    this.body.add(format, ...args);
+    this.body = this.body.add(format, ...args);
     return this;
   }
 
   public addNamedCode(format: string, args: Dictionary<any>): this {
     // modifiers -= Modifier.ABSTRACT
-    this.body.addNamed(format, args);
+    this.body = this.body.addNamed(format, args);
     return this;
   }
 
   public addCodeBlock(codeBlock: CodeBlock): this {
     // modifiers -= Modifier.ABSTRACT
-    this.body.addCode(codeBlock);
+    this.body = this.body.addCode(codeBlock);
     return this;
   }
 
   public addComment(format: string, ...args: any[]): this {
-    this.body.add("// " + format + "\n", ...args);
+    this.body = this.body.add("// " + format + "\n", ...args);
     return this;
   }
 
@@ -280,7 +280,7 @@ export class FunctionSpecBuilder {
    */
   public beginControlFlow(controlFlow: string, ...args: any[]): this {
     // modifiers -= Modifier.ABSTRACT
-    this.body.beginControlFlow(controlFlow, ...args);
+    this.body = this.body.beginControlFlow(controlFlow, ...args);
     return this;
   }
 
@@ -290,19 +290,19 @@ export class FunctionSpecBuilder {
    */
   public nextControlFlow(controlFlow: string, ...args: any[]): this {
     // modifiers -= Modifier.ABSTRACT
-    this.body.nextControlFlow(controlFlow, ...args);
+    this.body = this.body.nextControlFlow(controlFlow, ...args);
     return this;
   }
 
   public endControlFlow(): this {
     // modifiers -= Modifier.ABSTRACT
-    this.body.endControlFlow();
+    this.body = this.body.endControlFlow();
     return this;
   }
 
   public addStatement(format: string, ...args: any[]): this {
     // modifiers -= Modifier.ABSTRACT
-    this.body.addStatement(format, ...args);
+    this.body = this.body.addStatement(format, ...args);
     return this;
   }
 

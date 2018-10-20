@@ -1,9 +1,9 @@
-/** A generated typealias declaration */
-import { TypeName, TypeVariable } from "./TypeNames";
 import { CodeBlock } from "./CodeBlock";
-import { Modifier } from "./Modifier";
 import { CodeWriter } from "./CodeWriter";
+import { Modifier } from "./Modifier";
+import { TypeName, TypeVariable } from "./TypeNames";
 
+/** A generated typealias declaration */
 export class TypeAliasSpec {
 
   public static builder(name: string, type: TypeName): TypeAliasSpecBuilder {
@@ -19,7 +19,7 @@ export class TypeAliasSpec {
   constructor(builder: TypeAliasSpecBuilder) {
     this.name = builder.name;
     this.type = builder.type;
-    this.javaDoc = builder.javaDoc.build();
+    this.javaDoc = builder.javaDoc;
     this.modifiers.push(...builder.modifiers);
     this.typeVariables.push(...builder.typeVariables);
   }
@@ -43,7 +43,7 @@ export class TypeAliasSpec {
 
 class TypeAliasSpecBuilder {
 
-  public javaDoc = CodeBlock.builder()
+  public javaDoc = CodeBlock.empty()
   public modifiers: Modifier[] = [];
   public typeVariables: TypeVariable[] = [];
 
@@ -53,12 +53,12 @@ class TypeAliasSpecBuilder {
    // require(name.isName) { "not a valid name: $name" }
 
   public addJavadoc(format: string, ...args: any[]): this {
-    this.javaDoc.add(format, ...args);
+    this.javaDoc = this.javaDoc.add(format, ...args);
     return this;
   }
 
   public addJavadocBlock(block: CodeBlock): this {
-    this.javaDoc.addCode(block);
+    this.javaDoc = this.javaDoc.addCode(block);
     return this;
   }
 

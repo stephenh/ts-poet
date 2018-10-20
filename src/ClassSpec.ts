@@ -27,7 +27,7 @@ export class ClassSpec {
 
   public constructor(public builder: ClassSpecBuilder) {
     this.name = builder.name;
-    this.javaDoc = builder.javaDoc.build();
+    this.javaDoc = builder.javaDoc;
     this.decorators.push(...builder.decorators);
     this.modifiers.push(...builder.modifiers);
     this.typeVariables.push(...builder.typeVariables);
@@ -99,9 +99,7 @@ export class ClassSpec {
           param.emitDefaultValue(codeWriter);
 
           // Remove initializing statements
-          const bodyBuilder = body.toBuilder();
-          bodyBuilder.remove(this.constructorPropertyInitSearch(property.name));
-          body = bodyBuilder.build();
+          body = body.remove(this.constructorPropertyInitSearch(property.name));
         } else {
           param.emit(codeWriter, isRest);
         }
@@ -190,7 +188,7 @@ export class ClassSpec {
 
 export class ClassSpecBuilder {
 
-  public javaDoc = CodeBlock.builder();
+  public javaDoc = CodeBlock.empty();
   public decorators: DecoratorSpec[] = [];
   public modifiers: Modifier[] = [];
   public typeVariables: TypeVariable[] = [];
@@ -203,12 +201,12 @@ export class ClassSpecBuilder {
   constructor(public name: string) {}
 
   public addJavadoc(format: string, ...args: any[]): this {
-    this.javaDoc.add(format, ...args);
+    this.javaDoc = this.javaDoc.add(format, ...args);
     return this;
   }
 
   public addJavadocBlock(block: CodeBlock): this {
-    this.javaDoc.addCode(block);
+    this.javaDoc = this.javaDoc.addCode(block);
     return this;
   }
 

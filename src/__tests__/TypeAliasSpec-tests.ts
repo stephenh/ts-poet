@@ -1,8 +1,8 @@
-import { TypeNames } from "../TypeNames";
-import { StringBuffer } from "../StringBuffer";
 import { CodeWriter } from "../CodeWriter";
 import { Modifier } from "../Modifier";
+import { StringBuffer } from "../StringBuffer";
 import { TypeAliasSpec } from "../TypeAliasSpec";
+import { TypeNames } from "../TypeNames";
 
 describe("TypeAliasSpec", () => {
   it("generates JavaDoc at before class definition", () => {

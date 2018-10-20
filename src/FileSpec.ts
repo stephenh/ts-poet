@@ -39,7 +39,7 @@ export class FileSpec {
 
   constructor(builder: FileSpecBuilder) {
     this.path = builder.path;
-    this.comment = builder.comment.build();
+    this.comment = builder.comment;
     this.members.push(...builder.members);
     this.indent = builder.indentField;
   }
@@ -217,7 +217,7 @@ function filterInstances<T, U>(list: T[], t: Constructor<U>): U[] {
 
 export class FileSpecBuilder {
 
-  public comment = CodeBlock.builder();
+  public comment = CodeBlock.empty();
   public indentField = "  ";
   public readonly members: any[] = [];
 
@@ -225,7 +225,7 @@ export class FileSpecBuilder {
   }
 
   public addComment(format: string, ...args: any[]): this {
-    this.comment.add(format, ...args);
+    this.comment = this.comment.add(format, ...args);
     return this;
   }
 
