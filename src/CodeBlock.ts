@@ -79,8 +79,8 @@ export class CodeBlock extends Imm<CodeBlock> {
   }
 
   /** A heterogeneous list containing string literals and value placeholders.  */
-  @imm public readonly formatParts!: string[];
-  @imm public readonly args!: any[];
+  @imm public readonly formatParts!: ReadonlyArray<string>;
+  @imm public readonly args!: ReadonlyArray<any>;
   @imm public readonly referencedSymbols!: Set<SymbolSpec>;
 
   public indent(): this {
