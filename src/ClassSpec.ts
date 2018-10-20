@@ -21,7 +21,7 @@ export class ClassSpec extends Imm<ClassSpec> {
       superClassField: undefined,
       mixins: [],
       propertySpecs: [],
-      cstrField: undefined,
+      constructorField: undefined,
       functionSpecs: [],
     });
   }
@@ -34,7 +34,7 @@ export class ClassSpec extends Imm<ClassSpec> {
   @imm public readonly superClassField?: TypeName;
   @imm public readonly mixins!: TypeName[];
   @imm public readonly propertySpecs!: PropertySpec[];
-  @imm public readonly cstrField?: FunctionSpec;
+  @imm public readonly constructorField?: FunctionSpec;
   @imm public readonly functionSpecs!: FunctionSpec[];
 
   public emit(codeWriter: CodeWriter): void {
@@ -69,9 +69,9 @@ export class ClassSpec extends Imm<ClassSpec> {
 
     // Write the constructor manually, allowing the replacement
     // of property specs with constructor parameters
-    if (this.cstrField) {
+    if (this.constructorField) {
       codeWriter.emit("\n");
-      const it = this.cstrField;
+      const it = this.constructorField;
       if (it.decorators.length > 0) {
         codeWriter.emit(" ");
         codeWriter.emitDecorators(it.decorators, true);
@@ -196,12 +196,13 @@ export class ClassSpec extends Imm<ClassSpec> {
     });
   }
 
-  public cstr(cstr?: FunctionSpec): this {
-    if (cstr) {
+  // "constructor" can't be a method name
+  public cstr(constructor?: FunctionSpec): this {
+    if (constructor) {
       // require(constructor.isConstructor) { "expected a constructor but was ${constructor.name}; use FunctionSpec.constructorBuilder when building"
     }
     return this.copy({
-      cstrField: cstr,
+      constructorField: constructor,
     });
   }
 
@@ -235,20 +236,24 @@ export class ClassSpec extends Imm<ClassSpec> {
 
   /** Returns the properties that can be declared inline as constructor parameters. */
   private constructorProperties(): Map<string, PropertySpec> {
-    const cstr = this.cstrField;
+    const cstr = this.constructorField;
     if (!cstr || !cstr.body) {
       return new Map();
     }
     const result: Map<string, PropertySpec> = new Map();
     this.propertySpecs.forEach(property => {
       const parameter = cstr.parameter(property.name);
-      if (!parameter) return;
-      if (parameter.type !== property.type) return;
-      if (parameter.optional !== property.optional) return;
-      if (property.initializerField !== undefined) return;
-      const found = cstr.body.formatParts.find(p =>
+      if (!parameter
+        || parameter.type !== property.type
+        || parameter.optional !== property.optional
+        || property.initializerField !== undefined) {
+        return;
+      }
+      const foundAssignment = cstr.body.formatParts.find(p =>
         p.match(this.constructorPropertyInitSearch(property.name)) !== null);
-      if (!found) return;
+      if (!foundAssignment) {
+        return;
+      }
       result.set(property.name, property);
     });
     return result;
@@ -270,7 +275,7 @@ export class ClassSpec extends Imm<ClassSpec> {
         return false;
       }
     }
-    return this.cstrField === undefined && this.functionSpecs.length === 0;
+    return this.constructorField === undefined && this.functionSpecs.length === 0;
   }
 }
 
