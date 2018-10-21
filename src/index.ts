@@ -12,4 +12,4 @@ export { ParameterSpec } from './ParameterSpec';
 export { PropertySpec } from './PropertySpec';
 export { SymbolSpecs } from './SymbolSpecs';
 export { TypeAliasSpec } from './TypeAliasSpec';
-export { TypeName, TypeNames } from './TypeNames';
+export * from './TypeNames';

@@ -87,7 +87,7 @@ export class Anonymous extends TypeName {
   }
 }
 
-class Tuple extends TypeName {
+export class Tuple extends TypeName {
   constructor(public memberTypes: TypeName[]) {
     super();
   }
@@ -100,7 +100,7 @@ class Tuple extends TypeName {
   }
 }
 
-class Intersection extends TypeName {
+export class Intersection extends TypeName {
   constructor(public typeRequirements: TypeName[]) {
     super();
   }
@@ -110,7 +110,7 @@ class Intersection extends TypeName {
   }
 }
 
-class Union extends TypeName {
+export class Union extends TypeName {
   constructor(public typeChoices: TypeName[]) {
     super();
   }

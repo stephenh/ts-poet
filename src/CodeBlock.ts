@@ -315,7 +315,7 @@ export class CodeBlock extends Imm<CodeBlock> {
         i--;
       }
     }
-    return this.copy({ formatParts: newFormatParts });
+    return this.copy({formatParts: newFormatParts});
   }
 
   public isEmpty() {
