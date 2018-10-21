@@ -102,8 +102,7 @@ describe("CodeBlockTest", () => {
   it("multipleNamedArguments", () => {
     const map = { text: "tacos", pipe: "String" };
     const block = CodeBlock.empty()
-        .addNamed("%pipe:L.println(\"Let's eat some %text:L\");", map)
-        ;
+        .addNamed("%pipe:L.println(\"Let's eat some %text:L\");", map);
     expect(block.toString()).toEqual(
         "String.println(\"Let's eat some tacos\");");
   });
@@ -215,6 +214,5 @@ describe("CodeBlockTest", () => {
     const joined = CodeBlock.joinToCode(codeBlocks, " || ", "start {", "} end");
     expect(joined.toString()).toEqual("start {\"hello\" || Map || need tacos} end");
   });
-
 });
 

@@ -2,7 +2,6 @@ import { imm, Imm } from "ts-imm";
 import { CodeWriter } from "./CodeWriter";
 import { ParameterSpec } from "./ParameterSpec";
 import { PropertySpec } from "./PropertySpec";
-import { StringBuffer } from "./StringBuffer";
 import { SymbolReferenceTracker } from "./SymbolReferenceTracker";
 import { SymbolSpec } from "./SymbolSpecs";
 import { TypeName } from "./TypeNames";
@@ -327,10 +326,12 @@ export class CodeBlock extends Imm<CodeBlock> {
     return !this.isEmpty();
   }
 
+  public emit(codeWriter: CodeWriter): void {
+    codeWriter.emitCodeBlock(this);
+  }
+
   public toString(): string {
-    const buffer = new StringBuffer();
-    new CodeWriter(buffer).emitCodeBlock(this);
-    return buffer.toString();
+    return CodeWriter.emitToString(this);
   }
 
   /**

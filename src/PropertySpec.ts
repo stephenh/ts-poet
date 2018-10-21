@@ -36,7 +36,7 @@ export class PropertySpec extends Imm<PropertySpec> {
 
   public emit(
     codeWriter: CodeWriter,
-    implicitModifiers: Modifier[],
+    implicitModifiers: Modifier[] = [],
     asStatement: boolean = false,
     withInitializer: boolean = true,
   ) {
@@ -91,6 +91,10 @@ export class PropertySpec extends Imm<PropertySpec> {
     return this.copy({
       initializerField: codeBlock,
     });
+  }
+
+  public toString(): string {
+    return CodeWriter.emitToString(this);
   }
 }
 

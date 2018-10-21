@@ -71,5 +71,9 @@ export class TypeAliasSpec extends Imm<TypeAliasSpec> {
       typeVariables: [...this.typeVariables, typeVariable],
     });
   }
+
+  public toString(): string {
+    return CodeWriter.emitToString(this);
+  }
 }
 

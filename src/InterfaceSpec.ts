@@ -200,6 +200,10 @@ export class InterfaceSpec extends Imm<InterfaceSpec> {
     });
   }
 
+  public toString(): string {
+    return CodeWriter.emitToString(this);
+  }
+
   private get hasNoBody(): boolean {
     return this.propertySpecs.length === 0 && this.functionSpecs.length === 0 && this.indexableSpecs.length === 0 && this.callableField === undefined;
   }

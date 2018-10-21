@@ -22,7 +22,7 @@ export class DecoratorSpec extends Imm<DecoratorSpec> {
   @imm public readonly parameters!: Array<[string | undefined, CodeBlock]>;
   @imm public readonly factory!: boolean;
 
-  public emit(codeWriter: CodeWriter, inline: boolean, asParameter: boolean = false) {
+  public emit(codeWriter: CodeWriter, inline: boolean = false, asParameter: boolean = false) {
     codeWriter.emitCode("@%N", this.name);
 
     if (this.parameters.length > 0) {
@@ -71,6 +71,10 @@ export class DecoratorSpec extends Imm<DecoratorSpec> {
     return this.copy({
       parameters: [...this.parameters, [name, codeBlock]],
     });
+  }
+
+  public toString(): string {
+    return CodeWriter.emitToString(this);
   }
 }
 

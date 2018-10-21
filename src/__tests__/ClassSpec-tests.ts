@@ -291,7 +291,5 @@ class Test {
 });
 
 function emit(spec: ClassSpec): string {
-  const out = new StringBuffer();
-  spec.emit(new CodeWriter(out));
-  return out.toString();
+  return spec.toString();
 }

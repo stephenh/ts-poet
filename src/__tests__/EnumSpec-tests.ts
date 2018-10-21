@@ -1,15 +1,11 @@
-import { CodeWriter } from "../CodeWriter";
 import { EnumSpec } from "../EnumSpec";
 import { Modifier } from "../Modifier";
-import { StringBuffer } from "../StringBuffer";
 
 describe("EnumSpec", () => {
   it("testGenJavaDoc", () => {
     const testClass = EnumSpec.create("Test")
       .addJavadoc("this is a comment\n");
-    const out = new StringBuffer();
-    testClass.emit(new CodeWriter(out));
-    expect(out.toString()).toMatchInlineSnapshot(`
+    expect(testClass.toString()).toMatchInlineSnapshot(`
 "/**
  * this is a comment
  */
@@ -22,9 +18,7 @@ enum Test {
   it("testGenModifiersInOrder", () => {
     const testClass = EnumSpec.create("Test")
       .addModifiers(Modifier.EXPORT);
-    const out = new StringBuffer();
-    testClass.emit(new CodeWriter(out));
-    expect(out.toString()).toMatchInlineSnapshot(`
+    expect(testClass.toString()).toMatchInlineSnapshot(`
 "export enum Test {
 }
 "
@@ -36,9 +30,7 @@ enum Test {
       .addConstant("A", "10")
       .addConstant("B", "20")
       .addConstant("C", "30");
-    const out = new StringBuffer();
-    testClass.emit(new CodeWriter(out));
-    expect(out.toString()).toMatchInlineSnapshot(`
+    expect(testClass.toString()).toMatchInlineSnapshot(`
 "enum Test {
   A = 10,
   B = 20,

@@ -158,6 +158,10 @@ export class ModuleSpec extends Imm<ModuleSpec> {
   public isNotEmpty(): boolean {
     return !this.isEmpty();
   }
+
+  public toString(): string {
+    return CodeWriter.emitToString(this);
+  }
 }
 
 function checkMemberModifiers(modifiers: Modifier[]): void {

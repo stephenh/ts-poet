@@ -163,6 +163,12 @@ export class FileSpec extends Imm<FileSpec> {
     });
   }
 
+  public toString(): string {
+    const out = new StringBuffer();
+    this.emit(out);
+    return out.toString();
+  }
+
   private emitToWriter(codeWriter: CodeWriter) {
     if (this.comment.isNotEmpty()) {
       codeWriter.emitComment(this.comment);

@@ -7,6 +7,7 @@ import { Modifier } from "./Modifier";
 import { ParameterSpec } from "./ParameterSpec";
 import { PropertySpec } from "./PropertySpec";
 import {TypeName, TypeNames, TypeVariable} from "./TypeNames";
+import {StringBuffer} from "./StringBuffer";
 
 /** A generated `class` declaration. */
 export class ClassSpec extends Imm<ClassSpec> {
@@ -232,6 +233,10 @@ export class ClassSpec extends Imm<ClassSpec> {
     return this.copy({
       functionSpecs: [...this.functionSpecs, functionSpec],
     });
+  }
+
+  public toString(): string {
+    return CodeWriter.emitToString(this);
   }
 
   /** Returns the properties that can be declared inline as constructor parameters. */

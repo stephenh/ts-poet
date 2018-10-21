@@ -1,6 +1,5 @@
-
-import { Member, TypeNames } from "../TypeNames";
 import { ImportsName } from "../SymbolSpecs";
+import { Member, TypeNames } from "../TypeNames";
 
 describe("TypeNameTests", () => {
 

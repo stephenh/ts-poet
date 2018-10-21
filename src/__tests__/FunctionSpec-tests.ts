@@ -1,17 +1,9 @@
 import { CodeBlock } from "../CodeBlock";
-import { CodeWriter } from "../CodeWriter";
 import { DecoratorSpec } from "../DecoratorSpec";
 import { FunctionSpec } from "../FunctionSpec";
 import { Modifier } from "../Modifier";
 import { ParameterSpec } from "../ParameterSpec";
-import { StringBuffer } from "../StringBuffer";
 import { TypeNames as TypeName } from "../TypeNames";
-
-function emit(spec: FunctionSpec): string {
-  const out = new StringBuffer();
-  spec.emit(new CodeWriter(out));
-  return out.toString();
-}
 
 describe("FunctionSpec", () => {
   it("generates JavaDoc at before class definition", () => {
@@ -194,3 +186,7 @@ function test() {
 `);
   });
 });
+
+function emit(spec: FunctionSpec): string {
+  return spec.toString();
+}

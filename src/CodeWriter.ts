@@ -18,6 +18,12 @@ import { check, stringLiteralWithQuotes } from "./utils";
  */
 export class CodeWriter implements SymbolReferenceTracker {
 
+  public static emitToString(emittable: { emit(cw: CodeWriter): void }): string {
+    const out = new StringBuffer();
+    emittable.emit(new CodeWriter(out));
+    return out.toString();
+  }
+
   private readonly out: LineWrapper;
   private readonly referencedSymbols: Set<SymbolSpec> = new Set();
   private indentLevel = 0;

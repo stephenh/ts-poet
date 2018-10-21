@@ -120,5 +120,9 @@ export class ParameterSpec extends Imm<ParameterSpec> {
       defaultValueField: codeBlock,
     });
   }
+
+  public toString(): string {
+    return CodeWriter.emitToString(this);
+  }
 }
 

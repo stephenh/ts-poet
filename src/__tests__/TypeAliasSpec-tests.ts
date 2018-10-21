@@ -1,6 +1,4 @@
-import { CodeWriter } from "../CodeWriter";
 import { Modifier } from "../Modifier";
-import { StringBuffer } from "../StringBuffer";
 import { TypeAliasSpec } from "../TypeAliasSpec";
 import { TypeNames } from "../TypeNames";
 
@@ -53,7 +51,5 @@ type Integer = number;
 });
 
 function emit(spec: TypeAliasSpec): string {
-  const out = new StringBuffer();
-  spec.emit(new CodeWriter(out));
-  return out.toString();
+  return spec.toString();
 }

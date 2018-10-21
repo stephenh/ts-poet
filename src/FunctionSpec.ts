@@ -266,6 +266,10 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     return this.name === INDEXABLE;
   }
 
+  public toString(): string {
+    return CodeWriter.emitToString(this);
+  }
+
   private emitSignature(codeWriter: CodeWriter, enclosingName?: string) {
     if (this.isConstructor()) {
       codeWriter.emitCode("constructor");

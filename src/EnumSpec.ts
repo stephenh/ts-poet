@@ -67,6 +67,10 @@ export class EnumSpec extends Imm<EnumSpec> {
     return this;
   }
 
+  public toString(): string {
+    return CodeWriter.emitToString(this);
+  }
+
   private hasNoBody(): boolean {
     return this.constants.size === 0;
   }

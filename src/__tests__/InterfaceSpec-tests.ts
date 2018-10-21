@@ -1,8 +1,6 @@
-import { CodeWriter } from "../CodeWriter";
 import { FunctionSpec } from "../FunctionSpec";
 import { InterfaceSpec } from "../InterfaceSpec";
 import { Modifier } from "../Modifier";
-import { StringBuffer } from "../StringBuffer";
 import { TypeNames } from "../TypeNames";
 
 describe("InterfaceSpec", () => {
@@ -160,7 +158,5 @@ interface Test {
 });
 
 function emit(spec: InterfaceSpec): string {
-  const out = new StringBuffer();
-  spec.emit(new CodeWriter(out));
-  return out.toString();
+  return spec.toString();
 }
