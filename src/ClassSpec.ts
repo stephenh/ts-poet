@@ -7,7 +7,6 @@ import { Modifier } from "./Modifier";
 import { ParameterSpec } from "./ParameterSpec";
 import { PropertySpec } from "./PropertySpec";
 import {TypeName, TypeNames, TypeVariable} from "./TypeNames";
-import {StringBuffer} from "./StringBuffer";
 
 /** A generated `class` declaration. */
 export class ClassSpec extends Imm<ClassSpec> {

@@ -1,7 +1,6 @@
 import { CodeWriter } from "../CodeWriter";
 import { DecoratorSpec } from "../DecoratorSpec";
 import { StringBuffer } from "../StringBuffer";
-import { SymbolSpec } from "../SymbolSpecs";
 
 describe("DecoratorSpec", () => {
   it("generate inline", () => {

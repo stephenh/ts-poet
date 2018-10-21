@@ -14,8 +14,13 @@ export class DecoratorSpec extends Imm<DecoratorSpec> {
     });
   }
 
-  public static fromMaybeString(decorator: DecoratorSpec | string): DecoratorSpec {
-    return typeof decorator === 'string' ? DecoratorSpec.create(decorator) : decorator;
+  public static fromMaybeString(
+    decorator: DecoratorSpec | string | SymbolSpec,
+    data?: Partial<DecoratorSpec>
+  ): DecoratorSpec {
+    return (typeof decorator === 'string' || decorator instanceof SymbolSpec
+      ? DecoratorSpec.create(decorator)
+      : decorator).copy(data || {});
   }
 
   @imm public readonly name!: SymbolSpec;

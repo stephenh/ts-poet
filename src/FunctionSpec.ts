@@ -4,6 +4,7 @@ import { CodeWriter } from "./CodeWriter";
 import { DecoratorSpec } from "./DecoratorSpec";
 import { Modifier } from "./Modifier";
 import { ParameterSpec } from "./ParameterSpec";
+import { SymbolSpec } from "./SymbolSpecs";
 import { TypeName, TypeNames, TypeVariable } from "./TypeNames";
 
 const CONSTRUCTOR = "constructor()";
@@ -106,9 +107,11 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     });
   }
 
-  public addDecorator(decorator: DecoratorSpec | string): this {
+  public addDecorator(name: string | SymbolSpec, data?: Partial<DecoratorSpec>): this
+  public addDecorator(decorator: DecoratorSpec): this
+  public addDecorator(decorator: DecoratorSpec | string | SymbolSpec): this {
     return this.copy({
-      decorators: [...this.decorators, DecoratorSpec.fromMaybeString(decorator)],
+      decorators: [...this.decorators, DecoratorSpec.fromMaybeString(decorator, arguments[1])],
     });
   }
 
@@ -143,17 +146,15 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     });
   }
 
-  public addParameter(name: string, type: TypeName | string, optional?: boolean, modifiers?: Modifier[], initializer?: CodeBlock): this
+  public addParameter(name: string, type: TypeName | string, data?: Partial<ParameterSpec>): this
   public addParameter(parameterSpec: ParameterSpec): this
   public addParameter(parameterSpec: ParameterSpec | string): this {
     let param: ParameterSpec;
     if (typeof parameterSpec === 'string') {
       const name = parameterSpec;
       const type: TypeName = TypeNames.anyTypeMaybeString(arguments[1]);
-      const optional: boolean = arguments[2] || false;
-      const modifiers: Modifier[] = arguments[3] || [];
-      const initializer: CodeBlock | undefined = arguments[4];
-      param = ParameterSpec.create(name, type, optional, ...modifiers).defaultValueBlock(initializer);
+      const data: Partial<ParameterSpec> = arguments[2] || {};
+      param = ParameterSpec.create(name, type).copy(data);
     } else {
       param = parameterSpec;
     }

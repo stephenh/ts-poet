@@ -95,10 +95,8 @@ export class ParameterSpec extends Imm<ParameterSpec> {
     });
   }
 
-  public addDecorator(decoratorSpec: DecoratorSpec | SymbolSpec): this {
-    const decorator = decoratorSpec instanceof SymbolSpec
-      ? DecoratorSpec.create(decoratorSpec)
-      : decoratorSpec;
+  public addDecorator(decoratorSpec: DecoratorSpec | SymbolSpec | string): this {
+    const decorator = DecoratorSpec.fromMaybeString(decoratorSpec);
     return this.copy({
       decorators: [...this.decorators, decorator],
     });

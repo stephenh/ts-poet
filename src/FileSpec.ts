@@ -183,11 +183,11 @@ export class FileSpec extends Imm<FileSpec> {
         imports.filter(it => !(it instanceof Augmented) || !(it instanceof SideEffect)),
         it => it.source); // FileModules.importPath(this.path, it.source));
       // .toSortedMap()
-      Object.entries(m).forEach(([sourceImportPath, imports]) => {
+      Object.entries(m).forEach(([sourceImportPath, imps]) => {
         if (this.path === sourceImportPath) { // || Paths.get(".").resolve(path) == sourceImportPath) {
           return;
         }
-        filterInstances(imports, ImportsAll).forEach(i => {
+        filterInstances(imps, ImportsAll).forEach(i => {
           // Output star imports individually
           codeWriter.emitCode("%[import * as %L from '%L';\n%]", i.value, sourceImportPath);
           // Output related augments
@@ -198,7 +198,7 @@ export class FileSpec extends Imm<FileSpec> {
             });
           }
         });
-        const names = filterInstances(imports, ImportsName).map(it => it.value);
+        const names = filterInstances(imps, ImportsName).map(it => it.value);
         if (names.length > 0) {
           // Output named imports as a group
           codeWriter

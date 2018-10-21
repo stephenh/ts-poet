@@ -1,11 +1,9 @@
 import { ClassSpec } from "../ClassSpec";
 import { CodeBlock } from "../CodeBlock";
-import { CodeWriter } from "../CodeWriter";
 import { DecoratorSpec } from "../DecoratorSpec";
 import { FunctionSpec } from "../FunctionSpec";
 import { Modifier } from "../Modifier";
 import { PropertySpec } from "../PropertySpec";
-import { StringBuffer } from "../StringBuffer";
 import { TypeNames } from "../TypeNames";
 
 describe("ClassSpec", () => {
@@ -167,7 +165,7 @@ class Test {
         FunctionSpec.constructorBuilder()
           .addParameter("value", TypeNames.NUMBER)
           .addParameter("value2", TypeNames.STRING)
-          .addParameter("value3", TypeNames.BOOLEAN, true)
+          .addParameter("value3", TypeNames.BOOLEAN, { optional: true })
           .addCodeBlock(
             CodeBlock.empty()
               .add("const testing = 'need other code';\n")

@@ -159,7 +159,7 @@ function test() {
 
   it("generates parameters with default values", () => {
     const testClass = FunctionSpec.create("test")
-      .addParameter("a", TypeName.NUMBER, false, [], CodeBlock.of("10"));
+      .addParameter("a", TypeName.NUMBER, { defaultValueField: CodeBlock.of("10") });
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "function test(a: number = 10) {
 }
@@ -171,7 +171,7 @@ function test() {
     const testClass = FunctionSpec.create("test")
       .addParameter(
         ParameterSpec.create("a", TypeName.NUMBER)
-          .addDecorator(DecoratorSpec.create("required"))
+          .addDecorator("required")
           .addDecorator(
             DecoratorSpec.create("size")
               .addParameter("min", "10")
