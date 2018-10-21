@@ -158,9 +158,9 @@ class Test {
 
   it("generates constructor with shorthand properties", () => {
     const testClass = ClassSpec.create("Test")
-      .addProperty2("value", TypeNames.NUMBER, false, Modifier.PRIVATE)
-      .addProperty2("value2", TypeNames.STRING, false, Modifier.PUBLIC)
-      .addProperty2("value3", TypeNames.BOOLEAN, true, Modifier.PUBLIC)
+      .addProperty("value", TypeNames.NUMBER, { modifiers: [Modifier.PRIVATE] })
+      .addProperty("value2", TypeNames.STRING, { modifiers: [Modifier.PUBLIC] })
+      .addProperty("value3", TypeNames.BOOLEAN, { optional: true, modifiers: [Modifier.PUBLIC] })
       .cstr(
         FunctionSpec.constructorBuilder()
           .addParameter("value", TypeNames.NUMBER)
@@ -204,8 +204,8 @@ class Test {
 
   it("generates property declarations", () => {
     const testClass = ClassSpec.create("Test")
-      .addProperty2("value", TypeNames.NUMBER, false, Modifier.PRIVATE)
-      .addProperty2("value2", TypeNames.STRING, false, Modifier.PUBLIC)
+      .addProperty("value", TypeNames.NUMBER, { modifiers: [Modifier.PRIVATE] })
+      .addProperty("value2", TypeNames.STRING, { modifiers: [Modifier.PUBLIC] })
       .addProperty(
         PropertySpec.create(
           "value3",

@@ -82,8 +82,8 @@ interface Test {
 
   it("generates property declarations", () => {
     const testIface = InterfaceSpec.create("Test")
-      .addProperty2("value", TypeNames.NUMBER, false, Modifier.PRIVATE)
-      .addProperty2("value2", TypeNames.STRING, true, Modifier.PUBLIC);
+      .addProperty("value", TypeNames.NUMBER, { modifiers: [ Modifier.PRIVATE ]})
+      .addProperty("value2", TypeNames.STRING, { optional: true, modifiers: [ Modifier.PUBLIC ]});
     expect(emit(testIface)).toMatchInlineSnapshot(`
 "interface Test {
 

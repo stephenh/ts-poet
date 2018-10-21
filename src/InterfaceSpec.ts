@@ -4,7 +4,7 @@ import { CodeWriter } from "./CodeWriter";
 import { FunctionSpec } from "./FunctionSpec";
 import { Modifier } from "./Modifier";
 import { PropertySpec } from "./PropertySpec";
-import { TypeName, TypeVariable } from "./TypeNames";
+import { TypeName, TypeNames, TypeVariable } from "./TypeNames";
 
 /** A generated `interface` declaration. */
 export class InterfaceSpec extends Imm<InterfaceSpec> {
@@ -143,16 +143,23 @@ export class InterfaceSpec extends Imm<InterfaceSpec> {
     return curr;
   }
 
-  public addProperty(propertySpec: PropertySpec): this {
+  public addProperty(propertySpec: PropertySpec): this
+  public addProperty(name: string, type: TypeName | string, data: Partial<PropertySpec>): this
+  public addProperty(): this {
+    let propertySpec: PropertySpec;
+    if (arguments[0] instanceof PropertySpec) {
+      propertySpec = arguments[0];
+    } else {
+      const name = arguments[0];
+      const type = TypeNames.anyTypeMaybeString(arguments[1]);
+      const data = arguments[2] || {};
+      propertySpec = PropertySpec.create(name, type).copy(data);
+    }
     // require(propertySpec.decorators.isEmpty()) { "Interface properties cannot have decorators" }
     // require(propertySpec.initializer == null) { "Interface properties cannot have initializers" }
     return this.copy({
       propertySpecs: [...this.propertySpecs, propertySpec],
     });
-  }
-
-  public addProperty2(name: string, type: TypeName, optional: boolean = false, ...modifiers: Modifier[]): this {
-    return this.addProperty(PropertySpec.create(name, type, optional, ...modifiers));
   }
 
   public addFunctions(...functionSpecs: FunctionSpec[]): this {
