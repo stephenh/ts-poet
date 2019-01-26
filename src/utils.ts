@@ -12,6 +12,9 @@ export function filterInstances<T, U>(list: T[], t: Constructor<U>): U[] {
   return list.filter(e => e instanceof t) as unknown as U[];
 }
 
+export function unique<T>(list: T[]): T[] {
+  return [...new Set(list)];
+}
 
 // Based on original javapoet code; it looks like typescriptpoet has
 // an extra branch to cover multi-line strings; haven't handled that yet.

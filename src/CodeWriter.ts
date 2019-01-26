@@ -10,7 +10,7 @@ import { StringBuffer } from "./StringBuffer";
 import { SymbolReferenceTracker } from "./SymbolReferenceTracker";
 import { Augmented, Imported, ImportsAll, ImportsName, SideEffect, SymbolSpec } from "./SymbolSpecs";
 import { TypeName, TypeVariable } from "./TypeNames";
-import { check, filterInstances, stringLiteralWithQuotes } from "./utils";
+import { check, filterInstances, stringLiteralWithQuotes, unique } from "./utils";
 
 /**
  * Converts a [FileSpec] to a string suitable to both human- and tsc-consumption. This honors
@@ -170,7 +170,7 @@ export class CodeWriter implements SymbolReferenceTracker {
             });
           }
         });
-        const names = filterInstances(imps, ImportsName).map(it => it.value);
+        const names = unique(filterInstances(imps, ImportsName).map(it => it.value));
         if (names.length > 0) {
           // Output named imports as a group
           this

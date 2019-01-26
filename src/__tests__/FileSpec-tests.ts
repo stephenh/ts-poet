@@ -34,6 +34,23 @@ function bar(): Observable {
 "
 `);
   });
+
+  it("dedups imports", () => {
+    const spec = FileSpec.create("Test")
+      .addFunction(FunctionSpec.create("foo").returns("@rxjs/Subscriber"))
+      .addFunction(FunctionSpec.create("bar").returns("@rxjs/Subscriber"));
+    expect(emit(spec)).toMatchInlineSnapshot(`
+"import {Subscriber} from 'rxjs/Subscriber';
+
+
+function foo(): Subscriber {
+}
+
+function bar(): Subscriber {
+}
+"
+`);
+  });
 });
 
 function emit(spec: FileSpec): string {
