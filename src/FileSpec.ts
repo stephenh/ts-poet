@@ -6,7 +6,6 @@ import { EnumSpec } from "./EnumSpec";
 import { FunctionSpec } from "./FunctionSpec";
 import { InterfaceSpec } from "./InterfaceSpec";
 import { Modifier } from "./Modifier";
-import { ModuleSpec } from "./ModuleSpec";
 import { PropertySpec } from "./PropertySpec";
 import { StringBuffer } from "./StringBuffer";
 import { SymbolSpec, SymbolSpecs } from "./SymbolSpecs";
@@ -25,16 +24,13 @@ import { filterInstances } from "./utils";
  */
 export class FileSpec extends Imm<FileSpec> {
 
-  public static create(file: string | ModuleSpec): FileSpec {
+  public static create(file: string): FileSpec {
     const spec = new FileSpec({
-      path: typeof file === 'string' ? file : file.name,
+      path: file,
       comment: CodeBlock.empty(),
       members: [],
       indentField: "  ",
     });
-    if (file instanceof ModuleSpec) {
-      // builder.members.push(...file.members);
-    }
     return spec;
   }
 
@@ -51,9 +47,7 @@ export class FileSpec extends Imm<FileSpec> {
 
   public exportNamed(symbolName: string): SymbolSpec | undefined {
     const first = this.members.map(it => {
-      if (it instanceof ModuleSpec) {
-        return it.name;
-      } else if (it instanceof ClassSpec) {
+      if (it instanceof ClassSpec) {
         return it.name;
       } else if (it instanceof InterfaceSpec) {
         return it.name;
@@ -97,12 +91,6 @@ export class FileSpec extends Imm<FileSpec> {
   public addComment(format: string, ...args: any[]): this {
     return this.copy({
       comment: this.comment.add(format, ...args),
-    });
-  }
-
-  public addModule(moduleSpec: ModuleSpec): this {
-    return this.copy({
-      members: [...this.members, moduleSpec],
     });
   }
 
@@ -177,12 +165,10 @@ export class FileSpec extends Imm<FileSpec> {
     codeWriter.emitImports(this.path);
 
     this.members
-      .filter(it => !(it instanceof ModuleSpec || it instanceof CodeBlock))
+      .filter(it => !(it instanceof CodeBlock))
       .forEach(member => {
         codeWriter.emit("\n");
-        if (member instanceof ModuleSpec) {
-          member.emit(codeWriter);
-        } else if (member instanceof InterfaceSpec) {
+        if (member instanceof InterfaceSpec) {
           member.emit(codeWriter);
         } else if (member instanceof ClassSpec) {
           member.emit(codeWriter);
@@ -200,11 +186,6 @@ export class FileSpec extends Imm<FileSpec> {
           throw new Error("unhandled");
         }
       });
-
-    filterInstances(this.members, ModuleSpec).forEach(member => {
-      codeWriter.emit("\n");
-      member.emit(codeWriter);
-    });
 
     filterInstances(this.members, CodeBlock).forEach(member => {
       codeWriter.emit("\n");

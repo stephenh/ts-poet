@@ -7,7 +7,6 @@ export { FileSpec } from './FileSpec';
 export { FunctionSpec } from './FunctionSpec';
 export { InterfaceSpec } from './InterfaceSpec';
 export { Modifier } from './Modifier';
-export { ModuleSpec } from './ModuleSpec';
 export { ParameterSpec } from './ParameterSpec';
 export { PropertySpec } from './PropertySpec';
 export { SymbolSpecs } from './SymbolSpecs';
