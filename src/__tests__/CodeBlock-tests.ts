@@ -171,7 +171,7 @@ describe("CodeBlockTest", () => {
   it("sameIndexCanBeUsedWithDifferentFormats", () => {
     const block = CodeBlock.empty()
         .add("%1T.println(%1S)", TypeNames.MAP);
-    expect(block.toString()).toEqual("Map.println(\"[object Object]\")");
+    expect(block.toString()).toEqual("Map.println(\"Map\")");
   });
 
   it("tooManyStatementEnters", () => {
