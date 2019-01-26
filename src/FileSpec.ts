@@ -24,14 +24,18 @@ import { filterInstances } from "./utils";
  */
 export class FileSpec extends Imm<FileSpec> {
 
+  /**
+   * Creates a file to contain generated output.
+   *
+   * `file` should be the module name, e.g. for build/foo.ts, use file = foo.
+   */
   public static create(file: string): FileSpec {
-    const spec = new FileSpec({
+    return new FileSpec({
       path: file,
       comment: CodeBlock.empty(),
       members: [],
       indentField: "  ",
     });
-    return spec;
   }
 
   @imm public readonly path!: string;
