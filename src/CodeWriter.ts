@@ -1,4 +1,4 @@
-
+import _ from "lodash";
 import { ClassSpec } from "./ClassSpec";
 import { CodeBlock } from "./CodeBlock";
 import { DecoratorSpec } from "./DecoratorSpec";
@@ -8,9 +8,9 @@ import { LineWrapper } from "./LineWrapper";
 import { Modifier, ModifierOrder } from "./Modifier";
 import { StringBuffer } from "./StringBuffer";
 import { SymbolReferenceTracker } from "./SymbolReferenceTracker";
-import { Imported, SymbolSpec } from "./SymbolSpecs";
+import { Augmented, Imported, ImportsAll, ImportsName, SideEffect, SymbolSpec } from "./SymbolSpecs";
 import { TypeName, TypeVariable } from "./TypeNames";
-import { check, stringLiteralWithQuotes } from "./utils";
+import { check, filterInstances, stringLiteralWithQuotes } from "./utils";
 
 /**
  * Converts a [FileSpec] to a string suitable to both human- and tsc-consumption. This honors
@@ -62,7 +62,7 @@ export class CodeWriter implements SymbolReferenceTracker {
 
   public emitComment(codeBlock: CodeBlock): void {
     this.trailingNewline = true; // Force the '//' prefix for the comment.
-    this.comment = true
+    this.comment = true;
     try {
       this.emitCodeBlock(codeBlock);
       this.emit("\n");
@@ -145,6 +145,61 @@ export class CodeWriter implements SymbolReferenceTracker {
     this.emit(">");
   }
 
+  public emitImports(path?: string): this {
+    const imports = this.requiredImports();
+    const augmentImports = _.groupBy(filterInstances(imports, Augmented), a => a.augmented);
+    const sideEffectImports = _.groupBy(filterInstances(imports, SideEffect), a => a.source);
+
+    if (imports.length > 0) {
+      const m = _.groupBy(
+        imports.filter(it => !(it instanceof Augmented) || !(it instanceof SideEffect)),
+        it => it.source); // FileModules.importPath(this.path, it.source));
+      // .toSortedMap()
+      Object.entries(m).forEach(([sourceImportPath, imps]) => {
+        if (path === sourceImportPath) { // || Paths.get(".").resolve(path) == sourceImportPath) {
+          return;
+        }
+        filterInstances(imps, ImportsAll).forEach(i => {
+          // Output star imports individually
+          this.emitCode("%[import * as %L from '%L';\n%]", i.value, sourceImportPath);
+          // Output related augments
+          const augments = augmentImports[i.value];
+          if (augments) {
+            augments.forEach(augment => {
+              this.emitCode("%[import '%L';\n%]", augment.source);
+            });
+          }
+        });
+        const names = filterInstances(imps, ImportsName).map(it => it.value);
+        if (names.length > 0) {
+          // Output named imports as a group
+          this
+            .emitCode("import {")
+            .indent()
+            .emitCode(names.join(", "))
+            .unindent()
+            .emitCode("} from '%L';\n", sourceImportPath);
+          // Output related augments
+          names.forEach(name => {
+            const augments = augmentImports[name];
+            if (augments) {
+              augments.forEach(augment => {
+                this.emitCode("%[import '%L';\n%]", augment.source);
+              });
+            }
+          });
+        }
+      });
+
+      Object.keys(sideEffectImports).forEach(it => {
+        this.emitCode("%[import %S;\n%]", it);
+      });
+
+      this.emit("\n");
+    }
+    return this;
+  }
+
   /* TODO
   public emitCode(s: string): void {
     this.emitCodeBlock(CodeBlock.of(s));
@@ -172,7 +227,7 @@ export class CodeWriter implements SymbolReferenceTracker {
         case "%<": this.unindent(); break;
         case "%[": this.beginStatement(); break;
         case "%]": this.endStatement(); break;
-        case "%W": this.emitWrappingSpace();
+        case "%W": this.emitWrappingSpace(); break;
         // Handle deferred type.
         default: this.emit(part);
       }

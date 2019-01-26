@@ -13,6 +13,10 @@ export abstract class TypeName {
    * @return String type representation in TypeScript syntax
    */
   public abstract reference(trackedBy?: SymbolReferenceTracker): string;
+
+  public toString() {
+    return this.reference(undefined);
+  }
 }
 
 export class Any extends TypeName {

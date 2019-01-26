@@ -6,6 +6,13 @@ export function check(b: boolean, message: string = "check failed") {
   }
 }
 
+interface Constructor<T> { new(... args: any[]): T }
+
+export function filterInstances<T, U>(list: T[], t: Constructor<U>): U[] {
+  return list.filter(e => e instanceof t) as unknown as U[];
+}
+
+
 // Based on original javapoet code; it looks like typescriptpoet has
 // an extra branch to cover multi-line strings; haven't handled that yet.
 export function stringLiteralWithQuotes(value: string, indent: string = "  "): string {

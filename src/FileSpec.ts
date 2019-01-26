@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { imm, Imm } from "ts-imm";
 import { ClassSpec } from "./ClassSpec";
 import { CodeBlock } from "./CodeBlock";
@@ -10,9 +9,10 @@ import { Modifier } from "./Modifier";
 import { ModuleSpec } from "./ModuleSpec";
 import { PropertySpec } from "./PropertySpec";
 import { StringBuffer } from "./StringBuffer";
-import { Augmented, ImportsAll, ImportsName, SideEffect, SymbolSpec, SymbolSpecs } from "./SymbolSpecs";
+import { SymbolSpec, SymbolSpecs } from "./SymbolSpecs";
 import { TypeAliasSpec } from "./TypeAliasSpec";
 import { TypeName, TypeNames } from "./TypeNames";
+import { filterInstances } from "./utils";
 
 /**
  * A TypeScript file containing top level objects like classes, objects, functions, properties, and type
@@ -174,62 +174,12 @@ export class FileSpec extends Imm<FileSpec> {
       codeWriter.emitComment(this.comment);
     }
 
-    const imports = codeWriter.requiredImports();
-    const augmentImports = _.groupBy(filterInstances(imports, Augmented), a => a.augmented);
-    const sideEffectImports = _.groupBy(filterInstances(imports, SideEffect), a => a.source);
-
-    if (imports.length > 0) {
-      const m = _.groupBy(
-        imports.filter(it => !(it instanceof Augmented) || !(it instanceof SideEffect)),
-        it => it.source); // FileModules.importPath(this.path, it.source));
-      // .toSortedMap()
-      Object.entries(m).forEach(([sourceImportPath, imps]) => {
-        if (this.path === sourceImportPath) { // || Paths.get(".").resolve(path) == sourceImportPath) {
-          return;
-        }
-        filterInstances(imps, ImportsAll).forEach(i => {
-          // Output star imports individually
-          codeWriter.emitCode("%[import * as %L from '%L';\n%]", i.value, sourceImportPath);
-          // Output related augments
-          const augments = augmentImports[i.value];
-          if (augments) {
-            augments.forEach(augment => {
-              codeWriter.emitCode("%[import '%L';\n%]", augment.source);
-            });
-          }
-        });
-        const names = filterInstances(imps, ImportsName).map(it => it.value);
-        if (names.length > 0) {
-          // Output named imports as a group
-          codeWriter
-            .emitCode("import {")
-            .indent()
-            .emitCode(names.join(", "))
-            .unindent()
-            .emitCode("} from '%L';\n", sourceImportPath);
-          // Output related augments
-          names.forEach(name => {
-            const augments = augmentImports[name];
-            if (augments) {
-              augments.forEach(augment => {
-                codeWriter.emitCode("%[import '%L';\n%]", augment.source);
-              });
-            }
-          });
-        }
-      });
-
-      Object.keys(sideEffectImports).forEach(it => {
-        codeWriter.emitCode("%[import %S;\n%]", it);
-      });
-
-      codeWriter.emit("\n");
-    }
+    codeWriter.emitImports(this.path);
 
     this.members
       .filter(it => !(it instanceof ModuleSpec || it instanceof CodeBlock))
       .forEach(member => {
-        codeWriter.emit("\n")
+        codeWriter.emit("\n");
         if (member instanceof ModuleSpec) {
           member.emit(codeWriter);
         } else if (member instanceof InterfaceSpec) {
@@ -252,21 +202,15 @@ export class FileSpec extends Imm<FileSpec> {
       });
 
     filterInstances(this.members, ModuleSpec).forEach(member => {
-      codeWriter.emit("\n")
+      codeWriter.emit("\n");
       member.emit(codeWriter);
     });
 
     filterInstances(this.members, CodeBlock).forEach(member => {
-      codeWriter.emit("\n")
+      codeWriter.emit("\n");
       codeWriter.emitCodeBlock(member);
     });
   }
-}
-
-interface Constructor<T> { new(... args: any[]): T };
-
-function filterInstances<T, U>(list: T[], t: Constructor<U>): U[] {
-  return list.filter(e => e instanceof t) as unknown as U[];
 }
 
     // /** Writes this to `directory` as UTF-8 using the standard directory structure.  */

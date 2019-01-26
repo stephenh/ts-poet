@@ -10,6 +10,12 @@ describe("TypeNameTests", () => {
     if (typeName.imported) {
       expect(typeName.imported.value).toEqual("This");
     }
+    expect(typeName.toString()).toEqual("This.Is.Nested");
+  });
+
+  it("testToStringOfPrimitives", () => {
+    const typeName = TypeNames.NUMBER;
+    expect(typeName.toString()).toEqual("number");
   });
 
   it("testParsingUsage", () => {
@@ -45,6 +51,12 @@ describe("TypeNameTests", () => {
       new Member("c", TypeNames.DATE, true),
     ]);
     expect(typeName2.reference()).toEqual("{ a?: number, B: string, c?: Date }");
+  });
+
+  it("prints an array of unions", () => {
+    const elementType = TypeNames.unionType(TypeNames.STRING, TypeNames.BOOLEAN);
+    const typeName = TypeNames.arrayType(elementType);
+    expect(typeName.toString()).toEqual("Array<string | boolean>");
   });
 
 });
