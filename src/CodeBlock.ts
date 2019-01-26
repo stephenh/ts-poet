@@ -425,7 +425,7 @@ function toTuple(o: { reference(trackedBy?: SymbolReferenceTracker): string }): 
     public referenced(symbol: SymbolSpec): void {
       symbols.push(symbol);
     }
-  });;
+  });
   return [name, symbols];
 }
 
@@ -461,10 +461,10 @@ function argToLiteral(o?: any): [string, SymbolSpec[]] {
     return toTuple(o);
   } else if (o instanceof CodeBlock) {
     return [o.toString(), [...o.referencedSymbols.values()]];
-  } else if (o) {
+  } else if (o !== undefined) {
     return [o.toString(), []];
   } else {
-    throw new Error("not sure");
+    throw new Error("not sure how to output " + o);
   }
 }
 
