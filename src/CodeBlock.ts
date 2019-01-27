@@ -1,17 +1,17 @@
-import { imm, Imm } from "ts-imm";
-import { CodeWriter } from "./CodeWriter";
-import { ParameterSpec } from "./ParameterSpec";
-import { PropertySpec } from "./PropertySpec";
-import { SymbolReferenceTracker } from "./SymbolReferenceTracker";
-import { SymbolSpec } from "./SymbolSpecs";
-import { TypeName } from "./TypeNames";
-import { check } from "./utils";
+import { imm, Imm } from 'ts-imm';
+import { CodeWriter } from './CodeWriter';
+import { ParameterSpec } from './ParameterSpec';
+import { PropertySpec } from './PropertySpec';
+import { SymbolReferenceTracker } from './SymbolReferenceTracker';
+import { SymbolSpec } from './SymbolSpecs';
+import { TypeName } from './TypeNames';
+import { check } from './utils';
 
 const NAMED_ARGUMENT = /^%([\w_]+):([\w]).*$/;
 const LOWERCASE = /^[a-z]+[\w_]*$/;
 const ARG_NAME = 1;
 const TYPE_NAME = 2;
-const NO_ARG_PLACEHOLDERS = ["%W", "%>", "%<", "%[", "%]"];
+const NO_ARG_PLACEHOLDERS = ['%W', '%>', '%<', '%[', '%]'];
 
 export interface Dictionary<T> {
   [key: string]: T;
@@ -20,7 +20,6 @@ export interface Dictionary<T> {
 function isNoArgPlaceholder(c: string): boolean {
   return ['%', '>', '<', '[', ']', 'W'].indexOf(c) > -1;
 }
-
 
 /**
  * A fragment of a .ts file, potentially containing declarations, statements, and documentation.
@@ -52,7 +51,6 @@ function isNoArgPlaceholder(c: string): boolean {
  */
 
 export class CodeBlock extends Imm<CodeBlock> {
-
   public static of(format: string, ...args: any[]): CodeBlock {
     return CodeBlock.empty().add(format, ...args);
   }
@@ -61,36 +59,40 @@ export class CodeBlock extends Imm<CodeBlock> {
     return new CodeBlock({
       formatParts: [],
       args: [],
-      referencedSymbols: new Set(),
+      referencedSymbols: new Set()
     });
   }
 
   public static joinToCode(
     blocks: CodeBlock[],
-    separator: string = ", ",
-    prefix: string = "",
-    suffix: string = ""): CodeBlock {
+    separator: string = ', ',
+    prefix: string = '',
+    suffix: string = ''
+  ): CodeBlock {
     if (blocks.length === 0) {
       return CodeBlock.empty();
     }
-    const placeholders = blocks.map(_ => "%L");
+    const placeholders = blocks.map(_ => '%L');
     return CodeBlock.of(prefix + placeholders.join(separator) + suffix, ...blocks);
   }
 
   /** A heterogeneous list containing string literals and value placeholders.  */
-  @imm public readonly formatParts!: ReadonlyArray<string>;
-  @imm public readonly args!: ReadonlyArray<any>;
-  @imm public readonly referencedSymbols!: Set<SymbolSpec>;
+  @imm
+  public readonly formatParts!: ReadonlyArray<string>;
+  @imm
+  public readonly args!: ReadonlyArray<any>;
+  @imm
+  public readonly referencedSymbols!: Set<SymbolSpec>;
 
   public indent(): this {
     return this.copy({
-      formatParts: [...this.formatParts, "%>"]
+      formatParts: [...this.formatParts, '%>']
     });
   }
 
   public unindent(): this {
     return this.copy({
-      formatParts: [...this.formatParts, "%<"]
+      formatParts: [...this.formatParts, '%<']
     });
   }
 
@@ -107,22 +109,53 @@ export class CodeBlock extends Imm<CodeBlock> {
    *     Shouldn't contain braces or newline characters.
    */
   public nextControlFlow(controlFlow: string, ...args: any[]): this {
-    return this.unindent().add(`} ${controlFlow} {\n`, ...args).indent();
+    return this.unindent()
+      .add(`} ${controlFlow} {\n`, ...args)
+      .indent();
   }
 
   public endControlFlow(): this {
-    return this.unindent().add("}\n");
+    return this.unindent().add('}\n');
+  }
+
+  public beginHash(): this {
+    return this.add('{')
+      .newLine()
+      .indent();
+  }
+
+  public endHash(): this {
+    return this.unindent()
+      .add('}')
+      .newLine();
+  }
+
+  public addHashEntry(key: string, value: string | CodeBlock): this {
+    if (typeof value === 'string') {
+      return this.add('%L: %L,', key, value).newLine();
+    } else {
+      return this.add('%L: ', key)
+        .addCode(value)
+        .add(',')
+        .newLine();
+    }
+  }
+
+  public newLine(): this {
+    return this.add('\n');
   }
 
   public addStatement(format: string, ...args: any[]): this {
-    return this.add("%[").add(format, ...args).add(";\n%]");
+    return this.add('%[')
+      .add(format, ...args)
+      .add(';\n%]');
   }
 
   public addCode(codeBlock: CodeBlock): this {
     return this.copy({
       formatParts: [...this.formatParts, ...codeBlock.formatParts],
       args: [...this.args, ...codeBlock.args],
-      referencedSymbols: new Set([...this.referencedSymbols, ...codeBlock.referencedSymbols]),
+      referencedSymbols: new Set([...this.referencedSymbols, ...codeBlock.referencedSymbols])
     });
     return this;
   }
@@ -176,7 +209,7 @@ export class CodeBlock extends Imm<CodeBlock> {
 
       // If 'c' doesn't take an argument, we're done.
       if (isNoArgPlaceholder(c)) {
-        check(indexStart === indexEnd, "%%, %>, %<, %[, %], and %W may not have an index");
+        check(indexStart === indexEnd, '%%, %>, %<, %[, %], and %W may not have an index');
         newFormatParts.push(`%${c}`);
         continue;
       }
@@ -187,7 +220,7 @@ export class CodeBlock extends Imm<CodeBlock> {
         index = parseInt(format.substring(indexStart, indexEnd), 10) - 1;
         hasIndexed = true;
         if (args.length > 0) {
-          indexedParameterCount[index % args.length]++ // modulo is needed, checked below anyway
+          indexedParameterCount[index % args.length]++; // modulo is needed, checked below anyway
         }
       } else {
         index = relativeParameterCount;
@@ -197,10 +230,11 @@ export class CodeBlock extends Imm<CodeBlock> {
 
       check(
         index >= 0 && index < args.length,
-        `index ${index + 1} for '${format.substring(indexStart - 1, indexEnd + 1)}' not in range (received ${args.length} arguments)`);
-      check(
-        !hasIndexed || !hasRelative,
-        "cannot mix indexed and positional parameters");
+        `index ${index + 1} for '${format.substring(indexStart - 1, indexEnd + 1)}' not in range (received ${
+          args.length
+        } arguments)`
+      );
+      check(!hasIndexed || !hasRelative, 'cannot mix indexed and positional parameters');
 
       const [newArg, symbols] = formatToArgAndSymbols(format, c, args[index]);
       newArgs.push(newArg);
@@ -211,24 +245,25 @@ export class CodeBlock extends Imm<CodeBlock> {
     if (hasRelative) {
       check(
         relativeParameterCount >= args.length,
-        `unused arguments: expected ${relativeParameterCount}, received ${args.length}`);
+        `unused arguments: expected ${relativeParameterCount}, received ${args.length}`
+      );
     }
 
     if (hasIndexed) {
       const unused: string[] = [];
       for (let i = 0; i < args.length; i++) {
         if (indexedParameterCount[i] === 0) {
-          unused.push("%" + (i + 1));
+          unused.push('%' + (i + 1));
         }
       }
-      const s = (unused.length === 1) ? "" : "s";
-      check(unused.length === 0, `unused argument${s}: ${unused.join(", ")}`);
+      const s = unused.length === 1 ? '' : 's';
+      check(unused.length === 0, `unused argument${s}: ${unused.join(', ')}`);
     }
 
     return this.copy({
       formatParts: [...this.formatParts, ...newFormatParts],
       args: [...this.args, ...newArgs],
-      referencedSymbols: new Set([...this.referencedSymbols, ...newSymbols]),
+      referencedSymbols: new Set([...this.referencedSymbols, ...newSymbols])
     });
   }
 
@@ -250,14 +285,12 @@ export class CodeBlock extends Imm<CodeBlock> {
     const newSymbols: SymbolSpec[] = [];
 
     Object.keys(args).forEach(arg => {
-      check(
-        arg.match(LOWERCASE) !== null,
-        `argument '${arg}' must start with a lowercase character`);
+      check(arg.match(LOWERCASE) !== null, `argument '${arg}' must start with a lowercase character`);
     });
 
     let p = 0;
     while (p < format.length) {
-      const nextP = format.indexOf("%", p);
+      const nextP = format.indexOf('%', p);
       if (nextP === -1) {
         newFormatParts.push(format.substring(p, format.length));
         break;
@@ -285,10 +318,8 @@ export class CodeBlock extends Imm<CodeBlock> {
         const endIndex = Math.min(colon + 2, format.length);
         p = endIndex;
       } else {
-        check(p < format.length - 1, "dangling % at end");
-        check(
-          isNoArgPlaceholder(format[p + 1]),
-          `unknown format %${format[p + 1]} at ${p + 1} in '${format}'`);
+        check(p < format.length - 1, 'dangling % at end');
+        check(isNoArgPlaceholder(format[p + 1]), `unknown format %${format[p + 1]} at ${p + 1} in '${format}'`);
         newFormatParts.push(format.substring(p, p + 2));
         p += 2;
       }
@@ -297,25 +328,25 @@ export class CodeBlock extends Imm<CodeBlock> {
     return this.copy({
       formatParts: [...this.formatParts, ...newFormatParts],
       args: [...this.args, ...newArgs],
-      referencedSymbols: new Set([...this.referencedSymbols, ...newSymbols]),
+      referencedSymbols: new Set([...this.referencedSymbols, ...newSymbols])
     });
   }
 
   public remove(matching: RegExp): this {
     let newFormatParts: string[] = [];
     this.formatParts.forEach(part => {
-      part = part.replace(matching, "");
+      part = part.replace(matching, '');
       if (part.length > 0) {
         newFormatParts.push(part);
       }
     });
     for (let i = 0; i < newFormatParts.length - 3; i++) {
-      if (newFormatParts[i] === "%[" && newFormatParts[i + 1] === ";\n" && newFormatParts[i + 2] === "%]") {
+      if (newFormatParts[i] === '%[' && newFormatParts[i + 1] === ';\n' && newFormatParts[i + 2] === '%]') {
         newFormatParts = newFormatParts.slice(0, i).concat(newFormatParts.slice(i + 3));
         i--;
       }
     }
-    return this.copy({formatParts: newFormatParts});
+    return this.copy({ formatParts: newFormatParts });
   }
 
   public isEmpty() {
@@ -350,19 +381,19 @@ export class CodeBlock extends Imm<CodeBlock> {
     let firstFormatPart: string | undefined;
     // Walk through the formatParts of prefix to confirm that it's a of this.
     for (let index = 0; index < prefix.formatParts.length; index++) {
-      const theirPart = prefix.formatParts[index] || "";
-      const ourPart = this.formatParts[index] || "";
+      const theirPart = prefix.formatParts[index] || '';
+      const ourPart = this.formatParts[index] || '';
       if (ourPart !== theirPart) {
         // We've found a format part that doesn't match. If this is the very last format part check
         // for a string prefix match. If that doesn't match, we're done.
         if (index === prefix.formatParts.length - 1 && ourPart.startsWith(theirPart)) {
-          firstFormatPart = ourPart.substring(theirPart.length)
+          firstFormatPart = ourPart.substring(theirPart.length);
         } else {
           return undefined;
         }
       }
       // If the matching format part has an argument, check that too.
-      if (theirPart.startsWith("%") && !isNoArgPlaceholder(theirPart[1])) {
+      if (theirPart.startsWith('%') && !isNoArgPlaceholder(theirPart[1])) {
         if (this.args[prefixArgCount] !== prefix.args[prefixArgCount]) {
           return undefined; // Argument doesn't match.
         }
@@ -376,16 +407,16 @@ export class CodeBlock extends Imm<CodeBlock> {
       resultFormatParts.push(firstFormatPart);
     }
     for (let i = prefix.formatParts.length; i < this.formatParts.length; i++) {
-      resultFormatParts.push(this.formatParts[i] || "");
+      resultFormatParts.push(this.formatParts[i] || '');
     }
     const resultArgs: any[] = [];
     for (let i = prefix.args.length; i < this.args.length; i++) {
-      resultArgs.push(this.args[i] || "");
+      resultArgs.push(this.args[i] || '');
     }
 
     return this.copy({
       formatParts: resultFormatParts,
-      args: resultArgs,
+      args: resultArgs
     });
   }
 
@@ -421,22 +452,29 @@ export class CodeBlock extends Imm<CodeBlock> {
 // And ugly gyration to turn the side-effect reference into a tuple
 function toTuple(o: { reference(trackedBy?: SymbolReferenceTracker): string }): [string, SymbolSpec[]] {
   const symbols: SymbolSpec[] = [];
-  const name = o.reference(new class implements SymbolReferenceTracker {
-    public referenced(symbol: SymbolSpec): void {
-      symbols.push(symbol);
-    }
-  });
+  const name = o.reference(
+    new class implements SymbolReferenceTracker {
+      public referenced(symbol: SymbolSpec): void {
+        symbols.push(symbol);
+      }
+    }()
+  );
   return [name, symbols];
 }
 
 /** Look at `c` to tell what arg + related symbols we should add. */
 function formatToArgAndSymbols(format: string, c: string, arg: any): [any, SymbolSpec[]] {
   switch (c) {
-    case 'N': return argToName(arg);
-    case 'L': return argToLiteral(arg);
-    case 'S': return argToString(arg);
-    case 'T': return argToType(arg);
-    default: throw new Error(`invalid format string: '${format}'`);
+    case 'N':
+      return argToName(arg);
+    case 'L':
+      return argToLiteral(arg);
+    case 'S':
+      return argToString(arg);
+    case 'T':
+      return argToType(arg);
+    default:
+      throw new Error(`invalid format string: '${format}'`);
   }
 }
 
@@ -461,21 +499,23 @@ function argToLiteral(o?: any): [string, SymbolSpec[]] {
     return toTuple(o);
   } else if (o instanceof CodeBlock) {
     return [o.toString(), [...o.referencedSymbols.values()]];
+  } else if (o === null) {
+    return ['null', []];
   } else if (o !== undefined) {
     return [o.toString(), []];
   } else {
-    throw new Error("not sure how to output " + o);
+    throw new Error('not sure how to output ' + o);
   }
 }
 
 function argToString(o?: any): [string, SymbolSpec[]] {
-  return [(o || "").toString(), []];
+  return [(o || '').toString(), []];
 }
 
 function argToType(o?: any): [TypeName, SymbolSpec[]] {
   if (o instanceof TypeName) {
     return [o, toTuple(o)[1]];
   } else {
-    throw new Error(`expected type but was ${o}`)
+    throw new Error(`expected type but was ${o}`);
   }
 }
