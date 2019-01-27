@@ -1,8 +1,7 @@
-import {CodeBlock} from "../CodeBlock";
+import { CodeBlock } from "../CodeBlock";
 import { TypeNames } from "../TypeNames";
 
 describe("CodeBlockTest", () => {
-
   it("of", () => {
     const a = CodeBlock.of("%L taco", "delicious");
     expect(a.toString()).toEqual("delicious taco");
@@ -10,8 +9,16 @@ describe("CodeBlockTest", () => {
 
   it("isEmpty", () => {
     expect(CodeBlock.empty().isEmpty()).toBeTruthy();
-    expect(CodeBlock.empty().add("").isEmpty()).toBeTruthy();
-    expect(CodeBlock.empty().add(" ").isEmpty()).toBeFalsy();
+    expect(
+      CodeBlock.empty()
+        .add("")
+        .isEmpty()
+    ).toBeTruthy();
+    expect(
+      CodeBlock.empty()
+        .add(" ")
+        .isEmpty()
+    ).toBeFalsy();
   });
 
   it("indentCannotBeIndexed", () => {
@@ -56,7 +63,7 @@ describe("CodeBlockTest", () => {
 
   it("stringFormatCanBeIndexed", () => {
     const block = CodeBlock.empty().add("%1S", "taco");
-    expect(block.toString()).toEqual("\"taco\"");
+    expect(block.toString()).toEqual('"taco"');
   });
 
   it("typeFormatCanBeIndexed", () => {
@@ -67,22 +74,23 @@ describe("CodeBlockTest", () => {
   it("simpleNamedArgument", () => {
     const map = { text: "taco" };
     const block = CodeBlock.empty().addNamed("%text:S", map);
-    expect(block.toString()).toEqual("\"taco\"");
+    expect(block.toString()).toEqual('"taco"');
   });
 
   it("repeatedNamedArgument", () => {
     const map = { text: "tacos" };
-    const block = CodeBlock.empty()
-        .addNamed("\"I like \" + %text:S + \". Do you like \" + %text:S + \"?\"", map)
-        ;
+    const block = CodeBlock.empty().addNamed(
+      '"I like " + %text:S + ". Do you like " + %text:S + "?"',
+      map
+    );
     expect(block.toString()).toEqual(
-        "\"I like \" + \"tacos\" + \". Do you like \" + \"tacos\" + \"?\"");
+      '"I like " + "tacos" + ". Do you like " + "tacos" + "?"'
+    );
   });
 
   it("namedAndNoArgFormat", () => {
     const map = { text: "tacos" };
-    const block = CodeBlock.empty()
-        .addNamed("%>\n%text:L for %%3.50", map);
+    const block = CodeBlock.empty().addNamed("%>\n%text:L for %%3.50", map);
     expect(block.toString()).toEqual("\n  tacos for %3.50");
   });
 
@@ -101,10 +109,13 @@ describe("CodeBlockTest", () => {
 
   it("multipleNamedArguments", () => {
     const map = { text: "tacos", pipe: "String" };
-    const block = CodeBlock.empty()
-        .addNamed("%pipe:L.println(\"Let's eat some %text:L\");", map);
+    const block = CodeBlock.empty().addNamed(
+      '%pipe:L.println("Let\'s eat some %text:L");',
+      map
+    );
     expect(block.toString()).toEqual(
-        "String.println(\"Let's eat some tacos\");");
+      'String.println("Let\'s eat some tacos");'
+    );
   });
 
   it("namedNewline", () => {
@@ -169,9 +180,8 @@ describe("CodeBlockTest", () => {
   });
 
   it("sameIndexCanBeUsedWithDifferentFormats", () => {
-    const block = CodeBlock.empty()
-        .add("%1T.println(%1S)", TypeNames.MAP);
-    expect(block.toString()).toEqual("Map.println(\"Map\")");
+    const block = CodeBlock.empty().add("%1T.println(%1S)", TypeNames.MAP);
+    expect(block.toString()).toEqual('Map.println("Map")');
   });
 
   it("tooManyStatementEnters", () => {
@@ -196,14 +206,14 @@ describe("CodeBlockTest", () => {
     codeBlocks.push(CodeBlock.of("%T", TypeNames.ANY));
     codeBlocks.push(CodeBlock.of("need tacos"));
     const joined = CodeBlock.joinToCode(codeBlocks, " || ");
-    expect(joined.toString()).toEqual("\"hello\" || any || need tacos");
+    expect(joined.toString()).toEqual('"hello" || any || need tacos');
   });
 
   it("joiningSingle", () => {
     const codeBlocks: CodeBlock[] = [];
     codeBlocks.push(CodeBlock.of("%S", "hello"));
     const joined = CodeBlock.joinToCode(codeBlocks, " || ");
-    expect(joined.toString()).toEqual("\"hello\"");
+    expect(joined.toString()).toEqual('"hello"');
   });
 
   it("joiningWithPrefixAndSuffix", () => {
@@ -212,7 +222,27 @@ describe("CodeBlockTest", () => {
     codeBlocks.push(CodeBlock.of("%T", TypeNames.MAP));
     codeBlocks.push(CodeBlock.of("need tacos"));
     const joined = CodeBlock.joinToCode(codeBlocks, " || ", "start {", "} end");
-    expect(joined.toString()).toEqual("start {\"hello\" || Map || need tacos} end");
+    expect(joined.toString()).toEqual(
+      'start {"hello" || Map || need tacos} end'
+    );
+  });
+
+  it("nextControlFlow", () => {
+    expect(
+      CodeBlock.empty()
+        .beginControlFlow("if (true)")
+        .addStatement("logTrue()")
+        .nextControlFlow("else")
+        .addStatement("logFalse()")
+        .endControlFlow()
+        .toString()
+    ).toMatchInlineSnapshot(`
+"if (true) {
+  logTrue();
+} else {
+  logFalse();
+}
+"
+`);
   });
 });
-

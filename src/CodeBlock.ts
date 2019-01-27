@@ -107,7 +107,7 @@ export class CodeBlock extends Imm<CodeBlock> {
    *     Shouldn't contain braces or newline characters.
    */
   public nextControlFlow(controlFlow: string, ...args: any[]): this {
-    return this.unindent().add(`}\n$controlFlow {\n`, ...args).indent();
+    return this.unindent().add(`} ${controlFlow} {\n`, ...args).indent();
   }
 
   public endControlFlow(): this {
