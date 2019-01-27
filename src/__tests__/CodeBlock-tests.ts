@@ -248,12 +248,14 @@ describe('CodeBlockTest', () => {
         .beginHash()
         .addHashEntry('a', 'foo')
         .addHashEntry('b', CodeBlock.of('1 + 2'))
+        .addHashEntry('c', null)
         .endHash()
         .toString()
     ).toMatchInlineSnapshot(`
 "{
   a: foo,
   b: 1 + 2,
+  c: null,
 }
 "
 `);

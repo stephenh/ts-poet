@@ -130,14 +130,14 @@ export class CodeBlock extends Imm<CodeBlock> {
       .newLine();
   }
 
-  public addHashEntry(key: string, value: string | CodeBlock): this {
-    if (typeof value === 'string') {
-      return this.add('%L: %L,', key, value).newLine();
-    } else {
+  public addHashEntry(key: string, value: CodeBlock | any): this {
+    if (value instanceof CodeBlock) {
       return this.add('%L: ', key)
         .addCode(value)
         .add(',')
         .newLine();
+    } else {
+      return this.add('%L: %L,', key, value).newLine();
     }
   }
 

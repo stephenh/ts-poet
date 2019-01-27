@@ -51,7 +51,7 @@ export class PropertySpec extends Imm<PropertySpec> {
     codeWriter.emitCode(`%L${this.optional ? '?' : ''}: %T`, this.name, this.type);
     if (withInitializer && this.initializerField) {
       codeWriter.emit(' = ');
-      codeWriter.emitCode('%L', this.initializerField);
+      codeWriter.emitCodeBlock(this.initializerField);
     }
     if (asStatement) {
       codeWriter.emit(';\n');
