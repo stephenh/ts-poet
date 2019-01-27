@@ -1,4 +1,3 @@
-
 export { ClassSpec } from './ClassSpec';
 export { CodeBlock } from './CodeBlock';
 export { DecoratorSpec } from './DecoratorSpec';

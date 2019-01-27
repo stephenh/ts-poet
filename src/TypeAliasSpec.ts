@@ -1,12 +1,11 @@
-import { imm, Imm } from "ts-imm";
-import { CodeBlock } from "./CodeBlock";
-import { CodeWriter } from "./CodeWriter";
-import { Modifier } from "./Modifier";
-import { TypeName, TypeVariable } from "./TypeNames";
+import { imm, Imm } from 'ts-imm';
+import { CodeBlock } from './CodeBlock';
+import { CodeWriter } from './CodeWriter';
+import { Modifier } from './Modifier';
+import { TypeName, TypeVariable } from './TypeNames';
 
 /** A generated typealias declaration */
 export class TypeAliasSpec extends Imm<TypeAliasSpec> {
-
   public static create(name: string, type: TypeName): TypeAliasSpec {
     return new TypeAliasSpec({
       name,
@@ -17,24 +16,29 @@ export class TypeAliasSpec extends Imm<TypeAliasSpec> {
     });
   }
 
-  @imm public readonly name!: string;
-  @imm public readonly type!: TypeName;
-  @imm public readonly javaDoc!: CodeBlock;
-  @imm public readonly modifiers!: Modifier[];
-  @imm public readonly typeVariables!: TypeVariable[];
+  @imm
+  public readonly name!: string;
+  @imm
+  public readonly type!: TypeName;
+  @imm
+  public readonly javaDoc!: CodeBlock;
+  @imm
+  public readonly modifiers!: Modifier[];
+  @imm
+  public readonly typeVariables!: TypeVariable[];
 
   public emit(codeWriter: CodeWriter) {
     codeWriter.emitJavaDoc(this.javaDoc);
     codeWriter.emitModifiers(this.modifiers);
-    codeWriter.emitCode("type %L", this.name);
+    codeWriter.emitCode('type %L', this.name);
     codeWriter.emitTypeVariables(this.typeVariables);
-    codeWriter.emitCode(" = %T", this.type);
-    codeWriter.emit(";\n");
+    codeWriter.emitCode(' = %T', this.type);
+    codeWriter.emit(';\n');
   }
 
   public addJavadoc(format: string, ...args: any[]): this {
     return this.copy({
-      javaDoc: this.javaDoc.add(format, ...args)
+      javaDoc: this.javaDoc.add(format, ...args),
     });
   }
 
@@ -76,4 +80,3 @@ export class TypeAliasSpec extends Imm<TypeAliasSpec> {
     return CodeWriter.emitToString(this);
   }
 }
-

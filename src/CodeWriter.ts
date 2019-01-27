@@ -1,23 +1,22 @@
-import _ from "lodash";
-import { ClassSpec } from "./ClassSpec";
-import { CodeBlock } from "./CodeBlock";
-import { DecoratorSpec } from "./DecoratorSpec";
-import { EnumSpec } from "./EnumSpec";
-import { InterfaceSpec } from "./InterfaceSpec";
-import { LineWrapper } from "./LineWrapper";
-import { Modifier, ModifierOrder } from "./Modifier";
-import { StringBuffer } from "./StringBuffer";
-import { SymbolReferenceTracker } from "./SymbolReferenceTracker";
-import { Augmented, Imported, ImportsAll, ImportsName, SideEffect, SymbolSpec } from "./SymbolSpecs";
-import { TypeName, TypeVariable } from "./TypeNames";
-import { check, filterInstances, stringLiteralWithQuotes, unique } from "./utils";
+import _ from 'lodash';
+import { ClassSpec } from './ClassSpec';
+import { CodeBlock } from './CodeBlock';
+import { DecoratorSpec } from './DecoratorSpec';
+import { EnumSpec } from './EnumSpec';
+import { InterfaceSpec } from './InterfaceSpec';
+import { LineWrapper } from './LineWrapper';
+import { Modifier, ModifierOrder } from './Modifier';
+import { StringBuffer } from './StringBuffer';
+import { SymbolReferenceTracker } from './SymbolReferenceTracker';
+import { Augmented, Imported, ImportsAll, ImportsName, SideEffect, SymbolSpec } from './SymbolSpecs';
+import { TypeName, TypeVariable } from './TypeNames';
+import { check, filterInstances, stringLiteralWithQuotes, unique } from './utils';
 
 /**
  * Converts a [FileSpec] to a string suitable to both human- and tsc-consumption. This honors
  * imports, indentation, and deferred variable names.
  */
 export class CodeWriter implements SymbolReferenceTracker {
-
   public static emitToString(emittable: { emit(cw: CodeWriter): void }): string {
     const out = new StringBuffer();
     emittable.emit(new CodeWriter(out));
@@ -37,10 +36,7 @@ export class CodeWriter implements SymbolReferenceTracker {
    */
   private statementLine = -1;
 
-  constructor(
-    out: StringBuffer,
-    private indentString: string = "  ",
-    referencedSymbols: Set<SymbolSpec> = new Set()) {
+  constructor(out: StringBuffer, private indentString: string = '  ', referencedSymbols: Set<SymbolSpec> = new Set()) {
     this.out = new LineWrapper(out, indentString, 100);
     referencedSymbols.forEach(sym => this.referencedSymbols.add(sym));
   }
@@ -65,7 +61,7 @@ export class CodeWriter implements SymbolReferenceTracker {
     this.comment = true;
     try {
       this.emitCodeBlock(codeBlock);
-      this.emit("\n");
+      this.emit('\n');
     } finally {
       this.comment = false;
     }
@@ -75,20 +71,20 @@ export class CodeWriter implements SymbolReferenceTracker {
     if (javaDocCodeBlock.isEmpty()) {
       return;
     }
-    this.emit("/**\n");
+    this.emit('/**\n');
     this.javaDoc = true;
     try {
       this.emitCodeBlock(javaDocCodeBlock);
     } finally {
       this.javaDoc = false;
     }
-    this.emit(" */\n");
+    this.emit(' */\n');
   }
 
   public emitDecorators(decorators: DecoratorSpec[], inline: boolean) {
     decorators.forEach(decoratorSpec => {
       decoratorSpec.emit(this, inline);
-      this.emit(inline ? " " : "\n");
+      this.emit(inline ? ' ' : '\n');
     });
   }
 
@@ -102,7 +98,7 @@ export class CodeWriter implements SymbolReferenceTracker {
     }
     ModifierOrder.forEach(m => {
       if (modifiers.includes(m) && !implicitModifiers.includes(m)) {
-        this.emit(m).emit(" ");
+        this.emit(m).emit(' ');
       }
     });
   }
@@ -116,16 +112,16 @@ export class CodeWriter implements SymbolReferenceTracker {
     if (typeVariables.length === 0) {
       return;
     }
-    this.emit("<");
+    this.emit('<');
     let index = 0;
     typeVariables.forEach(typeVariable => {
       if (index > 0) {
-        this.emit(", ");
+        this.emit(', ');
       }
       let code = typeVariable.name;
       if (typeVariable.bounds.length > 0) {
         const parts: string[] = [];
-        parts.push(" extends");
+        parts.push(' extends');
         let j = 0;
         typeVariable.bounds.forEach(bound => {
           if (j > 0) {
@@ -137,12 +133,12 @@ export class CodeWriter implements SymbolReferenceTracker {
           parts.push(bound.type.reference(this));
           j++;
         });
-        code += parts.join(" ");
+        code += parts.join(' ');
       }
       this.emit(code);
       index++;
     });
-    this.emit(">");
+    this.emit('>');
   }
 
   public emitImports(path?: string): this {
@@ -153,10 +149,12 @@ export class CodeWriter implements SymbolReferenceTracker {
     if (imports.length > 0) {
       const m = _.groupBy(
         imports.filter(it => !(it instanceof Augmented) || !(it instanceof SideEffect)),
-        it => it.source); // FileModules.importPath(this.path, it.source));
+        it => it.source
+      ); // FileModules.importPath(this.path, it.source));
       // .toSortedMap()
       Object.entries(m).forEach(([sourceImportPath, imps]) => {
-        if (path === sourceImportPath) { // || Paths.get(".").resolve(path) == sourceImportPath) {
+        if (path === sourceImportPath) {
+          // || Paths.get(".").resolve(path) == sourceImportPath) {
           return;
         }
         filterInstances(imps, ImportsAll).forEach(i => {
@@ -173,10 +171,9 @@ export class CodeWriter implements SymbolReferenceTracker {
         const names = unique(filterInstances(imps, ImportsName).map(it => it.value));
         if (names.length > 0) {
           // Output named imports as a group
-          this
-            .emitCode("import {")
+          this.emitCode('import {')
             .indent()
-            .emitCode(names.join(", "))
+            .emitCode(names.join(', '))
             .unindent()
             .emitCode("} from '%L';\n", sourceImportPath);
           // Output related augments
@@ -192,10 +189,10 @@ export class CodeWriter implements SymbolReferenceTracker {
       });
 
       Object.keys(sideEffectImports).forEach(it => {
-        this.emitCode("%[import %S;\n%]", it);
+        this.emitCode('%[import %S;\n%]', it);
       });
 
-      this.emit("\n");
+      this.emit('\n');
     }
     return this;
   }
@@ -218,18 +215,39 @@ export class CodeWriter implements SymbolReferenceTracker {
     let a = 0;
     codeBlock.formatParts.forEach(part => {
       switch (part) {
-        case "%L": this.emitLiteral(codeBlock.args[a++]); break;
-        case "%N": this.emit(codeBlock.args[a++] as string); break;
-        case "%S": this.emitString(codeBlock.args[a++] as string); break;
-        case "%T": this.emitTypeName(codeBlock.args[a++] as TypeName); break;
-        case "%%": this.emit("%"); break;
-        case "%>": this.indent(); break;
-        case "%<": this.unindent(); break;
-        case "%[": this.beginStatement(); break;
-        case "%]": this.endStatement(); break;
-        case "%W": this.emitWrappingSpace(); break;
+        case '%L':
+          this.emitLiteral(codeBlock.args[a++]);
+          break;
+        case '%N':
+          this.emit(codeBlock.args[a++] as string);
+          break;
+        case '%S':
+          this.emitString(codeBlock.args[a++] as string);
+          break;
+        case '%T':
+          this.emitTypeName(codeBlock.args[a++] as TypeName);
+          break;
+        case '%%':
+          this.emit('%');
+          break;
+        case '%>':
+          this.indent();
+          break;
+        case '%<':
+          this.unindent();
+          break;
+        case '%[':
+          this.beginStatement();
+          break;
+        case '%]':
+          this.endStatement();
+          break;
+        case '%W':
+          this.emitWrappingSpace();
+          break;
         // Handle deferred type.
-        default: this.emit(part);
+        default:
+          this.emit(part);
       }
     });
     return this;
@@ -246,9 +264,9 @@ export class CodeWriter implements SymbolReferenceTracker {
       if (!first) {
         if ((this.javaDoc || this.comment) && this.trailingNewline) {
           this.emitIndentation();
-          this.out.append(this.javaDoc ? " *" : "//");
+          this.out.append(this.javaDoc ? ' *' : '//');
         }
-        this.out.append("\n");
+        this.out.append('\n');
         this.trailingNewline = true;
         if (this.statementLine !== -1) {
           if (this.statementLine === 0) {
@@ -267,9 +285,9 @@ export class CodeWriter implements SymbolReferenceTracker {
       if (this.trailingNewline) {
         this.emitIndentation();
         if (this.javaDoc) {
-          this.out.append(" * ")
+          this.out.append(' * ');
         } else if (this.comment) {
-          this.out.append("// ");
+          this.out.append('// ');
         }
       }
 
@@ -281,7 +299,7 @@ export class CodeWriter implements SymbolReferenceTracker {
   }
 
   public newLine(): this {
-    return this.emit("\n");
+    return this.emit('\n');
   }
 
   /**
@@ -305,12 +323,12 @@ export class CodeWriter implements SymbolReferenceTracker {
   }
 
   private beginStatement(): void {
-    check(this.statementLine === -1, "statement enter %[ followed by statement enter %[");
+    check(this.statementLine === -1, 'statement enter %[ followed by statement enter %[');
     this.statementLine = 0;
   }
 
   private endStatement(): void {
-    check(this.statementLine !== -1, "statement exit %] has no matching statement enter %[");
+    check(this.statementLine !== -1, 'statement exit %] has no matching statement enter %[');
     if (this.statementLine > 0) {
       this.unindent(2); // End a multi-line statement. Decrease the indentation level.
     }
@@ -328,7 +346,7 @@ export class CodeWriter implements SymbolReferenceTracker {
 
   private emitString(s?: string): void {
     // Emit null as a literal null: no quotes.
-    this.emit(s ? stringLiteralWithQuotes(s) : "null");
+    this.emit(s ? stringLiteralWithQuotes(s) : 'null');
   }
 
   private emitLiteral(o?: any): void {

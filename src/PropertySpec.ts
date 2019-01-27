@@ -1,20 +1,18 @@
-import { imm, Imm } from "ts-imm";
-import { CodeBlock } from "./CodeBlock";
-import { CodeWriter } from "./CodeWriter";
-import { DecoratorSpec } from "./DecoratorSpec";
-import { Modifier } from "./Modifier";
-import { TypeName } from "./TypeNames";
-
+import { imm, Imm } from 'ts-imm';
+import { CodeBlock } from './CodeBlock';
+import { CodeWriter } from './CodeWriter';
+import { DecoratorSpec } from './DecoratorSpec';
+import { Modifier } from './Modifier';
+import { TypeName } from './TypeNames';
 
 /** A generated property declaration. */
 export class PropertySpec extends Imm<PropertySpec> {
-
   public static create(
     name: string,
     type: TypeName,
     optional: boolean = false,
-    ...modifiers: Modifier[]): PropertySpec
-  {
+    ...modifiers: Modifier[]
+  ): PropertySpec {
     return new PropertySpec({
       name,
       type,
@@ -26,30 +24,37 @@ export class PropertySpec extends Imm<PropertySpec> {
     });
   }
 
-  @imm public readonly name!: string;
-  @imm public readonly type!: TypeName;
-  @imm public readonly javaDoc!: CodeBlock;
-  @imm public readonly decorators!: DecoratorSpec[];
-  @imm public readonly modifiers!: Modifier[];
-  @imm public readonly initializerField?: CodeBlock;
-  @imm public readonly optional!: boolean;
+  @imm
+  public readonly name!: string;
+  @imm
+  public readonly type!: TypeName;
+  @imm
+  public readonly javaDoc!: CodeBlock;
+  @imm
+  public readonly decorators!: DecoratorSpec[];
+  @imm
+  public readonly modifiers!: Modifier[];
+  @imm
+  public readonly initializerField?: CodeBlock;
+  @imm
+  public readonly optional!: boolean;
 
   public emit(
     codeWriter: CodeWriter,
     implicitModifiers: Modifier[] = [],
     asStatement: boolean = false,
-    withInitializer: boolean = true,
+    withInitializer: boolean = true
   ) {
     codeWriter.emitJavaDoc(this.javaDoc);
     codeWriter.emitDecorators(this.decorators, false);
     codeWriter.emitModifiers(this.modifiers, implicitModifiers);
-    codeWriter.emitCode(`%L${this.optional ? "?" : ""}: %T`, this.name, this.type);
+    codeWriter.emitCode(`%L${this.optional ? '?' : ''}: %T`, this.name, this.type);
     if (withInitializer && this.initializerField) {
-      codeWriter.emit(" = ");
-      codeWriter.emitCode("%L", this.initializerField);
+      codeWriter.emit(' = ');
+      codeWriter.emitCode('%L', this.initializerField);
     }
     if (asStatement) {
-      codeWriter.emit(";\n");
+      codeWriter.emit(';\n');
     }
   }
 
@@ -97,4 +102,3 @@ export class PropertySpec extends Imm<PropertySpec> {
     return CodeWriter.emitToString(this);
   }
 }
-

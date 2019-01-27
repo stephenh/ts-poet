@@ -1,12 +1,10 @@
 import { imm, Imm } from 'ts-imm';
-import { CodeBlock } from "./CodeBlock";
-import { CodeWriter } from "./CodeWriter";
-import { Modifier } from "./Modifier";
-import { check } from "./utils";
-
+import { CodeBlock } from './CodeBlock';
+import { CodeWriter } from './CodeWriter';
+import { Modifier } from './Modifier';
+import { check } from './utils';
 
 export class EnumSpec extends Imm<EnumSpec> {
-
   public static create(name: string): EnumSpec {
     return new EnumSpec({
       name,
@@ -16,42 +14,46 @@ export class EnumSpec extends Imm<EnumSpec> {
     });
   }
 
-  @imm public readonly name!: string;
-  @imm public readonly javaDoc!: CodeBlock;
-  @imm public readonly modifiers!: Modifier[];
-  @imm public readonly constants!: Map<string, CodeBlock | undefined>;
+  @imm
+  public readonly name!: string;
+  @imm
+  public readonly javaDoc!: CodeBlock;
+  @imm
+  public readonly modifiers!: Modifier[];
+  @imm
+  public readonly constants!: Map<string, CodeBlock | undefined>;
 
   public emit(codeWriter: CodeWriter) {
     codeWriter.emitJavaDoc(this.javaDoc);
     codeWriter.emitModifiers(this.modifiers);
-    codeWriter.emitCode("enum %L {\n", this.name);
+    codeWriter.emitCode('enum %L {\n', this.name);
     codeWriter.indent();
     let left = this.constants.size;
     this.constants.forEach((value, key) => {
-      codeWriter.emitCode("%L", key);
+      codeWriter.emitCode('%L', key);
       if (value) {
-        codeWriter.emitCode(" = ")
+        codeWriter.emitCode(' = ');
         codeWriter.emitCodeBlock(value);
       }
       if (left-- > 0) {
-        codeWriter.emit(",\n");
+        codeWriter.emit(',\n');
       } else {
-        codeWriter.emit("\n");
+        codeWriter.emit('\n');
       }
     });
     codeWriter.unindent();
-    codeWriter.emit("}\n");
+    codeWriter.emit('}\n');
   }
 
   public addJavadoc(format: string, ...args: any[]): this {
     return this.copy({
       javaDoc: this.javaDoc.add(format, ...args),
-    })
+    });
   }
 
   public addJavadocBlock(block: CodeBlock): this {
     return this.copy({
-      javaDoc: this.javaDoc.addCode(block)
+      javaDoc: this.javaDoc.addCode(block),
     });
   }
 
@@ -75,4 +77,3 @@ export class EnumSpec extends Imm<EnumSpec> {
     return this.constants.size === 0;
   }
 }
-

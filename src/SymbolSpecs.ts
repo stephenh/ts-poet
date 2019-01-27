@@ -1,10 +1,10 @@
 import _ from 'lodash';
-import {SymbolReferenceTracker} from "./SymbolReferenceTracker";
+import { SymbolReferenceTracker } from './SymbolReferenceTracker';
 
-const fileNamePattern = '(?:[a-zA-Z0-9._\-]+)'
-const modulePattern = `@?(?:(?:!${fileNamePattern})|(?:${fileNamePattern}(?:/${fileNamePattern})*))`
-const identPattern = `(?:(?:[a-zA-Z][_a-zA-Z0-9.]*)|(?:[_a-zA-Z][_a-zA-Z0-9.]+))`
-const importPattern = `^(${identPattern})?([*@+])(${modulePattern})(?:#(${identPattern}))?`
+const fileNamePattern = '(?:[a-zA-Z0-9._-]+)';
+const modulePattern = `@?(?:(?:!${fileNamePattern})|(?:${fileNamePattern}(?:/${fileNamePattern})*))`;
+const identPattern = `(?:(?:[a-zA-Z][_a-zA-Z0-9.]*)|(?:[_a-zA-Z][_a-zA-Z0-9.]+))`;
+const importPattern = `^(${identPattern})?([*@+])(${modulePattern})(?:#(${identPattern}))?`;
 
 /**
  * Specifies a symbol and its related origin, either via import or implicit/local declaration.
@@ -12,7 +12,6 @@ const importPattern = `^(${identPattern})?([*@+])(${modulePattern})(?:#(${identP
  * @param value Value of the symbol
  */
 export class SymbolSpec {
-
   /**
    * Parses a symbol reference pattern to create a symbol. The pattern
    * allows the simple definition of all symbol types including any possible
@@ -53,17 +52,23 @@ export class SymbolSpec {
    * @return Parsed symbol specification
    */
   public static from(spec: string): SymbolSpec {
-    const matched = spec.match(importPattern)
+    const matched = spec.match(importPattern);
     if (matched != null) {
       const modulePath = matched[3];
-      const type = matched[2] || "@";
-      const symbolName = matched[1] || (_.last(modulePath.split('/')) || "").replace("!", "");
-      const targetName = matched[4]
-      switch(type) {
-        case "*": return SymbolSpecs.importsAll(symbolName, modulePath);
-        case "@": return SymbolSpecs.importsName(symbolName, modulePath);
-        case "+": return targetName ? SymbolSpecs.augmented(symbolName, modulePath, targetName) : SymbolSpecs.sideEffect(symbolName, modulePath)
-        default: throw new Error("Invalid type character");
+      const type = matched[2] || '@';
+      const symbolName = matched[1] || (_.last(modulePath.split('/')) || '').replace('!', '');
+      const targetName = matched[4];
+      switch (type) {
+        case '*':
+          return SymbolSpecs.importsAll(symbolName, modulePath);
+        case '@':
+          return SymbolSpecs.importsName(symbolName, modulePath);
+        case '+':
+          return targetName
+            ? SymbolSpecs.augmented(symbolName, modulePath, targetName)
+            : SymbolSpecs.sideEffect(symbolName, modulePath);
+        default:
+          throw new Error('Invalid type character');
       }
     }
     return SymbolSpecs.implicit(spec);
@@ -73,8 +78,7 @@ export class SymbolSpec {
     return typeof spec === 'string' ? SymbolSpec.from(spec) : spec;
   }
 
-  protected constructor(public value: string) {
-  }
+  protected constructor(public value: string) {}
 
   public reference(trackedBy?: SymbolReferenceTracker): string {
     if (trackedBy) {
@@ -147,7 +151,6 @@ export class SymbolSpecs {
     return new Implicit(name);
   }
 }
-
 
 /**
  * Non-imported symbol

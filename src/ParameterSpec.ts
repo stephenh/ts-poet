@@ -1,14 +1,18 @@
-import { imm, Imm } from "ts-imm";
-import { CodeBlock } from "./CodeBlock";
-import { CodeWriter } from "./CodeWriter";
-import { DecoratorSpec } from "./DecoratorSpec";
-import { Modifier } from "./Modifier";
-import { SymbolSpec } from "./SymbolSpecs";
-import { TypeName } from "./TypeNames";
+import { imm, Imm } from 'ts-imm';
+import { CodeBlock } from './CodeBlock';
+import { CodeWriter } from './CodeWriter';
+import { DecoratorSpec } from './DecoratorSpec';
+import { Modifier } from './Modifier';
+import { SymbolSpec } from './SymbolSpecs';
+import { TypeName } from './TypeNames';
 
 export class ParameterSpec extends Imm<ParameterSpec> {
-
-  public static create(name: string, type: TypeName, optional: boolean = false, ...modifiers: Modifier[]): ParameterSpec {
+  public static create(
+    name: string,
+    type: TypeName,
+    optional: boolean = false,
+    ...modifiers: Modifier[]
+  ): ParameterSpec {
     // require(name.isName) { "not a valid name: $name" }
     return new ParameterSpec({
       name,
@@ -25,67 +29,71 @@ export class ParameterSpec extends Imm<ParameterSpec> {
     codeWriter: CodeWriter,
     enclosed: boolean,
     rest: ParameterSpec | undefined,
-    emitFn: ((p: ParameterSpec, rest: boolean) => void) | undefined): void {
-      const emitFn2 = emitFn || ((p, r) => p.emit(codeWriter, true, r));
-      const params = parameters.concat(rest !== undefined ? [rest] : []);
-      if (enclosed) {
-        codeWriter.emit("(");
-      }
-      if (params.length <= 5) {
-        let index = 0;
-        params.forEach(parameter => {
-          if (index > 0) {
-            codeWriter.emit(", ");
-          }
-          emitFn2(parameter, rest === parameter);
-          index++;
-        });
-      } else {
-        codeWriter.emit("\n").indent(2);
-        let index = 0;
-        params.forEach(parameter => {
-          if (index > 0) {
-            codeWriter.emit(",\n");
-          }
-          emitFn2(parameter, rest === parameter);
-          index++;
-        });
-        codeWriter.unindent(2).emit("\n");
-      }
-      if (enclosed) {
-        codeWriter.emit(")");
-      }
+    emitFn: ((p: ParameterSpec, rest: boolean) => void) | undefined
+  ): void {
+    const emitFn2 = emitFn || ((p, r) => p.emit(codeWriter, true, r));
+    const params = parameters.concat(rest !== undefined ? [rest] : []);
+    if (enclosed) {
+      codeWriter.emit('(');
     }
+    if (params.length <= 5) {
+      let index = 0;
+      params.forEach(parameter => {
+        if (index > 0) {
+          codeWriter.emit(', ');
+        }
+        emitFn2(parameter, rest === parameter);
+        index++;
+      });
+    } else {
+      codeWriter.emit('\n').indent(2);
+      let index = 0;
+      params.forEach(parameter => {
+        if (index > 0) {
+          codeWriter.emit(',\n');
+        }
+        emitFn2(parameter, rest === parameter);
+        index++;
+      });
+      codeWriter.unindent(2).emit('\n');
+    }
+    if (enclosed) {
+      codeWriter.emit(')');
+    }
+  }
 
-  @imm public readonly name!: string;
-  @imm public readonly type!: TypeName;
-  @imm public readonly optional!: boolean;
-  @imm public readonly decorators!: DecoratorSpec[];
-  @imm public readonly modifiers!: Modifier[];
-  @imm public readonly defaultValueField!: CodeBlock | undefined;
+  @imm
+  public readonly name!: string;
+  @imm
+  public readonly type!: TypeName;
+  @imm
+  public readonly optional!: boolean;
+  @imm
+  public readonly decorators!: DecoratorSpec[];
+  @imm
+  public readonly modifiers!: Modifier[];
+  @imm
+  public readonly defaultValueField!: CodeBlock | undefined;
 
-  public emit(
-    codeWriter: CodeWriter,
-    includeType: boolean = true,
-    isRest: boolean = false) {
+  public emit(codeWriter: CodeWriter, includeType: boolean = true, isRest: boolean = false) {
     codeWriter.emitDecorators(this.decorators, true);
     codeWriter.emitModifiers(this.modifiers);
     if (isRest) {
-      codeWriter.emitCode("...");
+      codeWriter.emitCode('...');
     }
-    codeWriter.emitCode("%L", this.name);
+    codeWriter.emitCode('%L', this.name);
     if (this.optional) {
-      codeWriter.emitCode("?");
+      codeWriter.emitCode('?');
     }
-    if (includeType) {;
-      codeWriter.emitCode(": %T", this.type);
+    if (includeType) {
+      codeWriter.emitCode(': %T', this.type);
     }
     this.emitDefaultValue(codeWriter);
   }
 
   public emitDefaultValue(codeWriter: CodeWriter) {
     if (this.defaultValueField) {
-      codeWriter.emitCode(" = %[%L%]", this.defaultValueField);
+      codeWriter.emitCode(' = %[%L%]', this.defaultValueField);
     }
   }
 
@@ -109,7 +117,7 @@ export class ParameterSpec extends Imm<ParameterSpec> {
   }
 
   public defaultValue(format: string, ...args: any[]): this {
-     return this.defaultValueBlock(CodeBlock.of(format, ...args));
+    return this.defaultValueBlock(CodeBlock.of(format, ...args));
   }
 
   public defaultValueBlock(codeBlock?: CodeBlock): this {
@@ -123,4 +131,3 @@ export class ParameterSpec extends Imm<ParameterSpec> {
     return CodeWriter.emitToString(this);
   }
 }
-

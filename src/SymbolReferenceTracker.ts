@@ -1,4 +1,4 @@
-import {SymbolSpec} from "./SymbolSpecs";
+import { SymbolSpec } from './SymbolSpecs';
 
 /**
  * Provides a hook for the CodeWriter to tell {@code FileSpec} all
@@ -7,6 +7,5 @@ import {SymbolSpec} from "./SymbolSpecs";
  * This lets FileSpec go back and make imports for all of the types in the file.
  */
 export interface SymbolReferenceTracker {
-  referenced(symbol: SymbolSpec): void
+  referenced(symbol: SymbolSpec): void;
 }
-

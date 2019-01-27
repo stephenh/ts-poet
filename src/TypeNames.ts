@@ -1,5 +1,5 @@
-import { SymbolReferenceTracker } from "./SymbolReferenceTracker";
-import { SymbolSpec } from "./SymbolSpecs";
+import { SymbolReferenceTracker } from './SymbolReferenceTracker';
+import { SymbolSpec } from './SymbolSpecs';
 
 /**
  * Name of any possible type that can be referenced.
@@ -40,24 +40,21 @@ export class Parameterized extends TypeName {
   public reference(trackedBy?: SymbolReferenceTracker): string {
     const name = this.name.reference(trackedBy);
     const typeArgs = this.typeArgs.map(it => it.reference(trackedBy));
-    return `${name}<${typeArgs.join(", ")}>`;
+    return `${name}<${typeArgs.join(', ')}>`;
   }
 }
 
 export enum Combiner {
-  UNION = "|", INTERSECT = "&"
+  UNION = '|',
+  INTERSECT = '&',
 }
 
 export enum BoundModifier {
-  KEY_OF = "keyof"
+  KEY_OF = 'keyof',
 }
 
 export class Bound {
-  constructor(
-    public type: TypeName,
-    public combiner: Combiner = Combiner.UNION,
-    public modifier?: BoundModifier) {
-  }
+  constructor(public type: TypeName, public combiner: Combiner = Combiner.UNION, public modifier?: BoundModifier) {}
 }
 
 export class TypeVariable extends TypeName {
@@ -71,8 +68,7 @@ export class TypeVariable extends TypeName {
 }
 
 export class Member {
-  constructor(public name: string, public type: TypeName, public optional: boolean) {
-  }
+  constructor(public name: string, public type: TypeName, public optional: boolean) {}
 }
 
 export class Anonymous extends TypeName {
@@ -81,12 +77,14 @@ export class Anonymous extends TypeName {
   }
 
   public reference(trackedBy?: SymbolReferenceTracker): string {
-    const entries = this.members.map(it => {
-      const name = it.name;
-      const opt = (it.optional) ? "?" : "";
-      const type = it.type.reference(trackedBy);
-      return `${name}${opt}: ${type}`;
-    }).join(", ");
+    const entries = this.members
+      .map(it => {
+        const name = it.name;
+        const opt = it.optional ? '?' : '';
+        const type = it.type.reference(trackedBy);
+        return `${name}${opt}: ${type}`;
+      })
+      .join(', ');
     return `{ ${entries} }`;
   }
 }
@@ -100,7 +98,7 @@ export class Tuple extends TypeName {
     const typeRequirements = this.memberTypes.map(it => {
       it.reference(trackedBy);
     });
-    return `[${typeRequirements.join(", ")}]`;
+    return `[${typeRequirements.join(', ')}]`;
   }
 }
 
@@ -110,7 +108,7 @@ export class Intersection extends TypeName {
   }
 
   public reference(trackedBy?: SymbolReferenceTracker): string {
-    return this.typeRequirements.map(it => it.reference(trackedBy)).join(" & ");
+    return this.typeRequirements.map(it => it.reference(trackedBy)).join(' & ');
   }
 }
 
@@ -120,14 +118,12 @@ export class Union extends TypeName {
   }
 
   public reference(trackedBy?: SymbolReferenceTracker): string {
-    return this.typeChoices.map(it => it.reference(trackedBy)).join(" | ");
+    return this.typeChoices.map(it => it.reference(trackedBy)).join(' | ');
   }
 }
 
 export class Lambda extends TypeName {
-  constructor(
-    public parameters: Map<string, TypeName> = new Map(),
-    public returnType: TypeName = TypeNames.VOID) {
+  constructor(public parameters: Map<string, TypeName> = new Map(), public returnType: TypeName = TypeNames.VOID) {
     super();
   }
 
@@ -135,27 +131,27 @@ export class Lambda extends TypeName {
     const params: string[] = [];
     this.parameters.forEach((value, key) => {
       params.push(`${key}: ${value.reference(trackedBy)}`);
-    })
-    return `(${params.join(", ")}) => ${this.returnType.reference(trackedBy)}`;
+    });
+    return `(${params.join(', ')}) => ${this.returnType.reference(trackedBy)}`;
   }
 }
 
 export class TypeNames {
-  public static readonly NULL = TypeNames.anyType("null");
-  public static readonly UNDEFINED = TypeNames.anyType("undefined");
-  public static readonly NEVER = TypeNames.anyType("never");
-  public static readonly VOID = TypeNames.anyType("void");
-  public static readonly ANY = TypeNames.anyType("any");
-  public static readonly BOOLEAN = TypeNames.anyType("boolean");
-  public static readonly NUMBER = TypeNames.anyType("number");
-  public static readonly STRING = TypeNames.anyType("string");
-  public static readonly OBJECT = TypeNames.anyType("Object");
-  public static readonly DATE = TypeNames.anyType("Date");
-  public static readonly ARRAY = TypeNames.anyType("Array");
-  public static readonly SET = TypeNames.anyType("Set");
-  public static readonly MAP = TypeNames.anyType("Map");
-  public static readonly BUFFER = TypeNames.anyType("Buffer");
-  public static readonly ARRAY_BUFFER = TypeNames.anyType("ArrayBuffer");
+  public static readonly NULL = TypeNames.anyType('null');
+  public static readonly UNDEFINED = TypeNames.anyType('undefined');
+  public static readonly NEVER = TypeNames.anyType('never');
+  public static readonly VOID = TypeNames.anyType('void');
+  public static readonly ANY = TypeNames.anyType('any');
+  public static readonly BOOLEAN = TypeNames.anyType('boolean');
+  public static readonly NUMBER = TypeNames.anyType('number');
+  public static readonly STRING = TypeNames.anyType('string');
+  public static readonly OBJECT = TypeNames.anyType('Object');
+  public static readonly DATE = TypeNames.anyType('Date');
+  public static readonly ARRAY = TypeNames.anyType('Array');
+  public static readonly SET = TypeNames.anyType('Set');
+  public static readonly MAP = TypeNames.anyType('Map');
+  public static readonly BUFFER = TypeNames.anyType('Buffer');
+  public static readonly ARRAY_BUFFER = TypeNames.anyType('ArrayBuffer');
 
   /**
    * An imported type name
@@ -178,8 +174,7 @@ export class TypeNames {
       if (match && match.index !== undefined) {
         const idx = match.index;
         const usage = name.substring(0, idx);
-        imported = SymbolSpec.from(
-          `${usage.split('.')[0]}${name.substring(idx)}`);
+        imported = SymbolSpec.from(`${usage.split('.')[0]}${name.substring(idx)}`);
         return new Any(usage.length === 0 ? imported.value : usage, imported);
       }
     }
@@ -248,10 +243,7 @@ export class TypeNames {
   /**
    * Factory for type variable bounds
    */
-  public static bound(
-    type: TypeName | string,
-    combiner: Combiner = Combiner.UNION,
-    modifier?: BoundModifier): Bound {
+  public static bound(type: TypeName | string, combiner: Combiner = Combiner.UNION, modifier?: BoundModifier): Bound {
     return new Bound(TypeNames.anyTypeMaybeString(type), combiner, modifier);
   }
 
@@ -262,7 +254,8 @@ export class TypeNames {
     return TypeNames.bound(
       TypeNames.anyTypeMaybeString(type),
       Combiner.UNION,
-      keyOf ? BoundModifier.KEY_OF : undefined);
+      keyOf ? BoundModifier.KEY_OF : undefined
+    );
   }
 
   /**
@@ -272,7 +265,8 @@ export class TypeNames {
     return TypeNames.bound(
       TypeNames.anyTypeMaybeString(type),
       Combiner.INTERSECT,
-      keyOf ? BoundModifier.KEY_OF : undefined);
+      keyOf ? BoundModifier.KEY_OF : undefined
+    );
   }
 
   /**
@@ -282,9 +276,11 @@ export class TypeNames {
    * @return Type name representing the anonymous type
    */
   public static anonymousType(...members: Array<Member | [string, TypeName]>): Anonymous {
-    return new Anonymous(members.map(it => {
-      return (it instanceof Member) ? it : new Member(it[0], it[1], false);
-    }));
+    return new Anonymous(
+      members.map(it => {
+        return it instanceof Member ? it : new Member(it[0], it[1], false);
+      })
+    );
   }
 
   /**
@@ -327,6 +323,3 @@ export class TypeNames {
     return new Lambda(new Map(parameters), returnType);
   }
 }
-
-
-

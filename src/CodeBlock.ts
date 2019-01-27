@@ -59,7 +59,7 @@ export class CodeBlock extends Imm<CodeBlock> {
     return new CodeBlock({
       formatParts: [],
       args: [],
-      referencedSymbols: new Set()
+      referencedSymbols: new Set(),
     });
   }
 
@@ -86,13 +86,13 @@ export class CodeBlock extends Imm<CodeBlock> {
 
   public indent(): this {
     return this.copy({
-      formatParts: [...this.formatParts, '%>']
+      formatParts: [...this.formatParts, '%>'],
     });
   }
 
   public unindent(): this {
     return this.copy({
-      formatParts: [...this.formatParts, '%<']
+      formatParts: [...this.formatParts, '%<'],
     });
   }
 
@@ -155,7 +155,7 @@ export class CodeBlock extends Imm<CodeBlock> {
     return this.copy({
       formatParts: [...this.formatParts, ...codeBlock.formatParts],
       args: [...this.args, ...codeBlock.args],
-      referencedSymbols: new Set([...this.referencedSymbols, ...codeBlock.referencedSymbols])
+      referencedSymbols: new Set([...this.referencedSymbols, ...codeBlock.referencedSymbols]),
     });
     return this;
   }
@@ -263,7 +263,7 @@ export class CodeBlock extends Imm<CodeBlock> {
     return this.copy({
       formatParts: [...this.formatParts, ...newFormatParts],
       args: [...this.args, ...newArgs],
-      referencedSymbols: new Set([...this.referencedSymbols, ...newSymbols])
+      referencedSymbols: new Set([...this.referencedSymbols, ...newSymbols]),
     });
   }
 
@@ -328,7 +328,7 @@ export class CodeBlock extends Imm<CodeBlock> {
     return this.copy({
       formatParts: [...this.formatParts, ...newFormatParts],
       args: [...this.args, ...newArgs],
-      referencedSymbols: new Set([...this.referencedSymbols, ...newSymbols])
+      referencedSymbols: new Set([...this.referencedSymbols, ...newSymbols]),
     });
   }
 
@@ -416,7 +416,7 @@ export class CodeBlock extends Imm<CodeBlock> {
 
     return this.copy({
       formatParts: resultFormatParts,
-      args: resultArgs
+      args: resultArgs,
     });
   }
 
@@ -441,7 +441,7 @@ export class CodeBlock extends Imm<CodeBlock> {
       return this.copy({
         args: this.args,
         formatParts: this.formatParts.slice(start, end),
-        referencedSymbols: this.referencedSymbols
+        referencedSymbols: this.referencedSymbols,
       });
     } else {
       return this;

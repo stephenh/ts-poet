@@ -1,4 +1,3 @@
-
 import { StringBuffer } from './StringBuffer';
 
 /**
@@ -6,7 +5,6 @@ import { StringBuffer } from './StringBuffer';
  * [LineWrapper.append] or soft-wrapping spaces using [LineWrapper.wrappingSpace].
  */
 export class LineWrapper {
-
   private readonly out: StringBuffer;
   private readonly indent: string;
   private readonly columnLimit: number;
@@ -27,7 +25,9 @@ export class LineWrapper {
 
   /** Emit `s`. This may be buffered to permit line wraps to be inserted.  */
   public append(s: string): void {
-    if (this.closed) { throw new Error("closed"); }
+    if (this.closed) {
+      throw new Error('closed');
+    }
 
     if (this.nextFlush) {
       const nextNewline = s.indexOf('\n');
@@ -47,13 +47,17 @@ export class LineWrapper {
 
     this.out.append(s);
     const lastNewline = s.lastIndexOf('\n');
-    this.column = (lastNewline !== -1) ? s.length - lastNewline - 1 : this.column + s.length;
+    this.column = lastNewline !== -1 ? s.length - lastNewline - 1 : this.column + s.length;
   }
 
   /** Emit either a space or a newline character.  */
   public wrappingSpace(indentLevel: number): void {
-    if (this.closed) { throw new Error("closed"); }
-    if (this.nextFlush) { this.flush(this.nextFlush); }
+    if (this.closed) {
+      throw new Error('closed');
+    }
+    if (this.nextFlush) {
+      this.flush(this.nextFlush);
+    }
     this.column++;
     this.nextFlush = FlushType.SPACE;
     this.indentLevel = indentLevel;
@@ -61,9 +65,15 @@ export class LineWrapper {
 
   /** Emit a newline character if the line will exceed it's limit, otherwise do nothing. */
   public zeroWidthSpace(indentLevel: number): void {
-    if (this.closed) { throw new Error("closed"); }
-    if (this.column === 0) { return; }
-    if (this.nextFlush) { this.flush(this.nextFlush); }
+    if (this.closed) {
+      throw new Error('closed');
+    }
+    if (this.column === 0) {
+      return;
+    }
+    if (this.nextFlush) {
+      this.flush(this.nextFlush);
+    }
     this.nextFlush = FlushType.EMPTY;
     this.indentLevel = indentLevel;
   }
@@ -105,5 +115,7 @@ export class LineWrapper {
 }
 
 enum FlushType {
-  WRAP, SPACE, EMPTY
+  WRAP,
+  SPACE,
+  EMPTY,
 }

@@ -1,17 +1,17 @@
-import { imm, Imm } from "ts-imm";
-import { ClassSpec } from "./ClassSpec";
-import { CodeBlock } from "./CodeBlock";
-import { CodeWriter } from "./CodeWriter";
-import { EnumSpec } from "./EnumSpec";
-import { FunctionSpec } from "./FunctionSpec";
-import { InterfaceSpec } from "./InterfaceSpec";
-import { Modifier } from "./Modifier";
-import { PropertySpec } from "./PropertySpec";
-import { StringBuffer } from "./StringBuffer";
-import { SymbolSpec, SymbolSpecs } from "./SymbolSpecs";
-import { TypeAliasSpec } from "./TypeAliasSpec";
-import { TypeName, TypeNames } from "./TypeNames";
-import { filterInstances } from "./utils";
+import { imm, Imm } from 'ts-imm';
+import { ClassSpec } from './ClassSpec';
+import { CodeBlock } from './CodeBlock';
+import { CodeWriter } from './CodeWriter';
+import { EnumSpec } from './EnumSpec';
+import { FunctionSpec } from './FunctionSpec';
+import { InterfaceSpec } from './InterfaceSpec';
+import { Modifier } from './Modifier';
+import { PropertySpec } from './PropertySpec';
+import { StringBuffer } from './StringBuffer';
+import { SymbolSpec, SymbolSpecs } from './SymbolSpecs';
+import { TypeAliasSpec } from './TypeAliasSpec';
+import { TypeName, TypeNames } from './TypeNames';
+import { filterInstances } from './utils';
 
 /**
  * A TypeScript file containing top level objects like classes, objects, functions, properties, and type
@@ -23,7 +23,6 @@ import { filterInstances } from "./utils";
  * - Members
  */
 export class FileSpec extends Imm<FileSpec> {
-
   /**
    * Creates a file to contain generated output.
    *
@@ -34,14 +33,18 @@ export class FileSpec extends Imm<FileSpec> {
       path: file,
       comment: CodeBlock.empty(),
       members: [],
-      indentField: "  ",
+      indentField: '  ',
     });
   }
 
-  @imm public readonly path!: string;
-  @imm public readonly comment!: CodeBlock;
-  @imm public readonly members!: any[];
-  @imm public readonly indentField!: string;
+  @imm
+  public readonly path!: string;
+  @imm
+  public readonly comment!: CodeBlock;
+  @imm
+  public readonly members!: any[];
+  @imm
+  public readonly indentField!: string;
 
   public exportType(typeName: string): TypeName | undefined {
     const typeNameParts = typeName.split('.');
@@ -50,28 +53,30 @@ export class FileSpec extends Imm<FileSpec> {
   }
 
   public exportNamed(symbolName: string): SymbolSpec | undefined {
-    const first = this.members.map(it => {
-      if (it instanceof ClassSpec) {
-        return it.name;
-      } else if (it instanceof InterfaceSpec) {
-        return it.name;
-      } else if (it instanceof EnumSpec) {
-        return it.name;
-      } else if (it instanceof FunctionSpec) {
-        return it.name;
-      } else if (it instanceof PropertySpec) {
-        return it.name;
-      } else if (it instanceof TypeAliasSpec) {
-        return it.name;
-      } else {
-        throw new Error("unrecognized member type");
-      }
-    }).filter(name => name === symbolName)[0];
-    return first ? SymbolSpecs.importsName(symbolName, "!" + this.path) : undefined;
+    const first = this.members
+      .map(it => {
+        if (it instanceof ClassSpec) {
+          return it.name;
+        } else if (it instanceof InterfaceSpec) {
+          return it.name;
+        } else if (it instanceof EnumSpec) {
+          return it.name;
+        } else if (it instanceof FunctionSpec) {
+          return it.name;
+        } else if (it instanceof PropertySpec) {
+          return it.name;
+        } else if (it instanceof TypeAliasSpec) {
+          return it.name;
+        } else {
+          throw new Error('unrecognized member type');
+        }
+      })
+      .filter(name => name === symbolName)[0];
+    return first ? SymbolSpecs.importsName(symbolName, '!' + this.path) : undefined;
   }
 
   public exportAll(localName: string): SymbolSpec {
-    return SymbolSpecs.importsAll(localName, "!" + this.path);
+    return SymbolSpecs.importsAll(localName, '!' + this.path);
   }
 
   public emit(out: StringBuffer) {
@@ -113,7 +118,7 @@ export class FileSpec extends Imm<FileSpec> {
   }
 
   public addEnum(enumSpec: EnumSpec): this {
-    checkMemberModifiers(enumSpec.modifiers)
+    checkMemberModifiers(enumSpec.modifiers);
     return this.copy({
       members: [...this.members, enumSpec],
     });
@@ -168,47 +173,45 @@ export class FileSpec extends Imm<FileSpec> {
 
     codeWriter.emitImports(this.path);
 
-    this.members
-      .filter(it => !(it instanceof CodeBlock))
-      .forEach(member => {
-        codeWriter.emit("\n");
-        if (member instanceof InterfaceSpec) {
-          member.emit(codeWriter);
-        } else if (member instanceof ClassSpec) {
-          member.emit(codeWriter);
-        } else if (member instanceof EnumSpec) {
-          member.emit(codeWriter);
-        } else if (member instanceof FunctionSpec) {
-          member.emit(codeWriter, undefined, [Modifier.PUBLIC]);
-        } else if (member instanceof PropertySpec) {
-          member.emit(codeWriter, [Modifier.PUBLIC], true);
-        } else if (member instanceof TypeAliasSpec) {
-          member.emit(codeWriter);
-        } else if (member instanceof CodeBlock) {
-          codeWriter.emitCodeBlock(member);
-        } else{
-          throw new Error("unhandled");
-        }
-      });
+    this.members.filter(it => !(it instanceof CodeBlock)).forEach(member => {
+      codeWriter.emit('\n');
+      if (member instanceof InterfaceSpec) {
+        member.emit(codeWriter);
+      } else if (member instanceof ClassSpec) {
+        member.emit(codeWriter);
+      } else if (member instanceof EnumSpec) {
+        member.emit(codeWriter);
+      } else if (member instanceof FunctionSpec) {
+        member.emit(codeWriter, undefined, [Modifier.PUBLIC]);
+      } else if (member instanceof PropertySpec) {
+        member.emit(codeWriter, [Modifier.PUBLIC], true);
+      } else if (member instanceof TypeAliasSpec) {
+        member.emit(codeWriter);
+      } else if (member instanceof CodeBlock) {
+        codeWriter.emitCodeBlock(member);
+      } else {
+        throw new Error('unhandled');
+      }
+    });
 
     filterInstances(this.members, CodeBlock).forEach(member => {
-      codeWriter.emit("\n");
+      codeWriter.emit('\n');
       codeWriter.emitCodeBlock(member);
     });
   }
 }
 
-    // /** Writes this to `directory` as UTF-8 using the standard directory structure.  */
-    // public writeTo(directory: Path) {
-    //   require(Files.notExists(directory) || Files.isDirectory(directory)) {
-    //     "path $directory exists but is not a directory."
-    //   }
-    //   const outputPath = directory.resolve("$path.ts")
-    //   OutputStreamWriter(Files.newOutputStream(outputPath), UTF_8).use { writer -> writeTo(writer) }
-    // }
-    //
-    // /** Writes this to `directory` as UTF-8 using the standard directory structure.  */
-    // public writeTo(directory: File) = writeTo(directory.toPath())
+// /** Writes this to `directory` as UTF-8 using the standard directory structure.  */
+// public writeTo(directory: Path) {
+//   require(Files.notExists(directory) || Files.isDirectory(directory)) {
+//     "path $directory exists but is not a directory."
+//   }
+//   const outputPath = directory.resolve("$path.ts")
+//   OutputStreamWriter(Files.newOutputStream(outputPath), UTF_8).use { writer -> writeTo(writer) }
+// }
+//
+// /** Writes this to `directory` as UTF-8 using the standard directory structure.  */
+// public writeTo(directory: File) = writeTo(directory.toPath())
 
 function checkMemberModifiers(modifiers: Modifier[]): void {
   // requireNoneOf(

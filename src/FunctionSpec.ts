@@ -1,19 +1,18 @@
-import { imm, Imm } from "ts-imm";
-import { CodeBlock, Dictionary } from "./CodeBlock";
-import { CodeWriter } from "./CodeWriter";
-import { DecoratorSpec } from "./DecoratorSpec";
-import { Modifier } from "./Modifier";
-import { ParameterSpec } from "./ParameterSpec";
-import { SymbolSpec } from "./SymbolSpecs";
-import { TypeName, TypeNames, TypeVariable } from "./TypeNames";
+import { imm, Imm } from 'ts-imm';
+import { CodeBlock, Dictionary } from './CodeBlock';
+import { CodeWriter } from './CodeWriter';
+import { DecoratorSpec } from './DecoratorSpec';
+import { Modifier } from './Modifier';
+import { ParameterSpec } from './ParameterSpec';
+import { SymbolSpec } from './SymbolSpecs';
+import { TypeName, TypeNames, TypeVariable } from './TypeNames';
 
-const CONSTRUCTOR = "constructor()";
-const CALLABLE = "callable()";
-const INDEXABLE = "indexable()";
+const CONSTRUCTOR = 'constructor()';
+const CALLABLE = 'callable()';
+const INDEXABLE = 'indexable()';
 
 /** A generated function declaration. */
 export class FunctionSpec extends Imm<FunctionSpec> {
-
   public static create(name: string) {
     return new FunctionSpec({
       name,
@@ -40,15 +39,24 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     return FunctionSpec.create(INDEXABLE);
   }
 
-  @imm public readonly name!: string;
-  @imm public readonly javaDoc!: CodeBlock;
-  @imm public readonly decorators!: DecoratorSpec[];
-  @imm public readonly modifiers!: Modifier[];
-  @imm public readonly typeVariables!: TypeVariable[];
-  @imm public readonly returnType?: TypeName;
-  @imm public readonly parameters!: ParameterSpec[];
-  @imm public readonly restParameter!: ParameterSpec | undefined;
-  @imm public readonly body!: CodeBlock;
+  @imm
+  public readonly name!: string;
+  @imm
+  public readonly javaDoc!: CodeBlock;
+  @imm
+  public readonly decorators!: DecoratorSpec[];
+  @imm
+  public readonly modifiers!: Modifier[];
+  @imm
+  public readonly typeVariables!: TypeVariable[];
+  @imm
+  public readonly returnType?: TypeName;
+  @imm
+  public readonly parameters!: ParameterSpec[];
+  @imm
+  public readonly restParameter!: ParameterSpec | undefined;
+  @imm
+  public readonly body!: CodeBlock;
 
   /*
   init {
@@ -62,7 +70,7 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     return FunctionSpec.create(this.name)
       .addModifiers(Modifier.ABSTRACT)
       .addTypeVariables(...this.typeVariables)
-      .addParameters(...this.parameters)
+      .addParameters(...this.parameters);
   }
 
   public parameter(name: string): ParameterSpec | undefined {
@@ -78,15 +86,15 @@ export class FunctionSpec extends Imm<FunctionSpec> {
 
     const isEmptyConstructor = this.isConstructor() && this.body.isEmpty();
     if (this.modifiers.indexOf(Modifier.ABSTRACT) > -1 || isEmptyConstructor) {
-      codeWriter.emit(";\n");
-      return
+      codeWriter.emit(';\n');
+      return;
     }
 
-    codeWriter.emit(" {\n");
+    codeWriter.emit(' {\n');
     codeWriter.indent();
     codeWriter.emitCodeBlock(this.body);
     codeWriter.unindent();
-    codeWriter.emit("}\n");
+    codeWriter.emit('}\n');
   }
 
   public addJavadoc(format: string, ...args: any[]): this {
@@ -107,8 +115,8 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     });
   }
 
-  public addDecorator(name: string | SymbolSpec, data?: Partial<DecoratorSpec>): this
-  public addDecorator(decorator: DecoratorSpec): this
+  public addDecorator(name: string | SymbolSpec, data?: Partial<DecoratorSpec>): this;
+  public addDecorator(decorator: DecoratorSpec): this;
   public addDecorator(decorator: DecoratorSpec | string | SymbolSpec): this {
     return this.copy({
       decorators: [...this.decorators, DecoratorSpec.fromMaybeString(decorator, arguments[1])],
@@ -146,8 +154,8 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     });
   }
 
-  public addParameter(name: string, type: TypeName | string, data?: Partial<ParameterSpec>): this
-  public addParameter(parameterSpec: ParameterSpec): this
+  public addParameter(name: string, type: TypeName | string, data?: Partial<ParameterSpec>): this;
+  public addParameter(parameterSpec: ParameterSpec): this;
   public addParameter(parameterSpec: ParameterSpec | string): this {
     let param: ParameterSpec;
     if (typeof parameterSpec === 'string') {
@@ -172,8 +180,8 @@ export class FunctionSpec extends Imm<FunctionSpec> {
      = addParameter(ParameterSpec.builder(name, type, optional, *modifiers).build())
      */
 
-  public rest(name: string, type: TypeName | string): this
-  public rest(parameterSpec: ParameterSpec): this
+  public rest(name: string, type: TypeName | string): this;
+  public rest(parameterSpec: ParameterSpec): this;
   public rest(parameterSpec: ParameterSpec | string): this {
     let param: ParameterSpec;
     if (typeof parameterSpec === 'string') {
@@ -211,7 +219,7 @@ export class FunctionSpec extends Imm<FunctionSpec> {
 
   public addComment(format: string, ...args: any[]): this {
     return this.copy({
-      body: this.body.add("// " + format + "\n", ...args),
+      body: this.body.add('// ' + format + '\n', ...args),
     });
   }
 
@@ -273,31 +281,26 @@ export class FunctionSpec extends Imm<FunctionSpec> {
 
   private emitSignature(codeWriter: CodeWriter, enclosingName?: string) {
     if (this.isConstructor()) {
-      codeWriter.emitCode("constructor");
+      codeWriter.emitCode('constructor');
     } else if (this.isCallable()) {
-      codeWriter.emitCode("");
+      codeWriter.emitCode('');
     } else if (this.isIndexable()) {
-      codeWriter.emitCode("[");
+      codeWriter.emitCode('[');
     } else {
       if (enclosingName === undefined) {
-        codeWriter.emit("function ");
+        codeWriter.emit('function ');
       }
-      codeWriter.emitCode("%L", this.name);
+      codeWriter.emitCode('%L', this.name);
     }
     if (this.typeVariables.length > 0) {
       codeWriter.emitTypeVariables(this.typeVariables);
     }
-    ParameterSpec.emitAll(
-      this.parameters,
-      codeWriter,
-      !this.isIndexable(),
-      this.restParameter,
-      undefined);
+    ParameterSpec.emitAll(this.parameters, codeWriter, !this.isIndexable(), this.restParameter, undefined);
     if (this.isIndexable()) {
-      codeWriter.emitCode("]")
+      codeWriter.emitCode(']');
     }
     if (this.returnType !== undefined && this.returnType !== TypeNames.VOID) {
-      codeWriter.emitCode(": %T", this.returnType);
+      codeWriter.emitCode(': %T', this.returnType);
     }
   }
 }

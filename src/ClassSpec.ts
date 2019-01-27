@@ -1,16 +1,15 @@
-import { imm, Imm } from "ts-imm";
-import { CodeBlock } from "./CodeBlock";
-import { CodeWriter } from "./CodeWriter";
-import { DecoratorSpec } from "./DecoratorSpec";
-import { FunctionSpec } from "./FunctionSpec";
-import { Modifier } from "./Modifier";
-import { ParameterSpec } from "./ParameterSpec";
-import { PropertySpec } from "./PropertySpec";
-import {TypeName, TypeNames, TypeVariable} from "./TypeNames";
+import { imm, Imm } from 'ts-imm';
+import { CodeBlock } from './CodeBlock';
+import { CodeWriter } from './CodeWriter';
+import { DecoratorSpec } from './DecoratorSpec';
+import { FunctionSpec } from './FunctionSpec';
+import { Modifier } from './Modifier';
+import { ParameterSpec } from './ParameterSpec';
+import { PropertySpec } from './PropertySpec';
+import { TypeName, TypeNames, TypeVariable } from './TypeNames';
 
 /** A generated `class` declaration. */
 export class ClassSpec extends Imm<ClassSpec> {
-
   public static create(name: string | TypeName): ClassSpec {
     return new ClassSpec({
       name: typeof name === 'string' ? name : name.reference(),
@@ -26,16 +25,26 @@ export class ClassSpec extends Imm<ClassSpec> {
     });
   }
 
-  @imm public readonly name!: string;
-  @imm public readonly javaDoc!: CodeBlock;
-  @imm public readonly decorators!: DecoratorSpec[];
-  @imm public readonly modifiers!: Modifier[];
-  @imm public readonly typeVariables!: TypeVariable[];
-  @imm public readonly superClassField?: TypeName;
-  @imm public readonly mixins!: TypeName[];
-  @imm public readonly propertySpecs!: PropertySpec[];
-  @imm public readonly constructorField?: FunctionSpec;
-  @imm public readonly functionSpecs!: FunctionSpec[];
+  @imm
+  public readonly name!: string;
+  @imm
+  public readonly javaDoc!: CodeBlock;
+  @imm
+  public readonly decorators!: DecoratorSpec[];
+  @imm
+  public readonly modifiers!: Modifier[];
+  @imm
+  public readonly typeVariables!: TypeVariable[];
+  @imm
+  public readonly superClassField?: TypeName;
+  @imm
+  public readonly mixins!: TypeName[];
+  @imm
+  public readonly propertySpecs!: PropertySpec[];
+  @imm
+  public readonly constructorField?: FunctionSpec;
+  @imm
+  public readonly functionSpecs!: FunctionSpec[];
 
   public emit(codeWriter: CodeWriter): void {
     const constructorProperties: Map<string, PropertySpec> = this.constructorProperties();
@@ -43,26 +52,25 @@ export class ClassSpec extends Imm<ClassSpec> {
     codeWriter.emitJavaDoc(this.javaDoc);
     codeWriter.emitDecorators(this.decorators, false);
     codeWriter.emitModifiers(this.modifiers, [Modifier.PUBLIC]);
-    codeWriter.emit("class");
-    codeWriter.emitCode(" %L", this.name);
+    codeWriter.emit('class');
+    codeWriter.emitCode(' %L', this.name);
     codeWriter.emitTypeVariables(this.typeVariables);
 
-    const sc = this.superClassField ? CodeBlock.of("extends %T", this.superClassField) : CodeBlock.empty();
-    const mixins = CodeBlock.joinToCode(
-      this.mixins.map(it => CodeBlock.of("%T", it)), ", ", "implements ");
+    const sc = this.superClassField ? CodeBlock.of('extends %T', this.superClassField) : CodeBlock.empty();
+    const mixins = CodeBlock.joinToCode(this.mixins.map(it => CodeBlock.of('%T', it)), ', ', 'implements ');
     if (sc.isNotEmpty() && mixins.isNotEmpty()) {
-      codeWriter.emitCode(" %L %L", sc, mixins);
+      codeWriter.emitCode(' %L %L', sc, mixins);
     } else if (sc.isNotEmpty() || mixins.isNotEmpty()) {
-      codeWriter.emitCode(" %L%L", sc, mixins);
+      codeWriter.emitCode(' %L%L', sc, mixins);
     }
 
-    codeWriter.emit(" {\n");
+    codeWriter.emit(' {\n');
     codeWriter.indent();
 
     // Non-static properties.
     this.propertySpecs.forEach(propertySpec => {
       if (!constructorProperties.has(propertySpec.name)) {
-        codeWriter.emit("\n")
+        codeWriter.emit('\n');
         propertySpec.emit(codeWriter, [Modifier.PUBLIC], true);
       }
     });
@@ -70,17 +78,17 @@ export class ClassSpec extends Imm<ClassSpec> {
     // Write the constructor manually, allowing the replacement
     // of property specs with constructor parameters
     if (this.constructorField) {
-      codeWriter.emit("\n");
+      codeWriter.emit('\n');
       const it = this.constructorField;
       if (it.decorators.length > 0) {
-        codeWriter.emit(" ");
+        codeWriter.emit(' ');
         codeWriter.emitDecorators(it.decorators, true);
-        codeWriter.emit("\n");
+        codeWriter.emit('\n');
       }
       if (it.modifiers.length > 0) {
         codeWriter.emitModifiers(it.modifiers);
       }
-      codeWriter.emit("constructor");
+      codeWriter.emit('constructor');
 
       let body = it.body;
       // Emit constructor parameters & property specs that can be replaced with parameters
@@ -88,9 +96,11 @@ export class ClassSpec extends Imm<ClassSpec> {
         let property = constructorProperties.get(param.name);
         if (property && !isRest) {
           // Ensure the parameter always has a modifier (that makes it a property in TS)
-          if (!property.modifiers.find(m =>
-            [Modifier.PUBLIC, Modifier.PRIVATE, Modifier.PROTECTED, Modifier.READONLY].includes(m)
-          )) {
+          if (
+            !property.modifiers.find(m =>
+              [Modifier.PUBLIC, Modifier.PRIVATE, Modifier.PROTECTED, Modifier.READONLY].includes(m)
+            )
+          ) {
             // Add default public modifier
             property = property.addModifiers(Modifier.PUBLIC);
           }
@@ -104,17 +114,17 @@ export class ClassSpec extends Imm<ClassSpec> {
         }
       });
 
-      codeWriter.emit(" {\n");
+      codeWriter.emit(' {\n');
       codeWriter.indent();
       codeWriter.emitCodeBlock(body);
       codeWriter.unindent();
-      codeWriter.emit("}\n");
+      codeWriter.emit('}\n');
     }
 
     // Constructors.
     this.functionSpecs.forEach(funSpec => {
       if (funSpec.isConstructor()) {
-        codeWriter.emit("\n");
+        codeWriter.emit('\n');
         funSpec.emit(codeWriter, this.name, [Modifier.PUBLIC]);
       }
     });
@@ -122,7 +132,7 @@ export class ClassSpec extends Imm<ClassSpec> {
     // Functions (static and non-static).
     this.functionSpecs.forEach(funSpec => {
       if (!funSpec.isConstructor()) {
-        codeWriter.emit("\n");
+        codeWriter.emit('\n');
         funSpec.emit(codeWriter, this.name, [Modifier.PUBLIC]);
       }
     });
@@ -130,9 +140,9 @@ export class ClassSpec extends Imm<ClassSpec> {
     codeWriter.unindent();
 
     if (!this.hasNoBody) {
-      codeWriter.emit("\n");
+      codeWriter.emit('\n');
     }
-    codeWriter.emit("}\n");
+    codeWriter.emit('}\n');
   }
 
   public addJavadoc(format: string, ...args: any[]): this {
@@ -212,8 +222,8 @@ export class ClassSpec extends Imm<ClassSpec> {
     });
   }
 
-  public addProperty(propertySpec: PropertySpec): this
-  public addProperty(name: string, type: TypeName | string, data: Partial<PropertySpec>): this
+  public addProperty(propertySpec: PropertySpec): this;
+  public addProperty(name: string, type: TypeName | string, data: Partial<PropertySpec>): this;
   public addProperty(): this {
     let propertySpec: PropertySpec;
     if (arguments[0] instanceof PropertySpec) {
@@ -254,14 +264,17 @@ export class ClassSpec extends Imm<ClassSpec> {
     const result: Map<string, PropertySpec> = new Map();
     this.propertySpecs.forEach(property => {
       const parameter = cstr.parameter(property.name);
-      if (!parameter
-        || parameter.type !== property.type
-        || parameter.optional !== property.optional
-        || property.initializerField !== undefined) {
+      if (
+        !parameter ||
+        parameter.type !== property.type ||
+        parameter.optional !== property.optional ||
+        property.initializerField !== undefined
+      ) {
         return;
       }
-      const foundAssignment = cstr.body.formatParts.find(p =>
-        p.match(this.constructorPropertyInitSearch(property.name)) !== null);
+      const foundAssignment = cstr.body.formatParts.find(
+        p => p.match(this.constructorPropertyInitSearch(property.name)) !== null
+      );
       if (!foundAssignment) {
         return;
       }
@@ -289,4 +302,3 @@ export class ClassSpec extends Imm<ClassSpec> {
     return this.constructorField === undefined && this.functionSpecs.length === 0;
   }
 }
-

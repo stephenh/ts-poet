@@ -1,188 +1,186 @@
-import { LineWrapper } from "../LineWrapper";
-import { StringBuffer } from "../StringBuffer";
+import { LineWrapper } from '../LineWrapper';
+import { StringBuffer } from '../StringBuffer';
 
-describe("LineWrapper", () => {
-
-  it("wrap", () => {
+describe('LineWrapper', () => {
+  it('wrap', () => {
     const out = new StringBuffer();
-    const lineWrapper = new LineWrapper(out, "  ", 10);
-    lineWrapper.append("abcde");
+    const lineWrapper = new LineWrapper(out, '  ', 10);
+    lineWrapper.append('abcde');
     lineWrapper.wrappingSpace(2);
-    lineWrapper.append("fghij");
+    lineWrapper.append('fghij');
     lineWrapper.close();
-    expect(out.toString()).toEqual("abcde\n    fghij");
+    expect(out.toString()).toEqual('abcde\n    fghij');
   });
 
-  it("noWrap", () => {
+  it('noWrap', () => {
     const out = new StringBuffer();
-    const lineWrapper = new LineWrapper(out, "  ", 10);
-    lineWrapper.append("abcde");
+    const lineWrapper = new LineWrapper(out, '  ', 10);
+    lineWrapper.append('abcde');
     lineWrapper.wrappingSpace(2);
-    lineWrapper.append("fghi");
+    lineWrapper.append('fghi');
     lineWrapper.close();
-    expect(out.toString()).toEqual("abcde fghi");
+    expect(out.toString()).toEqual('abcde fghi');
   });
 
-  it("zeroWidthNoWrap", () => {
+  it('zeroWidthNoWrap', () => {
     const out = new StringBuffer();
-    const lineWrapper = new LineWrapper(out, "  ", 10);
-    lineWrapper.append("abcde");
+    const lineWrapper = new LineWrapper(out, '  ', 10);
+    lineWrapper.append('abcde');
     lineWrapper.zeroWidthSpace(2);
-    lineWrapper.append("fghij");
+    lineWrapper.append('fghij');
     lineWrapper.close();
-    expect(out.toString()).toEqual("abcdefghij");
+    expect(out.toString()).toEqual('abcdefghij');
   });
 
-  it("nospaceWrapMax", () => {
+  it('nospaceWrapMax', () => {
     const out = new StringBuffer();
-    const lineWrapper = new LineWrapper(out, "  ", 10);
-    lineWrapper.append("abcde");
+    const lineWrapper = new LineWrapper(out, '  ', 10);
+    lineWrapper.append('abcde');
     lineWrapper.zeroWidthSpace(2);
-    lineWrapper.append("fghijk");
+    lineWrapper.append('fghijk');
     lineWrapper.close();
-    expect(out.toString()).toEqual("abcde\n    fghijk");
+    expect(out.toString()).toEqual('abcde\n    fghijk');
   });
 
-  it("multipleWrite", () => {
+  it('multipleWrite', () => {
     const out = new StringBuffer();
-    const lineWrapper = new LineWrapper(out, "  ", 10);
-    lineWrapper.append("ab");
+    const lineWrapper = new LineWrapper(out, '  ', 10);
+    lineWrapper.append('ab');
     lineWrapper.wrappingSpace(1);
-    lineWrapper.append("cd");
+    lineWrapper.append('cd');
     lineWrapper.wrappingSpace(1);
-    lineWrapper.append("ef");
+    lineWrapper.append('ef');
     lineWrapper.wrappingSpace(1);
-    lineWrapper.append("gh");
+    lineWrapper.append('gh');
     lineWrapper.wrappingSpace(1);
-    lineWrapper.append("ij");
+    lineWrapper.append('ij');
     lineWrapper.wrappingSpace(1);
-    lineWrapper.append("kl");
+    lineWrapper.append('kl');
     lineWrapper.wrappingSpace(1);
-    lineWrapper.append("mn");
+    lineWrapper.append('mn');
     lineWrapper.wrappingSpace(1);
-    lineWrapper.append("op");
+    lineWrapper.append('op');
     lineWrapper.wrappingSpace(1);
-    lineWrapper.append("qr");
+    lineWrapper.append('qr');
     lineWrapper.close();
-    expect(out.toString()).toEqual("ab cd ef\n  gh ij kl\n  mn op qr");
+    expect(out.toString()).toEqual('ab cd ef\n  gh ij kl\n  mn op qr');
   });
 
-  it("fencepost", () => {
+  it('fencepost', () => {
     const out = new StringBuffer();
-    const lineWrapper = new LineWrapper(out, "  ", 10);
-    lineWrapper.append("abcde");
-    lineWrapper.append("fghij");
+    const lineWrapper = new LineWrapper(out, '  ', 10);
+    lineWrapper.append('abcde');
+    lineWrapper.append('fghij');
     lineWrapper.wrappingSpace(2);
-    lineWrapper.append("k");
-    lineWrapper.append("lmnop");
+    lineWrapper.append('k');
+    lineWrapper.append('lmnop');
     lineWrapper.close();
-    expect(out.toString()).toEqual("abcdefghij\n    klmnop");
+    expect(out.toString()).toEqual('abcdefghij\n    klmnop');
   });
 
-  it("fencepostZeroWidth", () => {
+  it('fencepostZeroWidth', () => {
     const out = new StringBuffer();
-    const lineWrapper = new LineWrapper(out, "  ", 10);
-    lineWrapper.append("abcde");
-    lineWrapper.append("fghij");
+    const lineWrapper = new LineWrapper(out, '  ', 10);
+    lineWrapper.append('abcde');
+    lineWrapper.append('fghij');
     lineWrapper.zeroWidthSpace(2);
-    lineWrapper.append("k");
-    lineWrapper.append("lmnop");
+    lineWrapper.append('k');
+    lineWrapper.append('lmnop');
     lineWrapper.close();
-    expect(out.toString()).toEqual("abcdefghij\n    klmnop");
+    expect(out.toString()).toEqual('abcdefghij\n    klmnop');
   });
 
-  it("overlyLongLinesWithoutLeadingSpace", () => {
+  it('overlyLongLinesWithoutLeadingSpace', () => {
     const out = new StringBuffer();
-    const lineWrapper = new LineWrapper(out, "  ", 10);
-    lineWrapper.append("abcdefghijkl");
+    const lineWrapper = new LineWrapper(out, '  ', 10);
+    lineWrapper.append('abcdefghijkl');
     lineWrapper.close();
-    expect(out.toString()).toEqual("abcdefghijkl");
+    expect(out.toString()).toEqual('abcdefghijkl');
   });
 
-  it("overlyLongLinesWithLeadingSpace", () => {
+  it('overlyLongLinesWithLeadingSpace', () => {
     const out = new StringBuffer();
-    const lineWrapper = new LineWrapper(out, "  ", 10);
+    const lineWrapper = new LineWrapper(out, '  ', 10);
     lineWrapper.wrappingSpace(2);
-    lineWrapper.append("abcdefghijkl");
+    lineWrapper.append('abcdefghijkl');
     lineWrapper.close();
-    expect(out.toString()).toEqual("\n    abcdefghijkl");
+    expect(out.toString()).toEqual('\n    abcdefghijkl');
   });
 
-  it("overlyLongLinesWithLeadingZeroWidth", () => {
+  it('overlyLongLinesWithLeadingZeroWidth', () => {
     const out = new StringBuffer();
-    const lineWrapper = new LineWrapper(out, "  ", 10);
+    const lineWrapper = new LineWrapper(out, '  ', 10);
     lineWrapper.zeroWidthSpace(2);
-    lineWrapper.append("abcdefghijkl");
+    lineWrapper.append('abcdefghijkl');
     lineWrapper.close();
-    expect(out.toString()).toEqual("abcdefghijkl");
+    expect(out.toString()).toEqual('abcdefghijkl');
   });
 
-  it("noWrapEmbeddedNewlines", () => {
+  it('noWrapEmbeddedNewlines', () => {
     const out = new StringBuffer();
-    const lineWrapper = new LineWrapper(out, "  ", 10);
-    lineWrapper.append("abcde");
+    const lineWrapper = new LineWrapper(out, '  ', 10);
+    lineWrapper.append('abcde');
     lineWrapper.wrappingSpace(2);
-    lineWrapper.append("fghi\njklmn");
-    lineWrapper.append("opqrstuvwxy");
+    lineWrapper.append('fghi\njklmn');
+    lineWrapper.append('opqrstuvwxy');
     lineWrapper.close();
-    expect(out.toString()).toEqual("abcde fghi\njklmnopqrstuvwxy");
+    expect(out.toString()).toEqual('abcde fghi\njklmnopqrstuvwxy');
   });
 
-  it("wrapEmbeddedNewlines", () => {
+  it('wrapEmbeddedNewlines', () => {
     const out = new StringBuffer();
-    const lineWrapper = new LineWrapper(out, "  ", 10);
-    lineWrapper.append("abcde");
+    const lineWrapper = new LineWrapper(out, '  ', 10);
+    lineWrapper.append('abcde');
     lineWrapper.wrappingSpace(2);
-    lineWrapper.append("fghij\nklmn");
-    lineWrapper.append("opqrstuvwxy");
+    lineWrapper.append('fghij\nklmn');
+    lineWrapper.append('opqrstuvwxy');
     lineWrapper.close();
-    expect(out.toString()).toEqual("abcde\n    fghij\nklmnopqrstuvwxy");
+    expect(out.toString()).toEqual('abcde\n    fghij\nklmnopqrstuvwxy');
   });
 
-  it("noWrapEmbeddedNewlines_ZeroWidth", () => {
+  it('noWrapEmbeddedNewlines_ZeroWidth', () => {
     const out = new StringBuffer();
-    const lineWrapper = new LineWrapper(out, "  ", 10);
-    lineWrapper.append("abcde");
+    const lineWrapper = new LineWrapper(out, '  ', 10);
+    lineWrapper.append('abcde');
     lineWrapper.zeroWidthSpace(2);
-    lineWrapper.append("fghij\nklmn");
-    lineWrapper.append("opqrstuvwxyz");
+    lineWrapper.append('fghij\nklmn');
+    lineWrapper.append('opqrstuvwxyz');
     lineWrapper.close();
-    expect(out.toString()).toEqual("abcdefghij\nklmnopqrstuvwxyz");
+    expect(out.toString()).toEqual('abcdefghij\nklmnopqrstuvwxyz');
   });
 
-  it("wrapEmbeddedNewlines_ZeroWidth", () => {
+  it('wrapEmbeddedNewlines_ZeroWidth', () => {
     const out = new StringBuffer();
-    const lineWrapper = new LineWrapper(out, "  ", 10);
-    lineWrapper.append("abcde");
+    const lineWrapper = new LineWrapper(out, '  ', 10);
+    lineWrapper.append('abcde');
     lineWrapper.zeroWidthSpace(2);
-    lineWrapper.append("fghijk\nlmn");
-    lineWrapper.append("opqrstuvwxy");
+    lineWrapper.append('fghijk\nlmn');
+    lineWrapper.append('opqrstuvwxy');
     lineWrapper.close();
-    expect(out.toString()).toEqual("abcde\n    fghijk\nlmnopqrstuvwxy");
+    expect(out.toString()).toEqual('abcde\n    fghijk\nlmnopqrstuvwxy');
   });
 
-  it("noWrapMultipleNewlines", () => {
+  it('noWrapMultipleNewlines', () => {
     const out = new StringBuffer();
-    const lineWrapper = new LineWrapper(out, "  ", 10);
-    lineWrapper.append("abcde");
+    const lineWrapper = new LineWrapper(out, '  ', 10);
+    lineWrapper.append('abcde');
     lineWrapper.wrappingSpace(2);
-    lineWrapper.append("fghi\nklmnopq\nr");
+    lineWrapper.append('fghi\nklmnopq\nr');
     lineWrapper.wrappingSpace(2);
-    lineWrapper.append("stuvwxyz");
+    lineWrapper.append('stuvwxyz');
     lineWrapper.close();
-    expect(out.toString()).toEqual("abcde fghi\nklmnopq\nr stuvwxyz");
+    expect(out.toString()).toEqual('abcde fghi\nklmnopq\nr stuvwxyz');
   });
 
-  it("wrapMultipleNewlines", () => {
+  it('wrapMultipleNewlines', () => {
     const out = new StringBuffer();
-    const lineWrapper = new LineWrapper(out, "  ", 10);
-    lineWrapper.append("abcde");
+    const lineWrapper = new LineWrapper(out, '  ', 10);
+    lineWrapper.append('abcde');
     lineWrapper.wrappingSpace(2);
-    lineWrapper.append("fghi\nklmnopq\nrs");
+    lineWrapper.append('fghi\nklmnopq\nrs');
     lineWrapper.wrappingSpace(2);
-    lineWrapper.append("tuvwxyz1");
+    lineWrapper.append('tuvwxyz1');
     lineWrapper.close();
-    expect(out.toString()).toEqual("abcde fghi\nklmnopq\nrs\n    tuvwxyz1");
+    expect(out.toString()).toEqual('abcde fghi\nklmnopq\nrs\n    tuvwxyz1');
   });
-
 });

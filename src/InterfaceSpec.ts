@@ -1,14 +1,13 @@
-import { imm, Imm } from "ts-imm";
-import { CodeBlock } from "./CodeBlock";
-import { CodeWriter } from "./CodeWriter";
-import { FunctionSpec } from "./FunctionSpec";
-import { Modifier } from "./Modifier";
-import { PropertySpec } from "./PropertySpec";
-import { TypeName, TypeNames, TypeVariable } from "./TypeNames";
+import { imm, Imm } from 'ts-imm';
+import { CodeBlock } from './CodeBlock';
+import { CodeWriter } from './CodeWriter';
+import { FunctionSpec } from './FunctionSpec';
+import { Modifier } from './Modifier';
+import { PropertySpec } from './PropertySpec';
+import { TypeName, TypeNames, TypeVariable } from './TypeNames';
 
 /** A generated `interface` declaration. */
 export class InterfaceSpec extends Imm<InterfaceSpec> {
-
   public static create(name: string): InterfaceSpec {
     return new InterfaceSpec({
       name,
@@ -33,29 +32,38 @@ export class InterfaceSpec extends Imm<InterfaceSpec> {
   }
   */
 
-  @imm public readonly name!: string;
-  @imm public readonly javaDoc!: CodeBlock;
-  @imm public readonly modifiers!: Modifier[];
-  @imm public readonly typeVariables!: TypeVariable[];
-  @imm public readonly superInterfaces!: TypeName[];
-  @imm public readonly propertySpecs!: PropertySpec[];
-  @imm public readonly functionSpecs!: FunctionSpec[];
-  @imm public readonly indexableSpecs!: FunctionSpec[];
-  @imm public readonly callableField?: FunctionSpec;
+  @imm
+  public readonly name!: string;
+  @imm
+  public readonly javaDoc!: CodeBlock;
+  @imm
+  public readonly modifiers!: Modifier[];
+  @imm
+  public readonly typeVariables!: TypeVariable[];
+  @imm
+  public readonly superInterfaces!: TypeName[];
+  @imm
+  public readonly propertySpecs!: PropertySpec[];
+  @imm
+  public readonly functionSpecs!: FunctionSpec[];
+  @imm
+  public readonly indexableSpecs!: FunctionSpec[];
+  @imm
+  public readonly callableField?: FunctionSpec;
 
   public emit(codeWriter: CodeWriter): void {
     codeWriter.emitJavaDoc(this.javaDoc);
     codeWriter.emitModifiers(this.modifiers);
-    codeWriter.emit("interface");
-    codeWriter.emitCode(" %L", this.name);
+    codeWriter.emit('interface');
+    codeWriter.emitCode(' %L', this.name);
     codeWriter.emitTypeVariables(this.typeVariables);
 
-    const superClasses = this.superInterfaces.map(it => CodeBlock.of("%T", it));
+    const superClasses = this.superInterfaces.map(it => CodeBlock.of('%T', it));
     if (superClasses.length > 0) {
-      codeWriter.emitCodeBlock(CodeBlock.joinToCode(superClasses, ", ", " extends "));
+      codeWriter.emitCodeBlock(CodeBlock.joinToCode(superClasses, ', ', ' extends '));
     }
 
-    codeWriter.emit(" {\n");
+    codeWriter.emit(' {\n');
     codeWriter.indent();
 
     // If we have functions, then we'll break them apart by newlines. But if we don't have any functions,
@@ -94,7 +102,7 @@ export class InterfaceSpec extends Imm<InterfaceSpec> {
     if (!this.hasNoBody && this.functionSpecs.length > 0) {
       codeWriter.newLine();
     }
-    codeWriter.emit("}\n");
+    codeWriter.emit('}\n');
   }
 
   public addJavadoc(format: string, ...args: any[]): this {
@@ -148,8 +156,8 @@ export class InterfaceSpec extends Imm<InterfaceSpec> {
     return curr;
   }
 
-  public addProperty(propertySpec: PropertySpec): this
-  public addProperty(name: string, type: TypeName | string, data: Partial<PropertySpec>): this
+  public addProperty(propertySpec: PropertySpec): this;
+  public addProperty(name: string, type: TypeName | string, data: Partial<PropertySpec>): this;
   public addProperty(): this {
     let propertySpec: PropertySpec;
     if (arguments[0] instanceof PropertySpec) {
@@ -217,6 +225,11 @@ export class InterfaceSpec extends Imm<InterfaceSpec> {
   }
 
   private get hasNoBody(): boolean {
-    return this.propertySpecs.length === 0 && this.functionSpecs.length === 0 && this.indexableSpecs.length === 0 && this.callableField === undefined;
+    return (
+      this.propertySpecs.length === 0 &&
+      this.functionSpecs.length === 0 &&
+      this.indexableSpecs.length === 0 &&
+      this.callableField === undefined
+    );
   }
 }

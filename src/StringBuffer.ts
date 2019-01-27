@@ -5,7 +5,6 @@
  * the existing poet code/pattern.
  */
 export class StringBuffer {
-
   private strings: string[] = [];
 
   public append(s: string): this {

@@ -1,11 +1,10 @@
-import { imm, Imm } from "ts-imm";
-import { CodeBlock } from "./CodeBlock";
-import { CodeWriter } from "./CodeWriter";
-import { SymbolSpec } from "./SymbolSpecs";
+import { imm, Imm } from 'ts-imm';
+import { CodeBlock } from './CodeBlock';
+import { CodeWriter } from './CodeWriter';
+import { SymbolSpec } from './SymbolSpecs';
 
 /** A generated function or class decorator declaration. */
 export class DecoratorSpec extends Imm<DecoratorSpec> {
-
   public static create(name: string | SymbolSpec): DecoratorSpec {
     return new DecoratorSpec({
       name: SymbolSpec.fromMaybeString(name),
@@ -20,31 +19,35 @@ export class DecoratorSpec extends Imm<DecoratorSpec> {
   ): DecoratorSpec {
     return (typeof decorator === 'string' || decorator instanceof SymbolSpec
       ? DecoratorSpec.create(decorator)
-      : decorator).copy(data || {});
+      : decorator
+    ).copy(data || {});
   }
 
-  @imm public readonly name!: SymbolSpec;
-  @imm public readonly parameters!: Array<[string | undefined, CodeBlock]>;
-  @imm public readonly factory!: boolean;
+  @imm
+  public readonly name!: SymbolSpec;
+  @imm
+  public readonly parameters!: Array<[string | undefined, CodeBlock]>;
+  @imm
+  public readonly factory!: boolean;
 
   public emit(codeWriter: CodeWriter, inline: boolean = false, asParameter: boolean = false) {
-    codeWriter.emitCode("@%N", this.name);
+    codeWriter.emitCode('@%N', this.name);
 
     if (this.parameters.length > 0) {
-      codeWriter.emit("(");
+      codeWriter.emit('(');
       if (!inline) {
         codeWriter.indent();
-        codeWriter.emit("\n");
+        codeWriter.emit('\n');
       }
 
       let index = 0;
-      this.parameters.forEach( ([first, second]) => {
+      this.parameters.forEach(([first, second]) => {
         if (index > 0 && index < this.parameters.length) {
-          codeWriter.emit(",")
-          codeWriter.emit(inline ? " " : "\n");
+          codeWriter.emit(',');
+          codeWriter.emit(inline ? ' ' : '\n');
         }
         if (!asParameter && first !== undefined) {
-          codeWriter.emit(`/* ${first} */ `)
+          codeWriter.emit(`/* ${first} */ `);
         }
         codeWriter.emitCodeBlock(second);
         index++;
@@ -52,11 +55,11 @@ export class DecoratorSpec extends Imm<DecoratorSpec> {
 
       if (!inline) {
         codeWriter.unindent();
-        codeWriter.emit("\n");
+        codeWriter.emit('\n');
       }
-      codeWriter.emit(")");
+      codeWriter.emit(')');
     } else if (this.factory) {
-      codeWriter.emit("()");
+      codeWriter.emit('()');
     }
   }
 
@@ -68,7 +71,7 @@ export class DecoratorSpec extends Imm<DecoratorSpec> {
 
   public addParameter(name: string | undefined, format: string, ...args: any[]): this {
     return this.copy({
-      parameters: [...this.parameters, [name, CodeBlock.of(format, args)]]
+      parameters: [...this.parameters, [name, CodeBlock.of(format, args)]],
     });
   }
 
@@ -82,5 +85,3 @@ export class DecoratorSpec extends Imm<DecoratorSpec> {
     return CodeWriter.emitToString(this);
   }
 }
-
-

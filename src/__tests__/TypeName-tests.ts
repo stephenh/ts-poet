@@ -1,62 +1,61 @@
-import { ImportsName } from "../SymbolSpecs";
-import { Member, TypeNames } from "../TypeNames";
+import { ImportsName } from '../SymbolSpecs';
+import { Member, TypeNames } from '../TypeNames';
 
-describe("TypeNameTests", () => {
-
-  it("testParsingNestedImport", () => {
-    const typeName = TypeNames.anyType("This.Is.Nested@!Api");
-    expect(typeName.usage).toEqual("This.Is.Nested");
+describe('TypeNameTests', () => {
+  it('testParsingNestedImport', () => {
+    const typeName = TypeNames.anyType('This.Is.Nested@!Api');
+    expect(typeName.usage).toEqual('This.Is.Nested');
     expect(typeName.imported).toBeDefined();
     if (typeName.imported) {
-      expect(typeName.imported.value).toEqual("This");
+      expect(typeName.imported.value).toEqual('This');
     }
-    expect(typeName.toString()).toEqual("This.Is.Nested");
+    expect(typeName.toString()).toEqual('This.Is.Nested');
   });
 
-  it("testToStringOfPrimitives", () => {
+  it('testToStringOfPrimitives', () => {
     const typeName = TypeNames.NUMBER;
-    expect(typeName.toString()).toEqual("number");
+    expect(typeName.toString()).toEqual('number');
   });
 
-  it("testParsingUsage", () => {
-    const typeName = TypeNames.anyType("@rxjs/Subscriber");
-    expect(typeName.usage).toEqual("Subscriber");
+  it('testParsingUsage', () => {
+    const typeName = TypeNames.anyType('@rxjs/Subscriber');
+    expect(typeName.usage).toEqual('Subscriber');
     expect(typeName.imported).toBeDefined();
     if (typeName.imported) {
-      expect(typeName.imported.value).toEqual("Subscriber");
-      expect((typeName.imported as ImportsName).source).toEqual("rxjs/Subscriber");
+      expect(typeName.imported.value).toEqual('Subscriber');
+      expect((typeName.imported as ImportsName).source).toEqual('rxjs/Subscriber');
     }
   });
 
-  it ("testAnonymousNameGen", () => {
+  it('testAnonymousNameGen', () => {
     const typeName = TypeNames.anonymousType(
-      ["a", TypeNames.STRING],
-      ["b", TypeNames.NUMBER],
-      ["C", TypeNames.BOOLEAN]);
+      ['a', TypeNames.STRING],
+      ['b', TypeNames.NUMBER],
+      ['C', TypeNames.BOOLEAN]
+    );
     expect(typeName.members).toEqual([
-      new Member("a", TypeNames.STRING, false),
-      new Member("b", TypeNames.NUMBER, false),
-      new Member("C", TypeNames.BOOLEAN, false),
+      new Member('a', TypeNames.STRING, false),
+      new Member('b', TypeNames.NUMBER, false),
+      new Member('C', TypeNames.BOOLEAN, false),
     ]);
-    expect(typeName.reference()).toEqual("{ a: string, b: number, C: boolean }");
+    expect(typeName.reference()).toEqual('{ a: string, b: number, C: boolean }');
 
     const typeName2 = TypeNames.anonymousType(
-       new Member("a", TypeNames.NUMBER, true),
-       new Member("B", TypeNames.STRING, false),
-       new Member("c", TypeNames.DATE, true),
+      new Member('a', TypeNames.NUMBER, true),
+      new Member('B', TypeNames.STRING, false),
+      new Member('c', TypeNames.DATE, true)
     );
     expect(typeName2.members).toEqual([
-      new Member("a", TypeNames.NUMBER, true),
-      new Member("B", TypeNames.STRING, false),
-      new Member("c", TypeNames.DATE, true),
+      new Member('a', TypeNames.NUMBER, true),
+      new Member('B', TypeNames.STRING, false),
+      new Member('c', TypeNames.DATE, true),
     ]);
-    expect(typeName2.reference()).toEqual("{ a?: number, B: string, c?: Date }");
+    expect(typeName2.reference()).toEqual('{ a?: number, B: string, c?: Date }');
   });
 
-  it("prints an array of unions", () => {
+  it('prints an array of unions', () => {
     const elementType = TypeNames.unionType(TypeNames.STRING, TypeNames.BOOLEAN);
     const typeName = TypeNames.arrayType(elementType);
-    expect(typeName.toString()).toEqual("Array<string | boolean>");
+    expect(typeName.toString()).toEqual('Array<string | boolean>');
   });
-
 });
