@@ -1,6 +1,6 @@
 {
   "name": "ts-poet",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "code generation DSL for TypeScript",
   "main": "build/index.js",
   "types": "build/index.d.ts",
