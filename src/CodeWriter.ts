@@ -280,6 +280,10 @@ export class CodeWriter implements SymbolReferenceTracker {
     return this;
   }
 
+  public newLine(): this {
+    return this.emit("\n");
+  }
+
   /**
    * Returns the symbols that are required to be imported for this code. If there were any simple name
    * collisions, that symbol's first use is imported; which may cause compilation issues.

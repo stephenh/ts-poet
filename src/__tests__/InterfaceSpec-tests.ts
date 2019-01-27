@@ -86,11 +86,8 @@ interface Test {
       .addProperty("value2", TypeNames.STRING, { optional: true, modifiers: [ Modifier.PUBLIC ]});
     expect(emit(testIface)).toMatchInlineSnapshot(`
 "interface Test {
-
   private value: number;
-
   value2?: string;
-
 }
 "
 `);
@@ -128,11 +125,8 @@ interface Test {
       );
     expect(emit(testIface)).toMatchInlineSnapshot(`
 "interface Test {
-
   [idx: string]: any;
-
   readonly [idx: string]: any;
-
 }
 "
 `);
@@ -148,9 +142,7 @@ interface Test {
       );
     expect(emit(testIface)).toMatchInlineSnapshot(`
 "interface Test {
-
   (a: string): Test;
-
 }
 "
 `);

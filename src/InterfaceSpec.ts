@@ -58,36 +58,41 @@ export class InterfaceSpec extends Imm<InterfaceSpec> {
     codeWriter.emit(" {\n");
     codeWriter.indent();
 
+    // If we have functions, then we'll break them apart by newlines. But if we don't have any functions,
+    // we want to keep the body condensed, sans new lines. So only emit this beginning newline if we have
+    // upcoming functions ...and we have a callable/property/indexable spec was otherwise we'll have two
+    // newlines together in a row: this one and the one before the first function.
+    if (this.functionSpecs.length > 0 && !(this.callableField || this.propertySpecs || this.indexableSpecs)) {
+      codeWriter.newLine();
+    }
+
     // Callable
     if (this.callableField) {
-      codeWriter.emitCode("\n");
       this.callableField.emit(codeWriter, undefined, [Modifier.ABSTRACT]);
     }
 
     // Properties.
     this.propertySpecs.forEach(propertySpec => {
-      codeWriter.emit("\n");
       propertySpec.emit(codeWriter, [Modifier.PUBLIC], true);
     });
 
     // Indexables
     this.indexableSpecs.forEach(funSpec => {
-      codeWriter.emit("\n");
       funSpec.emit(codeWriter, undefined, [Modifier.PUBLIC, Modifier.ABSTRACT]);
     });
 
     // Functions.
     this.functionSpecs.forEach(funSpec => {
       if (!funSpec.isConstructor()) {
-        codeWriter.emit("\n");
+        codeWriter.newLine();
         funSpec.emit(codeWriter, this.name, [Modifier.PUBLIC, Modifier.ABSTRACT]);
       }
     });
 
     codeWriter.unindent();
 
-    if (!this.hasNoBody) {
-      codeWriter.emit("\n");
+    if (!this.hasNoBody && this.functionSpecs.length > 0) {
+      codeWriter.newLine();
     }
     codeWriter.emit("}\n");
   }
