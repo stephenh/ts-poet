@@ -181,6 +181,17 @@ export class TypeNames {
     return new Any(name, imported);
   }
 
+  /**
+   * A literal type value, e.g. 'one' or 1.
+   */
+  public static typeLiteral(value: string | number | boolean) {
+    if (typeof value === 'string') {
+      return TypeNames.anyType(`'${value}'`);
+    } else {
+      return TypeNames.anyType(`${value}`);
+    }
+  }
+
   public static anyTypeMaybeString(type: string | TypeName): TypeName {
     return type instanceof TypeName ? type : TypeNames.anyType(type);
   }
