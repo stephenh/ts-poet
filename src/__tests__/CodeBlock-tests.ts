@@ -256,8 +256,7 @@ describe('CodeBlockTest', () => {
   a: foo,
   b: 1 + 2,
   c: null,
-}
-"
+}"
 `);
   });
 });

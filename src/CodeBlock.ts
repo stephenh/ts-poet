@@ -125,9 +125,7 @@ export class CodeBlock extends Imm<CodeBlock> {
   }
 
   public endHash(): this {
-    return this.unindent()
-      .add('}')
-      .newLine();
+    return this.unindent().add('}');
   }
 
   public addHashEntry(key: string, value: CodeBlock | any): this {
