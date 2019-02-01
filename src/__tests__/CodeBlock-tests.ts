@@ -1,4 +1,5 @@
 import { CodeBlock } from '../CodeBlock';
+import { FunctionSpec } from '../FunctionSpec';
 import { TypeNames } from '../TypeNames';
 
 describe('CodeBlockTest', () => {
@@ -257,6 +258,52 @@ describe('CodeBlockTest', () => {
   b: 1 + 2,
   c: null,
 }"
+`);
+  });
+
+  it('can add functions', () => {
+    expect(
+      CodeBlock.empty()
+        .addStatement('const a = 1')
+        .addFunction(
+          FunctionSpec.create('foo')
+            .returns(TypeNames.STRING)
+            .addStatement('return %S', 'test')
+        )
+        .addStatement('const b = 2')
+        .toString()
+    ).toMatchInlineSnapshot(`
+"const a = 1;
+function foo(): string {
+  return \\"test\\";
+}
+const b = 2;
+"
+`);
+  });
+
+  it('can add functions to hashes', () => {
+    expect(
+      CodeBlock.empty()
+        .beginHash()
+        .addHashEntry('a', 'foo')
+        .addHashEntry(
+          'b',
+          FunctionSpec.create('foo')
+            .returns(TypeNames.STRING)
+            .addStatement('return %S', 'test')
+        )
+        .addHashEntry('c', 'bar')
+        .toString()
+    ).toMatchInlineSnapshot(`
+"{
+  a: foo,
+  b: function foo(): string {
+    return \\"test\\";
+  }
+  ,
+  c: bar,
+"
 `);
   });
 });

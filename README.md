@@ -51,4 +51,8 @@ FileSpec.create("Greeter").addClass(testClass).toString()
 
 * The original JavaPoet and TypeScriptPoet both heavily use the builder API; this is idiomatic in Java, but felt heavy in TypeScript, so the `FunctionSpec`, `ClassSpec`, etc., classes are themselves directly immutable and the `addProperty` methods return copies.
 
+### TODOs
+
+* Add LambdaSpec
+* Support hashes with lamdas
 

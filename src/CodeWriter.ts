@@ -11,6 +11,7 @@ import { SymbolReferenceTracker } from './SymbolReferenceTracker';
 import { Augmented, Imported, ImportsAll, ImportsName, SideEffect, SymbolSpec } from './SymbolSpecs';
 import { TypeName, TypeVariable } from './TypeNames';
 import { check, filterInstances, stringLiteralWithQuotes, unique } from './utils';
+import { FunctionSpec } from "./FunctionSpec";
 
 /**
  * Converts a [FileSpec] to a string suitable to both human- and tsc-consumption. This honors
@@ -245,6 +246,9 @@ export class CodeWriter implements SymbolReferenceTracker {
         case '%W':
           this.emitWrappingSpace();
           break;
+        case '%F':
+          this.emitFunction(codeBlock.args[a++] as FunctionSpec);
+          break;
         // Handle deferred type.
         default:
           this.emit(part);
@@ -342,6 +346,10 @@ export class CodeWriter implements SymbolReferenceTracker {
 
   private emitTypeName(typeName: TypeName) {
     this.emit(typeName.reference(this));
+  }
+
+  private emitFunction(fn: FunctionSpec) {
+    fn.emit(this);
   }
 
   private emitString(s?: string): void {

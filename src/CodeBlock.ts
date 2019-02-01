@@ -6,6 +6,7 @@ import { SymbolReferenceTracker } from './SymbolReferenceTracker';
 import { SymbolSpec } from './SymbolSpecs';
 import { TypeName } from './TypeNames';
 import { check } from './utils';
+import { FunctionSpec } from "./FunctionSpec";
 
 const NAMED_ARGUMENT = /^%([\w_]+):([\w]).*$/;
 const LOWERCASE = /^[a-z]+[\w_]*$/;
@@ -128,10 +129,14 @@ export class CodeBlock extends Imm<CodeBlock> {
     return this.unindent().add('}');
   }
 
-  public addHashEntry(key: string, value: CodeBlock | any): this {
+  public addHashEntry(key: string, value: FunctionSpec | CodeBlock | any): this {
     if (value instanceof CodeBlock) {
       return this.add('%L: ', key)
         .addCode(value)
+        .add(',')
+        .newLine();
+    } else if (value instanceof FunctionSpec) {
+      return this.add('%L: %F', key, value)
         .add(',')
         .newLine();
     } else {
@@ -147,6 +152,10 @@ export class CodeBlock extends Imm<CodeBlock> {
     return this.add('%[')
       .add(format, ...args)
       .add(';\n%]');
+  }
+
+  public addFunction(fn: FunctionSpec): this {
+    return this.add('%F', fn);
   }
 
   public addCode(codeBlock: CodeBlock): this {
@@ -471,6 +480,8 @@ function formatToArgAndSymbols(format: string, c: string, arg: any): [any, Symbo
       return argToString(arg);
     case 'T':
       return argToType(arg);
+    case 'F':
+      return [arg, []];
     default:
       throw new Error(`invalid format string: '${format}'`);
   }
