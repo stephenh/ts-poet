@@ -30,7 +30,9 @@ export class SymbolSpec {
    *
    *        `@` = Import named symbol from module (e.g. `import { <symbol_name> } from '<module_name>'`)
    *
-   *        `*` = Import all symbols from module (e.g. `import * from '<module_name>'`)
+   *        `*` = Import all symbols from module (e.g. `*Foo` becomes `import * as Foo from 'Foo'`,
+   *          `Foo*foo` becomes `import * as Foo from 'foo').
+   *
    *
    *        `+` = Symbol is declared implicitly via import of the module (e.g. `import '<module_name>'`)
    *
