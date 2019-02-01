@@ -68,7 +68,7 @@ export class TypeVariable extends TypeName {
 }
 
 export class Member {
-  constructor(public name: string, public type: TypeName, public optional: boolean) {}
+  constructor(public name: string, public type: TypeName, public optional: boolean = false) {}
 }
 
 export class Anonymous extends TypeName {
