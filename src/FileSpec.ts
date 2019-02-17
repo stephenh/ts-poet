@@ -182,7 +182,7 @@ export class FileSpec extends Imm<FileSpec> {
       } else if (member instanceof EnumSpec) {
         member.emit(codeWriter);
       } else if (member instanceof FunctionSpec) {
-        member.emit(codeWriter, undefined, [Modifier.PUBLIC]);
+        member.emit(codeWriter, [Modifier.PUBLIC]);
       } else if (member instanceof PropertySpec) {
         member.emit(codeWriter, [Modifier.PUBLIC], true);
       } else if (member instanceof TypeAliasSpec) {

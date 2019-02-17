@@ -1,12 +1,12 @@
 import { imm, Imm } from 'ts-imm';
 import { CodeWriter } from './CodeWriter';
+import { Encloser, FunctionSpec } from './FunctionSpec';
 import { ParameterSpec } from './ParameterSpec';
 import { PropertySpec } from './PropertySpec';
 import { SymbolReferenceTracker } from './SymbolReferenceTracker';
 import { SymbolSpec } from './SymbolSpecs';
 import { TypeName } from './TypeNames';
 import { check } from './utils';
-import { FunctionSpec } from "./FunctionSpec";
 
 const NAMED_ARGUMENT = /^%([\w_]+):([\w]).*$/;
 const LOWERCASE = /^[a-z]+[\w_]*$/;
@@ -129,14 +129,16 @@ export class CodeBlock extends Imm<CodeBlock> {
     return this.unindent().add('}');
   }
 
-  public addHashEntry(key: string, value: FunctionSpec | CodeBlock | any): this {
-    if (value instanceof CodeBlock) {
-      return this.add('%L: ', key)
-        .addCode(value)
+  public addHashEntry(value: FunctionSpec): this;
+  public addHashEntry(key: string, value: CodeBlock | any): this;
+  public addHashEntry(key: string | FunctionSpec, value?: CodeBlock | any): this {
+    if (key instanceof FunctionSpec) {
+      return this.add('%F', key.setEnclosed(Encloser.HASH))
         .add(',')
         .newLine();
-    } else if (value instanceof FunctionSpec) {
-      return this.add('%L: %F', key, value)
+    } else if (value instanceof CodeBlock) {
+      return this.add('%L: ', key)
+        .addCode(value)
         .add(',')
         .newLine();
     } else {

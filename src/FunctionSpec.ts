@@ -11,6 +11,8 @@ const CONSTRUCTOR = 'constructor()';
 const CALLABLE = 'callable()';
 const INDEXABLE = 'indexable()';
 
+export enum Encloser { HASH, CLASS, INTERFACE };
+
 /** A generated function declaration. */
 export class FunctionSpec extends Imm<FunctionSpec> {
   public static create(name: string) {
@@ -24,6 +26,7 @@ export class FunctionSpec extends Imm<FunctionSpec> {
       parameters: [],
       restParameter: undefined,
       body: CodeBlock.empty(),
+      encloser: undefined,
     });
   }
 
@@ -57,6 +60,8 @@ export class FunctionSpec extends Imm<FunctionSpec> {
   public readonly restParameter!: ParameterSpec | undefined;
   @imm
   public readonly body!: CodeBlock;
+  @imm
+  public readonly encloser?: Encloser;
 
   /*
   init {
@@ -77,12 +82,12 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     return this.parameters.find(it => it.name === name);
   }
 
-  public emit(codeWriter: CodeWriter, enclosingName?: string, implicitModifiers: Modifier[] = []): void {
+  public emit(codeWriter: CodeWriter, implicitModifiers: Modifier[] = []): void {
     codeWriter.emitJavaDoc(this.javaDoc);
     codeWriter.emitDecorators(this.decorators, false);
     codeWriter.emitModifiers(this.modifiers, implicitModifiers);
 
-    this.emitSignature(codeWriter, enclosingName);
+    this.emitSignature(codeWriter);
 
     const isEmptyConstructor = this.isConstructor() && this.body.isEmpty();
     if (this.modifiers.indexOf(Modifier.ABSTRACT) > -1 || isEmptyConstructor) {
@@ -94,7 +99,10 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     codeWriter.indent();
     codeWriter.emitCodeBlock(this.body);
     codeWriter.unindent();
-    codeWriter.emit('}\n');
+    codeWriter.emit('}');
+    if (this.encloser !== Encloser.HASH) {
+      codeWriter.emit('\n');
+    }
   }
 
   public addJavadoc(format: string, ...args: any[]): this {
@@ -275,11 +283,15 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     return this.name === INDEXABLE;
   }
 
+  public setEnclosed(encloser: Encloser): this {
+    return this.copy({ encloser });
+  }
+
   public toString(): string {
     return CodeWriter.emitToString(this);
   }
 
-  private emitSignature(codeWriter: CodeWriter, enclosingName?: string) {
+  private emitSignature(codeWriter: CodeWriter) {
     if (this.isConstructor()) {
       codeWriter.emitCode('constructor');
     } else if (this.isCallable()) {
@@ -287,7 +299,7 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     } else if (this.isIndexable()) {
       codeWriter.emitCode('[');
     } else {
-      if (enclosingName === undefined) {
+      if (this.encloser === undefined) {
         codeWriter.emit('function ');
       }
       codeWriter.emitCode('%L', this.name);

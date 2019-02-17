@@ -2,7 +2,7 @@ import { imm, Imm } from 'ts-imm';
 import { CodeBlock } from './CodeBlock';
 import { CodeWriter } from './CodeWriter';
 import { DecoratorSpec } from './DecoratorSpec';
-import { FunctionSpec } from './FunctionSpec';
+import { Encloser, FunctionSpec } from './FunctionSpec';
 import { Modifier } from './Modifier';
 import { ParameterSpec } from './ParameterSpec';
 import { PropertySpec } from './PropertySpec';
@@ -125,7 +125,7 @@ export class ClassSpec extends Imm<ClassSpec> {
     this.functionSpecs.forEach(funSpec => {
       if (funSpec.isConstructor()) {
         codeWriter.emit('\n');
-        funSpec.emit(codeWriter, this.name, [Modifier.PUBLIC]);
+        funSpec.emit(codeWriter, [Modifier.PUBLIC]);
       }
     });
 
@@ -133,7 +133,7 @@ export class ClassSpec extends Imm<ClassSpec> {
     this.functionSpecs.forEach(funSpec => {
       if (!funSpec.isConstructor()) {
         codeWriter.emit('\n');
-        funSpec.emit(codeWriter, this.name, [Modifier.PUBLIC]);
+        funSpec.emit(codeWriter, [Modifier.PUBLIC]);
       }
     });
 
@@ -247,7 +247,7 @@ export class ClassSpec extends Imm<ClassSpec> {
   public addFunction(functionSpec: FunctionSpec): this {
     // require(!functionSpec.isConstructor) { "Use the 'constructor' method for the constructor" }
     return this.copy({
-      functionSpecs: [...this.functionSpecs, functionSpec],
+      functionSpecs: [...this.functionSpecs, functionSpec.setEnclosed(Encloser.CLASS)],
     });
   }
 

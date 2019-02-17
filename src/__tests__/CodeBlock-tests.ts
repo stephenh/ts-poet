@@ -288,8 +288,7 @@ const b = 2;
         .beginHash()
         .addHashEntry('a', 'foo')
         .addHashEntry(
-          'b',
-          FunctionSpec.create('foo')
+          FunctionSpec.create('b')
             .returns(TypeNames.STRING)
             .addStatement('return %S', 'test')
         )
@@ -298,10 +297,9 @@ const b = 2;
     ).toMatchInlineSnapshot(`
 "{
   a: foo,
-  b: function foo(): string {
+  b(): string {
     return \\"test\\";
-  }
-  ,
+  },
   c: bar,
 "
 `);

@@ -1,7 +1,7 @@
 import { imm, Imm } from 'ts-imm';
 import { CodeBlock } from './CodeBlock';
 import { CodeWriter } from './CodeWriter';
-import { FunctionSpec } from './FunctionSpec';
+import { Encloser, FunctionSpec } from './FunctionSpec';
 import { Modifier } from './Modifier';
 import { PropertySpec } from './PropertySpec';
 import { TypeName, TypeNames, TypeVariable } from './TypeNames';
@@ -76,7 +76,7 @@ export class InterfaceSpec extends Imm<InterfaceSpec> {
 
     // Callable
     if (this.callableField) {
-      this.callableField.emit(codeWriter, undefined, [Modifier.ABSTRACT]);
+      this.callableField.emit(codeWriter, [Modifier.ABSTRACT]);
     }
 
     // Properties.
@@ -86,14 +86,14 @@ export class InterfaceSpec extends Imm<InterfaceSpec> {
 
     // Indexables
     this.indexableSpecs.forEach(funSpec => {
-      funSpec.emit(codeWriter, undefined, [Modifier.PUBLIC, Modifier.ABSTRACT]);
+      funSpec.emit(codeWriter, [Modifier.PUBLIC, Modifier.ABSTRACT]);
     });
 
     // Functions.
     this.functionSpecs.forEach(funSpec => {
       if (!funSpec.isConstructor()) {
         codeWriter.newLine();
-        funSpec.emit(codeWriter, this.name, [Modifier.PUBLIC, Modifier.ABSTRACT]);
+        funSpec.emit(codeWriter, [Modifier.PUBLIC, Modifier.ABSTRACT]);
       }
     });
 
@@ -190,7 +190,7 @@ export class InterfaceSpec extends Imm<InterfaceSpec> {
     // require(!functionSpec.isConstructor) { "Interfaces cannot have a constructor" }
     // require(functionSpec.decorators.isEmpty()) { "Interface functions cannot have decorators" }
     return this.copy({
-      functionSpecs: [...this.functionSpecs, functionSpec],
+      functionSpecs: [...this.functionSpecs, functionSpec.setEnclosed(Encloser.INTERFACE)],
     });
   }
 
