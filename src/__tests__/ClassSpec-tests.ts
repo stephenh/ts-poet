@@ -132,7 +132,7 @@ class Test {
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test {
 
-  constructor(value: number, ...all: Array<string>) {
+  constructor(value: number, ...all: string[]) {
   }
 
 }

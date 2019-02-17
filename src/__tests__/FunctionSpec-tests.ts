@@ -132,7 +132,7 @@ function test() {
       .addParameter('b', TypeName.STRING)
       .rest('c', TypeName.arrayType(TypeName.STRING));
     expect(emit(testClass)).toMatchInlineSnapshot(`
-"function test(b: string, ...c: Array<string>) {
+"function test(b: string, ...c: string[]) {
 }
 "
 `);

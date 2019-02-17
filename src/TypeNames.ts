@@ -25,6 +25,10 @@ export abstract class TypeName {
   public param(...typeArgs: TypeNameOrString[]) {
     return TypeNames.parameterizedType(this, ...typeArgs);
   }
+
+  public useShortArraySyntax(): boolean {
+    return true;
+  }
 }
 
 export class Any extends TypeName {
@@ -48,7 +52,15 @@ export class Parameterized extends TypeName {
   public reference(trackedBy?: SymbolReferenceTracker): string {
     const name = this.name.reference(trackedBy);
     const typeArgs = this.typeArgs.map(it => it.reference(trackedBy));
-    return `${name}<${typeArgs.join(', ')}>`;
+    if (name === 'Array' && this.typeArgs.every(t => t.useShortArraySyntax())) {
+      return `${typeArgs.join(', ')}[]`;
+    } else {
+      return `${name}<${typeArgs.join(', ')}>`;
+    }
+  }
+
+  public useShortArraySyntax(): boolean {
+    return false;
   }
 }
 
@@ -72,6 +84,10 @@ export class TypeVariable extends TypeName {
 
   public reference(trackedBy?: SymbolReferenceTracker): string {
     return this.name;
+  }
+
+  public useShortArraySyntax(): boolean {
+    return false;
   }
 }
 
@@ -108,6 +124,10 @@ export class Tuple extends TypeName {
     });
     return `[${typeRequirements.join(', ')}]`;
   }
+
+  public useShortArraySyntax(): boolean {
+    return false;
+  }
 }
 
 export class Intersection extends TypeName {
@@ -118,6 +138,10 @@ export class Intersection extends TypeName {
   public reference(trackedBy?: SymbolReferenceTracker): string {
     return this.typeRequirements.map(it => it.reference(trackedBy)).join(' & ');
   }
+
+  public useShortArraySyntax(): boolean {
+    return false;
+  }
 }
 
 export class Union extends TypeName {
@@ -127,6 +151,10 @@ export class Union extends TypeName {
 
   public reference(trackedBy?: SymbolReferenceTracker): string {
     return this.typeChoices.map(it => it.reference(trackedBy)).join(' | ');
+  }
+
+  public useShortArraySyntax(): boolean {
+    return false;
   }
 }
 
@@ -141,6 +169,10 @@ export class Lambda extends TypeName {
       params.push(`${key}: ${value.reference(trackedBy)}`);
     });
     return `(${params.join(', ')}) => ${this.returnType.reference(trackedBy)}`;
+  }
+
+  public useShortArraySyntax(): boolean {
+    return false;
   }
 }
 
@@ -219,7 +251,7 @@ export class TypeNames {
    * @param elementType Element type of the array
    * @return Type name of the new array type
    */
-  public static arrayType(elementType: TypeName): TypeName {
+  public static arrayType(elementType: TypeNameOrString): TypeName {
     return TypeNames.parameterizedType(TypeNames.ARRAY, elementType);
   }
 
@@ -229,7 +261,7 @@ export class TypeNames {
    * @param elementType Element type of the set
    * @return Type name of the new set type
    */
-  public static setType(elementType: TypeName): TypeName {
+  public static setType(elementType: TypeNameOrString): TypeName {
     return TypeNames.parameterizedType(TypeNames.SET, elementType);
   }
 
@@ -240,7 +272,7 @@ export class TypeNames {
    * @param valueType Value type of the map
    * @return Type name of the new map type
    */
-  public static mapType(keyType: TypeName, valueType: TypeName): TypeName {
+  public static mapType(keyType: TypeNameOrString, valueType: TypeNameOrString): TypeName {
     return TypeNames.parameterizedType(TypeNames.MAP, keyType, valueType);
   }
 

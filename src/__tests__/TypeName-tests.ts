@@ -59,6 +59,11 @@ describe('TypeNameTests', () => {
     expect(typeName.toString()).toEqual('Array<string | boolean>');
   });
 
+  it('prints an array of strings', () => {
+    const typeName = TypeNames.arrayType('string');
+    expect(typeName.toString()).toEqual('string[]');
+  });
+
   it('supports type literals', () => {
     expect(TypeNames.typeLiteral('one').toString()).toEqual("'one'");
     expect(TypeNames.typeLiteral(1).toString()).toEqual('1');
