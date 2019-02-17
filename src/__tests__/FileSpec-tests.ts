@@ -62,6 +62,17 @@ function foo(): Bar {
 "
 `);
   });
+
+  it('does not self import resolved paths', () => {
+    const spec = FileSpec.create('foo').addFunction(FunctionSpec.create('foo').returns('Bar@./foo'));
+    expect(emit(spec)).toMatchInlineSnapshot(`
+"
+
+function foo(): Bar {
+}
+"
+`);
+  });
 });
 
 function emit(spec: FileSpec): string {

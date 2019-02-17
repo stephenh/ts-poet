@@ -1,3 +1,4 @@
+import * as Path from 'path';
 import _ from 'lodash';
 import { ClassSpec } from './ClassSpec';
 import { CodeBlock } from './CodeBlock';
@@ -11,7 +12,7 @@ import { SymbolReferenceTracker } from './SymbolReferenceTracker';
 import { Augmented, Imported, ImportsAll, ImportsName, SideEffect, SymbolSpec } from './SymbolSpecs';
 import { TypeName, TypeVariable } from './TypeNames';
 import { check, filterInstances, stringLiteralWithQuotes, unique } from './utils';
-import { FunctionSpec } from "./FunctionSpec";
+import { FunctionSpec } from './FunctionSpec';
 
 /**
  * Converts a [FileSpec] to a string suitable to both human- and tsc-consumption. This honors
@@ -154,8 +155,7 @@ export class CodeWriter implements SymbolReferenceTracker {
       ); // FileModules.importPath(this.path, it.source));
       // .toSortedMap()
       Object.entries(m).forEach(([sourceImportPath, imps]) => {
-        if (path === sourceImportPath) {
-          // || Paths.get(".").resolve(path) == sourceImportPath) {
+        if (path && (path === sourceImportPath || Path.resolve(path) === Path.resolve(sourceImportPath))) {
           return;
         }
         filterInstances(imps, ImportsAll).forEach(i => {
