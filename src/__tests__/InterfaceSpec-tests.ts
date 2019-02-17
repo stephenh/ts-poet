@@ -93,13 +93,13 @@ interface Test {
   it('generates indexing declarations', () => {
     const testIface = InterfaceSpec.create('Test')
       .addIndexable(
-        FunctionSpec.indexableBuilder()
+        FunctionSpec.createIndexable()
           .addModifiers(Modifier.ABSTRACT)
           .addParameter('idx', TypeNames.STRING)
           .returns(TypeNames.ANY)
       )
       .addIndexable(
-        FunctionSpec.indexableBuilder()
+        FunctionSpec.createIndexable()
           .addModifiers(Modifier.READONLY, Modifier.ABSTRACT)
           .addParameter('idx', TypeNames.STRING)
           .returns(TypeNames.ANY)
@@ -115,7 +115,7 @@ interface Test {
 
   it('generates callable declaration', () => {
     const testIface = InterfaceSpec.create('Test').callable(
-      FunctionSpec.callableBuilder()
+      FunctionSpec.createCallable()
         .addModifiers(Modifier.ABSTRACT)
         .addParameter('a', TypeNames.STRING)
         .returns(TypeNames.anyType('Test'))

@@ -209,7 +209,7 @@ export class ClassSpec extends Imm<ClassSpec> {
   // "constructor" can't be a method name
   public cstr(constructor?: FunctionSpec): this {
     if (constructor) {
-      // require(constructor.isConstructor) { "expected a constructor but was ${constructor.name}; use FunctionSpec.constructorBuilder when building"
+      // require(constructor.isConstructor) { "expected a constructor but was ${constructor.name}; use FunctionSpec.createConstructor when building"
     }
     return this.copy({
       constructorField: constructor,

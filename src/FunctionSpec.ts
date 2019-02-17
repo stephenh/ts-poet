@@ -27,15 +27,15 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     });
   }
 
-  public static constructorBuilder() {
+  public static createConstructor() {
     return FunctionSpec.create(CONSTRUCTOR);
   }
 
-  public static callableBuilder() {
+  public static createCallable() {
     return FunctionSpec.create(CALLABLE);
   }
 
-  public static indexableBuilder() {
+  public static createIndexable() {
     return FunctionSpec.create(INDEXABLE);
   }
 

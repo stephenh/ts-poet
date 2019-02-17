@@ -212,7 +212,7 @@ export class InterfaceSpec extends Imm<InterfaceSpec> {
 
   public callable(callable?: FunctionSpec): this {
     if (callable) {
-      // require(callable.isCallable) { "expected a callable signature but was ${callable.name}; use FunctionSpec.callableBuilder when building" }
+      // require(callable.isCallable) { "expected a callable signature but was ${callable.name}; use FunctionSpec.createCallable when building" }
       // require(callable.modifiers == setOf(Modifier.ABSTRACT)) { "Callable must be ABSTRACT and nothing else" }
     }
     return this.copy({

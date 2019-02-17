@@ -104,7 +104,7 @@ class Test {
 
   it('generates constructor', () => {
     const testClass = ClassSpec.create('Test').cstr(
-      FunctionSpec.constructorBuilder().addParameter('value', TypeNames.NUMBER)
+      FunctionSpec.createConstructor().addParameter('value', TypeNames.NUMBER)
     );
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test {
@@ -119,7 +119,7 @@ class Test {
 
   it('generates constructor with rest parameter', () => {
     const testClass = ClassSpec.create('Test').cstr(
-      FunctionSpec.constructorBuilder()
+      FunctionSpec.createConstructor()
         .addParameter('value', TypeNames.NUMBER)
         .rest('all', TypeNames.arrayType(TypeNames.STRING))
     );
@@ -140,7 +140,7 @@ class Test {
       .addProperty('value2', TypeNames.STRING, { modifiers: [Modifier.PUBLIC] })
       .addProperty('value3', TypeNames.BOOLEAN, { optional: true, modifiers: [Modifier.PUBLIC] })
       .cstr(
-        FunctionSpec.constructorBuilder()
+        FunctionSpec.createConstructor()
           .addParameter('value', TypeNames.NUMBER)
           .addParameter('value2', TypeNames.STRING)
           .addParameter('value3', TypeNames.BOOLEAN, { optional: true })
