@@ -6,7 +6,7 @@ import { FunctionSpec } from './FunctionSpec';
 import { Modifier } from './Modifier';
 import { ParameterSpec } from './ParameterSpec';
 import { PropertySpec } from './PropertySpec';
-import { TypeName, TypeNames, TypeVariable } from './TypeNames';
+import { TypeName, TypeNameOrString, TypeNames, TypeVariable } from './TypeNames';
 
 /** A generated `class` declaration. */
 export class ClassSpec extends Imm<ClassSpec> {
@@ -187,7 +187,7 @@ export class ClassSpec extends Imm<ClassSpec> {
     });
   }
 
-  public superClass(superClass: TypeName | string): this {
+  public superClass(superClass: TypeNameOrString): this {
     // check(this.superClass == null) { "superclass already set to ${this.superClass}" }
     return this.copy({
       superClassField: TypeNames.anyTypeMaybeString(superClass),
@@ -200,7 +200,7 @@ export class ClassSpec extends Imm<ClassSpec> {
     });
   }
 
-  public addMixin(mixin: TypeName | string): this {
+  public addMixin(mixin: TypeNameOrString): this {
     return this.copy({
       mixins: [...this.mixins, TypeNames.anyTypeMaybeString(mixin)],
     });

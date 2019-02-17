@@ -17,6 +17,14 @@ export abstract class TypeName {
   public toString() {
     return this.reference(undefined);
   }
+
+  public union(other: TypeNameOrString) {
+    return TypeNames.unionType(this, other);
+  }
+
+  public param(...typeArgs: TypeNameOrString[]) {
+    return TypeNames.parameterizedType(this, ...typeArgs);
+  }
 }
 
 export class Any extends TypeName {
@@ -136,6 +144,10 @@ export class Lambda extends TypeName {
   }
 }
 
+/** Accept an existing TypeName or a string that could be a type literal or an import spec. */
+export type TypeNameOrString = TypeName | string;
+
+/** Provides public factory methods for all of the type name variants. */
 export class TypeNames {
   public static readonly NULL = TypeNames.anyType('null');
   public static readonly UNDEFINED = TypeNames.anyType('undefined');
@@ -150,6 +162,7 @@ export class TypeNames {
   public static readonly ARRAY = TypeNames.anyType('Array');
   public static readonly SET = TypeNames.anyType('Set');
   public static readonly MAP = TypeNames.anyType('Map');
+  public static readonly PROMISE = TypeNames.anyType('Promise');
   public static readonly BUFFER = TypeNames.anyType('Buffer');
   public static readonly ARRAY_BUFFER = TypeNames.anyType('ArrayBuffer');
 
@@ -192,8 +205,12 @@ export class TypeNames {
     }
   }
 
-  public static anyTypeMaybeString(type: string | TypeName): TypeName {
+  public static anyTypeMaybeString(type: TypeNameOrString): TypeName {
     return type instanceof TypeName ? type : TypeNames.anyType(type);
+  }
+
+  public static typesOrStrings(types: TypeNameOrString[]): TypeName[] {
+    return types.map(t => this.anyTypeMaybeString(t));
   }
 
   /**
@@ -235,8 +252,8 @@ export class TypeNames {
    * @param typeArgs Names of the provided type arguments
    * @return Type name of the new parameterized type
    */
-  public static parameterizedType(rawType: TypeName, ...typeArgs: TypeName[]): Parameterized {
-    return new Parameterized(rawType, typeArgs);
+  public static parameterizedType(rawType: TypeName, ...typeArgs: TypeNameOrString[]): Parameterized {
+    return new Parameterized(rawType, this.typesOrStrings(typeArgs));
   }
 
   /**
@@ -254,30 +271,22 @@ export class TypeNames {
   /**
    * Factory for type variable bounds
    */
-  public static bound(type: TypeName | string, combiner: Combiner = Combiner.UNION, modifier?: BoundModifier): Bound {
+  public static bound(type: TypeNameOrString, combiner: Combiner = Combiner.UNION, modifier?: BoundModifier): Bound {
     return new Bound(TypeNames.anyTypeMaybeString(type), combiner, modifier);
   }
 
   /**
    * Factory for type variable bounds
    */
-  public static unionBound(type: TypeName | string, keyOf: boolean = false): Bound {
-    return TypeNames.bound(
-      TypeNames.anyTypeMaybeString(type),
-      Combiner.UNION,
-      keyOf ? BoundModifier.KEY_OF : undefined
-    );
+  public static unionBound(type: TypeNameOrString, keyOf: boolean = false): Bound {
+    return TypeNames.bound(type, Combiner.UNION, keyOf ? BoundModifier.KEY_OF : undefined);
   }
 
   /**
    * Factory for type variable bounds
    */
-  public static intersectBound(type: TypeName | string, keyOf: boolean = false): Bound {
-    return TypeNames.bound(
-      TypeNames.anyTypeMaybeString(type),
-      Combiner.INTERSECT,
-      keyOf ? BoundModifier.KEY_OF : undefined
-    );
+  public static intersectBound(type: TypeNameOrString, keyOf: boolean = false): Bound {
+    return TypeNames.bound(type, Combiner.INTERSECT, keyOf ? BoundModifier.KEY_OF : undefined);
   }
 
   /**
@@ -320,8 +329,8 @@ export class TypeNames {
    * @param typeChoices All possible choices allowed in the union
    * @return Type name representing the union type
    */
-  public static unionType(...typeChoices: TypeName[]): Union {
-    return new Union(typeChoices);
+  public static unionType(...typeChoices: TypeNameOrString[]): Union {
+    return new Union(this.typesOrStrings(typeChoices));
   }
 
   /** Returns a lambda type with `returnType` and parameters of listed in `parameters`. */

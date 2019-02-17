@@ -5,6 +5,12 @@ import { Modifier } from '../Modifier';
 import { ParameterSpec } from '../ParameterSpec';
 import { TypeNames as TypeName } from '../TypeNames';
 
+const Test2 = TypeName.anyType('Test2');
+const Test3 = TypeName.anyType('Test3');
+const Test4 = TypeName.anyType('Test4');
+const Test5 = TypeName.anyType('Test5');
+const Test6 = TypeName.anyType('Test6');
+
 describe('FunctionSpec', () => {
   it('generates JavaDoc at before class definition', () => {
     const testFunc = FunctionSpec.create('test').addJavadoc('this is a comment\n');
@@ -66,9 +72,9 @@ function test() {
 
   it('generates type variables', () => {
     const testClass = FunctionSpec.create('test')
-      .addTypeVariable(TypeName.typeVariable('X', TypeName.bound('Test2')))
-      .addTypeVariable(TypeName.typeVariable('Y', TypeName.bound('Test3'), TypeName.intersectBound('Test4')))
-      .addTypeVariable(TypeName.typeVariable('Z', TypeName.bound('Test5'), TypeName.unionBound('Test6', true)));
+      .addTypeVariable(TypeName.typeVariable('X', TypeName.bound(Test2)))
+      .addTypeVariable(TypeName.typeVariable('Y', TypeName.bound(Test3), TypeName.intersectBound(Test4)))
+      .addTypeVariable(TypeName.typeVariable('Z', TypeName.bound(Test5), TypeName.unionBound(Test6, true)));
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "function test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6>() {
 }

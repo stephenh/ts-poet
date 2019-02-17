@@ -5,7 +5,7 @@ import { DecoratorSpec } from './DecoratorSpec';
 import { Modifier } from './Modifier';
 import { ParameterSpec } from './ParameterSpec';
 import { SymbolSpec } from './SymbolSpecs';
-import { TypeName, TypeNames, TypeVariable } from './TypeNames';
+import { TypeName, TypeNameOrString, TypeNames, TypeVariable } from './TypeNames';
 
 const CONSTRUCTOR = 'constructor()';
 const CALLABLE = 'callable()';
@@ -141,7 +141,7 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     });
   }
 
-  public returns(returnType: TypeName | string): this {
+  public returns(returnType: TypeNameOrString): this {
     // check(!name.isConstructor) { "$name cannot have a return type" }
     return this.copy({
       returnType: TypeNames.anyTypeMaybeString(returnType),

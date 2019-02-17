@@ -6,6 +6,12 @@ import { Modifier } from '../Modifier';
 import { PropertySpec } from '../PropertySpec';
 import { TypeNames } from '../TypeNames';
 
+const Test2 = TypeNames.anyType('Test2');
+const Test3 = TypeNames.anyType('Test3');
+const Test4 = TypeNames.anyType('Test4');
+const Test5 = TypeNames.anyType('Test5');
+const Test6 = TypeNames.anyType('Test6');
+
 describe('ClassSpec', () => {
   it('generates JavaDoc at before class definition', () => {
     const testClass = ClassSpec.create('Test').addJavadoc('this is a comment\n');
@@ -47,9 +53,9 @@ class Test {
 
   it('generates type variables', () => {
     const testClass = ClassSpec.create('Test')
-      .addTypeVariable(TypeNames.typeVariable('X', TypeNames.bound('Test2')))
-      .addTypeVariable(TypeNames.typeVariable('Y', TypeNames.bound('Test3'), TypeNames.intersectBound('Test4')))
-      .addTypeVariable(TypeNames.typeVariable('Z', TypeNames.bound('Test5'), TypeNames.unionBound('Test6', true)));
+      .addTypeVariable(TypeNames.typeVariable('X', TypeNames.bound(Test2)))
+      .addTypeVariable(TypeNames.typeVariable('Y', TypeNames.bound(Test3), TypeNames.intersectBound(Test4)))
+      .addTypeVariable(TypeNames.typeVariable('Z', TypeNames.bound(Test5), TypeNames.unionBound(Test6, true)));
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6> {
 }
@@ -58,7 +64,7 @@ class Test {
   });
 
   it('generates super class', () => {
-    const testClass = ClassSpec.create('Test').superClass('Test2');
+    const testClass = ClassSpec.create('Test').superClass(Test2);
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test extends Test2 {
 }
@@ -68,8 +74,8 @@ class Test {
 
   it('generates mixins', () => {
     const testClass = ClassSpec.create('Test')
-      .addMixin('Test2')
-      .addMixin('Test3');
+      .addMixin(Test2)
+      .addMixin(Test3);
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test implements Test2, Test3 {
 }
@@ -79,9 +85,9 @@ class Test {
 
   it('generates super class & mixins properly formatted', () => {
     const testClass = ClassSpec.create('Test')
-      .superClass('Test2')
-      .addMixin('Test3')
-      .addMixin('Test4');
+      .superClass(Test2)
+      .addMixin(Test3)
+      .addMixin(Test4);
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test extends Test2 implements Test3, Test4 {
 }
@@ -91,10 +97,10 @@ class Test {
 
   it('generates type vars, super class & mixins properly formatted', () => {
     const testClass = ClassSpec.create('Test')
-      .addTypeVariable(TypeNames.typeVariable('Y', TypeNames.bound('Test3'), TypeNames.intersectBound('Test4')))
-      .superClass('Test2')
-      .addMixin('Test3')
-      .addMixin('Test4');
+      .addTypeVariable(TypeNames.typeVariable('Y', TypeNames.bound(Test3), TypeNames.intersectBound(Test4)))
+      .superClass(Test2)
+      .addMixin(Test3)
+      .addMixin(Test4);
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test<Y extends Test3 & Test4> extends Test2 implements Test3, Test4 {
 }

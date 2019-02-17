@@ -3,6 +3,12 @@ import { InterfaceSpec } from '../InterfaceSpec';
 import { Modifier } from '../Modifier';
 import { TypeNames } from '../TypeNames';
 
+const Test2 = TypeNames.anyType('Test2');
+const Test3 = TypeNames.anyType('Test3');
+const Test4 = TypeNames.anyType('Test4');
+const Test5 = TypeNames.anyType('Test5');
+const Test6 = TypeNames.anyType('Test6');
+
 describe('InterfaceSpec', () => {
   it('generates JavaDoc at before interface definition', () => {
     const testIface = InterfaceSpec.create('Test').addJavadoc('this is a comment\n');
@@ -27,9 +33,9 @@ interface Test {
 
   it('generates type variables', () => {
     const testIface = InterfaceSpec.create('Test')
-      .addTypeVariable(TypeNames.typeVariable('X', TypeNames.bound('Test2')))
-      .addTypeVariable(TypeNames.typeVariable('Y', TypeNames.bound('Test3'), TypeNames.intersectBound('Test4')))
-      .addTypeVariable(TypeNames.typeVariable('Z', TypeNames.bound('Test5'), TypeNames.unionBound('Test6', true)));
+      .addTypeVariable(TypeNames.typeVariable('X', TypeNames.bound(Test2)))
+      .addTypeVariable(TypeNames.typeVariable('Y', TypeNames.bound(Test3), TypeNames.intersectBound(Test4)))
+      .addTypeVariable(TypeNames.typeVariable('Z', TypeNames.bound(Test5), TypeNames.unionBound(Test6, true)));
     expect(emit(testIface)).toMatchInlineSnapshot(`
 "interface Test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6> {
 }
@@ -50,10 +56,10 @@ interface Test {
 
   it('generates type vars & super interfaces properly formatted', () => {
     const testIface = InterfaceSpec.create('Test')
-      .addTypeVariable(TypeNames.typeVariable('Y', TypeNames.bound('Test3'), TypeNames.intersectBound('Test4')))
-      .addSuperInterface(TypeNames.anyType('Test2'))
-      .addSuperInterface(TypeNames.anyType('Test3'))
-      .addSuperInterface(TypeNames.anyType('Test4'));
+      .addTypeVariable(TypeNames.typeVariable('Y', TypeNames.bound(Test3), TypeNames.intersectBound(Test4)))
+      .addSuperInterface(Test2)
+      .addSuperInterface(Test3)
+      .addSuperInterface(Test4);
     expect(emit(testIface)).toMatchInlineSnapshot(`
 "interface Test<Y extends Test3 & Test4> extends Test2, Test3, Test4 {
 }

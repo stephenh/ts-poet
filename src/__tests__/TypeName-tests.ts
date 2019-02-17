@@ -61,7 +61,17 @@ describe('TypeNameTests', () => {
 
   it('supports type literals', () => {
     expect(TypeNames.typeLiteral('one').toString()).toEqual("'one'");
-    expect(TypeNames.typeLiteral(1).toString()).toEqual("1");
-    expect(TypeNames.typeLiteral(true).toString()).toEqual("true");
+    expect(TypeNames.typeLiteral(1).toString()).toEqual('1');
+    expect(TypeNames.typeLiteral(true).toString()).toEqual('true');
+  });
+
+  it('has helper methods', () => {
+    expect(TypeNames.STRING.union('boolean').toString()).toEqual('string | boolean');
+    expect(
+      TypeNames.STRING.union('boolean')
+        .union('number')
+        .toString()
+    ).toEqual('string | boolean | number');
+    expect(TypeNames.PROMISE.param('boolean').toString()).toEqual('Promise<boolean>');
   });
 });
