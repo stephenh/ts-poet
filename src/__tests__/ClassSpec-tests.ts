@@ -72,10 +72,10 @@ class Test {
 `);
   });
 
-  it('generates mixins', () => {
+  it('generates implements', () => {
     const testClass = ClassSpec.create('Test')
-      .addMixin(Test2)
-      .addMixin(Test3);
+      .addInterface(Test2)
+      .addInterface(Test3);
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test implements Test2, Test3 {
 }
@@ -83,11 +83,11 @@ class Test {
 `);
   });
 
-  it('generates super class & mixins properly formatted', () => {
+  it('generates super class & implements properly formatted', () => {
     const testClass = ClassSpec.create('Test')
       .superClass(Test2)
-      .addMixin(Test3)
-      .addMixin(Test4);
+      .addInterface(Test3)
+      .addInterface(Test4);
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test extends Test2 implements Test3, Test4 {
 }
@@ -95,12 +95,12 @@ class Test {
 `);
   });
 
-  it('generates type vars, super class & mixins properly formatted', () => {
+  it('generates type vars, super class & implements properly formatted', () => {
     const testClass = ClassSpec.create('Test')
       .addTypeVariable(TypeNames.typeVariable('Y', TypeNames.bound(Test3), TypeNames.intersectBound(Test4)))
       .superClass(Test2)
-      .addMixin(Test3)
-      .addMixin(Test4);
+      .addInterface(Test3)
+      .addInterface(Test4);
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "class Test<Y extends Test3 & Test4> extends Test2 implements Test3, Test4 {
 }

@@ -18,7 +18,7 @@ export class ClassSpec extends Imm<ClassSpec> {
       modifiers: [],
       typeVariables: [],
       superClassField: undefined,
-      mixins: [],
+      interfaces: [],
       propertySpecs: [],
       constructorField: undefined,
       functionSpecs: [],
@@ -38,7 +38,7 @@ export class ClassSpec extends Imm<ClassSpec> {
   @imm
   public readonly superClassField?: TypeName;
   @imm
-  public readonly mixins!: TypeName[];
+  public readonly interfaces!: TypeName[];
   @imm
   public readonly propertySpecs!: PropertySpec[];
   @imm
@@ -57,11 +57,11 @@ export class ClassSpec extends Imm<ClassSpec> {
     codeWriter.emitTypeVariables(this.typeVariables);
 
     const sc = this.superClassField ? CodeBlock.of('extends %T', this.superClassField) : CodeBlock.empty();
-    const mixins = CodeBlock.joinToCode(this.mixins.map(it => CodeBlock.of('%T', it)), ', ', 'implements ');
-    if (sc.isNotEmpty() && mixins.isNotEmpty()) {
-      codeWriter.emitCode(' %L %L', sc, mixins);
-    } else if (sc.isNotEmpty() || mixins.isNotEmpty()) {
-      codeWriter.emitCode(' %L%L', sc, mixins);
+    const interfaces = CodeBlock.joinToCode(this.interfaces.map(it => CodeBlock.of('%T', it)), ', ', 'implements ');
+    if (sc.isNotEmpty() && interfaces.isNotEmpty()) {
+      codeWriter.emitCode(' %L %L', sc, interfaces);
+    } else if (sc.isNotEmpty() || interfaces.isNotEmpty()) {
+      codeWriter.emitCode(' %L%L', sc, interfaces);
     }
 
     codeWriter.emit(' {\n');
@@ -194,15 +194,15 @@ export class ClassSpec extends Imm<ClassSpec> {
     });
   }
 
-  public addMixins(mixins: TypeName[]): this {
+  public addInterfaces(interfaces: TypeName[]): this {
     return this.copy({
-      mixins: [...this.mixins, ...mixins],
+      interfaces: [...this.interfaces, ...interfaces],
     });
   }
 
-  public addMixin(mixin: TypeNameOrString): this {
+  public addInterface(iface: TypeNameOrString): this {
     return this.copy({
-      mixins: [...this.mixins, TypeNames.anyTypeMaybeString(mixin)],
+      interfaces: [...this.interfaces, TypeNames.anyTypeMaybeString(iface)],
     });
   }
 
