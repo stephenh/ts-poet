@@ -1,5 +1,5 @@
 import { SymbolReferenceTracker } from './SymbolReferenceTracker';
-import { SymbolSpec } from './SymbolSpecs';
+import { moduleSeparator, SymbolSpec } from "./SymbolSpecs";
 
 /**
  * Name of any possible type that can be referenced.
@@ -215,7 +215,7 @@ export class TypeNames {
    */
   public static anyType(name: string, imported?: SymbolSpec): Any {
     if (imported === undefined) {
-      const match = name.match(/[\*@\+]/);
+      const match = name.match(moduleSeparator);
       if (match && match.index !== undefined) {
         const idx = match.index;
         const usage = name.substring(0, idx);

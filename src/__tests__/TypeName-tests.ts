@@ -1,4 +1,4 @@
-import { ImportsName } from '../SymbolSpecs';
+import { ImportsDefault, ImportsName } from "../SymbolSpecs";
 import { Member, TypeNames } from '../TypeNames';
 
 describe('TypeNameTests', () => {
@@ -24,6 +24,16 @@ describe('TypeNameTests', () => {
     if (typeName.imported) {
       expect(typeName.imported.value).toEqual('Subscriber');
       expect((typeName.imported as ImportsName).source).toEqual('rxjs/Subscriber');
+    }
+  });
+
+  it('testParsingDefault', () => {
+    const typeName = TypeNames.anyType('DataLoader=dataloader');
+    expect(typeName.usage).toEqual('DataLoader');
+    expect(typeName.imported).toBeDefined();
+    if (typeName.imported) {
+      expect(typeName.imported.value).toEqual('DataLoader');
+      expect((typeName.imported as ImportsDefault).source).toEqual('dataloader');
     }
   });
 

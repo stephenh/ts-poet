@@ -4,7 +4,8 @@ import { SymbolReferenceTracker } from './SymbolReferenceTracker';
 const fileNamePattern = '(?:[a-zA-Z0-9._-]+)';
 const modulePattern = `@?(?:(?:!${fileNamePattern})|(?:${fileNamePattern}(?:/${fileNamePattern})*))`;
 const identPattern = `(?:(?:[a-zA-Z][_a-zA-Z0-9.]*)|(?:[_a-zA-Z][_a-zA-Z0-9.]+))`;
-const importPattern = `^(${identPattern})?([*@+=])(${modulePattern})(?:#(${identPattern}))?`;
+export const moduleSeparator = '[*@+=]';
+const importPattern = `^(${identPattern})?(${moduleSeparator})(${modulePattern})(?:#(${identPattern}))?`;
 
 /**
  * Specifies a symbol and its related origin, either via import or implicit/local declaration.
