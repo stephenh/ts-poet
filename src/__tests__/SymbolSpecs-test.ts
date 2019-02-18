@@ -1,6 +1,6 @@
 import { CodeWriter } from '../CodeWriter';
 import { StringBuffer } from '../StringBuffer';
-import { Augmented, ImportsAll, ImportsName, SideEffect, SymbolSpec } from '../SymbolSpecs';
+import { Augmented, ImportsAll, ImportsDefault, ImportsName, SideEffect, SymbolSpec } from "../SymbolSpecs";
 
 describe('SymbolSpec Tests', () => {
   it('parsing implicitly defined (non-imported) symbols', () => {
@@ -16,7 +16,7 @@ describe('SymbolSpec Tests', () => {
     expect(sym.value).toEqual('Observable');
     expect(sym.source).toEqual('rxjs/Observable');
 
-    expect(emit(sym)).toMatchInlineSnapshot(`"import {Observable} from 'rxjs/Observable';"`);
+    expect(emit(sym)).toMatchInlineSnapshot(`"import { Observable } from 'rxjs/Observable';"`);
   });
 
   it('parsing named import: exported symbol implied by generated module path', () => {
@@ -27,7 +27,7 @@ describe('SymbolSpec Tests', () => {
     expect(sym.value).toEqual('Api');
     expect(sym.source).toEqual('!Api');
 
-    expect(emit(sym)).toMatchInlineSnapshot(`"import {Api} from '!Api';"`);
+    expect(emit(sym)).toMatchInlineSnapshot(`"import { Api } from '!Api';"`);
   });
 
   it('parsing named import: exported symbol explicit, source relative to current dir', () => {
@@ -37,7 +37,7 @@ describe('SymbolSpec Tests', () => {
     const sym = parsed as ImportsName;
     expect(sym.value).toEqual('BackendService');
     expect(sym.source).toEqual('./some/local/source/file');
-    expect(emit(sym)).toMatchInlineSnapshot(`"import {BackendService} from './some/local/source/file';"`);
+    expect(emit(sym)).toMatchInlineSnapshot(`"import { BackendService } from './some/local/source/file';"`);
   });
 
   it('parsing named import: exported symbol explicit, source relative to parent dir', () => {
@@ -47,7 +47,7 @@ describe('SymbolSpec Tests', () => {
     const sym = parsed as ImportsName;
     expect(sym.value).toEqual('BackendService');
     expect(sym.source).toEqual('../some/local/source/file');
-    expect(emit(sym)).toMatchInlineSnapshot(`"import {BackendService} from '../some/local/source/file';"`);
+    expect(emit(sym)).toMatchInlineSnapshot(`"import { BackendService } from '../some/local/source/file';"`);
   });
 
   it('parsing named import: exported symbol explicit, source is implied module', () => {
@@ -57,7 +57,7 @@ describe('SymbolSpec Tests', () => {
     const sym = parsed as ImportsName;
     expect(sym.value).toEqual('SomeOtherSymbolDepth');
     expect(sym.source).toEqual('rxjs/Observable');
-    expect(emit(sym)).toMatchInlineSnapshot(`"import {SomeOtherSymbolDepth} from 'rxjs/Observable';"`);
+    expect(emit(sym)).toMatchInlineSnapshot(`"import { SomeOtherSymbolDepth } from 'rxjs/Observable';"`);
   });
 
   it('parsing all import: exported symbol implied by module path', () => {
@@ -78,6 +78,16 @@ describe('SymbolSpec Tests', () => {
     expect(sym.value).toEqual('SomeOther');
     expect(sym.source).toEqual('rxjs/Observable');
     expect(emit(sym)).toMatchInlineSnapshot(`"import * as SomeOther from 'rxjs/Observable';"`);
+  });
+
+  it('parsing default import', () => {
+    const parsed = SymbolSpec.from('DataLoader=dataloader');
+    expect(parsed).toBeInstanceOf(ImportsDefault);
+
+    const sym = parsed as ImportsDefault;
+    expect(sym.value).toEqual('DataLoader');
+    expect(sym.source).toEqual('dataloader');
+    expect(emit(sym)).toMatchInlineSnapshot(`"import DataLoader from 'dataloader';"`);
   });
 
   it('parsing side effect import: exported symbol made available as side effect of import', () => {

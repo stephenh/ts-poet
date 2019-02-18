@@ -4,7 +4,7 @@ import { SymbolReferenceTracker } from './SymbolReferenceTracker';
 const fileNamePattern = '(?:[a-zA-Z0-9._-]+)';
 const modulePattern = `@?(?:(?:!${fileNamePattern})|(?:${fileNamePattern}(?:/${fileNamePattern})*))`;
 const identPattern = `(?:(?:[a-zA-Z][_a-zA-Z0-9.]*)|(?:[_a-zA-Z][_a-zA-Z0-9.]+))`;
-const importPattern = `^(${identPattern})?([*@+])(${modulePattern})(?:#(${identPattern}))?`;
+const importPattern = `^(${identPattern})?([*@+=])(${modulePattern})(?:#(${identPattern}))?`;
 
 /**
  * Specifies a symbol and its related origin, either via import or implicit/local declaration.
@@ -65,6 +65,8 @@ export class SymbolSpec {
           return SymbolSpecs.importsAll(symbolName, modulePath);
         case '@':
           return SymbolSpecs.importsName(symbolName, modulePath);
+        case '=':
+          return SymbolSpecs.importsDefault(symbolName, modulePath);
         case '+':
           return targetName
             ? SymbolSpecs.augmented(symbolName, modulePath, targetName)
@@ -152,6 +154,19 @@ export class SymbolSpecs {
   public static implicit(name: string): SymbolSpec {
     return new Implicit(name);
   }
+
+  /**
+   * Creates an import of a single named symbol from the module's exported
+   * default.
+   *
+   * e.g. `import Engine from 'engine';`
+   *
+   * @param exportedName The symbol that is both exported and imported
+   * @param from The module the symbol is exported from
+   */
+  public static importsDefault(exportedName: string, from: string): SymbolSpec {
+    return new ImportsDefault(exportedName, from);
+  }
 }
 
 /**
@@ -183,6 +198,18 @@ export abstract class Imported extends SymbolSpec {
  * e.g. `import { Engine } from 'templates';`
  */
 export class ImportsName extends Imported {
+  constructor(value: string, source: string) {
+    super(value, source);
+  }
+}
+
+/**
+ * Imports a single named symbol from the module's exported
+ * default.
+ *
+ * e.g. `import Engine from 'engine';`
+ */
+export class ImportsDefault extends Imported {
   constructor(value: string, source: string) {
     super(value, source);
   }

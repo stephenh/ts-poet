@@ -22,8 +22,8 @@ function foo() {
       .addFunction(FunctionSpec.create('foo').returns('@rxjs/Subscriber'))
       .addFunction(FunctionSpec.create('bar').returns('@rxjs/Observable'));
     expect(emit(spec)).toMatchInlineSnapshot(`
-"import {Subscriber} from 'rxjs/Subscriber';
-import {Observable} from 'rxjs/Observable';
+"import { Subscriber } from 'rxjs/Subscriber';
+import { Observable } from 'rxjs/Observable';
 
 
 function foo(): Subscriber {
@@ -40,7 +40,7 @@ function bar(): Observable {
       .addFunction(FunctionSpec.create('foo').returns('@rxjs/Subscriber'))
       .addFunction(FunctionSpec.create('bar').returns('@rxjs/Subscriber'));
     expect(emit(spec)).toMatchInlineSnapshot(`
-"import {Subscriber} from 'rxjs/Subscriber';
+"import { Subscriber } from 'rxjs/Subscriber';
 
 
 function foo(): Subscriber {

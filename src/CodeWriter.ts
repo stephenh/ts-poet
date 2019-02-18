@@ -9,7 +9,7 @@ import { LineWrapper } from './LineWrapper';
 import { Modifier, ModifierOrder } from './Modifier';
 import { StringBuffer } from './StringBuffer';
 import { SymbolReferenceTracker } from './SymbolReferenceTracker';
-import { Augmented, Imported, ImportsAll, ImportsName, SideEffect, SymbolSpec } from './SymbolSpecs';
+import { Augmented, Imported, ImportsAll, ImportsDefault, ImportsName, SideEffect, SymbolSpec } from "./SymbolSpecs";
 import { TypeName, TypeVariable } from './TypeNames';
 import { check, filterInstances, stringLiteralWithQuotes, unique } from './utils';
 import { FunctionSpec } from './FunctionSpec';
@@ -154,36 +154,32 @@ export class CodeWriter implements SymbolReferenceTracker {
         it => it.source
       ); // FileModules.importPath(this.path, it.source));
       // .toSortedMap()
-      Object.entries(m).forEach(([sourceImportPath, imps]) => {
+      Object.entries(m).forEach(([sourceImportPath, imports]) => {
+        // Skip imports from the current module
         if (path && (path === sourceImportPath || Path.resolve(path) === Path.resolve(sourceImportPath))) {
           return;
         }
-        filterInstances(imps, ImportsAll).forEach(i => {
-          // Output star imports individually
+        // Output star imports individually
+        filterInstances(imports, ImportsAll).forEach(i => {
           this.emitCode("%[import * as %L from '%L';\n%]", i.value, sourceImportPath);
-          // Output related augments
           const augments = augmentImports[i.value];
           if (augments) {
-            augments.forEach(augment => {
-              this.emitCode("%[import '%L';\n%]", augment.source);
-            });
+            augments.forEach(augment => this.emitCode("%[import '%L';\n%]", augment.source));
           }
         });
-        const names = unique(filterInstances(imps, ImportsName).map(it => it.value));
-        if (names.length > 0) {
-          // Output named imports as a group
-          this.emitCode('import {')
-            .indent()
-            .emitCode(names.join(', '))
-            .unindent()
-            .emitCode("} from '%L';\n", sourceImportPath);
-          // Output related augments
-          names.forEach(name => {
+        // Output named imports as a group
+        const names = unique(filterInstances(imports, ImportsName).map(it => it.value));
+        const def = unique(filterInstances(imports, ImportsDefault).map(it => it.value));
+        if (names.length > 0 || def.length > 0) {
+          const namesPart = names.length > 0 ? [`{ ${names.join(', ')} }`] : [];
+          const defPart = def.length > 0 ? [def[0]] : [];
+          this.emitCode('import ')
+            .emitCode([...defPart, ...namesPart].join(', '))
+            .emitCode(" from '%L';\n", sourceImportPath);
+          [...names, ...def].forEach(name => {
             const augments = augmentImports[name];
             if (augments) {
-              augments.forEach(augment => {
-                this.emitCode("%[import '%L';\n%]", augment.source);
-              });
+              augments.forEach(augment => this.emitCode("%[import '%L';\n%]", augment.source));
             }
           });
         }
