@@ -21,6 +21,7 @@ export class PropertySpec extends Imm<PropertySpec> {
       modifiers,
       initializerField: undefined,
       optional,
+      implicitlyType: false,
     });
   }
 
@@ -38,6 +39,8 @@ export class PropertySpec extends Imm<PropertySpec> {
   public readonly initializerField?: CodeBlock;
   @imm
   public readonly optional!: boolean;
+  @imm
+  public readonly implicitlyType!: boolean;
 
   public emit(
     codeWriter: CodeWriter,
@@ -48,7 +51,13 @@ export class PropertySpec extends Imm<PropertySpec> {
     codeWriter.emitJavaDoc(this.javaDoc);
     codeWriter.emitDecorators(this.decorators, false);
     codeWriter.emitModifiers(this.modifiers, implicitModifiers);
-    codeWriter.emitCode(`%L${this.optional ? '?' : ''}: %T`, this.name, this.type);
+    codeWriter.emitCode(this.name);
+    if (this.optional) {
+      codeWriter.emitCode('?');
+    }
+    if (!this.implicitlyType) {
+      codeWriter.emitCode(`: %T`, this.type);
+    }
     if (withInitializer && this.initializerField) {
       codeWriter.emit(' = ');
       codeWriter.emitCodeBlock(this.initializerField);
@@ -86,6 +95,10 @@ export class PropertySpec extends Imm<PropertySpec> {
     return this.copy({
       modifiers: [...this.modifiers, ...modifiers],
     });
+  }
+
+  public setImplicitlyTyped(): this {
+    return this.copy({ implicitlyType: true });
   }
 
   public initializer(format: string, ...args: any[]): this {

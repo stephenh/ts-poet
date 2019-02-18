@@ -208,7 +208,6 @@ export class CodeWriter implements SymbolReferenceTracker {
   public emitCodeBlock(codeBlock: CodeBlock): this {
     // Transfer all symbols referenced in the code block
     codeBlock.referencedSymbols.forEach(sym => this.referencedSymbols.add(sym));
-
     let a = 0;
     codeBlock.formatParts.forEach(part => {
       switch (part) {
@@ -250,6 +249,9 @@ export class CodeWriter implements SymbolReferenceTracker {
           this.emit(part);
       }
     });
+    if (codeBlock.trailer) {
+      this.emitCodeBlock(codeBlock.trailer);
+    }
     return this;
   }
   /**

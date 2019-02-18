@@ -61,7 +61,20 @@ export class CodeBlock extends Imm<CodeBlock> {
       formatParts: [],
       args: [],
       referencedSymbols: new Set(),
+      trailer: undefined,
     });
+  }
+
+  /** Returns a code block for doing multiline lambdas. */
+  public static lambda(...parameterNames: string[]): CodeBlock {
+    return CodeBlock.empty()
+      .add('(%L) => {\n', parameterNames.join(', '))
+      .indent()
+      .addTrailer(
+        CodeBlock.empty()
+          .unindent()
+          .add('}')
+      );
   }
 
   public static joinToCode(
@@ -84,6 +97,8 @@ export class CodeBlock extends Imm<CodeBlock> {
   public readonly args!: ReadonlyArray<any>;
   @imm
   public readonly referencedSymbols!: Set<SymbolSpec>;
+  @imm
+  public readonly trailer?: CodeBlock;
 
   public indent(): this {
     return this.copy({
@@ -167,6 +182,10 @@ export class CodeBlock extends Imm<CodeBlock> {
       referencedSymbols: new Set([...this.referencedSymbols, ...codeBlock.referencedSymbols]),
     });
     return this;
+  }
+
+  public addTrailer(codeBlock: CodeBlock): this {
+    return this.copy({ trailer: codeBlock });
   }
 
   /**

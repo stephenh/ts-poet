@@ -6,6 +6,7 @@ import { Modifier } from '../Modifier';
 import { PropertySpec } from '../PropertySpec';
 import { TypeNames } from '../TypeNames';
 
+const DataLoader = TypeNames.anyType('DataLoader=dataloader');
 const Test2 = TypeNames.anyType('Test2');
 const Test3 = TypeNames.anyType('Test3');
 const Test4 = TypeNames.anyType('Test4');
@@ -228,6 +229,31 @@ class Test {
 
   @logged()
   value5: number;
+
+}
+"
+`);
+  });
+
+  it('generates property declarations with initializers', () => {
+    const testClass = ClassSpec.create('Test').addProperty(
+      PropertySpec.create('loader', DataLoader.param('string', 'string'))
+        .addModifiers(Modifier.PRIVATE)
+        .setImplicitlyTyped()
+        .initializerBlock(
+          CodeBlock.empty().add(
+            'new %L(%L)',
+            DataLoader.param('string', 'string'),
+            CodeBlock.lambda('keys').addStatement('return keys')
+          )
+        )
+    );
+    expect(emit(testClass)).toMatchInlineSnapshot(`
+"class Test {
+
+  private loader = new DataLoader<string, string>((keys) => {
+    return keys;
+  });
 
 }
 "
