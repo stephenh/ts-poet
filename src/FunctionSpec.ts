@@ -94,7 +94,11 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     this.emitSignature(codeWriter);
 
     const isEmptyConstructor = this.isConstructor() && this.body.isEmpty();
-    if (this.modifiers.indexOf(Modifier.ABSTRACT) > -1 || isEmptyConstructor) {
+    if (
+      this.modifiers.includes(Modifier.ABSTRACT) ||
+      implicitModifiers.includes(Modifier.ABSTRACT) ||
+      isEmptyConstructor
+    ) {
       codeWriter.emit(';\n');
       return;
     }

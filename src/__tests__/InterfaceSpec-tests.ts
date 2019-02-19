@@ -82,8 +82,8 @@ interface Test {
 
   it('generates method declarations', () => {
     const testIface = InterfaceSpec.create('Test')
-      .addFunction(FunctionSpec.create('test1').addModifiers(Modifier.ABSTRACT))
-      .addFunction(FunctionSpec.create('test2').addModifiers(Modifier.ABSTRACT));
+      .addFunction(FunctionSpec.create('test1'))
+      .addFunction(FunctionSpec.create('test2'));
     expect(emit(testIface)).toMatchInlineSnapshot(`
 "interface Test {
 
@@ -100,13 +100,12 @@ interface Test {
     const testIface = InterfaceSpec.create('Test')
       .addIndexable(
         FunctionSpec.createIndexable()
-          .addModifiers(Modifier.ABSTRACT)
           .addParameter('idx', TypeNames.STRING)
           .returns(TypeNames.ANY)
       )
       .addIndexable(
         FunctionSpec.createIndexable()
-          .addModifiers(Modifier.READONLY, Modifier.ABSTRACT)
+          .addModifiers(Modifier.READONLY)
           .addParameter('idx', TypeNames.STRING)
           .returns(TypeNames.ANY)
       );
@@ -122,7 +121,6 @@ interface Test {
   it('generates callable declaration', () => {
     const testIface = InterfaceSpec.create('Test').callable(
       FunctionSpec.createCallable()
-        .addModifiers(Modifier.ABSTRACT)
         .addParameter('a', TypeNames.STRING)
         .returns(TypeNames.anyType('Test'))
     );
