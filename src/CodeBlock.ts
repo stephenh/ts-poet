@@ -134,6 +134,14 @@ export class CodeBlock extends Imm<CodeBlock> {
     return this.unindent().add('}\n');
   }
 
+  public beginLambda(controlFlow: string, ...args: any[]): this {
+    return this.add(`${controlFlow} {\n`, ...args).indent();
+  }
+
+  public endLambda(closing: string, ...args: any[]): this {
+    return this.unindent().add(`}${closing}\n`, ...args);
+  }
+
   public beginHash(): this {
     return this.add('{')
       .newLine()

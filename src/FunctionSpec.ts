@@ -11,7 +11,11 @@ const CONSTRUCTOR = 'constructor()';
 const CALLABLE = 'callable()';
 const INDEXABLE = 'indexable()';
 
-export enum Encloser { HASH, CLASS, INTERFACE };
+export enum Encloser {
+  HASH,
+  CLASS,
+  INTERFACE,
+}
 
 /** A generated function declaration. */
 export class FunctionSpec extends Imm<FunctionSpec> {
@@ -257,6 +261,30 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     // modifiers -= Modifier.ABSTRACT
     return this.copy({
       body: this.body.endControlFlow(),
+    });
+  }
+
+  public beginLambda(controlFlow: string, ...args: any[]): this {
+    return this.copy({
+      body: this.body.beginLambda(controlFlow, ...args),
+    });
+  }
+
+  public endLambda(closing: string, ...args: any[]): this {
+    return this.copy({
+      body: this.body.endLambda(closing, ...args),
+    });
+  }
+
+  public indent(): this {
+    return this.copy({
+      body: this.body.indent(),
+    });
+  }
+
+  public unindent(): this {
+    return this.copy({
+      body: this.body.unindent(),
     });
   }
 
