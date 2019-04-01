@@ -73,6 +73,17 @@ function foo(): Bar {
 "
 `);
   });
+
+  it('does not self import resolved ts paths', () => {
+    const spec = FileSpec.create('foo.ts').addFunction(FunctionSpec.create('foo').returns('Bar@./foo'));
+    expect(emit(spec)).toMatchInlineSnapshot(`
+"
+
+function foo(): Bar {
+}
+"
+`);
+  });
 });
 
 function emit(spec: FileSpec): string {
