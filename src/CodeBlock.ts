@@ -5,7 +5,7 @@ import { ParameterSpec } from './ParameterSpec';
 import { PropertySpec } from './PropertySpec';
 import { SymbolReferenceTracker } from './SymbolReferenceTracker';
 import { SymbolSpec } from './SymbolSpecs';
-import { TypeName } from './TypeNames';
+import { TypeName, TypeNames } from './TypeNames';
 import { check } from './utils';
 
 const NAMED_ARGUMENT = /^%([\w_]+):([\w]).*$/;
@@ -553,6 +553,9 @@ function argToString(o?: any): [string, SymbolSpec[]] {
 function argToType(o?: any): [TypeName, SymbolSpec[]] {
   if (o instanceof TypeName) {
     return [o, toTuple(o)[1]];
+  } else if (typeof o === 'string') {
+    const type = TypeNames.importedType(o);
+    return [type, toTuple(type)[1]];
   } else {
     throw new Error(`expected type but was ${o}`);
   }

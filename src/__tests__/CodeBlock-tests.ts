@@ -243,6 +243,12 @@ describe('CodeBlockTest', () => {
     ).toMatchInlineSnapshot(`"const a = null"`);
   });
 
+  it('accepts strings for %T', () => {
+    const block = CodeBlock.empty().add('%T', 'SomeClass@some/import');
+    expect(block.toString()).toEqual('SomeClass');
+    expect(block.referencedSymbols.size).toEqual(1);
+  });
+
   it('has a DSL for hashes', () => {
     expect(
       CodeBlock.empty()
