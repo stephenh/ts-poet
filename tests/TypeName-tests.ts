@@ -1,5 +1,5 @@
-import { ImportsDefault, ImportsName } from "../SymbolSpecs";
-import { Member, TypeNames } from '../TypeNames';
+import { ImportsDefault, ImportsName } from '@src/SymbolSpecs';
+import { Member, TypeNames } from '@src/TypeNames';
 
 describe('TypeNameTests', () => {
   it('testParsingNestedImport', () => {

@@ -1,5 +1,5 @@
-import { EnumSpec } from '../EnumSpec';
-import { Modifier } from '../Modifier';
+import { EnumSpec } from '@src/EnumSpec';
+import { Modifier } from '@src/Modifier';
 
 describe('EnumSpec', () => {
   it('testGenJavaDoc', () => {

@@ -1,5 +1,5 @@
-import { CodeWriter } from '../CodeWriter';
-import { StringBuffer } from '../StringBuffer';
+import { CodeWriter } from '@src/CodeWriter';
+import { StringBuffer } from '@src/StringBuffer';
 import { Augmented, ImportsAll, ImportsDefault, ImportsName, SideEffect, SymbolSpec } from "../SymbolSpecs";
 
 describe('SymbolSpec Tests', () => {
@@ -46,8 +46,8 @@ describe('SymbolSpec Tests', () => {
 
     const sym = parsed as ImportsName;
     expect(sym.value).toEqual('BackendService');
-    expect(sym.source).toEqual('../some/local/source/file');
-    expect(emit(sym)).toMatchInlineSnapshot(`"import { BackendService } from '../some/local/source/file';"`);
+    expect(sym.source).toEqual('@src/some/local/source/file');
+    expect(emit(sym)).toMatchInlineSnapshot(`"import { BackendService } from '@src/some/local/source/file';"`);
   });
 
   it('parsing named import: exported symbol explicit, source is implied module', () => {

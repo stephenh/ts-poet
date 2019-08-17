@@ -1,6 +1,6 @@
-import { CodeBlock } from '../CodeBlock';
-import { FunctionSpec } from '../FunctionSpec';
-import { TypeNames } from '../TypeNames';
+import { CodeBlock } from '@src/CodeBlock';
+import { FunctionSpec } from '@src/FunctionSpec';
+import { TypeNames } from '@src/TypeNames';
 
 describe('CodeBlockTest', () => {
   it('of', () => {

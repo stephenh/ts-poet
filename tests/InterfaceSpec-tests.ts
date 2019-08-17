@@ -1,7 +1,7 @@
-import { FunctionSpec } from '../FunctionSpec';
-import { InterfaceSpec } from '../InterfaceSpec';
-import { Modifier } from '../Modifier';
-import { TypeNames } from '../TypeNames';
+import { FunctionSpec } from '@src/FunctionSpec';
+import { InterfaceSpec } from '@src/InterfaceSpec';
+import { Modifier } from '@src/Modifier';
+import { TypeNames } from '@src/TypeNames';
 
 const Test2 = TypeNames.anyType('Test2');
 const Test3 = TypeNames.anyType('Test3');

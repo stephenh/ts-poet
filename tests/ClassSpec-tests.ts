@@ -1,10 +1,10 @@
-import { ClassSpec } from '../ClassSpec';
-import { CodeBlock } from '../CodeBlock';
-import { DecoratorSpec } from '../DecoratorSpec';
-import { FunctionSpec } from '../FunctionSpec';
-import { Modifier } from '../Modifier';
-import { PropertySpec } from '../PropertySpec';
-import { TypeNames } from '../TypeNames';
+import { ClassSpec } from '@src/ClassSpec';
+import { CodeBlock } from '@src/CodeBlock';
+import { DecoratorSpec } from '@src/DecoratorSpec';
+import { FunctionSpec } from '@src/FunctionSpec';
+import { Modifier } from '@src/Modifier';
+import { PropertySpec } from '@src/PropertySpec';
+import { TypeNames } from '@src/TypeNames';
 
 const DataLoader = TypeNames.anyType('DataLoader=dataloader');
 const Test2 = TypeNames.anyType('Test2');

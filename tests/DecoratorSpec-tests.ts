@@ -1,6 +1,6 @@
-import { CodeWriter } from '../CodeWriter';
-import { DecoratorSpec } from '../DecoratorSpec';
-import { StringBuffer } from '../StringBuffer';
+import { CodeWriter } from '@src/CodeWriter';
+import { DecoratorSpec } from '@src/DecoratorSpec';
+import { StringBuffer } from '@src/StringBuffer';
 
 describe('DecoratorSpec', () => {
   it('generate inline', () => {

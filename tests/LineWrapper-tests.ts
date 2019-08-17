@@ -1,5 +1,5 @@
-import { LineWrapper } from '../LineWrapper';
-import { StringBuffer } from '../StringBuffer';
+import { LineWrapper } from '@src/LineWrapper';
+import { StringBuffer } from '@src/StringBuffer';
 
 describe('LineWrapper', () => {
   it('wrap', () => {

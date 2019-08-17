@@ -1,9 +1,9 @@
-import { CodeBlock } from '../CodeBlock';
-import { DecoratorSpec } from '../DecoratorSpec';
-import { FunctionSpec } from '../FunctionSpec';
-import { Modifier } from '../Modifier';
-import { ParameterSpec } from '../ParameterSpec';
-import { TypeNames as TypeName } from '../TypeNames';
+import { CodeBlock } from '@src/CodeBlock';
+import { DecoratorSpec } from '@src/DecoratorSpec';
+import { FunctionSpec } from '@src/FunctionSpec';
+import { Modifier } from '@src/Modifier';
+import { ParameterSpec } from '@src/ParameterSpec';
+import { TypeNames as TypeName } from '@src/TypeNames';
 
 const Test2 = TypeName.anyType('Test2');
 const Test3 = TypeName.anyType('Test3');

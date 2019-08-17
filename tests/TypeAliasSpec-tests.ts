@@ -1,6 +1,6 @@
-import { Modifier } from '../Modifier';
-import { TypeAliasSpec } from '../TypeAliasSpec';
-import { TypeNames } from '../TypeNames';
+import { Modifier } from '@src/Modifier';
+import { TypeAliasSpec } from '@src/TypeAliasSpec';
+import { TypeNames } from '@src/TypeNames';
 
 describe('TypeAliasSpec', () => {
   it('generates JavaDoc at before class definition', () => {

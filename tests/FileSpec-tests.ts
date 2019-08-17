@@ -1,6 +1,6 @@
-import { FileSpec } from '../FileSpec';
-import { FunctionSpec } from '../FunctionSpec';
-import { StringBuffer } from '../StringBuffer';
+import { FileSpec } from '@src/FileSpec';
+import { FunctionSpec } from '@src/FunctionSpec';
+import { StringBuffer } from '@src/StringBuffer';
 
 describe('FileSpec', () => {
   it('generates comment at before class definition', () => {
