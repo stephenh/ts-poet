@@ -1,9 +1,10 @@
-import * as Path from 'path';
 import _ from 'lodash';
+import * as Path from 'path';
 import { ClassSpec } from './ClassSpec';
 import { CodeBlock } from './CodeBlock';
 import { DecoratorSpec } from './DecoratorSpec';
 import { EnumSpec } from './EnumSpec';
+import { FunctionSpec } from './FunctionSpec';
 import { InterfaceSpec } from './InterfaceSpec';
 import { LineWrapper } from './LineWrapper';
 import { Modifier, ModifierOrder } from './Modifier';
@@ -12,7 +13,6 @@ import { SymbolReferenceTracker } from './SymbolReferenceTracker';
 import { Augmented, Imported, ImportsAll, ImportsDefault, ImportsName, SideEffect, SymbolSpec } from "./SymbolSpecs";
 import { TypeName, TypeVariable } from './TypeNames';
 import { check, filterInstances, stringLiteralWithQuotes, unique } from './utils';
-import { FunctionSpec } from './FunctionSpec';
 
 /**
  * Converts a [FileSpec] to a string suitable to both human- and tsc-consumption. This honors
@@ -154,6 +154,7 @@ export class CodeWriter implements SymbolReferenceTracker {
         it => it.source
       ); // FileModules.importPath(this.path, it.source));
       // .toSortedMap()
+      // tslint:disable-next-line:no-shadowed-variable
       Object.entries(m).forEach(([sourceImportPath, imports]) => {
         // Skip imports from the current module
         if (path && (path === sourceImportPath || Path.resolve(path) === Path.resolve(sourceImportPath))) {

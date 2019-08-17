@@ -6,9 +6,7 @@ export function check(b: boolean, message: string = 'check failed') {
   }
 }
 
-interface Constructor<T> {
-  new (...args: any[]): T;
-}
+type Constructor<T> = new (...args: any[]) => T;
 
 export function filterInstances<T, U>(list: T[], t: Constructor<U>): U[] {
   return (list.filter(e => e instanceof t) as unknown) as U[];
