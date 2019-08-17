@@ -1,4 +1,6 @@
 
+[![CircleCI](https://circleci.com/gh/stephenh/ts-poet.svg?style=svg)](https://circleci.com/gh/stephenh/ts-poet)
+
 ts-poet
 =======
 
