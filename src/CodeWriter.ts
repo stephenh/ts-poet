@@ -10,7 +10,7 @@ import { LineWrapper } from './LineWrapper';
 import { Modifier, ModifierOrder } from './Modifier';
 import { StringBuffer } from './StringBuffer';
 import { SymbolReferenceTracker } from './SymbolReferenceTracker';
-import { Augmented, Imported, ImportsAll, ImportsDefault, ImportsName, SideEffect, SymbolSpec } from "./SymbolSpecs";
+import { Augmented, Imported, ImportsAll, ImportsDefault, ImportsName, SideEffect, SymbolSpec } from './SymbolSpecs';
 import { TypeName, TypeVariable } from './TypeNames';
 import { check, filterInstances, stringLiteralWithQuotes, unique } from './utils';
 
@@ -352,8 +352,14 @@ export class CodeWriter implements SymbolReferenceTracker {
   }
 
   private emitString(s?: string): void {
-    // Emit null as a literal null: no quotes.
-    this.emit(s ? stringLiteralWithQuotes(s) : 'null');
+    if (s === null) {
+      // Emit null as a literal null: no quotes.
+      this.emit('null');
+    } else if (s === undefined) {
+      this.emit('undefined');
+    } else {
+      this.emit(stringLiteralWithQuotes(s));
+    }
   }
 
   private emitLiteral(o?: any): void {

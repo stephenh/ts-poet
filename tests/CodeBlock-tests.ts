@@ -243,6 +243,10 @@ describe('CodeBlockTest', () => {
     ).toMatchInlineSnapshot(`"const a = null"`);
   });
 
+  it('handles empty strings', () => {
+    expect(CodeBlock.of('%S', '').toString()).toEqual(`""`);
+  });
+
   it('accepts strings for %T', () => {
     const block = CodeBlock.empty().add('%T', 'SomeClass@some/import');
     expect(block.toString()).toEqual('SomeClass');
