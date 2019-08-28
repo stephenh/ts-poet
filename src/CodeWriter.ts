@@ -31,12 +31,6 @@ export class CodeWriter implements SymbolReferenceTracker {
   private javaDoc = false;
   private comment = false;
   private trailingNewline = false;
-  /**
-   * When emitting a statement, this is the line of the statement currently being written. The first
-   * line of a statement is indented normally and subsequent wrapped lines are double-indented. This
-   * is -1 when the currently-written line isn't part of a statement.
-   */
-  private statementLine = -1;
 
   constructor(out: StringBuffer, private indentString: string = '  ', referencedSymbols: Set<SymbolSpec> = new Set()) {
     this.out = new LineWrapper(out, indentString, 100);
@@ -83,7 +77,7 @@ export class CodeWriter implements SymbolReferenceTracker {
     this.emit(' */\n');
   }
 
-  public emitDecorators(decorators: DecoratorSpec[], inline: boolean) {
+  public emitDecorators(decorators: DecoratorSpec[], inline: boolean): void {
     decorators.forEach(decoratorSpec => {
       decoratorSpec.emit(this, inline);
       this.emit(inline ? ' ' : '\n');
@@ -94,7 +88,7 @@ export class CodeWriter implements SymbolReferenceTracker {
    * Emits `modifiers` in the standard order. Modifiers in `implicitModifiers` will not
    * be emitted.
    */
-  public emitModifiers(modifiers: Modifier[], implicitModifiers: Modifier[] = []) {
+  public emitModifiers(modifiers: Modifier[], implicitModifiers: Modifier[] = []): void {
     if (modifiers.length === 0) {
       return;
     }
@@ -201,7 +195,7 @@ export class CodeWriter implements SymbolReferenceTracker {
   }
   */
 
-  public emitCode(format: string, ...args: any[]): this {
+  public emitCode(format: string, ...args: unknown[]): this {
     this.emitCodeBlock(CodeBlock.of(format, ...args));
     return this;
   }
@@ -234,10 +228,8 @@ export class CodeWriter implements SymbolReferenceTracker {
           this.unindent();
           break;
         case '%[':
-          this.beginStatement();
           break;
         case '%]':
-          this.endStatement();
           break;
         case '%W':
           this.emitWrappingSpace();
@@ -271,12 +263,6 @@ export class CodeWriter implements SymbolReferenceTracker {
         }
         this.out.append('\n');
         this.trailingNewline = true;
-        if (this.statementLine !== -1) {
-          if (this.statementLine === 0) {
-            this.indent(2); // Begin multiple-line statement. Increase the indentation level.
-          }
-          this.statementLine++;
-        }
       }
 
       first = false;
@@ -323,19 +309,6 @@ export class CodeWriter implements SymbolReferenceTracker {
     for (let j = 0; j < this.indentLevel; j++) {
       this.out.append(this.indentString);
     }
-  }
-
-  private beginStatement(): void {
-    check(this.statementLine === -1, 'statement enter %[ followed by statement enter %[');
-    this.statementLine = 0;
-  }
-
-  private endStatement(): void {
-    check(this.statementLine !== -1, 'statement exit %] has no matching statement enter %[');
-    if (this.statementLine > 0) {
-      this.unindent(2); // End a multi-line statement. Decrease the indentation level.
-    }
-    this.statementLine = -1;
   }
 
   private emitWrappingSpace(): this {

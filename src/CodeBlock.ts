@@ -46,8 +46,7 @@ function isNoArgPlaceholder(c: string): boolean {
  *    lines before 100 columns.
  *  * `%>` increases the indentation level.
  *  * `%<` decreases the indentation level.
- *  * `%[` begins a statement. For multiline statements, every line after the first line is
- *    double-indented.
+ *  * `%[` begins a statement.
  *  * `%]` ends a statement.
  */
 

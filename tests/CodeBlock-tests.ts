@@ -175,22 +175,6 @@ describe('CodeBlockTest', () => {
     expect(block.toString()).toEqual('Map.println("Map")');
   });
 
-  it('tooManyStatementEnters', () => {
-    const codeBlock = CodeBlock.empty().add('%[%[');
-    expect(() => {
-      // We can't report this error until rendering type because code blocks might be composed.
-      codeBlock.toString();
-    }).toThrow('statement enter %[ followed by statement enter %[');
-  });
-
-  it('statementExitWithoutStatementEnter', () => {
-    const codeBlock = CodeBlock.empty().add('%]');
-    expect(() => {
-      // We can't report this error until rendering type because code blocks might be composed.
-      codeBlock.toString();
-    }).toThrow('statement exit %] has no matching statement enter %[');
-  });
-
   it('join', () => {
     const codeBlocks: CodeBlock[] = [];
     codeBlocks.push(CodeBlock.of('%S', 'hello'));
@@ -322,8 +306,8 @@ describe('CodeBlockTest', () => {
         .toString()
     ).toMatchInlineSnapshot(`
       "const fn = (a, b) => {
-            return a + b;
-          };
+        return a + b;
+      };
       "
     `);
   });
@@ -335,8 +319,8 @@ describe('CodeBlockTest', () => {
         .toString()
     ).toMatchInlineSnapshot(`
       "const fn = async (a, b) => {
-            return a + b;
-          };
+        return a + b;
+      };
       "
     `);
   });
