@@ -226,13 +226,13 @@ describe('CodeBlockTest', () => {
         .endControlFlow()
         .toString()
     ).toMatchInlineSnapshot(`
-"if (true) {
-  logTrue();
-} else {
-  logFalse();
-}
-"
-`);
+      "if (true) {
+        logTrue();
+      } else {
+        logFalse();
+      }
+      "
+    `);
   });
 
   it('handles null literals', () => {
@@ -263,12 +263,12 @@ describe('CodeBlockTest', () => {
         .endHash()
         .toString()
     ).toMatchInlineSnapshot(`
-"{
-  a: foo,
-  b: 1 + 2,
-  c: null,
-}"
-`);
+      "{
+        a: foo,
+        b: 1 + 2,
+        c: null,
+      }"
+    `);
   });
 
   it('can add functions', () => {
@@ -283,13 +283,13 @@ describe('CodeBlockTest', () => {
         .addStatement('const b = 2')
         .toString()
     ).toMatchInlineSnapshot(`
-"const a = 1;
-function foo(): string {
-  return \\"test\\";
-}
-const b = 2;
-"
-`);
+      "const a = 1;
+      function foo(): string {
+        return \\"test\\";
+      }
+      const b = 2;
+      "
+    `);
   });
 
   it('can add functions to hashes', () => {
@@ -305,13 +305,39 @@ const b = 2;
         .addHashEntry('c', 'bar')
         .toString()
     ).toMatchInlineSnapshot(`
-"{
-  a: foo,
-  b(): string {
-    return \\"test\\";
-  },
-  c: bar,
-"
-`);
+      "{
+        a: foo,
+        b(): string {
+          return \\"test\\";
+        },
+        c: bar,
+      "
+    `);
+  });
+
+  it('lambda', () => {
+    expect(
+      CodeBlock.empty()
+        .addStatement('const fn = %L', CodeBlock.lambda('a', 'b').addStatement('return a + b'))
+        .toString()
+    ).toMatchInlineSnapshot(`
+      "const fn = (a, b) => {
+            return a + b;
+          };
+      "
+    `);
+  });
+
+  it('async lambda', () => {
+    expect(
+      CodeBlock.empty()
+        .addStatement('const fn = %L', CodeBlock.asyncLambda('a', 'b').addStatement('return a + b'))
+        .toString()
+    ).toMatchInlineSnapshot(`
+      "const fn = async (a, b) => {
+            return a + b;
+          };
+      "
+    `);
   });
 });

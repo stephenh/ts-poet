@@ -62,6 +62,17 @@ function test() {
 `);
   });
 
+  it('generates async modifier', () => {
+    const testClass = FunctionSpec.create('test')
+      .addModifiers(Modifier.EXPORT, Modifier.ASYNC)
+      .addCode('');
+    expect(emit(testClass)).toMatchInlineSnapshot(`
+"export async function test() {
+}
+"
+`);
+  });
+
   it('generates no block when abstract', () => {
     const testClass = FunctionSpec.create('test').addModifiers(Modifier.PRIVATE, Modifier.ABSTRACT);
     expect(emit(testClass)).toMatchInlineSnapshot(`

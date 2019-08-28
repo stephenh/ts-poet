@@ -77,6 +77,17 @@ export class CodeBlock extends Imm<CodeBlock> {
       );
   }
 
+  public static asyncLambda(...parameterNames: string[]): CodeBlock {
+    return CodeBlock.empty()
+      .add('async (%L) => {\n', parameterNames.join(', '))
+      .indent()
+      .addTrailer(
+        CodeBlock.empty()
+          .unindent()
+          .add('}')
+      );
+  }
+
   public static joinToCode(
     blocks: CodeBlock[],
     separator: string = ', ',

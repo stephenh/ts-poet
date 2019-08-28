@@ -1,5 +1,6 @@
 /** Available declaration modifiers. */
 export enum Modifier {
+  ASYNC = 'async',
   EXPORT = 'export',
   PUBLIC = 'public',
   PROTECTED = 'protected',
@@ -18,15 +19,16 @@ export enum Modifier {
 // should try a tsc transformer
 export const ModifierOrder = [
   Modifier.EXPORT,
+  Modifier.DECLARE,
   Modifier.PUBLIC,
   Modifier.PROTECTED,
   Modifier.PRIVATE,
   Modifier.READONLY,
+  Modifier.ABSTRACT,
   Modifier.GET,
   Modifier.SET,
   Modifier.STATIC,
-  Modifier.ABSTRACT,
-  Modifier.DECLARE,
+  Modifier.ASYNC,
   Modifier.CONST,
   Modifier.LET,
   Modifier.VAR,
