@@ -178,7 +178,7 @@ export class Implicit extends SymbolSpec {
     super(value);
   }
 
-  public reference(trackedBy?: SymbolReferenceTracker): string {
+  public reference(): string {
     return this.value;
   }
 }

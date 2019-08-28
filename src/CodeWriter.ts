@@ -343,11 +343,11 @@ export class CodeWriter implements SymbolReferenceTracker {
     return this;
   }
 
-  private emitTypeName(typeName: TypeName) {
+  private emitTypeName(typeName: TypeName): void {
     this.emit(typeName.reference(this));
   }
 
-  private emitFunction(fn: FunctionSpec) {
+  private emitFunction(fn: FunctionSpec): void {
     fn.emit(this);
   }
 
@@ -362,7 +362,7 @@ export class CodeWriter implements SymbolReferenceTracker {
     }
   }
 
-  private emitLiteral(o?: any): void {
+  private emitLiteral(o?: unknown): void {
     if (o instanceof ClassSpec) {
       return o.emit(this);
     } else if (o instanceof InterfaceSpec) {
@@ -373,9 +373,10 @@ export class CodeWriter implements SymbolReferenceTracker {
       return o.emit(this, true, true);
     } else if (o instanceof CodeBlock) {
       this.emitCodeBlock(o);
-    } else if (o) {
-      // TODO Check if `if o` is right
+    } else if (typeof o === 'object' && o) {
       this.emit(o.toString());
+    } else {
+      this.emit(String(o));
     }
   }
 }

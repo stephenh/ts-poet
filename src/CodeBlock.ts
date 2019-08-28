@@ -94,7 +94,7 @@ export class CodeBlock extends Imm<CodeBlock> {
   @imm
   public readonly formatParts!: ReadonlyArray<string>;
   @imm
-  public readonly args!: ReadonlyArray<any>;
+  public readonly args!: ReadonlyArray<unknown>;
   @imm
   public readonly referencedSymbols!: Set<SymbolSpec>;
   @imm
@@ -210,7 +210,7 @@ export class CodeBlock extends Imm<CodeBlock> {
   public add(format: string, ...args: any[]): this {
     // keep some mutable state so we don't have to completely gut this
     const newFormatParts: string[] = [];
-    const newArgs: string[] = [];
+    const newArgs: unknown[] = [];
     const newSymbols: SymbolSpec[] = [];
 
     let hasRelative = false;
@@ -314,10 +314,10 @@ export class CodeBlock extends Imm<CodeBlock> {
    * format string containing `%clazz:T` and include the key `clazz` with value
    * `java.lang.Integer.class` in the argument map.
    */
-  public addNamed(format: string, args: Dictionary<any>): this {
+  public addNamed(format: string, args: Dictionary<unknown>): this {
     // keep some mutable state so we don't have to completely gut this
     const newFormatParts: string[] = [];
-    const newArgs: string[] = [];
+    const newArgs: unknown[] = [];
     const newSymbols: SymbolSpec[] = [];
 
     Object.keys(args).forEach(arg => {
@@ -489,17 +489,17 @@ export class CodeBlock extends Imm<CodeBlock> {
 function toTuple(o: { reference(trackedBy?: SymbolReferenceTracker): string }): [string, SymbolSpec[]] {
   const symbols: SymbolSpec[] = [];
   const name = o.reference(
-    new class implements SymbolReferenceTracker {
+    new (class implements SymbolReferenceTracker {
       public referenced(symbol: SymbolSpec): void {
         symbols.push(symbol);
       }
-    }()
+    })()
   );
   return [name, symbols];
 }
 
 /** Look at `c` to tell what arg + related symbols we should add. */
-function formatToArgAndSymbols(format: string, c: string, arg: any): [any, SymbolSpec[]] {
+function formatToArgAndSymbols(format: string, c: string, arg: unknown): [unknown, SymbolSpec[]] {
   switch (c) {
     case 'N':
       return argToName(arg);

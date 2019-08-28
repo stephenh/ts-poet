@@ -23,7 +23,7 @@ export class EnumSpec extends Imm<EnumSpec> {
   @imm
   public readonly constants!: Map<string, CodeBlock | undefined>;
 
-  public emit(codeWriter: CodeWriter) {
+  public emit(codeWriter: CodeWriter): void {
     codeWriter.emitJavaDoc(this.javaDoc);
     codeWriter.emitModifiers(this.modifiers);
     codeWriter.emitCode('enum %L {\n', this.name);
@@ -45,7 +45,7 @@ export class EnumSpec extends Imm<EnumSpec> {
     codeWriter.emit('}\n');
   }
 
-  public addJavadoc(format: string, ...args: any[]): this {
+  public addJavadoc(format: string, ...args: unknown[]): this {
     return this.copy({
       javaDoc: this.javaDoc.add(format, ...args),
     });

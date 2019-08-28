@@ -173,26 +173,28 @@ export class FileSpec extends Imm<FileSpec> {
 
     codeWriter.emitImports(this.path.replace(/\.ts$/, ''));
 
-    this.members.filter(it => !(it instanceof CodeBlock)).forEach(member => {
-      codeWriter.emit('\n');
-      if (member instanceof InterfaceSpec) {
-        member.emit(codeWriter);
-      } else if (member instanceof ClassSpec) {
-        member.emit(codeWriter);
-      } else if (member instanceof EnumSpec) {
-        member.emit(codeWriter);
-      } else if (member instanceof FunctionSpec) {
-        member.emit(codeWriter, [Modifier.PUBLIC]);
-      } else if (member instanceof PropertySpec) {
-        member.emit(codeWriter, [Modifier.PUBLIC], true);
-      } else if (member instanceof TypeAliasSpec) {
-        member.emit(codeWriter);
-      } else if (member instanceof CodeBlock) {
-        codeWriter.emitCodeBlock(member);
-      } else {
-        throw new Error('unhandled');
-      }
-    });
+    this.members
+      .filter(it => !(it instanceof CodeBlock))
+      .forEach(member => {
+        codeWriter.emit('\n');
+        if (member instanceof InterfaceSpec) {
+          member.emit(codeWriter);
+        } else if (member instanceof ClassSpec) {
+          member.emit(codeWriter);
+        } else if (member instanceof EnumSpec) {
+          member.emit(codeWriter);
+        } else if (member instanceof FunctionSpec) {
+          member.emit(codeWriter, [Modifier.PUBLIC]);
+        } else if (member instanceof PropertySpec) {
+          member.emit(codeWriter, [Modifier.PUBLIC], true);
+        } else if (member instanceof TypeAliasSpec) {
+          member.emit(codeWriter);
+        } else if (member instanceof CodeBlock) {
+          codeWriter.emitCodeBlock(member);
+        } else {
+          throw new Error('unhandled');
+        }
+      });
 
     filterInstances(this.members, CodeBlock).forEach(member => {
       codeWriter.emit('\n');

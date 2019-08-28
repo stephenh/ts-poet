@@ -105,7 +105,7 @@ export class InterfaceSpec extends Imm<InterfaceSpec> {
     codeWriter.emit('}\n');
   }
 
-  public addJavadoc(format: string, ...args: any[]): this {
+  public addJavadoc(format: string, ...args: unknown[]): this {
     return this.copy({
       javaDoc: this.javaDoc.add(format, ...args),
     });
@@ -148,7 +148,7 @@ export class InterfaceSpec extends Imm<InterfaceSpec> {
   }
 
   public addProperties(...propertySpecs: PropertySpec[]): this {
-    // tslint:disable-next-line
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let curr = this;
     propertySpecs.forEach(it => {
       curr = curr.addProperty(it);
@@ -158,14 +158,19 @@ export class InterfaceSpec extends Imm<InterfaceSpec> {
 
   public addProperty(propertySpec: PropertySpec): this;
   public addProperty(name: string, type: TypeName | string, data: Partial<PropertySpec>): this;
-  public addProperty(): this {
+  public addProperty(
+    nameOrProp: string | PropertySpec,
+    maybeType?: TypeName | string,
+    maybeData?: Partial<PropertySpec>
+  ): this {
     let propertySpec: PropertySpec;
-    if (arguments[0] instanceof PropertySpec) {
-      propertySpec = arguments[0];
+    if (nameOrProp instanceof PropertySpec) {
+      propertySpec = nameOrProp;
     } else {
-      const name = arguments[0];
-      const type = TypeNames.anyTypeMaybeString(arguments[1]);
-      const data = arguments[2] || {};
+      const name = nameOrProp;
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const type = TypeNames.anyTypeMaybeString(maybeType!);
+      const data = maybeData || {};
       propertySpec = PropertySpec.create(name, type).copy(data);
     }
     // require(propertySpec.decorators.isEmpty()) { "Interface properties cannot have decorators" }
@@ -176,7 +181,7 @@ export class InterfaceSpec extends Imm<InterfaceSpec> {
   }
 
   public addFunctions(...functionSpecs: FunctionSpec[]): this {
-    // tslint:disable-next-line
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let curr = this;
     functionSpecs.forEach(it => {
       curr = curr.addFunction(it);
@@ -195,7 +200,7 @@ export class InterfaceSpec extends Imm<InterfaceSpec> {
   }
 
   public addIndexables(...indexableSpecs: FunctionSpec[]): this {
-    // tslint:disable-next-line
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let curr = this;
     indexableSpecs.forEach(it => {
       curr = curr.addIndexable(it);

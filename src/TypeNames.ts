@@ -1,5 +1,5 @@
 import { SymbolReferenceTracker } from './SymbolReferenceTracker';
-import { moduleSeparator, SymbolSpec } from "./SymbolSpecs";
+import { moduleSeparator, SymbolSpec } from './SymbolSpecs';
 
 /**
  * Name of any possible type that can be referenced.

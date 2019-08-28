@@ -31,7 +31,7 @@ export class ParameterSpec extends Imm<ParameterSpec> {
     rest: ParameterSpec | undefined,
     emitFn: ((p: ParameterSpec, rest: boolean) => void) | undefined
   ): void {
-    const emitFn2 = emitFn || ((p, r) => p.emit(codeWriter, true, r));
+    const emitFn2 = emitFn || ((p, r): void => p.emit(codeWriter, true, r));
     const params = parameters.concat(rest !== undefined ? [rest] : []);
     if (enclosed) {
       codeWriter.emit('(');
@@ -75,7 +75,7 @@ export class ParameterSpec extends Imm<ParameterSpec> {
   @imm
   public readonly defaultValueField!: CodeBlock | undefined;
 
-  public emit(codeWriter: CodeWriter, includeType: boolean = true, isRest: boolean = false) {
+  public emit(codeWriter: CodeWriter, includeType: boolean = true, isRest: boolean = false): void {
     codeWriter.emitDecorators(this.decorators, true);
     codeWriter.emitModifiers(this.modifiers);
     if (isRest) {
@@ -91,7 +91,7 @@ export class ParameterSpec extends Imm<ParameterSpec> {
     this.emitDefaultValue(codeWriter);
   }
 
-  public emitDefaultValue(codeWriter: CodeWriter) {
+  public emitDefaultValue(codeWriter: CodeWriter): void {
     if (this.defaultValueField) {
       codeWriter.emitCode(' = %[%L%]', this.defaultValueField);
     }

@@ -133,9 +133,9 @@ export class FunctionSpec extends Imm<FunctionSpec> {
 
   public addDecorator(name: string | SymbolSpec, data?: Partial<DecoratorSpec>): this;
   public addDecorator(decorator: DecoratorSpec): this;
-  public addDecorator(decorator: DecoratorSpec | string | SymbolSpec): this {
+  public addDecorator(decorator: DecoratorSpec | string | SymbolSpec, data?: Partial<DecoratorSpec>): this {
     return this.copy({
-      decorators: [...this.decorators, DecoratorSpec.fromMaybeString(decorator, arguments[1])],
+      decorators: [...this.decorators, DecoratorSpec.fromMaybeString(decorator, data)],
     });
   }
 
@@ -172,12 +172,17 @@ export class FunctionSpec extends Imm<FunctionSpec> {
 
   public addParameter(name: string, type: TypeName | string, data?: Partial<ParameterSpec>): this;
   public addParameter(parameterSpec: ParameterSpec): this;
-  public addParameter(parameterSpec: ParameterSpec | string): this {
+  public addParameter(
+    parameterSpec: ParameterSpec | string,
+    maybeType?: TypeName | string,
+    maybeData?: Partial<ParameterSpec>
+  ): this {
     let param: ParameterSpec;
     if (typeof parameterSpec === 'string') {
       const name = parameterSpec;
-      const type: TypeName = TypeNames.anyTypeMaybeString(arguments[1]);
-      const data: Partial<ParameterSpec> = arguments[2] || {};
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const type: TypeName = TypeNames.anyTypeMaybeString(maybeType!);
+      const data: Partial<ParameterSpec> = maybeData || {};
       param = ParameterSpec.create(name, type).copy(data);
     } else {
       param = parameterSpec;
@@ -198,11 +203,11 @@ export class FunctionSpec extends Imm<FunctionSpec> {
 
   public rest(name: string, type: TypeName | string): this;
   public rest(parameterSpec: ParameterSpec): this;
-  public rest(parameterSpec: ParameterSpec | string): this {
+  public rest(parameterSpec: ParameterSpec | string, maybeType?: TypeName | string): this {
     let param: ParameterSpec;
     if (typeof parameterSpec === 'string') {
       const name = parameterSpec;
-      const type: TypeName = TypeNames.anyTypeMaybeString(arguments[1]);
+      const type: TypeName = TypeNames.anyTypeMaybeString(maybeType!);
       param = ParameterSpec.create(name, type);
     } else {
       param = parameterSpec;
@@ -212,7 +217,7 @@ export class FunctionSpec extends Imm<FunctionSpec> {
     });
   }
 
-  public addCode(format: string, ...args: any[]): this {
+  public addCode(format: string, ...args: unknown[]): this {
     // modifiers -= Modifier.ABSTRACT
     return this.copy({
       body: this.body.add(format, ...args),

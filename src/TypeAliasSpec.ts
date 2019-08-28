@@ -27,7 +27,7 @@ export class TypeAliasSpec extends Imm<TypeAliasSpec> {
   @imm
   public readonly typeVariables!: TypeVariable[];
 
-  public emit(codeWriter: CodeWriter) {
+  public emit(codeWriter: CodeWriter): void {
     codeWriter.emitJavaDoc(this.javaDoc);
     codeWriter.emitModifiers(this.modifiers);
     codeWriter.emitCode('type %L', this.name);
@@ -36,7 +36,7 @@ export class TypeAliasSpec extends Imm<TypeAliasSpec> {
     codeWriter.emit(';\n');
   }
 
-  public addJavadoc(format: string, ...args: any[]): this {
+  public addJavadoc(format: string, ...args: unknown[]): this {
     return this.copy({
       javaDoc: this.javaDoc.add(format, ...args),
     });
@@ -49,7 +49,7 @@ export class TypeAliasSpec extends Imm<TypeAliasSpec> {
   }
 
   public addModifiers(...modifiers: Modifier[]): this {
-    // tslint:disable-next-line
+    // eslint-disable-next-line
     let curr = this;
     modifiers.forEach(it => {
       curr = curr.addModifier(it);
