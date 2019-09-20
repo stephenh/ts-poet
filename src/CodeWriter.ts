@@ -137,7 +137,7 @@ export class CodeWriter implements SymbolReferenceTracker {
     this.emit('>');
   }
 
-  public emitImports(path?: string): this {
+  public emitImports(path: string): this {
     const imports = this.requiredImports();
     const augmentImports = _.groupBy(filterInstances(imports, Augmented), a => a.augmented);
     const sideEffectImports = _.groupBy(filterInstances(imports, SideEffect), a => a.source);
@@ -151,7 +151,7 @@ export class CodeWriter implements SymbolReferenceTracker {
       // tslint:disable-next-line:no-shadowed-variable
       Object.entries(m).forEach(([sourceImportPath, imports]) => {
         // Skip imports from the current module
-        if (path && (path === sourceImportPath || Path.resolve(path) === Path.resolve(sourceImportPath))) {
+        if (path === sourceImportPath || Path.resolve(path) === Path.resolve(sourceImportPath)) {
           return;
         }
         // Output star imports individually
