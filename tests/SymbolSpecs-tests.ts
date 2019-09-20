@@ -1,6 +1,6 @@
 import { CodeWriter } from '@src/CodeWriter';
 import { StringBuffer } from '@src/StringBuffer';
-import { Augmented, ImportsAll, ImportsDefault, ImportsName, SideEffect, SymbolSpec } from "../SymbolSpecs";
+import { Augmented, ImportsAll, ImportsDefault, ImportsName, SideEffect, SymbolSpec } from "@src/SymbolSpecs";
 
 describe('SymbolSpec Tests', () => {
   it('parsing implicitly defined (non-imported) symbols', () => {
@@ -126,7 +126,7 @@ describe('SymbolSpec Tests', () => {
     const out = new StringBuffer();
     const w = new CodeWriter(out);
     w.referenced(spec);
-    w.emitImports();
+    w.emitImports("foo.ts");
     return out.toString().trim();
   }
 });
