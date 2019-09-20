@@ -46,8 +46,8 @@ describe('SymbolSpec Tests', () => {
 
     const sym = parsed as ImportsName;
     expect(sym.value).toEqual('BackendService');
-    expect(sym.source).toEqual('@src/some/local/source/file');
-    expect(emit(sym)).toMatchInlineSnapshot(`"import { BackendService } from '@src/some/local/source/file';"`);
+    expect(sym.source).toEqual('../some/local/source/file');
+    expect(emit(sym)).toMatchInlineSnapshot(`"import { BackendService } from '../some/local/source/file';"`);
   });
 
   it('parsing named import: exported symbol explicit, source is implied module', () => {
