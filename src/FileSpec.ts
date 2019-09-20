@@ -171,7 +171,7 @@ export class FileSpec extends Imm<FileSpec> {
       codeWriter.emitComment(this.comment);
     }
 
-    codeWriter.emitImports(this.path.replace(/\.ts$/, ''));
+    codeWriter.emitImports(this.path.replace(/\.tsx?$/, ''));
 
     this.members
       .filter(it => !(it instanceof CodeBlock))
