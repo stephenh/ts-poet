@@ -84,6 +84,38 @@ function foo(): Bar {
 "
 `);
   });
+
+  it('resolves relative paths correctly ', () => {
+    // Given a file emitted to a sub directory
+    let spec = FileSpec.create('sub/foo.ts');
+    // And it references a relative-from-the-root path
+    spec = spec.addFunction(FunctionSpec.create('foo').returns('Bar@./foo'));
+    // Then it knows to resolve it
+    expect(emit(spec)).toMatchInlineSnapshot(`
+"import { Bar } from '../foo';
+
+
+function foo(): Bar {
+}
+"
+`);
+  });
+
+  it('resolves nested relative paths correctly ', () => {
+    // Given a file emitted to a two-layer sub directory
+    let spec = FileSpec.create('sub/one/foo.ts');
+    // And it references a relative-from-the-root path
+    spec = spec.addFunction(FunctionSpec.create('foo').returns('Bar@./sub/two'));
+    // Then it knows to resolve it
+    expect(emit(spec)).toMatchInlineSnapshot(`
+"import { Bar } from '../../sub/two';
+
+
+function foo(): Bar {
+}
+"
+`);
+  });
 });
 
 function emit(spec: FileSpec): string {

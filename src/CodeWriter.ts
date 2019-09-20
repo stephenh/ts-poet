@@ -154,9 +154,10 @@ export class CodeWriter implements SymbolReferenceTracker {
         if (path === sourceImportPath || Path.resolve(path) === Path.resolve(sourceImportPath)) {
           return;
         }
+        const importPath = maybeRelativePath(path, sourceImportPath);
         // Output star imports individually
         filterInstances(imports, ImportsAll).forEach(i => {
-          this.emitCode("%[import * as %L from '%L';\n%]", i.value, sourceImportPath);
+          this.emitCode("%[import * as %L from '%L';\n%]", i.value, importPath);
           const augments = augmentImports[i.value];
           if (augments) {
             augments.forEach(augment => this.emitCode("%[import '%L';\n%]", augment.source));
@@ -170,7 +171,7 @@ export class CodeWriter implements SymbolReferenceTracker {
           const defPart = def.length > 0 ? [def[0]] : [];
           this.emitCode('import ')
             .emitCode([...defPart, ...namesPart].join(', '))
-            .emitCode(" from '%L';\n", sourceImportPath);
+            .emitCode(" from '%L';\n", importPath);
           [...names, ...def].forEach(name => {
             const augments = augmentImports[name];
             if (augments) {
@@ -352,4 +353,21 @@ export class CodeWriter implements SymbolReferenceTracker {
       this.emit(String(o));
     }
   }
+}
+
+// If output path is `sub/foo.ts` and importPath is `./foo`, we want to
+// return `../foo`. Note that technically ! is supposed to be usable as
+// a hint to do/not do this, but we don't look for that yet.
+function maybeRelativePath(outputPath: string, importPath: string): string {
+  if (!importPath.startsWith('./')) {
+    return importPath;
+  }
+  // Ideally we'd use a path library to do this
+  const dirs = outputPath.split('').filter(l => l === '/').length;
+  if (dirs === 0) {
+    return importPath;
+  }
+  const a: string[] = new Array(dirs);
+  const prefix = a.fill('..', 0, dirs).join('/');
+  return prefix + importPath.substring(1);
 }

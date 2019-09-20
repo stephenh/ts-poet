@@ -34,7 +34,6 @@ export class SymbolSpec {
    *        `*` = Import all symbols from module (e.g. `*Foo` becomes `import * as Foo from 'Foo'`,
    *          `Foo*foo` becomes `import * as Foo from 'foo').
    *
-   *
    *        `+` = Symbol is declared implicitly via import of the module (e.g. `import '<module_name>'`)
    *
    * * module_path = `!<filename> | <filename>(/<filename)*`
@@ -244,7 +243,7 @@ export class Augmented extends Imported {
  * A symbol that is brought in as a side effect of an
  * import.
  *
- * e.g. `import 'mocha'`
+ * E.g. `from("Foo+mocha")` will add `import 'mocha'`
  */
 export class SideEffect extends Imported {
   constructor(value: string, source: string) {
