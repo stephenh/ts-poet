@@ -255,6 +255,22 @@ describe('CodeBlockTest', () => {
     `);
   });
 
+  it('has a hash factory function', () => {
+    expect(
+      CodeBlock.hash({
+        a: 'foo',
+        b: CodeBlock.of('1 + 2'),
+        c: null,
+      }).toString()
+    ).toMatchInlineSnapshot(`
+      "{
+        a: foo,
+        b: 1 + 2,
+        c: null,
+      }"
+    `);
+  });
+
   it('can add functions', () => {
     expect(
       CodeBlock.empty()

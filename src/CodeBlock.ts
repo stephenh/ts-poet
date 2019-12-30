@@ -64,6 +64,14 @@ export class CodeBlock extends Imm<CodeBlock> {
     });
   }
 
+  public static hash(contents: object): CodeBlock {
+    let block = CodeBlock.empty().beginHash();
+    Object.entries(contents).forEach(([key, value]) => {
+      block = block.addHashEntry(key, value);
+    });
+    return block.endHash();
+  }
+
   /** Returns a code block for doing multiline lambdas. */
   public static lambda(...parameterNames: string[]): CodeBlock {
     return CodeBlock.empty()
