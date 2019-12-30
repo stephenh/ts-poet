@@ -27,13 +27,13 @@ function test() {
   it('generates decorators formatted', () => {
     const testFunc = FunctionSpec.create('test').addDecorator(
       DecoratorSpec.create('decorate')
-        .addParameter(undefined, 'true')
-        .addParameter('targetType', 'Test2')
+        .addParameter('true')
+        .addParameter('Test2')
     );
     expect(emit(testFunc)).toMatchInlineSnapshot(`
 "@decorate(
   true,
-  /* targetType */ Test2
+  Test2
 )
 function test() {
 }
@@ -175,13 +175,13 @@ function test() {
         .addDecorator('required')
         .addDecorator(
           DecoratorSpec.create('size')
-            .addParameter('min', '10')
-            .addParameter('max', '100')
+            .addParameter('10')
+            .addParameter('100')
         )
         .addDecorator(DecoratorSpec.create('logged').asFactory())
     );
     expect(emit(testClass)).toMatchInlineSnapshot(`
-"function test(@required @size(/* min */ 10, /* max */ 100) @logged() a: number) {
+"function test(@required @size(10, 100) @logged() a: number) {
 }
 "
 `);

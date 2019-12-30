@@ -5,19 +5,19 @@ import { StringBuffer } from '@src/StringBuffer';
 describe('DecoratorSpec', () => {
   it('generate inline', () => {
     const testDec = DecoratorSpec.create('test')
-      .addParameter('value', '100')
-      .addParameter('value2', '20');
-    expect(emit(testDec, true)).toMatchInlineSnapshot(`"@test(/* value */ 100, /* value2 */ 20)"`);
+      .addParameter('100')
+      .addParameter('120');
+    expect(emit(testDec, true)).toMatchInlineSnapshot(`"@test(100, 120)"`);
   });
 
   it('generate expanded', () => {
     const testDec = DecoratorSpec.create('test')
-      .addParameter('value', '100')
-      .addParameter('value2', '20');
+      .addParameter('100')
+      .addParameter('20');
     expect(emit(testDec)).toMatchInlineSnapshot(`
 "@test(
-  /* value */ 100,
-  /* value2 */ 20
+  100,
+  20
 )"
 `);
   });

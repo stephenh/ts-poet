@@ -29,13 +29,13 @@ class Test {
   it('generates decorators formatted', () => {
     const testClass = ClassSpec.create('Test').addDecorator(
       DecoratorSpec.create('decorate')
-        .addParameter(undefined, 'true')
-        .addParameter('targetType', 'Test2')
+        .addParameter('true')
+        .addParameter('Test2')
     );
     expect(emit(testClass)).toMatchInlineSnapshot(`
 "@decorate(
   true,
-  /* targetType */ Test2
+  Test2
 )
 class Test {
 }
@@ -195,8 +195,8 @@ class Test {
       .addProperty(
         PropertySpec.create('value4', TypeNames.NUMBER, false, Modifier.PUBLIC).addDecorator(
           DecoratorSpec.create('limited')
-            .addParameter('min', '5')
-            .addParameter('max', '100')
+            .addParameter('5')
+            .addParameter('100')
         )
       )
       .addProperty(
@@ -219,8 +219,8 @@ class Test {
   value3: boolean = true;
 
   @limited(
-    /* min */ 5,
-    /* max */ 100
+    5,
+    100
   )
   value4: number;
 
@@ -268,8 +268,8 @@ class Test {
           .addCode('')
           .addDecorator(
             DecoratorSpec.create('validated')
-              .addParameter('strict', 'true')
-              .addParameter('name', 'test2')
+              .addParameter('true')
+              .addParameter('test2')
           )
       );
     expect(emit(testClass)).toMatchInlineSnapshot(`
@@ -279,8 +279,8 @@ class Test {
   }
 
   @validated(
-    /* strict */ true,
-    /* name */ test2
+    true,
+    test2
   )
   test2() {
   }

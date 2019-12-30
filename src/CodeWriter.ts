@@ -344,7 +344,7 @@ export class CodeWriter implements SymbolReferenceTracker {
     } else if (o instanceof EnumSpec) {
       return o.emit(this);
     } else if (o instanceof DecoratorSpec) {
-      return o.emit(this, true, true);
+      return o.emit(this, true);
     } else if (o instanceof CodeBlock) {
       this.emitCodeBlock(o);
     } else if (typeof o === 'object' && o) {

@@ -26,11 +26,11 @@ export class DecoratorSpec extends Imm<DecoratorSpec> {
   @imm
   public readonly name!: SymbolSpec;
   @imm
-  public readonly parameters!: Array<[string | undefined, CodeBlock]>;
+  public readonly parameters!: Array<CodeBlock>;
   @imm
   public readonly factory!: boolean;
 
-  public emit(codeWriter: CodeWriter, inline: boolean = false, asParameter: boolean = false): void {
+  public emit(codeWriter: CodeWriter, inline: boolean = false): void {
     codeWriter.emitCode('@%N', this.name);
 
     if (this.parameters.length > 0) {
@@ -41,15 +41,12 @@ export class DecoratorSpec extends Imm<DecoratorSpec> {
       }
 
       let index = 0;
-      this.parameters.forEach(([first, second]) => {
+      this.parameters.forEach(block => {
         if (index > 0 && index < this.parameters.length) {
           codeWriter.emit(',');
           codeWriter.emit(inline ? ' ' : '\n');
         }
-        if (!asParameter && first !== undefined) {
-          codeWriter.emit(`/* ${first} */ `);
-        }
-        codeWriter.emitCodeBlock(second);
+        codeWriter.emitCodeBlock(block);
         index++;
       });
 
@@ -69,15 +66,15 @@ export class DecoratorSpec extends Imm<DecoratorSpec> {
     });
   }
 
-  public addParameter(name: string | undefined, format: string, ...args: unknown[]): this {
+  public addParameter(format: string, ...args: unknown[]): this {
     return this.copy({
-      parameters: [...this.parameters, [name, CodeBlock.of(format, args)]],
+      parameters: [...this.parameters, CodeBlock.of(format, args)],
     });
   }
 
-  public addParameterBlock(name: string | undefined, codeBlock: CodeBlock): this {
+  public addParameterBlock(codeBlock: CodeBlock): this {
     return this.copy({
-      parameters: [...this.parameters, [name, codeBlock]],
+      parameters: [...this.parameters, codeBlock],
     });
   }
 
