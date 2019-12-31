@@ -14,6 +14,8 @@ class Code {
         imports.push(placeholder);
       } else if (placeholder instanceof Code) {
         toScan = [...toScan, ...placeholder.placeholders];
+      } else if (Array.isArray(placeholder)) {
+        toScan = [...toScan, ...placeholder];
       }
     }
 
@@ -32,6 +34,8 @@ class Code {
       result += literal;
       if (placeholder instanceof SymbolSpec) {
         result += placeholder.value;
+      } else if (Array.isArray(placeholder)) {
+        placeholder.forEach(p => result += p.toString());
       } else {
         result += placeholder.toString();
       }

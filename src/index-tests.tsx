@@ -60,4 +60,24 @@ describe('code', () => {
       "
     `);
   });
+
+  it('can nest lists of codes', () => {
+    const method1 = code`foo(): ${imp('Foo@foo')} { return "foo"; }`;
+    const method2 = code`bar(): ${imp('Bar@bar')} { return "bar"; }`;
+    const zaz = code`class Zaz { ${[method1, method2]} }`;
+    expect(zaz.toStringWithImports()).toMatchInlineSnapshot(`
+      "import { Bar } from \\"bar\\";
+      import { Foo } from \\"foo\\";
+
+      class Zaz {
+        foo(): Foo {
+          return \\"foo\\";
+        }
+        bar(): Bar {
+          return \\"bar\\";
+        }
+      }
+      "
+    `);
+  });
 });
