@@ -1,6 +1,12 @@
-import { CodeWriter } from '@src/CodeWriter';
-import { StringBuffer } from '@src/StringBuffer';
-import { Augmented, ImportsAll, ImportsDefault, ImportsName, SideEffect, SymbolSpec } from "@src/SymbolSpecs";
+import {
+  Augmented,
+  emitImports,
+  ImportsAll,
+  ImportsDefault,
+  ImportsName,
+  SideEffect,
+  SymbolSpec,
+} from '@src/SymbolSpecs';
 
 describe('SymbolSpec Tests', () => {
   it('parsing implicitly defined (non-imported) symbols', () => {
@@ -97,7 +103,7 @@ describe('SymbolSpec Tests', () => {
     const sym = parsed as SideEffect;
     expect(sym.value).toEqual('describe');
     expect(sym.source).toEqual('mocha');
-    expect(emit(sym)).toMatchInlineSnapshot(`"import \\"mocha\\";"`);
+    expect(emit(sym)).toMatchInlineSnapshot(`"import 'mocha';"`);
   });
 
   it('parsing augmentation import: exported symbol implied by module path', () => {
@@ -123,10 +129,6 @@ describe('SymbolSpec Tests', () => {
   });
 
   function emit(spec: SymbolSpec): string {
-    const out = new StringBuffer();
-    const w = new CodeWriter(out);
-    w.referenced(spec);
-    w.emitImports("foo.ts");
-    return out.toString().trim();
+    return emitImports([spec], '').trim();
   }
 });

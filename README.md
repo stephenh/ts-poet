@@ -40,9 +40,11 @@ class Greeter {
 And this is the code to generate it with TypeScriptPoet:
 
 ```typescript
+import { TypeNames, ClassSpec, TypeName, Modifier, FunctionSpec } from "ts-poet";
+
 const observableTypeName = TypeNames.importedType("@rxjs/Observable")
 
-val testClass = ClassSpec.create("Greeter")
+const testClass = ClassSpec.create("Greeter")
   .addProperty("name", TypeName.STRING, false, Modifier.PRIVATE)
   .constructor(
      FunctionSpec.constructorBuilder()

@@ -1,6 +1,6 @@
 {
   "name": "ts-poet",
-  "version": "2.1.0",
+  "version": "3.0.0-alpha.0",
   "description": "code generation DSL for TypeScript",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -23,13 +23,13 @@
     "eslint-config-prettier": "^6.1.0",
     "eslint-plugin-prettier": "^3.1.0",
     "jest": "^24.9.0",
-    "prettier": "^1.18.2",
     "ts-jest": "^24.0.2",
     "tslint-immutable": "^6.0.1",
-    "typescript": "^3.5.3"
+    "typescript": "^3.7.4"
   },
   "dependencies": {
+    "@types/prettier": "^1.19.0",
     "lodash": "^4.17.15",
-    "ts-imm": "0.4.0"
+    "prettier": "^1.18.2"
   }
 }

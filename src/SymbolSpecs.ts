@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { SymbolReferenceTracker } from './SymbolReferenceTracker';
 
 const fileNamePattern = '(?:[a-zA-Z0-9._-]+)';
 const modulePattern = `@?(?:(?:!${fileNamePattern})|(?:${fileNamePattern}(?:/${fileNamePattern})*))`;
@@ -12,7 +11,7 @@ const importPattern = `^(${identPattern})?(${moduleSeparator})(${modulePattern})
  *
  * @param value Value of the symbol
  */
-export class SymbolSpec {
+export abstract class SymbolSpec {
   /**
    * Parses a symbol reference pattern to create a symbol. The pattern
    * allows the simple definition of all symbol types including any possible
@@ -84,12 +83,7 @@ export class SymbolSpec {
 
   protected constructor(public value: string) {}
 
-  public reference(trackedBy?: SymbolReferenceTracker): string {
-    if (trackedBy) {
-      trackedBy.referenced(this);
-    }
-    return this.value;
-  }
+  public abstract source: string | undefined;
 }
 
 export class SymbolSpecs {
@@ -177,15 +171,12 @@ export class Implicit extends SymbolSpec {
     super(value);
   }
 
-  public reference(): string {
-    return this.value;
-  }
+  source = undefined;
 }
 
-/**
- * Common base class for imported symbols
- */
+/** Common base class for imported symbols. */
 export abstract class Imported extends SymbolSpec {
+  /** The value is the imported symbol, i.e. `BarClass`, and source is the path it comes from. */
   protected constructor(public value: string, public source: string) {
     super(source);
   }
@@ -249,4 +240,77 @@ export class SideEffect extends Imported {
   constructor(value: string, source: string) {
     super(value, source);
   }
+}
+
+export function emitImports(imports: SymbolSpec[], path: string): string {
+  if (imports.length == 0) {
+    return '';
+  }
+
+  let result = '';
+  const augmentImports = _.groupBy(filterInstances(imports, Augmented), a => a.augmented);
+  const sideEffectImports = _.groupBy(filterInstances(imports, SideEffect), a => a.source);
+
+  // FileModules.importPath(this.path, it.source)).toSortedMap()
+  const m = _.groupBy(imports.filter(it => it.source !== undefined), it => it.source);
+
+  Object.entries(m).forEach(([sourceImportPath, imports]) => {
+    // Skip imports from the current module
+    // if (path === sourceImportPath || Path.resolve(path) === Path.resolve(sourceImportPath)) {
+    //   return;
+    // }
+    const importPath = maybeRelativePath(path, sourceImportPath);
+
+    // Output star imports individually
+    filterInstances(imports, ImportsAll).forEach(i => {
+      result += `import * as ${i.value} from '${importPath}';\n`;
+      const augments = augmentImports[i.value];
+      if (augments) {
+        augments.forEach(augment => (result += `import '${augment.source}';\n`));
+      }
+    });
+
+    // Output named imports as a group
+    const names = unique(filterInstances(imports, ImportsName).map(it => it.value));
+    const def = unique(filterInstances(imports, ImportsDefault).map(it => it.value));
+    if (names.length > 0 || def.length > 0) {
+      const namesPart = names.length > 0 ? [`{ ${names.join(', ')} }`] : [];
+      const defPart = def.length > 0 ? [def[0]] : [];
+      const allNames = [...defPart, ...namesPart];
+      result += `import ${allNames.join(', ')} from '${importPath}';\n`;
+      [...names, ...def].forEach(name => {
+        const augments = augmentImports[name];
+        if (augments) {
+          augments.forEach(augment => (result += `import '${augment.source}';\n`));
+        }
+      });
+    }
+  });
+
+  Object.keys(sideEffectImports).forEach(it => (result += `import '${it}';\n`));
+
+  return result;
+}
+
+type Constructor<T> = new (...args: any[]) => T;
+
+function filterInstances<T, U>(list: T[], t: Constructor<U>): U[] {
+  return (list.filter(e => e instanceof t) as unknown) as U[];
+}
+
+function unique<T>(list: T[]): T[] {
+  return [...new Set(list)];
+}
+function maybeRelativePath(outputPath: string, importPath: string): string {
+  if (!importPath.startsWith('./')) {
+    return importPath;
+  }
+  // Ideally we'd use a path library to do this
+  const dirs = outputPath.split('').filter(l => l === '/').length;
+  if (dirs === 0) {
+    return importPath;
+  }
+  const a: string[] = new Array(dirs);
+  const prefix = a.fill('..', 0, dirs).join('/');
+  return prefix + importPath.substring(1);
 }
