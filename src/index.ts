@@ -1,7 +1,7 @@
 import prettier from 'prettier';
 import { emitImports, SymbolSpec } from '@src/SymbolSpecs';
 
-class Code {
+export class Code {
   constructor(private literals: TemplateStringsArray, private placeholders: any[]) {}
 
   toStringWithImports() {
