@@ -80,4 +80,19 @@ describe('code', () => {
       "
     `);
   });
+
+  it('will use relative imports', () => {
+    const method1 = code`foo(): ${imp('Foo@./foo/Foo')} { return "foo"; }`;
+    const zaz = code`class Zaz { ${method1} }`;
+    expect(zaz.toStringWithImports('./zaz/Zaz')).toMatchInlineSnapshot(`
+      "import { Foo } from \\"../foo/Foo\\";
+
+      class Zaz {
+        foo(): Foo {
+          return \\"foo\\";
+        }
+      }
+      "
+    `);
+  });
 });

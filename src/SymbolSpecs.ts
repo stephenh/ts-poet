@@ -301,16 +301,20 @@ function filterInstances<T, U>(list: T[], t: Constructor<U>): U[] {
 function unique<T>(list: T[]): T[] {
   return [...new Set(list)];
 }
-function maybeRelativePath(outputPath: string, importPath: string): string {
+
+export function maybeRelativePath(outputPath: string, importPath: string): string {
   if (!importPath.startsWith('./')) {
     return importPath;
   }
-  // Ideally we'd use a path library to do this
-  const dirs = outputPath.split('').filter(l => l === '/').length;
-  if (dirs === 0) {
+  // Drop the `./` prefix from the outputPath if it exists.
+  const basePath = outputPath.replace(/^.\//, '');
+  // Ideally we'd use a path library to do all this.
+  const numberOfDirs = basePath.split('').filter(l => l === '/').length;
+  if (numberOfDirs === 0) {
     return importPath;
   }
-  const a: string[] = new Array(dirs);
-  const prefix = a.fill('..', 0, dirs).join('/');
+  // Make an array of `..` to get our importPath to the root directory.
+  const a: string[] = new Array(numberOfDirs);
+  const prefix = a.fill('..', 0, numberOfDirs).join('/');
   return prefix + importPath.substring(1);
 }

@@ -4,11 +4,12 @@ import {
   ImportsAll,
   ImportsDefault,
   ImportsName,
+  maybeRelativePath,
   SideEffect,
   SymbolSpec,
 } from '@src/SymbolSpecs';
 
-describe('SymbolSpec Tests', () => {
+describe('SymbolSpecs', () => {
   it('parsing implicitly defined (non-imported) symbols', () => {
     const parsed = SymbolSpec.from('Some.Symbol.Depth');
     expect(parsed.value).toEqual('Some.Symbol.Depth');
@@ -126,6 +127,14 @@ describe('SymbolSpec Tests', () => {
     expect(sym.source).toEqual('rxjs/add/operator/toPromise');
     expect(sym.augmented).toEqual('Observable');
     expect(emit(sym)).toMatchInlineSnapshot(`""`);
+  });
+
+  it('can handle relative imports', () => {
+    expect(maybeRelativePath('zaz/Zaz', './foo/Foo')).toEqual('../foo/Foo');
+  });
+
+  it('can handle relative imports with a current directory', () => {
+    expect(maybeRelativePath('./zaz/Zaz', './foo/Foo')).toEqual('../foo/Foo');
   });
 
   function emit(spec: SymbolSpec): string {

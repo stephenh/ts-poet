@@ -1,10 +1,15 @@
 import prettier from 'prettier';
 import { emitImports, SymbolSpec } from '@src/SymbolSpecs';
 
+/** A template literal to format code and auto-organize imports. */
+export function code(literals: TemplateStringsArray, ...placeholders: any[]): Code {
+  return new Code(literals, placeholders);
+}
+
 export class Code {
   constructor(private literals: TemplateStringsArray, private placeholders: any[]) {}
 
-  toStringWithImports() {
+  toStringWithImports(path?: string): string {
     const imports: SymbolSpec[] = [];
 
     let toScan = [...this.placeholders];
@@ -19,11 +24,12 @@ export class Code {
       }
     }
 
-    const importPart = emitImports(imports, '');
+    const importPart = emitImports(imports, path || '');
     const bodyPart = this.toString();
     return maybePretty(importPart + '\n' + bodyPart);
   }
 
+  /** Returns the formatted code, without any imports. */
   toString() {
     const { literals, placeholders } = this;
     let result = '';
@@ -35,7 +41,7 @@ export class Code {
       if (placeholder instanceof SymbolSpec) {
         result += placeholder.value;
       } else if (Array.isArray(placeholder)) {
-        placeholder.forEach(p => result += p.toString());
+        placeholder.forEach(p => (result += p.toString()));
       } else {
         result += placeholder.toString();
       }
@@ -58,8 +64,4 @@ function maybePretty(input: string): string {
 
 export function imp(spec: string): SymbolSpec {
   return SymbolSpec.from(spec);
-}
-
-export function code(literals: TemplateStringsArray, ...placeholders: any[]): Code {
-  return new Code(literals, placeholders);
 }
