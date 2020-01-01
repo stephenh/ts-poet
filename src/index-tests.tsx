@@ -81,6 +81,27 @@ describe('code', () => {
     `);
   });
 
+  it('can double nest lists', () => {
+    const method1 = code`foo(): ${imp('Foo@foo')} { return "foo"; }`;
+    const method2 = code`bar(): ${imp('Bar@bar')} { return "bar"; }`;
+    const methods = [method1, method2];
+    const zaz = code`class Zaz { ${[methods]} }`;
+    expect(zaz.toStringWithImports()).toMatchInlineSnapshot(`
+      "import { Bar } from \\"bar\\";
+      import { Foo } from \\"foo\\";
+
+      class Zaz {
+        foo(): Foo {
+          return \\"foo\\";
+        }
+        bar(): Bar {
+          return \\"bar\\";
+        }
+      }
+      "
+    `);
+  });
+
   it('will use relative imports', () => {
     const method1 = code`foo(): ${imp('Foo@./foo/Foo')} { return "foo"; }`;
     const zaz = code`class Zaz { ${method1} }`;

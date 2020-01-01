@@ -36,12 +36,21 @@ export class Code {
 
     // interleave the literals with the placeholders
     for (let i = 0; i < placeholders.length; i++) {
-      const [literal, placeholder] = [literals[i], placeholders[i]];
+      const literal = literals[i];
+      const placeholder = placeholders[i];
       result += literal;
       if (placeholder instanceof SymbolSpec) {
         result += placeholder.value;
       } else if (Array.isArray(placeholder)) {
-        placeholder.forEach(p => (result += p.toString()));
+        let todo = [...placeholder];
+        while (todo.length > 0) {
+          const current = todo.shift();
+          if (Array.isArray(current)) {
+            todo = [...todo, ...current];
+          } else {
+            result += current.toString();
+          }
+        }
       } else {
         result += placeholder.toString();
       }
