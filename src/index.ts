@@ -1,5 +1,5 @@
 import prettier from 'prettier';
-import { emitImports, SymbolSpec } from '@src/SymbolSpecs';
+import { emitImports, SymbolSpec } from './SymbolSpecs';
 
 /** A template literal to format code and auto-organize imports. */
 export function code(literals: TemplateStringsArray, ...placeholders: any[]): Code {

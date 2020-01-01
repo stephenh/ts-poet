@@ -7,7 +7,7 @@ import {
   maybeRelativePath,
   SideEffect,
   SymbolSpec,
-} from '@src/SymbolSpecs';
+} from './SymbolSpecs';
 
 describe('SymbolSpecs', () => {
   it('parsing implicitly defined (non-imported) symbols', () => {

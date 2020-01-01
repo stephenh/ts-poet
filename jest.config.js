@@ -6,9 +6,6 @@ module.exports = {
     },
   },
   moduleFileExtensions: ['ts', 'tsx', 'js'],
-  moduleNameMapper: {
-    "^@src/(.*)": "<rootDir>/src/$1"
-  },
   testEnvironment: 'node',
   testMatch: ['<rootDir>/**/*-tests.+(ts|tsx|js)'],
   transform: {
