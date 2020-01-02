@@ -65,7 +65,7 @@ export class Code {
 
 function maybePretty(input: string): string {
   try {
-    return prettier.format(input.trim(), { parser: 'babel' });
+    return prettier.format(input.trim(), { parser: 'typescript' });
   } catch (e) {
     return input; // assume it's invalid syntax and ignore
   }
