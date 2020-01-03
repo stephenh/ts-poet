@@ -81,6 +81,18 @@ describe('code', () => {
     `);
   });
 
+  it('can nest lists of imports', async () => {
+    const b = code`const types = ${[imp('Foo@foo'), ', ', imp('Bar@bar')]};`;
+    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+      "import { Bar } from 'bar';
+      import { Foo } from 'foo';
+
+      const types = Foo,
+        Bar;
+      "
+    `);
+  });
+
   it('can double nest lists', async () => {
     const method1 = code`foo(): ${imp('Foo@foo')} { return "foo"; }`;
     const method2 = code`bar(): ${imp('Bar@bar')} { return "bar"; }`;

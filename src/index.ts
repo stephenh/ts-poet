@@ -66,6 +66,8 @@ export class Code {
           const current = todo.shift();
           if (Array.isArray(current)) {
             todo = [...todo, ...current];
+          } else if (current instanceof SymbolSpec) {
+            result += current.value;
           } else {
             result += current.toString();
           }
