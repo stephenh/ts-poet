@@ -1,4 +1,4 @@
-import { code, imp } from '../src';
+import { arrayOf, code, imp } from '../src';
 
 describe('code', () => {
   it('basic interpolation', () => {
@@ -125,6 +125,17 @@ describe('code', () => {
           return 'foo';
         }
       }
+      "
+    `);
+  });
+
+  it('can make literal arrays', async () => {
+    const b = code`const types = ${arrayOf(imp('Foo@foo'), imp('Bar@bar'))};`;
+    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+      "import { Bar } from 'bar';
+      import { Foo } from 'foo';
+
+      const types = [Foo, Bar];
       "
     `);
   });
