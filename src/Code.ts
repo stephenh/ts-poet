@@ -44,7 +44,7 @@ export class Code extends Node {
     const imports: SymbolSpec[] = [];
     let todo: unknown[] = [this];
     while (todo.length > 0) {
-      const placeholder = todo.pop()!;
+      const placeholder = todo.shift();
       if (placeholder instanceof SymbolSpec) {
         imports.push(placeholder);
       } else if (placeholder instanceof Node) {

@@ -46,8 +46,8 @@ describe('code', () => {
     const method2 = code`bar(): ${imp('Bar@bar')} { return "bar"; }`;
     const zaz = code`class Zaz { ${method1} ${method2} }`;
     expect(await zaz.toStringWithImports()).toMatchInlineSnapshot(`
-      "import { Bar } from 'bar';
-      import { Foo } from 'foo';
+      "import { Foo } from 'foo';
+      import { Bar } from 'bar';
 
       class Zaz {
         foo(): Foo {
@@ -66,8 +66,8 @@ describe('code', () => {
     const method2 = code`bar(): ${imp('Bar@bar')} { return "bar"; }`;
     const zaz = code`class Zaz { ${[method1, method2]} }`;
     expect(await zaz.toStringWithImports()).toMatchInlineSnapshot(`
-      "import { Bar } from 'bar';
-      import { Foo } from 'foo';
+      "import { Foo } from 'foo';
+      import { Bar } from 'bar';
 
       class Zaz {
         foo(): Foo {
@@ -84,8 +84,8 @@ describe('code', () => {
   it('can nest lists of imports', async () => {
     const b = code`const types = ${[imp('Foo@foo'), ', ', imp('Bar@bar')]};`;
     expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
-      "import { Bar } from 'bar';
-      import { Foo } from 'foo';
+      "import { Foo } from 'foo';
+      import { Bar } from 'bar';
 
       const types = Foo,
         Bar;
@@ -99,8 +99,8 @@ describe('code', () => {
     const methods = [method1, method2];
     const zaz = code`class Zaz { ${[methods]} }`;
     expect(await zaz.toStringWithImports()).toMatchInlineSnapshot(`
-      "import { Bar } from 'bar';
-      import { Foo } from 'foo';
+      "import { Foo } from 'foo';
+      import { Bar } from 'bar';
 
       class Zaz {
         foo(): Foo {
@@ -132,8 +132,8 @@ describe('code', () => {
   it('can make literal arrays', async () => {
     const b = code`const types = ${arrayOf(imp('Foo@foo'), imp('Bar@bar'))};`;
     expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
-      "import { Bar } from 'bar';
-      import { Foo } from 'foo';
+      "import { Foo } from 'foo';
+      import { Bar } from 'bar';
 
       const types = [Foo, Bar];
       "

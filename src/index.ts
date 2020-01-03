@@ -1,6 +1,7 @@
 import { SymbolSpec } from './SymbolSpecs';
 import { Code, deepGenerate } from './Code';
 import { Node } from './Node';
+export { Code } from './Code';
 
 /** A template literal to format code and auto-organize imports. */
 export function code(literals: TemplateStringsArray, ...placeholders: unknown[]): Code {
