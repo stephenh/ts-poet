@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { Node } from './Node';
 
 const fileNamePattern = '(?:[a-zA-Z0-9._-]+)';
 const modulePattern = `@?(?:(?:!${fileNamePattern})|(?:${fileNamePattern}(?:/${fileNamePattern})*))`;
@@ -11,7 +12,7 @@ const importPattern = `^(${identPattern})?(${moduleSeparator})(${modulePattern})
  *
  * @param value Value of the symbol
  */
-export abstract class SymbolSpec {
+export abstract class SymbolSpec extends Node {
   /**
    * Parses a symbol reference pattern to create a symbol. The pattern
    * allows the simple definition of all symbol types including any possible
@@ -81,7 +82,17 @@ export abstract class SymbolSpec {
     return typeof spec === 'string' ? SymbolSpec.from(spec) : spec;
   }
 
-  protected constructor(public value: string) {}
+  protected constructor(public value: string) {
+    super();
+  }
+
+  public toCodeString(): string {
+    return this.value;
+  }
+
+  public get childNodes(): unknown[] {
+    return [];
+  }
 
   public abstract source: string | undefined;
 }

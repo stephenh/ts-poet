@@ -1,13 +1,16 @@
 import prettier, { resolveConfig } from 'prettier';
 import { emitImports, SymbolSpec } from './SymbolSpecs';
+import { Node } from './Node';
 
 /** A template literal to format code and auto-organize imports. */
 export function code(literals: TemplateStringsArray, ...placeholders: any[]): Code {
   return new Code(literals, placeholders);
 }
 
-export class Code {
-  constructor(private literals: TemplateStringsArray, private placeholders: any[]) {}
+export class Code extends Node {
+  constructor(private literals: TemplateStringsArray, private placeholders: any[]) {
+    super();
+  }
 
   /**
    * Returns the code with any necessary import statements prefixed.
@@ -34,17 +37,25 @@ export class Code {
     return maybePretty(this.generateCode());
   }
 
+  public get childNodes(): unknown[] {
+    return this.placeholders;
+  }
+
+  toCodeString(): string {
+    return this.generateCode();
+  }
+
   private deepFindImports(): SymbolSpec[] {
     const imports: SymbolSpec[] = [];
-    let toScan = [...this.placeholders];
-    while (toScan.length > 0) {
-      const placeholder = toScan.pop()!;
+    let todo: unknown[] = [this];
+    while (todo.length > 0) {
+      const placeholder = todo.pop()!;
       if (placeholder instanceof SymbolSpec) {
         imports.push(placeholder);
-      } else if (placeholder instanceof Code) {
-        toScan = [...toScan, ...placeholder.placeholders];
+      } else if (placeholder instanceof Node) {
+        todo = [...todo, ...placeholder.childNodes];
       } else if (Array.isArray(placeholder)) {
-        toScan = [...toScan, ...placeholder];
+        todo = [...todo, ...placeholder];
       }
     }
     return imports;
@@ -58,22 +69,16 @@ export class Code {
       const literal = literals[i];
       const placeholder = placeholders[i];
       result += literal;
-      if (placeholder instanceof SymbolSpec) {
-        result += placeholder.value;
-      } else if (Array.isArray(placeholder)) {
-        let todo = [...placeholder];
-        while (todo.length > 0) {
-          const current = todo.shift();
-          if (Array.isArray(current)) {
-            todo = [...todo, ...current];
-          } else if (current instanceof SymbolSpec) {
-            result += current.value;
-          } else {
-            result += current.toString();
-          }
+      let todo = [placeholder];
+      while (todo.length > 0) {
+        const current = todo.shift();
+        if (Array.isArray(current)) {
+          todo = [...todo, ...current];
+        } else if (current instanceof Node) {
+          result += current.toCodeString();
+        } else {
+          result += current.toString();
         }
-      } else {
-        result += placeholder.toString();
       }
     }
     // add the last literal
