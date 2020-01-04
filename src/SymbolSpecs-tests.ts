@@ -27,14 +27,14 @@ describe('SymbolSpecs', () => {
   });
 
   it('parsing named import: exported symbol implied by generated module path', () => {
-    const parsed = SymbolSpec.from('@!Api');
+    const parsed = SymbolSpec.from('@Api');
     expect(parsed).toBeInstanceOf(ImportsName);
 
     const sym = parsed as ImportsName;
     expect(sym.value).toEqual('Api');
-    expect(sym.source).toEqual('!Api');
+    expect(sym.source).toEqual('Api');
 
-    expect(emit(sym)).toMatchInlineSnapshot(`"import { Api } from '!Api';"`);
+    expect(emit(sym)).toMatchInlineSnapshot(`"import { Api } from 'Api';"`);
   });
 
   it('parsing named import: exported symbol explicit, source relative to current dir', () => {

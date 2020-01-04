@@ -28,7 +28,6 @@ And this is the code to generate it with ts-poet:
 
 ```typescript
 import { code, imp } from "ts-poet";
-// 
 
 const Observable = imp("@rxjs/Observable");
 
@@ -55,24 +54,36 @@ const output = greeter.toStringWithImports("Greeter");
 
 I.e. really all ts-poet does is:
 
-* "Auto organize imports" symbols, i.e. if you use `imp` to define the modules/imports you need for types in your generated code, ts-poet will create the import stanza at the top of the file.
+* "Auto organize imports" symbols, i.e. if you use `imp` to define the modules/imports you need in your generated code, ts-poet will create the import stanza at the top of the file.
 
   This can seem fairly minor, but it facilitates decomposition of your code generation code, so that you can have multiple levels of helper methods/etc. that can return `code` template literals that embed both the code itself as well as the import types, so that when the final file is generated, ts-poet can collect and emit all of the imports.
 
 * Formats the output with prettier (using your local `.prettierrc` if it exists)
 
+Import Specs
+============
+
+Given the primary goal of ts-poet is to manage imports for you, there are several ways of specifying imports to the `imp` function:
+
+* `imp("Observable@rxjs")` --> `import { Observable } from "rxjs"`
+* `imp("Observable@./Api")` --> `import { Observable } from "./Api"`
+* `imp("Observable*./Api")` --> `import * as Observable from "./Api"`
+* `imp("Observable=./Api")` --> `import Observable from "./Api"`
+* `imp("@rxjs/Observable")` --> `import { Observable } from "rxjs/Observable"`
+* `imp("*rxjs/Observable")` --> `import * as Observable from "rxjs/Observable"`
+* `imp("@Api")` --> `import { Api } from "Api"`
+* `imp("describe+mocha")` --> `import "mocha"`
+
 History
 =======
 
-ts-poet was originally inspired by Square's [JavaPoet](https://github.com/square/javapoet) code generation DSL, and had a very "Java-esque" builder API of `addFunction`/`addProperty`/etc.
+ts-poet was originally inspired by Square's [JavaPoet](https://github.com/square/javapoet) code generation DSL, which has a very "Java-esque" builder API of `addFunction`/`addProperty`/etc. that ts-poet copied in it's original v1/v2 releases.
 
-This worked, JavaPoet was doing three things:
+JavaPoet's approach worked very well for the Java ecosystem, as it was providing three features:
  
-1. providing nice formatting (historically code generation output has looked terrible; bad formatting, bad indentation, etc.)
-2. providing nice multi-line string support, via `appendLine(...).appendLine(...)` style methods.
-3. providing "auto organize imports", of collecting imported symbols across the entire compilation unit of output, and organizing/formatting them at the top of the output file.
+1. nice formatting (historically code generation output has looked terrible; bad formatting, bad indentation, etc.)
+2. nice multi-line string support, via `appendLine(...).appendLine(...)` style methods.
+3. "auto organize imports", of collecting imported symbols across the entire compilation unit of output, and organizing/formatting them at the top of the output file.
 
-In the JavaScript/TypeScript world we have prettier for formatting, and nice multi-line string support via template literals.
-
-This means the only real value a JavaPoet-style library would need to provide is "auto organize imports", so that is what ts-poet has been stripped down to be.
+However, in the JavaScript/TypeScript world we have prettier for formatting, and nice multi-line string support via template literals, so really the only value add that ts-poet needs to provide is the "auto organize imports", which is what the post-v2/3.0 API has been rewritten (and dramatically simplified as a result) to provide.
 

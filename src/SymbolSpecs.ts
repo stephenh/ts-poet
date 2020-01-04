@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Node } from './Node';
 
 const fileNamePattern = '(?:[a-zA-Z0-9._-]+)';
-const modulePattern = `@?(?:(?:!${fileNamePattern})|(?:${fileNamePattern}(?:/${fileNamePattern})*))`;
+const modulePattern = `@?(?:(?:${fileNamePattern}(?:/${fileNamePattern})*))`;
 const identPattern = `(?:(?:[a-zA-Z][_a-zA-Z0-9.]*)|(?:[_a-zA-Z][_a-zA-Z0-9.]+))`;
 export const moduleSeparator = '[*@+=]';
 const importPattern = `^(${identPattern})?(${moduleSeparator})(${modulePattern})(?:#(${identPattern}))?`;
@@ -36,10 +36,9 @@ export abstract class SymbolSpec extends Node {
    *
    *        `+` = Symbol is declared implicitly via import of the module (e.g. `import '<module_name>'`)
    *
-   * * module_path = `!<filename> | <filename>(/<filename)*`
+   * * module_path = `<filename>(/<filename)*`
    *
-   *        Path name specifying the module. If the module path begins with a `!` then it is considered
-   *        to be a file being generated. This ensures the paths are output as relative imports.
+   *        Path name specifying the module.
    *
    * * augmented_symbol_name = `[a-zA-Z0-9_]+`
    *
@@ -58,7 +57,7 @@ export abstract class SymbolSpec extends Node {
     if (matched != null) {
       const modulePath = matched[3];
       const type = matched[2] || '@';
-      const symbolName = matched[1] || (_.last(modulePath.split('/')) || '').replace('!', '');
+      const symbolName = matched[1] || (_.last(modulePath.split('/')) || '');
       const targetName = matched[4];
       switch (type) {
         case '*':
