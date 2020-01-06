@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import Path from 'path';
 import { Node } from './Node';
 
 const fileNamePattern = '(?:[a-zA-Z0-9._-]+)';
@@ -252,7 +253,7 @@ export class SideEffect extends Imported {
   }
 }
 
-export function emitImports(imports: SymbolSpec[], path: string): string {
+export function emitImports(imports: SymbolSpec[], filePath: string): string {
   if (imports.length == 0) {
     return '';
   }
@@ -264,12 +265,14 @@ export function emitImports(imports: SymbolSpec[], path: string): string {
   // FileModules.importPath(this.path, it.source)).toSortedMap()
   const m = _.groupBy(imports.filter(it => it.source !== undefined), it => it.source);
 
+  const modulePath = filePath.replace(/\.[tj]sx?/, '');
+
   Object.entries(m).forEach(([sourceImportPath, imports]) => {
     // Skip imports from the current module
-    // if (path === sourceImportPath || Path.resolve(path) === Path.resolve(sourceImportPath)) {
-    //   return;
-    // }
-    const importPath = maybeRelativePath(path, sourceImportPath);
+    if (modulePath === sourceImportPath || Path.resolve(modulePath) === Path.resolve(sourceImportPath)) {
+      return;
+    }
+    const importPath = maybeRelativePath(modulePath, sourceImportPath);
 
     // Output star imports individually
     filterInstances(imports, ImportsAll).forEach(i => {

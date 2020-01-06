@@ -129,6 +129,14 @@ describe('code', () => {
     `);
   });
 
+  it('will skip same file imports', async () => {
+    const b = code`const f = ${imp('Foo@./foo')};`;
+    expect(await b.toStringWithImports('foo.ts')).toMatchInlineSnapshot(`
+      "const f = Foo;
+      "
+    `);
+  });
+
   it('can make literal arrays', async () => {
     const b = code`const types = ${arrayOf(imp('Foo@foo'), imp('Bar@bar'))};`;
     expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
