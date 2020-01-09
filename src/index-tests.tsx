@@ -7,6 +7,18 @@ describe('code', () => {
     expect(a.toString()).toEqual('delicious taco');
   });
 
+  it('basic interpolation of booleans', () => {
+    const foo = false;
+    const a = code`${foo} taco`;
+    expect(a.toString()).toEqual('false taco');
+  });
+
+  it('basic interpolation of null', () => {
+    const foo = null;
+    const a = code`${foo} taco`;
+    expect(a.toString()).toEqual('null taco');
+  });
+
   it('is pretty', () => {
     const b = code`if (true) { logTrue(); } else { logFalse(); }`;
     expect(b.toString()).toMatchInlineSnapshot(`

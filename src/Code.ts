@@ -78,7 +78,9 @@ export function deepGenerate(object: unknown): string {
       todo = [...todo, ...current];
     } else if (current instanceof Node) {
       result += current.toCodeString();
-    } else if (current) {
+    } else if (current === null) {
+      result += 'null';
+    } else if (current !== undefined) {
       result += (current as any).toString();
     } else {
       result += 'undefined';
