@@ -1,5 +1,5 @@
 import { Node } from './Node';
-import { emitImports, SymbolSpec } from './SymbolSpecs';
+import { emitImports, ImportsName, SymbolSpec } from './SymbolSpecs';
 import prettier, { resolveConfig } from 'prettier';
 
 export class Code extends Node {
@@ -18,6 +18,8 @@ export class Code extends Node {
    */
   toStringWithImports(path?: string): Promise<string> {
     const imports = this.deepFindImports();
+    const defs = this.deepFindDefs();
+    assignAliasesIfNeeded(defs, imports);
     const importPart = emitImports(imports, path || '');
     const bodyPart = this.generateCode();
     return maybePrettyWithConfig(importPart + '\n' + bodyPart);
@@ -54,6 +56,22 @@ export class Code extends Node {
       }
     }
     return imports;
+  }
+
+  private deepFindDefs(): Def[] {
+    const defs: Def[] = [];
+    let todo: unknown[] = [this];
+    while (todo.length > 0) {
+      const placeholder = todo.shift();
+      if (placeholder instanceof Def) {
+        defs.push(placeholder);
+      } else if (placeholder instanceof Node) {
+        todo = [...todo, ...placeholder.childNodes];
+      } else if (Array.isArray(placeholder)) {
+        todo = [...todo, ...placeholder];
+      }
+    }
+    return defs;
   }
 
   private generateCode(): string {
@@ -100,10 +118,58 @@ async function maybePrettyWithConfig(input: string): Promise<string> {
   }
 }
 
+/** Finds any namespace collisions of a named import colliding with def and assigns the import an alias it. */
+function assignAliasesIfNeeded(defs: Def[], imports: SymbolSpec[]) {
+  const defNames = new Set<string>();
+  defs.forEach((def) => defNames.add(def.symbol));
+
+  // A mapping of original to assigned alias, i.e. Foo@foo --> Foo2
+  const assignedAliases: Record<string, string> = {};
+  let j = 1;
+
+  imports.forEach((i) => {
+    if (i instanceof ImportsName) {
+      if (defNames.has(i.value)) {
+        // Look for an existing value
+        const key = `${i.value}@${i.source}`;
+        let alias = assignedAliases[key];
+        if (!alias) {
+          alias = `${i.value}${j++}`;
+          assignedAliases[key] = alias;
+        }
+        // Move the original symbol over
+        i.sourceValue = i.value;
+        i.value = alias;
+      }
+    }
+  });
+}
+
 function maybePretty(input: string): string {
   try {
     return prettier.format(input.trim(), { parser: 'typescript' });
   } catch (e) {
     return input; // assume it's invalid syntax and ignore
+  }
+}
+
+/**
+ * Represents a symbol defined in the current file.
+ *
+ * We use this to know if a symbol imported from a different file is going to
+ * have a namespace collision.
+ */
+export class Def extends Node {
+  constructor(public symbol: string) {
+    super();
+  }
+
+  toCodeString(): string {
+    return this.symbol;
+  }
+
+  /** Any potentially string/SymbolSpec/Code nested nodes within us. */
+  get childNodes() {
+    return [];
   }
 }

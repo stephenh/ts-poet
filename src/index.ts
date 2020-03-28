@@ -1,5 +1,5 @@
 import { SymbolSpec } from './SymbolSpecs';
-import { Code, deepGenerate } from './Code';
+import { Code, deepGenerate, Def } from './Code';
 import { Node } from './Node';
 export { Code } from './Code';
 
@@ -20,6 +20,12 @@ export function arrayOf(...elements: unknown[]): Node {
   })();
 }
 
+/** Creates an import that will be auto-imported at the top of the output file. */
 export function imp(spec: string): SymbolSpec {
   return SymbolSpec.from(spec);
+}
+
+/** Defines `symbol` as being locally defined in the file, to avoid import collisions. */
+export function def(symbol: string): Def {
+  return new Def(symbol);
 }

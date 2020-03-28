@@ -1,4 +1,4 @@
-import { arrayOf, code, imp } from '../src';
+import { arrayOf, code, def, imp } from '../src';
 
 describe('code', () => {
   it('basic interpolation', () => {
@@ -93,6 +93,17 @@ describe('code', () => {
     `);
   });
 
+  it('can nest lists of strings', async () => {
+    const zaz = code`${['a', 'b']}`;
+    expect(await zaz.toStringWithImports()).toEqual('ab;\n');
+  });
+
+  it('can nest iterables', async () => {
+    const obj = { a: 1, b: 2 };
+    const zaz = code`${Object.values(obj).map((i) => i + 1)}`;
+    expect(await zaz.toStringWithImports()).toEqual('23;\n');
+  });
+
   it('can nest lists of imports', async () => {
     const b = code`const types = ${[imp('Foo@foo'), ', ', imp('Bar@bar')]};`;
     expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
@@ -145,6 +156,28 @@ describe('code', () => {
     const b = code`const f = ${imp('Foo@./foo')};`;
     expect(await b.toStringWithImports('foo.ts')).toMatchInlineSnapshot(`
       "const f = Foo;
+      "
+    `);
+  });
+
+  it('will avoid namespace collisions', async () => {
+    // Given we have some type Foo we want to import from another file
+    // And we also define our own local foo
+    const b = code`
+      const ${def('Foo')} = {};
+      const f1 = new ${imp('Foo@./bar')}();
+      const f2 = new ${imp('Foo@./zaz')}();
+      const f3 = new ${imp('Foo@./zaz')}();
+    `;
+    // Then we get a Foo alias.
+    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+      "import { Foo as Foo1 } from './bar';
+      import { Foo as Foo2 } from './zaz';
+
+      const Foo = {};
+      const f1 = new Foo1();
+      const f2 = new Foo2();
+      const f3 = new Foo2();
       "
     `);
   });

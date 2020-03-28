@@ -197,11 +197,23 @@ export abstract class Imported extends SymbolSpec {
  * Imports a single named symbol from the module's exported
  * symbols.
  *
- * e.g. `import { Engine } from 'templates';`
+ * E.g.:
+ *
+ * `import { Engine } from 'templates'` or
+ * `import { Engine as Engine2 } from 'templates'`
  */
 export class ImportsName extends Imported {
-  constructor(value: string, source: string) {
+  /**
+   * @param value
+   * @param source
+   * @param sourceValue is the optional original value, i.e if we're renaming the symbol it is `Engine`
+   */
+  constructor(value: string, source: string, public sourceValue?: string) {
     super(value, source);
+  }
+
+  public toImportPiece(): string {
+    return this.sourceValue ? `${this.sourceValue} as ${this.value}` : this.value;
   }
 }
 
@@ -284,7 +296,7 @@ export function emitImports(imports: SymbolSpec[], filePath: string): string {
     });
 
     // Output named imports as a group
-    const names = unique(filterInstances(imports, ImportsName).map(it => it.value));
+    const names = unique(filterInstances(imports, ImportsName).map(it => it.toImportPiece()));
     const def = unique(filterInstances(imports, ImportsDefault).map(it => it.value));
     if (names.length > 0 || def.length > 0) {
       const namesPart = names.length > 0 ? [`{ ${names.join(', ')} }`] : [];
