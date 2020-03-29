@@ -194,7 +194,7 @@ describe('code', () => {
       const f2 = new ${imp('Foo@./bar')}();
     `;
     // Then we don't need an import for f1
-    expect(await b.toStringWithImports('./foo')).toMatchInlineSnapshot(`
+    expect(await b.toStringWithImports('foo.ts')).toMatchInlineSnapshot(`
       "import { Foo as Foo1 } from './bar';
 
       const Foo = {};

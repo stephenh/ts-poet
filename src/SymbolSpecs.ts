@@ -268,26 +268,29 @@ export class SideEffect extends Imported {
 }
 
 /** Generates the `import ...` lines for the given `imports`. */
-export function emitImports(imports: SymbolSpec[], filePath: string): string {
+export function emitImports(imports: SymbolSpec[], ourModulePath: string): string {
   if (imports.length == 0) {
     return '';
   }
 
   let result = '';
-  const ourModulePath = filePath.replace(/\.[tj]sx?/, '');
 
   const augmentImports = _.groupBy(filterInstances(imports, Augmented), (a) => a.augmented);
 
   // Group the imports by source module they're imported from
   const importsByModule = _.groupBy(
-    imports.filter((it) => it.source !== undefined && !(it instanceof ImportsName && it.definedIn === ourModulePath)),
+    imports.filter(
+      (it) =>
+        it.source !== undefined &&
+        !(it instanceof ImportsName && it.definedIn && sameModule(it.definedIn, ourModulePath))
+    ),
     (it) => it.source
   );
 
   // Output each source module as one line
   Object.entries(importsByModule).forEach(([modulePath, imports]) => {
     // Skip imports from the current module
-    if (ourModulePath === modulePath || Path.resolve(ourModulePath) === Path.resolve(modulePath)) {
+    if (sameModule(ourModulePath, modulePath)) {
       return;
     }
     const importPath = maybeRelativePath(ourModulePath, modulePath);
@@ -349,4 +352,9 @@ export function maybeRelativePath(outputPath: string, importPath: string): strin
   const a: string[] = new Array(numberOfDirs);
   const prefix = a.fill('..', 0, numberOfDirs).join('/');
   return prefix + importPath.substring(1);
+}
+
+/** Checks if `path1 === path2` despite minor path differences like `./foo` and `foo`. */
+export function sameModule(path1: string, path2: string): boolean {
+  return path1 === path2 || Path.resolve(path1) === Path.resolve(path2);
 }

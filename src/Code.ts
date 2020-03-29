@@ -1,5 +1,5 @@
 import { Node } from './Node';
-import { emitImports, ImportsName, SymbolSpec } from './SymbolSpecs';
+import { emitImports, ImportsName, sameModule, SymbolSpec } from './SymbolSpecs';
 import prettier, { resolveConfig } from 'prettier';
 
 export class Code extends Node {
@@ -17,10 +17,11 @@ export class Code extends Node {
    * to return a `Promise<String>`.
    */
   toStringWithImports(path?: string): Promise<string> {
+    const ourModulePath = (path || '').replace(/\.[tj]sx?/, '');
     const imports = this.deepFindImports();
     const defs = this.deepFindDefs();
-    assignAliasesIfNeeded(defs, imports, path || '');
-    const importPart = emitImports(imports, path || '');
+    assignAliasesIfNeeded(defs, imports, ourModulePath);
+    const importPart = emitImports(imports, ourModulePath);
     const bodyPart = this.generateCode();
     return maybePrettyWithConfig(importPart + '\n' + bodyPart);
   }
@@ -119,7 +120,7 @@ async function maybePrettyWithConfig(input: string): Promise<string> {
 }
 
 /** Finds any namespace collisions of a named import colliding with def and assigns the import an alias it. */
-function assignAliasesIfNeeded(defs: Def[], imports: SymbolSpec[], path: string) {
+function assignAliasesIfNeeded(defs: Def[], imports: SymbolSpec[], ourModulePath: string) {
   const defNames = new Set<string>();
   defs.forEach((def) => defNames.add(def.symbol));
 
@@ -128,7 +129,10 @@ function assignAliasesIfNeeded(defs: Def[], imports: SymbolSpec[], path: string)
   let j = 1;
 
   imports.forEach((i) => {
-    if (i instanceof ImportsName && !(i.source === path || i.definedIn === path)) {
+    if (
+      i instanceof ImportsName &&
+      !(sameModule(i.source, ourModulePath) || (i.definedIn && sameModule(i.definedIn, ourModulePath)))
+    ) {
       if (defNames.has(i.value)) {
         // Look for an existing alias
         const key = `${i.value}@${i.source}`;
