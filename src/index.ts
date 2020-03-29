@@ -22,7 +22,11 @@ export function arrayOf(...elements: unknown[]): Node {
 
 /** Creates an import that will be auto-imported at the top of the output file. */
 export function imp(spec: string, opts: { definedIn?: string } = {}): SymbolSpec {
-  return SymbolSpec.from(spec);
+  const sym = SymbolSpec.from(spec);
+  if (opts && opts.definedIn) {
+    sym.definedIn = opts.definedIn;
+  }
+  return sym;
 }
 
 /** Defines `symbol` as being locally defined in the file, to avoid import collisions. */

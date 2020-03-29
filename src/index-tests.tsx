@@ -184,9 +184,8 @@ describe('code', () => {
 
   it('can handle types defined in barrels', async () => {
     // Given we want to import Foo from an index file
-    let Foo = imp('Foo@./index');
     // And we know that it's actually defined in ./foo
-    Foo.definedIn = './foo';
+    const Foo = imp('Foo@./index', { definedIn: './foo' });
     // When we use the Foo@./index type within ./foo itself
     const b = code`
       const ${def('Foo')} = {};
