@@ -160,7 +160,7 @@ describe('code', () => {
     `);
   });
 
-  it('will avoid namespace collisions', async () => {
+  it('avoids namespace collisions', async () => {
     // Given we have some type Foo we want to import from another file
     // And we also define our own local foo
     const b = code`
@@ -178,6 +178,28 @@ describe('code', () => {
       const f1 = new Foo1();
       const f2 = new Foo2();
       const f3 = new Foo2();
+      "
+    `);
+  });
+
+  it('can handle types defined in barrels', async () => {
+    // Given we want to import Foo from an index file
+    let Foo = imp('Foo@./index');
+    // And we know that it's actually defined in ./foo
+    Foo.definedIn = './foo';
+    // When we use the Foo@./index type within ./foo itself
+    const b = code`
+      const ${def('Foo')} = {};
+      const f1 = new ${Foo}();
+      const f2 = new ${imp('Foo@./bar')}();
+    `;
+    // Then we don't need an import for f1
+    expect(await b.toStringWithImports('./foo')).toMatchInlineSnapshot(`
+      "import { Foo as Foo1 } from './bar';
+
+      const Foo = {};
+      const f1 = new Foo();
+      const f2 = new Foo1();
       "
     `);
   });

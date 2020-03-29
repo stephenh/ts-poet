@@ -21,7 +21,7 @@ export function arrayOf(...elements: unknown[]): Node {
 }
 
 /** Creates an import that will be auto-imported at the top of the output file. */
-export function imp(spec: string): SymbolSpec {
+export function imp(spec: string, opts: { definedIn?: string } = {}): SymbolSpec {
   return SymbolSpec.from(spec);
 }
 

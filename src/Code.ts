@@ -19,7 +19,7 @@ export class Code extends Node {
   toStringWithImports(path?: string): Promise<string> {
     const imports = this.deepFindImports();
     const defs = this.deepFindDefs();
-    assignAliasesIfNeeded(defs, imports);
+    assignAliasesIfNeeded(defs, imports, path || '');
     const importPart = emitImports(imports, path || '');
     const bodyPart = this.generateCode();
     return maybePrettyWithConfig(importPart + '\n' + bodyPart);
@@ -119,7 +119,7 @@ async function maybePrettyWithConfig(input: string): Promise<string> {
 }
 
 /** Finds any namespace collisions of a named import colliding with def and assigns the import an alias it. */
-function assignAliasesIfNeeded(defs: Def[], imports: SymbolSpec[]) {
+function assignAliasesIfNeeded(defs: Def[], imports: SymbolSpec[], path: string) {
   const defNames = new Set<string>();
   defs.forEach((def) => defNames.add(def.symbol));
 
@@ -128,9 +128,9 @@ function assignAliasesIfNeeded(defs: Def[], imports: SymbolSpec[]) {
   let j = 1;
 
   imports.forEach((i) => {
-    if (i instanceof ImportsName) {
+    if (i instanceof ImportsName && !(i.source === path || i.definedIn === path)) {
       if (defNames.has(i.value)) {
-        // Look for an existing value
+        // Look for an existing alias
         const key = `${i.value}@${i.source}`;
         let alias = assignedAliases[key];
         if (!alias) {

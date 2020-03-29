@@ -5,8 +5,8 @@ import { Node } from './Node';
 const fileNamePattern = '(?:[a-zA-Z0-9._-]+)';
 const modulePattern = `@?(?:(?:${fileNamePattern}(?:/${fileNamePattern})*))`;
 const identPattern = `(?:(?:[a-zA-Z][_a-zA-Z0-9.]*)|(?:[_a-zA-Z][_a-zA-Z0-9.]+))`;
-export const moduleSeparator = '[*@+=]';
-const importPattern = `^(${identPattern})?(${moduleSeparator})(${modulePattern})(?:#(${identPattern}))?`;
+export const importType = '[*@+=]';
+const importPattern = `^(${identPattern})?(${importType})(${modulePattern})(?:#(${identPattern}))?`;
 
 /**
  * Specifies a symbol and its related origin, either via import or implicit/local declaration.
@@ -20,28 +20,22 @@ export abstract class SymbolSpec extends Node {
    * import variation. If the spec to parse does not follow the proper format
    * an implicit symbol is created from the unparsed spec.
    *
-   * Pattern: `<symbol_name>? <import_type> <module_path> (#<augmented_symbol_name>)?`
+   * Pattern: `symbolName? importType modulePath (#<augmentedSymbolName>)?`
    *
-   * * symbol_name = `[a-zA-Z0-9._]+`
+   * Where:
    *
-   *        Any legal compound JS/TS symbol (e.g. symbol._member.member). If no symbol name is
-   *        specified then the last component of the module path is used as the symbol name;
-   *        allows easy use with libraries that follow normal conventions.
-   *
-   * * import_type = `@ | * | +`
-   *
-   *        `@` = Import named symbol from module (e.g. `import { <symbol_name> } from '<module_name>'`)
-   *
-   *        `*` = Import all symbols from module (e.g. `*Foo` becomes `import * as Foo from 'Foo'`,
-   *          `Foo*foo` becomes `import * as Foo from 'foo').
-   *
-   *        `+` = Symbol is declared implicitly via import of the module (e.g. `import '<module_name>'`)
-   *
-   * * module_path = `<filename>(/<filename)*`
-   *
-   *        Path name specifying the module.
-   *
-   * * augmented_symbol_name = `[a-zA-Z0-9_]+`
+   * - `symbolName` is any legal JS/TS symbol. If none, we use the last part of the module path as a guess.
+   * - `importType` is one of `@` or `*` or `+`, where:
+   *    - `@` is a named import
+   *       - `Foo@bar` becomes `import { Foo } from 'bar'`
+   *    - `*` is a star import,
+   *       - `*Foo` becomes `import * as Foo from 'Foo'`
+   *       - `Foo*foo` becomes `import * as Foo from 'foo'`
+   *    - `+` is an implicit import
+   *       - E.g. `Foo+foo` becomes `import 'foo'`
+   * - `modulePath` is a path
+   *    - E.g. `<filename>(/<filename)*`
+   * - augmentedSymbolName = `[a-zA-Z0-9_]+`
    *
    *        Any valid symbol name that represents the symbol that is being augmented. For example,
    *        the import `rxjs/add/observable/from` attaches the `from` method to the `Observable` class.
@@ -58,7 +52,7 @@ export abstract class SymbolSpec extends Node {
     if (matched != null) {
       const modulePath = matched[3];
       const type = matched[2] || '@';
-      const symbolName = matched[1] || (_.last(modulePath.split('/')) || '');
+      const symbolName = matched[1] || _.last(modulePath.split('/')) || '';
       const targetName = matched[4];
       switch (type) {
         case '*':
@@ -81,6 +75,14 @@ export abstract class SymbolSpec extends Node {
   public static fromMaybeString(spec: string | SymbolSpec): SymbolSpec {
     return typeof spec === 'string' ? SymbolSpec.from(spec) : spec;
   }
+
+  /**
+   * Defined if the symbol is typically imported from a barrel/etc. path, but is technically defined in another file.
+   *
+   * We need to know this in case the "this comes from the barrel" type ends up being used in the file where
+   * the symbol itself is defined, i.e. we don't need an import in that case.
+   */
+  public definedIn?: string;
 
   protected constructor(public value: string) {
     super();
@@ -265,54 +267,59 @@ export class SideEffect extends Imported {
   }
 }
 
+/** Generates the `import ...` lines for the given `imports`. */
 export function emitImports(imports: SymbolSpec[], filePath: string): string {
   if (imports.length == 0) {
     return '';
   }
 
   let result = '';
-  const augmentImports = _.groupBy(filterInstances(imports, Augmented), a => a.augmented);
-  const sideEffectImports = _.groupBy(filterInstances(imports, SideEffect), a => a.source);
+  const ourModulePath = filePath.replace(/\.[tj]sx?/, '');
 
-  // FileModules.importPath(this.path, it.source)).toSortedMap()
-  const m = _.groupBy(imports.filter(it => it.source !== undefined), it => it.source);
+  const augmentImports = _.groupBy(filterInstances(imports, Augmented), (a) => a.augmented);
 
-  const modulePath = filePath.replace(/\.[tj]sx?/, '');
+  // Group the imports by source module they're imported from
+  const importsByModule = _.groupBy(
+    imports.filter((it) => it.source !== undefined && !(it instanceof ImportsName && it.definedIn === ourModulePath)),
+    (it) => it.source
+  );
 
-  Object.entries(m).forEach(([sourceImportPath, imports]) => {
+  // Output each source module as one line
+  Object.entries(importsByModule).forEach(([modulePath, imports]) => {
     // Skip imports from the current module
-    if (modulePath === sourceImportPath || Path.resolve(modulePath) === Path.resolve(sourceImportPath)) {
+    if (ourModulePath === modulePath || Path.resolve(ourModulePath) === Path.resolve(modulePath)) {
       return;
     }
-    const importPath = maybeRelativePath(modulePath, sourceImportPath);
+    const importPath = maybeRelativePath(ourModulePath, modulePath);
 
     // Output star imports individually
-    filterInstances(imports, ImportsAll).forEach(i => {
+    filterInstances(imports, ImportsAll).forEach((i) => {
       result += `import * as ${i.value} from '${importPath}';\n`;
       const augments = augmentImports[i.value];
       if (augments) {
-        augments.forEach(augment => (result += `import '${augment.source}';\n`));
+        augments.forEach((augment) => (result += `import '${augment.source}';\n`));
       }
     });
 
     // Output named imports as a group
-    const names = unique(filterInstances(imports, ImportsName).map(it => it.toImportPiece()));
-    const def = unique(filterInstances(imports, ImportsDefault).map(it => it.value));
+    const names = unique(filterInstances(imports, ImportsName).map((it) => it.toImportPiece()));
+    const def = unique(filterInstances(imports, ImportsDefault).map((it) => it.value));
     if (names.length > 0 || def.length > 0) {
       const namesPart = names.length > 0 ? [`{ ${names.join(', ')} }`] : [];
       const defPart = def.length > 0 ? [def[0]] : [];
       const allNames = [...defPart, ...namesPart];
       result += `import ${allNames.join(', ')} from '${importPath}';\n`;
-      [...names, ...def].forEach(name => {
+      [...names, ...def].forEach((name) => {
         const augments = augmentImports[name];
         if (augments) {
-          augments.forEach(augment => (result += `import '${augment.source}';\n`));
+          augments.forEach((augment) => (result += `import '${augment.source}';\n`));
         }
       });
     }
   });
 
-  Object.keys(sideEffectImports).forEach(it => (result += `import '${it}';\n`));
+  const sideEffectImports = _.groupBy(filterInstances(imports, SideEffect), (a) => a.source);
+  Object.keys(sideEffectImports).forEach((it) => (result += `import '${it}';\n`));
 
   return result;
 }
@@ -320,7 +327,7 @@ export function emitImports(imports: SymbolSpec[], filePath: string): string {
 type Constructor<T> = new (...args: any[]) => T;
 
 function filterInstances<T, U>(list: T[], t: Constructor<U>): U[] {
-  return (list.filter(e => e instanceof t) as unknown) as U[];
+  return (list.filter((e) => e instanceof t) as unknown) as U[];
 }
 
 function unique<T>(list: T[]): T[] {
@@ -334,7 +341,7 @@ export function maybeRelativePath(outputPath: string, importPath: string): strin
   // Drop the `./` prefix from the outputPath if it exists.
   const basePath = outputPath.replace(/^.\//, '');
   // Ideally we'd use a path library to do all this.
-  const numberOfDirs = basePath.split('').filter(l => l === '/').length;
+  const numberOfDirs = basePath.split('').filter((l) => l === '/').length;
   if (numberOfDirs === 0) {
     return importPath;
   }
