@@ -165,17 +165,17 @@ function assignAliasesIfNeeded(defs: Def[], imports: Import[], ourModulePath: st
       i instanceof ImportsName &&
       !(sameModule(i.source, ourModulePath) || (i.definedIn && sameModule(i.definedIn, ourModulePath)))
     ) {
-      if (defNames.has(i.value)) {
+      if (defNames.has(i.symbol)) {
         // Look for an existing alias
-        const key = `${i.value}@${i.source}`;
+        const key = `${i.symbol}@${i.source}`;
         let alias = assignedAliases[key];
         if (!alias) {
-          alias = `${i.value}${j++}`;
+          alias = `${i.symbol}${j++}`;
           assignedAliases[key] = alias;
         }
         // Move the original symbol over
-        i.sourceValue = i.value;
-        i.value = alias;
+        i.sourceSymbol = i.symbol;
+        i.symbol = alias;
       }
     }
   });

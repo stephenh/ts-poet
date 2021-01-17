@@ -10,8 +10,6 @@ const importPattern = `^(${identPattern})?(${importType})(${modulePattern})(?:#(
 
 /**
  * Specifies a symbol and its related origin, either via import or implicit/local declaration.
- *
- * @param value Value of the symbol
  */
 export abstract class Import extends Node {
   /**
@@ -84,12 +82,12 @@ export abstract class Import extends Node {
    */
   public definedIn?: string;
 
-  protected constructor(public value: string) {
+  protected constructor(public symbol: string) {
     super();
   }
 
   public toCodeString(): string {
-    return this.value;
+    return this.symbol;
   }
 
   public get childNodes(): unknown[] {
@@ -178,8 +176,8 @@ export abstract class Import extends Node {
  * Non-imported symbol
  */
 export class Implicit extends Import {
-  constructor(value: string) {
-    super(value);
+  constructor(symbol: string) {
+    super(symbol);
   }
 
   source = undefined;
@@ -187,8 +185,8 @@ export class Implicit extends Import {
 
 /** Common base class for imported symbols. */
 export abstract class Imported extends Import {
-  /** The value is the imported symbol, i.e. `BarClass`, and source is the path it comes from. */
-  protected constructor(public value: string, public source: string) {
+  /** The symbol is the imported symbol, i.e. `BarClass`, and source is the path it comes from. */
+  protected constructor(public symbol: string, public source: string) {
     super(source);
   }
 }
@@ -204,16 +202,16 @@ export abstract class Imported extends Import {
  */
 export class ImportsName extends Imported {
   /**
-   * @param value
+   * @param symbol
    * @param source
-   * @param sourceValue is the optional original value, i.e if we're renaming the symbol it is `Engine`
+   * @param sourceSymbol is the optional original symbol, i.e if we're renaming the symbol it is `Engine`
    */
-  constructor(value: string, source: string, public sourceValue?: string) {
-    super(value, source);
+  constructor(symbol: string, source: string, public sourceSymbol?: string) {
+    super(symbol, source);
   }
 
   public toImportPiece(): string {
-    return this.sourceValue ? `${this.sourceValue} as ${this.value}` : this.value;
+    return this.sourceSymbol ? `${this.sourceSymbol} as ${this.symbol}` : this.symbol;
   }
 }
 
@@ -224,8 +222,8 @@ export class ImportsName extends Imported {
  * e.g. `import Engine from 'engine';`
  */
 export class ImportsDefault extends Imported {
-  constructor(value: string, source: string) {
-    super(value, source);
+  constructor(symbol: string, source: string) {
+    super(symbol, source);
   }
 }
 
@@ -236,8 +234,8 @@ export class ImportsDefault extends Imported {
  * e.g. `import * as Engine from 'templates';`
  */
 export class ImportsAll extends Imported {
-  constructor(value: string, source: string) {
-    super(value, source);
+  constructor(symbol: string, source: string) {
+    super(symbol, source);
   }
 }
 
@@ -248,20 +246,19 @@ export class ImportsAll extends Imported {
  * e.g. `import 'rxjs/add/operator/flatMap'`
  */
 export class Augmented extends Imported {
-  constructor(value: string, source: string, public augmented: string) {
-    super(value, source);
+  constructor(symbol: string, source: string, public augmented: string) {
+    super(symbol, source);
   }
 }
 
 /**
- * A symbol that is brought in as a side effect of an
- * import.
+ * A symbol that is brought in as a side effect of an import.
  *
  * E.g. `from("Foo+mocha")` will add `import 'mocha'`
  */
 export class SideEffect extends Imported {
-  constructor(value: string, source: string) {
-    super(value, source);
+  constructor(symbol: string, source: string) {
+    super(symbol, source);
   }
 }
 
@@ -295,8 +292,8 @@ export function emitImports(imports: Import[], ourModulePath: string): string {
 
     // Output star imports individually
     filterInstances(imports, ImportsAll).forEach((i) => {
-      result += `import * as ${i.value} from '${importPath}';\n`;
-      const augments = augmentImports[i.value];
+      result += `import * as ${i.symbol} from '${importPath}';\n`;
+      const augments = augmentImports[i.symbol];
       if (augments) {
         augments.forEach((augment) => (result += `import '${augment.source}';\n`));
       }
@@ -304,7 +301,7 @@ export function emitImports(imports: Import[], ourModulePath: string): string {
 
     // Output named imports as a group
     const names = unique(filterInstances(imports, ImportsName).map((it) => it.toImportPiece()));
-    const def = unique(filterInstances(imports, ImportsDefault).map((it) => it.value));
+    const def = unique(filterInstances(imports, ImportsDefault).map((it) => it.symbol));
     if (names.length > 0 || def.length > 0) {
       const namesPart = names.length > 0 ? [`{ ${names.join(', ')} }`] : [];
       const defPart = def.length > 0 ? [def[0]] : [];

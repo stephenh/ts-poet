@@ -12,7 +12,7 @@ import {
 describe('Import', () => {
   it('parsing implicitly defined (non-imported) symbols', () => {
     const parsed = Import.from('Some.Symbol.Depth');
-    expect(parsed.value).toEqual('Some.Symbol.Depth');
+    expect(parsed.symbol).toEqual('Some.Symbol.Depth');
   });
 
   it('parsing named import: exported symbol implied by module path', () => {
@@ -20,7 +20,7 @@ describe('Import', () => {
     expect(parsed).toBeInstanceOf(ImportsName);
 
     const sym = parsed as ImportsName;
-    expect(sym.value).toEqual('Observable');
+    expect(sym.symbol).toEqual('Observable');
     expect(sym.source).toEqual('rxjs/Observable');
 
     expect(emit(sym)).toMatchInlineSnapshot(`"import { Observable } from 'rxjs/Observable';"`);
@@ -31,7 +31,7 @@ describe('Import', () => {
     expect(parsed).toBeInstanceOf(ImportsName);
 
     const sym = parsed as ImportsName;
-    expect(sym.value).toEqual('Api');
+    expect(sym.symbol).toEqual('Api');
     expect(sym.source).toEqual('Api');
 
     expect(emit(sym)).toMatchInlineSnapshot(`"import { Api } from 'Api';"`);
@@ -42,7 +42,7 @@ describe('Import', () => {
     expect(parsed).toBeInstanceOf(ImportsName);
 
     const sym = parsed as ImportsName;
-    expect(sym.value).toEqual('BackendService');
+    expect(sym.symbol).toEqual('BackendService');
     expect(sym.source).toEqual('./some/local/source/file');
     expect(emit(sym)).toMatchInlineSnapshot(`"import { BackendService } from './some/local/source/file';"`);
   });
@@ -52,7 +52,7 @@ describe('Import', () => {
     expect(parsed).toBeInstanceOf(ImportsName);
 
     const sym = parsed as ImportsName;
-    expect(sym.value).toEqual('BackendService');
+    expect(sym.symbol).toEqual('BackendService');
     expect(sym.source).toEqual('../some/local/source/file');
     expect(emit(sym)).toMatchInlineSnapshot(`"import { BackendService } from '../some/local/source/file';"`);
   });
@@ -62,7 +62,7 @@ describe('Import', () => {
     expect(parsed).toBeInstanceOf(ImportsName);
 
     const sym = parsed as ImportsName;
-    expect(sym.value).toEqual('SomeOtherSymbolDepth');
+    expect(sym.symbol).toEqual('SomeOtherSymbolDepth');
     expect(sym.source).toEqual('rxjs/Observable');
     expect(emit(sym)).toMatchInlineSnapshot(`"import { SomeOtherSymbolDepth } from 'rxjs/Observable';"`);
   });
@@ -72,7 +72,7 @@ describe('Import', () => {
     expect(parsed).toBeInstanceOf(ImportsAll);
 
     const sym = parsed as ImportsAll;
-    expect(sym.value).toEqual('Observable');
+    expect(sym.symbol).toEqual('Observable');
     expect(sym.source).toEqual('rxjs/Observable');
     expect(emit(sym)).toMatchInlineSnapshot(`"import * as Observable from 'rxjs/Observable';"`);
   });
@@ -82,7 +82,7 @@ describe('Import', () => {
     expect(parsed).toBeInstanceOf(ImportsAll);
 
     const sym = parsed as ImportsAll;
-    expect(sym.value).toEqual('SomeOther');
+    expect(sym.symbol).toEqual('SomeOther');
     expect(sym.source).toEqual('rxjs/Observable');
     expect(emit(sym)).toMatchInlineSnapshot(`"import * as SomeOther from 'rxjs/Observable';"`);
   });
@@ -92,7 +92,7 @@ describe('Import', () => {
     expect(parsed).toBeInstanceOf(ImportsDefault);
 
     const sym = parsed as ImportsDefault;
-    expect(sym.value).toEqual('DataLoader');
+    expect(sym.symbol).toEqual('DataLoader');
     expect(sym.source).toEqual('dataloader');
     expect(emit(sym)).toMatchInlineSnapshot(`"import DataLoader from 'dataloader';"`);
   });
@@ -102,7 +102,7 @@ describe('Import', () => {
     expect(parsed).toBeInstanceOf(SideEffect);
 
     const sym = parsed as SideEffect;
-    expect(sym.value).toEqual('describe');
+    expect(sym.symbol).toEqual('describe');
     expect(sym.source).toEqual('mocha');
     expect(emit(sym)).toMatchInlineSnapshot(`"import 'mocha';"`);
   });
@@ -112,7 +112,7 @@ describe('Import', () => {
     expect(parsed).toBeInstanceOf(Augmented);
 
     const sym = parsed as Augmented;
-    expect(sym.value).toEqual('toPromise');
+    expect(sym.symbol).toEqual('toPromise');
     expect(sym.source).toEqual('rxjs/add/operator/toPromise');
     expect(sym.augmented).toEqual('Observable');
     expect(emit(sym)).toMatchInlineSnapshot(`""`);
@@ -123,7 +123,7 @@ describe('Import', () => {
     expect(parsed).toBeInstanceOf(Augmented);
 
     const sym = parsed as Augmented;
-    expect(sym.value).toEqual('SomeSymbol');
+    expect(sym.symbol).toEqual('SomeSymbol');
     expect(sym.source).toEqual('rxjs/add/operator/toPromise');
     expect(sym.augmented).toEqual('Observable');
     expect(emit(sym)).toMatchInlineSnapshot(`""`);
