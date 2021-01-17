@@ -6,17 +6,17 @@ import {
   ImportsName,
   maybeRelativePath,
   SideEffect,
-  SymbolSpec,
-} from './SymbolSpecs';
+  Import,
+} from './Import';
 
-describe('SymbolSpecs', () => {
+describe('Import', () => {
   it('parsing implicitly defined (non-imported) symbols', () => {
-    const parsed = SymbolSpec.from('Some.Symbol.Depth');
+    const parsed = Import.from('Some.Symbol.Depth');
     expect(parsed.value).toEqual('Some.Symbol.Depth');
   });
 
   it('parsing named import: exported symbol implied by module path', () => {
-    const parsed = SymbolSpec.from('@rxjs/Observable');
+    const parsed = Import.from('@rxjs/Observable');
     expect(parsed).toBeInstanceOf(ImportsName);
 
     const sym = parsed as ImportsName;
@@ -27,7 +27,7 @@ describe('SymbolSpecs', () => {
   });
 
   it('parsing named import: exported symbol implied by generated module path', () => {
-    const parsed = SymbolSpec.from('@Api');
+    const parsed = Import.from('@Api');
     expect(parsed).toBeInstanceOf(ImportsName);
 
     const sym = parsed as ImportsName;
@@ -38,7 +38,7 @@ describe('SymbolSpecs', () => {
   });
 
   it('parsing named import: exported symbol explicit, source relative to current dir', () => {
-    const parsed = SymbolSpec.from('BackendService@./some/local/source/file');
+    const parsed = Import.from('BackendService@./some/local/source/file');
     expect(parsed).toBeInstanceOf(ImportsName);
 
     const sym = parsed as ImportsName;
@@ -48,7 +48,7 @@ describe('SymbolSpecs', () => {
   });
 
   it('parsing named import: exported symbol explicit, source relative to parent dir', () => {
-    const parsed = SymbolSpec.from('BackendService@../some/local/source/file');
+    const parsed = Import.from('BackendService@../some/local/source/file');
     expect(parsed).toBeInstanceOf(ImportsName);
 
     const sym = parsed as ImportsName;
@@ -58,7 +58,7 @@ describe('SymbolSpecs', () => {
   });
 
   it('parsing named import: exported symbol explicit, source is implied module', () => {
-    const parsed = SymbolSpec.from('SomeOtherSymbolDepth@rxjs/Observable');
+    const parsed = Import.from('SomeOtherSymbolDepth@rxjs/Observable');
     expect(parsed).toBeInstanceOf(ImportsName);
 
     const sym = parsed as ImportsName;
@@ -68,7 +68,7 @@ describe('SymbolSpecs', () => {
   });
 
   it('parsing all import: exported symbol implied by module path', () => {
-    const parsed = SymbolSpec.from('*rxjs/Observable');
+    const parsed = Import.from('*rxjs/Observable');
     expect(parsed).toBeInstanceOf(ImportsAll);
 
     const sym = parsed as ImportsAll;
@@ -78,7 +78,7 @@ describe('SymbolSpecs', () => {
   });
 
   it('parsing all import: exported symbol explicit, source is implied module', () => {
-    const parsed = SymbolSpec.from('SomeOther*rxjs/Observable');
+    const parsed = Import.from('SomeOther*rxjs/Observable');
     expect(parsed).toBeInstanceOf(ImportsAll);
 
     const sym = parsed as ImportsAll;
@@ -88,7 +88,7 @@ describe('SymbolSpecs', () => {
   });
 
   it('parsing default import', () => {
-    const parsed = SymbolSpec.from('DataLoader=dataloader');
+    const parsed = Import.from('DataLoader=dataloader');
     expect(parsed).toBeInstanceOf(ImportsDefault);
 
     const sym = parsed as ImportsDefault;
@@ -98,7 +98,7 @@ describe('SymbolSpecs', () => {
   });
 
   it('parsing side effect import: exported symbol made available as side effect of import', () => {
-    const parsed = SymbolSpec.from('describe+mocha');
+    const parsed = Import.from('describe+mocha');
     expect(parsed).toBeInstanceOf(SideEffect);
 
     const sym = parsed as SideEffect;
@@ -108,7 +108,7 @@ describe('SymbolSpecs', () => {
   });
 
   it('parsing augmentation import: exported symbol implied by module path', () => {
-    const parsed = SymbolSpec.from('+rxjs/add/operator/toPromise#Observable');
+    const parsed = Import.from('+rxjs/add/operator/toPromise#Observable');
     expect(parsed).toBeInstanceOf(Augmented);
 
     const sym = parsed as Augmented;
@@ -119,7 +119,7 @@ describe('SymbolSpecs', () => {
   });
 
   it('parsing augmentation import: exported symbol explicit', () => {
-    const parsed = SymbolSpec.from('SomeSymbol+rxjs/add/operator/toPromise#Observable');
+    const parsed = Import.from('SomeSymbol+rxjs/add/operator/toPromise#Observable');
     expect(parsed).toBeInstanceOf(Augmented);
 
     const sym = parsed as Augmented;
@@ -137,7 +137,7 @@ describe('SymbolSpecs', () => {
     expect(maybeRelativePath('./zaz/Zaz', './foo/Foo')).toEqual('../foo/Foo');
   });
 
-  function emit(spec: SymbolSpec): string {
+  function emit(spec: Import): string {
     return emitImports([spec], '').trim();
   }
 });

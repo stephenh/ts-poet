@@ -13,7 +13,7 @@ const importPattern = `^(${identPattern})?(${importType})(${modulePattern})(?:#(
  *
  * @param value Value of the symbol
  */
-export abstract class SymbolSpec extends Node {
+export abstract class Import extends Node {
   /**
    * Parses a symbol reference pattern to create a symbol. The pattern
    * allows the simple definition of all symbol types including any possible
@@ -47,7 +47,7 @@ export abstract class SymbolSpec extends Node {
    * @param spec Symbol spec to parse.
    * @return Parsed symbol specification
    */
-  public static from(spec: string): SymbolSpec {
+  public static from(spec: string): Import {
     const matched = spec.match(importPattern);
     if (matched != null) {
       const modulePath = matched[3];
@@ -56,24 +56,24 @@ export abstract class SymbolSpec extends Node {
       const targetName = matched[4];
       switch (type) {
         case '*':
-          return SymbolSpecs.importsAll(symbolName, modulePath);
+          return Import.importsAll(symbolName, modulePath);
         case '@':
-          return SymbolSpecs.importsName(symbolName, modulePath);
+          return Import.importsName(symbolName, modulePath);
         case '=':
-          return SymbolSpecs.importsDefault(symbolName, modulePath);
+          return Import.importsDefault(symbolName, modulePath);
         case '+':
           return targetName
-            ? SymbolSpecs.augmented(symbolName, modulePath, targetName)
-            : SymbolSpecs.sideEffect(symbolName, modulePath);
+            ? Import.augmented(symbolName, modulePath, targetName)
+            : Import.sideEffect(symbolName, modulePath);
         default:
           throw new Error('Invalid type character');
       }
     }
-    return SymbolSpecs.implicit(spec);
+    return Import.implicit(spec);
   }
 
-  public static fromMaybeString(spec: string | SymbolSpec): SymbolSpec {
-    return typeof spec === 'string' ? SymbolSpec.from(spec) : spec;
+  public static fromMaybeString(spec: string | Import): Import {
+    return typeof spec === 'string' ? Import.from(spec) : spec;
   }
 
   /**
@@ -97,9 +97,7 @@ export abstract class SymbolSpec extends Node {
   }
 
   public abstract source: string | undefined;
-}
 
-export class SymbolSpecs {
   /**
    * Creates an import of all the modules exported symbols as a single
    * local named symbol
@@ -109,7 +107,7 @@ export class SymbolSpecs {
    * @param localName The local name of the imported symbols
    * @param from The module to import the symbols from
    */
-  public static importsAll(localName: string, from: string): SymbolSpec {
+  public static importsAll(localName: string, from: string): Import {
     return new ImportsAll(localName, from);
   }
 
@@ -122,7 +120,7 @@ export class SymbolSpecs {
    * @param exportedName The symbol that is both exported and imported
    * @param from The module the symbol is exported from
    */
-  public static importsName(exportedName: string, from: string): SymbolSpec {
+  public static importsName(exportedName: string, from: string): Import {
     return new ImportsName(exportedName, from);
   }
 
@@ -136,7 +134,7 @@ export class SymbolSpecs {
    * @param from The entire import that does the augmentation
    * @param target The symbol that is augmented
    */
-  public static augmented(symbolName: string, from: string, target: string): SymbolSpec {
+  public static augmented(symbolName: string, from: string, target: string): Import {
     return new Augmented(symbolName, from, target);
   }
 
@@ -149,7 +147,7 @@ export class SymbolSpecs {
    * @param symbolName The symbol to be imported
    * @param from The entire import that does the augmentation
    */
-  public static sideEffect(symbolName: string, from: string): SymbolSpec {
+  public static sideEffect(symbolName: string, from: string): Import {
     return new SideEffect(symbolName, from);
   }
 
@@ -158,7 +156,7 @@ export class SymbolSpecs {
    *
    * @param name The implicit symbol name
    */
-  public static implicit(name: string): SymbolSpec {
+  public static implicit(name: string): Import {
     return new Implicit(name);
   }
 
@@ -171,7 +169,7 @@ export class SymbolSpecs {
    * @param exportedName The symbol that is both exported and imported
    * @param from The module the symbol is exported from
    */
-  public static importsDefault(exportedName: string, from: string): SymbolSpec {
+  public static importsDefault(exportedName: string, from: string): Import {
     return new ImportsDefault(exportedName, from);
   }
 }
@@ -179,7 +177,7 @@ export class SymbolSpecs {
 /**
  * Non-imported symbol
  */
-export class Implicit extends SymbolSpec {
+export class Implicit extends Import {
   constructor(value: string) {
     super(value);
   }
@@ -188,7 +186,7 @@ export class Implicit extends SymbolSpec {
 }
 
 /** Common base class for imported symbols. */
-export abstract class Imported extends SymbolSpec {
+export abstract class Imported extends Import {
   /** The value is the imported symbol, i.e. `BarClass`, and source is the path it comes from. */
   protected constructor(public value: string, public source: string) {
     super(source);
@@ -268,7 +266,7 @@ export class SideEffect extends Imported {
 }
 
 /** Generates the `import ...` lines for the given `imports`. */
-export function emitImports(imports: SymbolSpec[], ourModulePath: string): string {
+export function emitImports(imports: Import[], ourModulePath: string): string {
   if (imports.length == 0) {
     return '';
   }
