@@ -1,4 +1,4 @@
-import { arrayOf, code, def, imp } from '../src';
+import { arrayOf, code, conditionalOutput, def, imp } from '../src';
 
 describe('code', () => {
   it('basic interpolation', () => {
@@ -120,6 +120,55 @@ describe('code', () => {
     const obj = { a: 1, b: false };
     const zaz = code`const foo = ${obj}`;
     expect(await zaz.toStringWithImports()).toEqual('const foo = { a: 1, b: false };\n');
+  });
+
+  it('can conditionally output helper methods', async () => {
+    const helperMethod = conditionalOutput('foo', code`function foo() { return 1; }`);
+    const o = code`
+      const a = ${helperMethod}();
+      
+      ${helperMethod.ifUsed()}
+    `;
+    expect(await o.toStringWithImports()).toMatchInlineSnapshot(`
+      "const a = foo();
+
+      function foo() {
+        return 1;
+      }
+      "
+    `);
+  });
+
+  it('can conditionally not output helper methods', async () => {
+    const helperMethod = conditionalOutput('foo', code`function foo() { return 1; }`);
+    const o = code`
+      const a = notFoo();
+      ${helperMethod.ifUsed()}
+    `;
+    expect(await o.toStringWithImports()).toMatchInlineSnapshot(`
+      "const a = notFoo();
+      "
+    `);
+  });
+
+  it('can conditionally output conditional helper methods', async () => {
+    const a = conditionalOutput('a', code`function a() { return 1; }`);
+    const b = conditionalOutput('b', code`function b() { return ${a}(); }`);
+    const o = code`
+      const foo = ${b}();
+      ${a.ifUsed()}
+      ${b.ifUsed()}
+    `;
+    expect(await o.toStringWithImports()).toMatchInlineSnapshot(`
+      "const foo = b();
+      function a() {
+        return 1;
+      }
+      function b() {
+        return a();
+      }
+      "
+    `);
   });
 
   it('can double nest lists', async () => {

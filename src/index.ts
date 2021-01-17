@@ -1,6 +1,7 @@
 import { SymbolSpec } from './SymbolSpecs';
 import { Code, deepGenerate, Def } from './Code';
 import { Node } from './Node';
+import { ConditionalOutput } from './ConditionalOutput';
 export { Code } from './Code';
 
 /** A template literal to format code and auto-organize imports. */
@@ -14,8 +15,8 @@ export function arrayOf(...elements: unknown[]): Node {
       return elements;
     }
 
-    toCodeString(): string {
-      return '[' + elements.map(deepGenerate).join(', ') + ']';
+    toCodeString(used: ConditionalOutput[]): string {
+      return '[' + elements.map((e) => deepGenerate(used, e)).join(', ') + ']';
     }
   })();
 }
@@ -32,4 +33,9 @@ export function imp(spec: string, opts: { definedIn?: string } = {}): SymbolSpec
 /** Defines `symbol` as being locally defined in the file, to avoid import collisions. */
 export function def(symbol: string): Def {
   return new Def(symbol);
+}
+
+/** Creates a conditionally-output code snippet. */
+export function conditionalOutput(usageSite: string, declarationSite: Code): ConditionalOutput {
+  return new ConditionalOutput(usageSite, declarationSite);
 }

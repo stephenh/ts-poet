@@ -2,6 +2,7 @@ import { Node } from './Node';
 import { emitImports, ImportsName, sameModule, SymbolSpec } from './SymbolSpecs';
 import prettier, { resolveConfig } from 'prettier';
 import { isPlainObject } from './is-plain-object';
+import { ConditionalOutput, MaybeOutput } from './ConditionalOutput';
 
 export class Code extends Node {
   constructor(private literals: TemplateStringsArray, private placeholders: any[]) {
@@ -21,9 +22,10 @@ export class Code extends Node {
     const ourModulePath = (path || '').replace(/\.[tj]sx?/, '');
     const imports = this.deepFindImports();
     const defs = this.deepFindDefs();
+    const used = this.deepConditionalOutput();
     assignAliasesIfNeeded(defs, imports, ourModulePath);
     const importPart = emitImports(imports, ourModulePath);
-    const bodyPart = this.generateCode();
+    const bodyPart = this.generateCode(used);
     return maybePrettyWithConfig(importPart + '\n' + bodyPart);
   }
 
@@ -33,15 +35,16 @@ export class Code extends Node {
    * Note that we don't use `.prettierrc` b/c that requires async I/O to resolve.
    */
   toString(): string {
-    return maybePretty(this.generateCode());
+    const used = this.deepConditionalOutput();
+    return maybePretty(this.generateCode(used));
   }
 
   public get childNodes(): unknown[] {
     return this.placeholders;
   }
 
-  toCodeString(): string {
-    return this.generateCode();
+  toCodeString(used: ConditionalOutput[]): string {
+    return this.generateCode(used);
   }
 
   private deepFindImports(): SymbolSpec[] {
@@ -76,12 +79,29 @@ export class Code extends Node {
     return defs;
   }
 
-  private generateCode(): string {
+  private deepConditionalOutput(): ConditionalOutput[] {
+    const used: ConditionalOutput[] = [];
+    let todo: unknown[] = [this];
+    while (todo.length > 0) {
+      const placeholder = todo.shift();
+      if (placeholder instanceof ConditionalOutput) {
+        used.push(placeholder);
+        todo = [...todo, ...placeholder.declarationSiteCode.childNodes];
+      } else if (placeholder instanceof Node) {
+        todo = [...todo, ...placeholder.childNodes];
+      } else if (Array.isArray(placeholder)) {
+        todo = [...todo, ...placeholder];
+      }
+    }
+    return used;
+  }
+
+  private generateCode(used: ConditionalOutput[]): string {
     const { literals, placeholders } = this;
     let result = '';
     // interleave the literals with the placeholders
     for (let i = 0; i < placeholders.length; i++) {
-      result += literals[i] + deepGenerate(placeholders[i]);
+      result += literals[i] + deepGenerate(used, placeholders[i]);
     }
     // add the last literal
     result += literals[literals.length - 1];
@@ -89,7 +109,7 @@ export class Code extends Node {
   }
 }
 
-export function deepGenerate(object: unknown): string {
+export function deepGenerate(used: ConditionalOutput[], object: unknown): string {
   let result = '';
   let todo: unknown[] = [object];
   while (todo.length > 0) {
@@ -97,7 +117,11 @@ export function deepGenerate(object: unknown): string {
     if (Array.isArray(current)) {
       todo = [...todo, ...current];
     } else if (current instanceof Node) {
-      result += current.toCodeString();
+      result += current.toCodeString(used);
+    } else if (current instanceof MaybeOutput) {
+      if (used.includes(current.parent)) {
+        result += current.code.toCodeString(used);
+      }
     } else if (current === null) {
       result += 'null';
     } else if (current !== undefined) {
@@ -125,7 +149,7 @@ async function maybePrettyWithConfig(input: string): Promise<string> {
 }
 
 /** Finds any namespace collisions of a named import colliding with def and assigns the import an alias it. */
-function assignAliasesIfNeeded(defs: Def[], imports: SymbolSpec[], ourModulePath: string) {
+function assignAliasesIfNeeded(defs: Def[], imports: SymbolSpec[], ourModulePath: string): void {
   const defNames = new Set<string>();
   defs.forEach((def) => defNames.add(def.symbol));
 
@@ -178,7 +202,7 @@ export class Def extends Node {
   }
 
   /** Any potentially string/SymbolSpec/Code nested nodes within us. */
-  get childNodes() {
+  get childNodes(): Node[] {
     return [];
   }
 }
