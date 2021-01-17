@@ -1,8 +1,9 @@
 import { Node } from './Node';
-import { emitImports, ImportsName, sameModule, Import } from './Import';
+import { emitImports, ImportsName, sameModule, Import, ImportsDefault } from './Import';
 import prettier, { resolveConfig } from 'prettier';
 import { isPlainObject } from './is-plain-object';
 import { ConditionalOutput, MaybeOutput } from './ConditionalOutput';
+import { code } from './index';
 
 // We only have a single top-level Code.toStringWithImports running at a time,
 // so use a global var to capture this contextual state.
@@ -22,8 +23,12 @@ export class Code extends Node {
    * This method will also use any local `.prettierrc` settings, hence needs
    * to return a `Promise<String>`.
    */
-  toStringWithImports(path?: string): Promise<string> {
-    const ourModulePath = (path || '').replace(/\.[tj]sx?/, '');
+  toStringWithImports(opts?: { path?: string; forceDefaultImport?: string[] }): Promise<string> {
+    const { path = '', forceDefaultImport } = opts || {};
+    const ourModulePath = path.replace(/\.[tj]sx?/, '');
+    if (forceDefaultImport) {
+      this.deepReplaceNamedImports(forceDefaultImport);
+    }
     const imports = this.deepFindImports();
     const defs = this.deepFindDefs();
     usedConditionals = this.deepConditionalOutput();
@@ -97,6 +102,37 @@ export class Code extends Node {
       }
     }
     return used;
+  }
+
+  private deepReplaceNamedImports(forceDefaultImport: string[]): void {
+    // Keep a map of module name --> symbol we're importing, i.e. protobufjs/simple is _m1
+    const assignedNames: Record<string, string> = {};
+    function getName(source: string): string {
+      let name = assignedNames[source];
+      if (!name) {
+        name = `_m${Object.values(assignedNames).length}`;
+        assignedNames[source] = name;
+      }
+      return name;
+    }
+
+    let todo: unknown[] = [this];
+    while (todo.length > 0) {
+      const placeholder = todo.shift();
+      if (placeholder instanceof Node) {
+        const array = placeholder.childNodes;
+        for (let i = 0; i < array.length; i++) {
+          const maybeImp = array[i]!;
+          if (maybeImp instanceof ImportsName && forceDefaultImport.includes(maybeImp.source)) {
+            const name = getName(maybeImp.source);
+            array[i] = code`${new ImportsDefault(name, maybeImp.source)}.${maybeImp.sourceSymbol || maybeImp.symbol}`;
+          }
+        }
+        todo = [...todo, ...placeholder.childNodes];
+      } else if (Array.isArray(placeholder)) {
+        todo = [...todo, ...placeholder];
+      }
+    }
   }
 
   private generateCode(): string {

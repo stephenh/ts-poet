@@ -305,8 +305,7 @@ export function emitImports(imports: Import[], ourModulePath: string): string {
     if (names.length > 0 || def.length > 0) {
       const namesPart = names.length > 0 ? [`{ ${names.join(', ')} }`] : [];
       const defPart = def.length > 0 ? [def[0]] : [];
-      const allNames = [...defPart, ...namesPart];
-      result += `import ${allNames.join(', ')} from '${importPath}';\n`;
+      result += `import ${[...defPart, ...namesPart].join(', ')} from '${importPath}';\n`;
       [...names, ...def].forEach((name) => {
         const augments = augmentImports[name];
         if (augments) {

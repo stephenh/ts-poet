@@ -195,7 +195,7 @@ describe('code', () => {
   it('will use relative imports', async () => {
     const method1 = code`foo(): ${imp('Foo@./foo/Foo')} { return "foo"; }`;
     const zaz = code`class Zaz { ${method1} }`;
-    expect(await zaz.toStringWithImports('./zaz/Zaz')).toMatchInlineSnapshot(`
+    expect(await zaz.toStringWithImports({ path: './zaz/Zaz' })).toMatchInlineSnapshot(`
       "import { Foo } from '../foo/Foo';
 
       class Zaz {
@@ -209,7 +209,7 @@ describe('code', () => {
 
   it('will skip same file imports', async () => {
     const b = code`const f = ${imp('Foo@./foo')};`;
-    expect(await b.toStringWithImports('foo.ts')).toMatchInlineSnapshot(`
+    expect(await b.toStringWithImports({ path: 'foo.ts' })).toMatchInlineSnapshot(`
       "const f = Foo;
       "
     `);
@@ -248,7 +248,7 @@ describe('code', () => {
       const f2 = new ${imp('Foo@./bar')}();
     `;
     // Then we don't need an import for f1
-    expect(await b.toStringWithImports('foo.ts')).toMatchInlineSnapshot(`
+    expect(await b.toStringWithImports({ path: 'foo.ts' })).toMatchInlineSnapshot(`
       "import { Foo as Foo1 } from './bar';
 
       const Foo = {};
@@ -265,6 +265,34 @@ describe('code', () => {
       import { Bar } from 'bar';
 
       const types = [Foo, Bar];
+      "
+    `);
+  });
+
+  it('can force using the CJS default export', async () => {
+    const b = code`const types = [
+      ${imp('Foo@foo')},
+      ${imp('Bar@bar')},
+      ${imp('Zaz@zaz')},
+    ];`;
+    expect(await b.toStringWithImports({ forceDefaultImport: ['foo', 'bar'] })).toMatchInlineSnapshot(`
+      "import { Zaz } from 'zaz';
+      import _m0 from 'foo';
+      import _m1 from 'bar';
+
+      const types = [_m0.Foo, _m1.Bar, Zaz];
+      "
+    `);
+  });
+
+  it('can force using the CJS default export with arrays', async () => {
+    const b = code`const types = ${arrayOf(imp('Foo@foo'), imp('Bar@bar'), imp('Zaz@zaz'))};`;
+    expect(await b.toStringWithImports({ forceDefaultImport: ['foo', 'bar'] })).toMatchInlineSnapshot(`
+      "import { Zaz } from 'zaz';
+      import _m0 from 'foo';
+      import _m1 from 'bar';
+
+      const types = [_m0.Foo, _m1.Bar, Zaz];
       "
     `);
   });
