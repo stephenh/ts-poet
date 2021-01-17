@@ -127,7 +127,7 @@ describe('code', () => {
     const o = code`
       const a = ${helperMethod}();
       
-      ${helperMethod.ifUsed()}
+      ${helperMethod.ifUsed}
     `;
     expect(await o.toStringWithImports()).toMatchInlineSnapshot(`
       "const a = foo();
@@ -143,7 +143,7 @@ describe('code', () => {
     const helperMethod = conditionalOutput('foo', code`function foo() { return 1; }`);
     const o = code`
       const a = notFoo();
-      ${helperMethod.ifUsed()}
+      ${helperMethod.ifUsed}
     `;
     expect(await o.toStringWithImports()).toMatchInlineSnapshot(`
       "const a = notFoo();
@@ -156,8 +156,8 @@ describe('code', () => {
     const b = conditionalOutput('b', code`function b() { return ${a}(); }`);
     const o = code`
       const foo = ${b}();
-      ${a.ifUsed()}
-      ${b.ifUsed()}
+      ${a.ifUsed}
+      ${b.ifUsed}
     `;
     expect(await o.toStringWithImports()).toMatchInlineSnapshot(`
       "const foo = b();

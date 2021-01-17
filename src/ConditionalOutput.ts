@@ -42,7 +42,7 @@ export class ConditionalOutput extends Node {
     return this.usageSiteName;
   }
 
-  ifUsed(): MaybeOutput {
+  get ifUsed(): MaybeOutput {
     return new MaybeOutput(this, this.declarationSiteCode);
   }
 }
