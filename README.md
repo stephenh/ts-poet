@@ -74,6 +74,56 @@ Given the primary goal of ts-poet is to manage imports for you, there are severa
 * `imp("@Api")` --> `import { Api } from "Api"`
 * `imp("describe+mocha")` --> `import "mocha"`
 
+### Avoiding Import Conflicts
+
+Sometimes code generation output may declare a symbol that conflicts with an imported type (usually for generic names like `Error`).
+
+ts-poet will automatically detect and avoid conflicts if you tell it which symbols you're declaring, i.e.:
+
+```typescript
+const bar = imp('Bar@./bar');
+const output = code`
+  class ${def("Bar")} extends ${bar} {
+     ...
+  }
+`;
+```
+
+Will result in the imported `Bar` symbol being remapped to `Bar1` in the output:
+
+```typescript
+import { Bar as Bar1 } from "./bar";
+class Bar extends Bar1 {}
+```
+
+This is an admittedly contrived example for documentation purposes, but can be really useful when generating code against arbitrary / user-defined input (i.e. a schema that happens to uses a really common term).
+
+# Conditional Output
+
+Sometimes when generating larger, intricate output, you want to conditionally include helper methods. I.e. have a `convertTimestamps` function declared at the top of your module, but only actually include that function is some other part of the output actually uses timestamps (which might depend on the specific input/schema you're generating code against).
+
+ts-poet supports this with a `conditionalOutput` method:
+
+```typescript
+const convertTimestamps = conditionalOutput(
+  "convertTimestamps",
+  code`function convertTimestamps() { ...impl... }`,
+);
+
+const output = code`
+  ${someSchema.map(f => {
+    if (f.type === "timestamp") {
+      return code`${convertTimestamps}(f)`;
+    }
+  })}
+  ${convertTimestamps.ifUsed}
+`;
+```
+
+And your output will have the `convertTimestamps` declaration only if one of the schema fields had a `timestamp` type.
+
+This helps cut down on unnecessary output in the code, and compiler/IDE warnings like unused functions.
+
 History
 =======
 
