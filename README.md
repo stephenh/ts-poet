@@ -1,4 +1,4 @@
-
+![npm](https://img.shields.io/npm/v/ts-poet)
 [![CircleCI](https://circleci.com/gh/stephenh/ts-poet.svg?style=svg)](https://circleci.com/gh/stephenh/ts-poet)
 
 Overview
