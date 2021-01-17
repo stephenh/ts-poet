@@ -4,6 +4,10 @@ import prettier, { resolveConfig } from 'prettier';
 import { isPlainObject } from './is-plain-object';
 import { ConditionalOutput, MaybeOutput } from './ConditionalOutput';
 
+// We only have a single top-level Code.toStringWithImports running at a time,
+// so use a global var to capture this contextual state.
+let usedConditionals: ConditionalOutput[] = [];
+
 export class Code extends Node {
   constructor(private literals: TemplateStringsArray, private placeholders: any[]) {
     super();
@@ -22,10 +26,10 @@ export class Code extends Node {
     const ourModulePath = (path || '').replace(/\.[tj]sx?/, '');
     const imports = this.deepFindImports();
     const defs = this.deepFindDefs();
-    const used = this.deepConditionalOutput();
+    usedConditionals = this.deepConditionalOutput();
     assignAliasesIfNeeded(defs, imports, ourModulePath);
     const importPart = emitImports(imports, ourModulePath);
-    const bodyPart = this.generateCode(used);
+    const bodyPart = this.generateCode();
     return maybePrettyWithConfig(importPart + '\n' + bodyPart);
   }
 
@@ -35,16 +39,15 @@ export class Code extends Node {
    * Note that we don't use `.prettierrc` b/c that requires async I/O to resolve.
    */
   toString(): string {
-    const used = this.deepConditionalOutput();
-    return maybePretty(this.generateCode(used));
+    return maybePretty(this.generateCode());
   }
 
   public get childNodes(): unknown[] {
     return this.placeholders;
   }
 
-  toCodeString(used: ConditionalOutput[]): string {
-    return this.generateCode(used);
+  toCodeString(): string {
+    return this.generateCode();
   }
 
   private deepFindImports(): SymbolSpec[] {
@@ -96,12 +99,12 @@ export class Code extends Node {
     return used;
   }
 
-  private generateCode(used: ConditionalOutput[]): string {
+  private generateCode(): string {
     const { literals, placeholders } = this;
     let result = '';
     // interleave the literals with the placeholders
     for (let i = 0; i < placeholders.length; i++) {
-      result += literals[i] + deepGenerate(used, placeholders[i]);
+      result += literals[i] + deepGenerate(placeholders[i]);
     }
     // add the last literal
     result += literals[literals.length - 1];
@@ -109,7 +112,7 @@ export class Code extends Node {
   }
 }
 
-export function deepGenerate(used: ConditionalOutput[], object: unknown): string {
+export function deepGenerate(object: unknown): string {
   let result = '';
   let todo: unknown[] = [object];
   while (todo.length > 0) {
@@ -117,10 +120,10 @@ export function deepGenerate(used: ConditionalOutput[], object: unknown): string
     if (Array.isArray(current)) {
       todo = [...todo, ...current];
     } else if (current instanceof Node) {
-      result += current.toCodeString(used);
+      result += current.toCodeString();
     } else if (current instanceof MaybeOutput) {
-      if (used.includes(current.parent)) {
-        result += current.code.toCodeString(used);
+      if (usedConditionals.includes(current.parent)) {
+        result += current.code.toCodeString();
       }
     } else if (current === null) {
       result += 'null';

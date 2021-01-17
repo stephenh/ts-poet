@@ -15,8 +15,8 @@ export function arrayOf(...elements: unknown[]): Node {
       return elements;
     }
 
-    toCodeString(used: ConditionalOutput[]): string {
-      return '[' + elements.map((e) => deepGenerate(used, e)).join(', ') + ']';
+    toCodeString(): string {
+      return '[' + elements.map(deepGenerate).join(', ') + ']';
     }
   })();
 }
