@@ -1,8 +1,9 @@
-import { SymbolSpec } from './SymbolSpecs';
+import { Import } from './Import';
 import { Code, deepGenerate, Def } from './Code';
 import { Node } from './Node';
 import { ConditionalOutput } from './ConditionalOutput';
 export { Code } from './Code';
+export { Import } from './Import';
 
 /** A template literal to format code and auto-organize imports. */
 export function code(literals: TemplateStringsArray, ...placeholders: unknown[]): Code {
@@ -22,8 +23,8 @@ export function arrayOf(...elements: unknown[]): Node {
 }
 
 /** Creates an import that will be auto-imported at the top of the output file. */
-export function imp(spec: string, opts: { definedIn?: string } = {}): SymbolSpec {
-  const sym = SymbolSpec.from(spec);
+export function imp(spec: string, opts: { definedIn?: string } = {}): Import {
+  const sym = Import.from(spec);
   if (opts && opts.definedIn) {
     sym.definedIn = opts.definedIn;
   }

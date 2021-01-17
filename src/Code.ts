@@ -1,5 +1,5 @@
 import { Node } from './Node';
-import { emitImports, ImportsName, sameModule, SymbolSpec } from './SymbolSpecs';
+import { emitImports, ImportsName, sameModule, Import } from './Import';
 import prettier, { resolveConfig } from 'prettier';
 import { isPlainObject } from './is-plain-object';
 import { ConditionalOutput, MaybeOutput } from './ConditionalOutput';
@@ -50,12 +50,12 @@ export class Code extends Node {
     return this.generateCode();
   }
 
-  private deepFindImports(): SymbolSpec[] {
-    const imports: SymbolSpec[] = [];
+  private deepFindImports(): Import[] {
+    const imports: Import[] = [];
     let todo: unknown[] = [this];
     while (todo.length > 0) {
       const placeholder = todo.shift();
-      if (placeholder instanceof SymbolSpec) {
+      if (placeholder instanceof Import) {
         imports.push(placeholder);
       } else if (placeholder instanceof Node) {
         todo = [...todo, ...placeholder.childNodes];
@@ -152,7 +152,7 @@ async function maybePrettyWithConfig(input: string): Promise<string> {
 }
 
 /** Finds any namespace collisions of a named import colliding with def and assigns the import an alias it. */
-function assignAliasesIfNeeded(defs: Def[], imports: SymbolSpec[], ourModulePath: string): void {
+function assignAliasesIfNeeded(defs: Def[], imports: Import[], ourModulePath: string): void {
   const defNames = new Set<string>();
   defs.forEach((def) => defNames.add(def.symbol));
 
