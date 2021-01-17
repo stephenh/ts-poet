@@ -108,7 +108,7 @@ ts-poet supports this with a `conditionalOutput` method:
 const convertTimestamps = conditionalOutput(
   // The string to output at the usage site
   "convertTimestamps",
-  // The code to conditionally output if convertTimestamps is ussed
+  // The code to conditionally output if convertTimestamps is used
   code`function convertTimestamps() { ...impl... }`,
 );
 
