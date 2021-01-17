@@ -116,6 +116,12 @@ describe('code', () => {
     `);
   });
 
+  it('can interpolate object literals', async () => {
+    const obj = { a: 1, b: false };
+    const zaz = code`const foo = ${obj}`;
+    expect(await zaz.toStringWithImports()).toEqual('const foo = { a: 1, b: false };\n');
+  });
+
   it('can double nest lists', async () => {
     const method1 = code`foo(): ${imp('Foo@foo')} { return "foo"; }`;
     const method2 = code`bar(): ${imp('Bar@bar')} { return "bar"; }`;

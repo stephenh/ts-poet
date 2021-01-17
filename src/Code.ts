@@ -1,6 +1,7 @@
 import { Node } from './Node';
 import { emitImports, ImportsName, sameModule, SymbolSpec } from './SymbolSpecs';
 import prettier, { resolveConfig } from 'prettier';
+import { isPlainObject } from './is-plain-object';
 
 export class Code extends Node {
   constructor(private literals: TemplateStringsArray, private placeholders: any[]) {
@@ -100,7 +101,11 @@ export function deepGenerate(object: unknown): string {
     } else if (current === null) {
       result += 'null';
     } else if (current !== undefined) {
-      result += (current as any).toString();
+      if (isPlainObject(current)) {
+        result += JSON.stringify(current);
+      } else {
+        result += (current as any).toString();
+      }
     } else {
       result += 'undefined';
     }
