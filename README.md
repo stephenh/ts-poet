@@ -100,22 +100,26 @@ This is an admittedly contrived example for documentation purposes, but can be r
 
 # Conditional Output
 
-Sometimes when generating larger, intricate output, you want to conditionally include helper methods. I.e. have a `convertTimestamps` function declared at the top of your module, but only actually include that function is some other part of the output actually uses timestamps (which might depend on the specific input/schema you're generating code against).
+Sometimes when generating larger, intricate output, you want to conditionally include helper methods. I.e. have a `convertTimestamps` function declared at the top of your module, but only actually include that function if some other part of the output actually uses timestamps (which might depend on the specific input/schema you're generating code against).
 
 ts-poet supports this with a `conditionalOutput` method:
 
 ```typescript
 const convertTimestamps = conditionalOutput(
+  // The string to output at the usage site
   "convertTimestamps",
+  // The code to conditionally output if convertTimestamps is ussed
   code`function convertTimestamps() { ...impl... }`,
 );
 
 const output = code`
   ${someSchema.map(f => {
     if (f.type === "timestamp") {
+      // Using the convertTimestamps const marks it as used in our output
       return code`${convertTimestamps}(f)`;
     }
   })}
+  // The .ifUsed result will be empty unless `convertTimestamps` has been marked has used
   ${convertTimestamps.ifUsed}
 `;
 ```
