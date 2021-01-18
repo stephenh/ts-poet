@@ -22,8 +22,12 @@ export function arrayOf(...elements: unknown[]): Node {
   })();
 }
 
-export function joinCode(chunks: Code[]): Code {
-  return code`${chunks}`;
+export function joinCode(chunks: Code[], separator = ''): Code {
+  const literals: string[] = [''];
+  for (let i = 0; i < chunks.length - 1; i++) {
+    literals.push(separator);
+  }
+  return new Code(literals as any, chunks);
 }
 
 /** Creates an import that will be auto-imported at the top of the output file. */

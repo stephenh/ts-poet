@@ -31,11 +31,11 @@ describe('code', () => {
     `);
   });
 
-  it('can use symbols', () => {
+  it('can use symbols', async () => {
     const b = code`
       class Foo extends ${imp('Bar@bar')} {}
     `;
-    expect(b.toString()).toMatchInlineSnapshot(`
+    expect(await b.toString()).toMatchInlineSnapshot(`
       "class Foo extends Bar {}
       "
     `);
@@ -308,6 +308,21 @@ describe('code', () => {
 
       const a: Foo;
       const b: Bar;
+      "
+    `);
+  });
+
+  it('can format params', async () => {
+    const params: Code[] = [];
+    params.push(code`a: ${imp('Foo@foo')}`);
+    params.push(code`b: string`);
+    const b = code`function foo(${joinCode(params, ',')}) { return 1; }`;
+    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+      "import { Foo } from 'foo';
+
+      function foo(a: Foo, b: string) {
+        return 1;
+      }
       "
     `);
   });
