@@ -1,4 +1,4 @@
-import { arrayOf, code, conditionalOutput, def, imp } from '../src';
+import { arrayOf, Code, code, conditionalOutput, def, imp, joinCode } from '../src';
 
 describe('code', () => {
   it('basic interpolation', () => {
@@ -293,6 +293,21 @@ describe('code', () => {
       import _m1 from 'bar';
 
       const types = [_m0.Foo, _m1.Bar, Zaz];
+      "
+    `);
+  });
+
+  it('can join chunks', async () => {
+    const chunks: Code[] = [];
+    chunks.push(code`const a: ${imp('Foo@foo')};`);
+    chunks.push(code`const b: ${imp('Bar@bar')};`);
+    const b = joinCode(chunks);
+    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+      "import { Foo } from 'foo';
+      import { Bar } from 'bar';
+
+      const a: Foo;
+      const b: Bar;
       "
     `);
   });

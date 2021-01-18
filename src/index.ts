@@ -22,6 +22,10 @@ export function arrayOf(...elements: unknown[]): Node {
   })();
 }
 
+export function joinCode(chunks: Code[]): Code {
+  return code`${chunks}`;
+}
+
 /** Creates an import that will be auto-imported at the top of the output file. */
 export function imp(spec: string, opts: { definedIn?: string } = {}): Import {
   const sym = Import.from(spec);
