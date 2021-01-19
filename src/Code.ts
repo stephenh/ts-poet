@@ -32,9 +32,9 @@ export class Code extends Node {
     if (forceDefaultImport) {
       this.deepReplaceNamedImports(forceDefaultImport);
     }
+    usedConditionals = this.deepConditionalOutput();
     const imports = this.deepFindImports();
     const defs = this.deepFindDefs();
-    usedConditionals = this.deepConditionalOutput();
     assignAliasesIfNeeded(defs, imports, ourModulePath);
     const importPart = emitImports(imports, ourModulePath);
     const bodyPart = this.generateCode();
@@ -68,6 +68,10 @@ export class Code extends Node {
         imports.push(placeholder);
       } else if (placeholder instanceof Node) {
         todo = [...todo, ...placeholder.childNodes];
+      } else if (placeholder instanceof MaybeOutput) {
+        if (usedConditionals.includes(placeholder.parent)) {
+          todo = [...todo, placeholder.code];
+        }
       } else if (Array.isArray(placeholder)) {
         todo = [...todo, ...placeholder];
       }
@@ -84,6 +88,10 @@ export class Code extends Node {
         defs.push(placeholder);
       } else if (placeholder instanceof Node) {
         todo = [...todo, ...placeholder.childNodes];
+      } else if (placeholder instanceof MaybeOutput) {
+        if (usedConditionals.includes(placeholder.parent)) {
+          todo = [...todo, placeholder.code];
+        }
       } else if (Array.isArray(placeholder)) {
         todo = [...todo, ...placeholder];
       }

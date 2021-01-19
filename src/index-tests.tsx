@@ -152,7 +152,8 @@ describe('code', () => {
   });
 
   it('can conditionally output conditional helper methods', async () => {
-    const a = conditionalOutput('a', code`function a() { return 1; }`);
+    const Foo = imp('Foo@./foo');
+    const a = conditionalOutput('a', code`function a(): ${Foo} { return 1; }`);
     const b = conditionalOutput('b', code`function b() { return ${a}(); }`);
     const o = code`
       const foo = ${b}();
@@ -160,8 +161,10 @@ describe('code', () => {
       ${b.ifUsed}
     `;
     expect(await o.toStringWithImports()).toMatchInlineSnapshot(`
-      "const foo = b();
-      function a() {
+      "import { Foo } from './foo';
+
+      const foo = b();
+      function a(): Foo {
         return 1;
       }
       function b() {
