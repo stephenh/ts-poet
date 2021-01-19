@@ -312,11 +312,35 @@ describe('code', () => {
     `);
   });
 
+  it('can join chunks and strip new lines', async () => {
+    const chunks: Code[] = [];
+    chunks.push(code`
+      if (true) {
+        console.log("asdf");
+      }
+    `);
+    chunks.push(code`
+      if (true) {
+        console.log("asdf");
+      }
+    `);
+    const b = joinCode(chunks);
+    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+      "if (true) {
+        console.log('asdf');
+      }
+      if (true) {
+        console.log('asdf');
+      }
+      "
+    `);
+  });
+
   it('can format params', async () => {
     const params: Code[] = [];
     params.push(code`a: ${imp('Foo@foo')}`);
     params.push(code`b: string`);
-    const b = code`function foo(${joinCode(params, ',')}) { return 1; }`;
+    const b = code`function foo(${joinCode(params, { on: ',' })}) { return 1; }`;
     expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
       "import { Foo } from 'foo';
 

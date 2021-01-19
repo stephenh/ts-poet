@@ -10,6 +10,9 @@ import { code } from './index';
 let usedConditionals: ConditionalOutput[] = [];
 
 export class Code extends Node {
+  // Used by joinCode
+  public trim: boolean = false;
+
   constructor(private literals: TemplateStringsArray, private placeholders: any[]) {
     super();
   }
@@ -52,7 +55,8 @@ export class Code extends Node {
   }
 
   toCodeString(): string {
-    return this.generateCode();
+    const code = this.generateCode();
+    return this.trim ? code.trim() : code;
   }
 
   private deepFindImports(): Import[] {

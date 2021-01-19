@@ -22,10 +22,14 @@ export function arrayOf(...elements: unknown[]): Node {
   })();
 }
 
-export function joinCode(chunks: Code[], separator = ''): Code {
+export function joinCode(chunks: Code[], opts: { on?: string; trim?: boolean } = {}): Code {
+  const { on = '', trim = true } = opts;
   const literals: string[] = [''];
   for (let i = 0; i < chunks.length - 1; i++) {
-    literals.push(separator);
+    literals.push(on);
+  }
+  if (trim) {
+    chunks.forEach((c) => (c.trim = true));
   }
   return new Code(literals as any, chunks);
 }
