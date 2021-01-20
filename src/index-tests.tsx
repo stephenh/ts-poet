@@ -53,6 +53,34 @@ describe('code', () => {
     `);
   });
 
+  it('dedups imports', async () => {
+    const b = code`
+      const a = ${imp('Bar@bar')};
+      const b = ${imp('Bar@bar')};
+    `;
+    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+      "import { Bar } from 'bar';
+
+      const a = Bar;
+      const b = Bar;
+      "
+    `);
+  });
+
+  it('dedups star imports', async () => {
+    const b = code`
+      const a = ${imp('Bar*bar')};
+      const b = ${imp('Bar*bar')};
+    `;
+    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+      "import * as Bar from 'bar';
+
+      const a = Bar;
+      const b = Bar;
+      "
+    `);
+  });
+
   it('can nest codes', async () => {
     const method1 = code`foo(): ${imp('Foo@foo')} { return "foo"; }`;
     const method2 = code`bar(): ${imp('Bar@bar')} { return "bar"; }`;

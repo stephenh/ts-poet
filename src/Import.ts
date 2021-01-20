@@ -291,9 +291,9 @@ export function emitImports(imports: Import[], ourModulePath: string): string {
     const importPath = maybeRelativePath(ourModulePath, modulePath);
 
     // Output star imports individually
-    filterInstances(imports, ImportsAll).forEach((i) => {
-      result += `import * as ${i.symbol} from '${importPath}';\n`;
-      const augments = augmentImports[i.symbol];
+    unique(filterInstances(imports, ImportsAll).map((i) => i.symbol)).forEach((symbol) => {
+      result += `import * as ${symbol} from '${importPath}';\n`;
+      const augments = augmentImports[symbol];
       if (augments) {
         augments.forEach((augment) => (result += `import '${augment.source}';\n`));
       }
