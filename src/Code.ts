@@ -26,8 +26,8 @@ export class Code extends Node {
    * This method will also use any local `.prettierrc` settings, hence needs
    * to return a `Promise<String>`.
    */
-  toStringWithImports(opts?: { path?: string; forceDefaultImport?: string[] }): Promise<string> {
-    const { path = '', forceDefaultImport } = opts || {};
+  toStringWithImports(opts?: { path?: string; forceDefaultImport?: string[]; prefix?: string }): Promise<string> {
+    const { path = '', forceDefaultImport, prefix } = opts || {};
     const ourModulePath = path.replace(/\.[tj]sx?/, '');
     if (forceDefaultImport) {
       this.deepReplaceNamedImports(forceDefaultImport);
@@ -38,7 +38,8 @@ export class Code extends Node {
     assignAliasesIfNeeded(defs, imports, ourModulePath);
     const importPart = emitImports(imports, ourModulePath);
     const bodyPart = this.generateCode();
-    return maybePrettyWithConfig(importPart + '\n' + bodyPart);
+    const maybePrefix = prefix ? `${prefix}\n` : '';
+    return maybePrettyWithConfig(maybePrefix + importPart + '\n' + bodyPart);
   }
 
   /**

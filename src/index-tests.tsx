@@ -53,6 +53,19 @@ describe('code', () => {
     `);
   });
 
+  it('can add a prefix before the imports', async () => {
+    const b = code`
+      class Foo extends ${imp('Bar@bar')} {}
+    `;
+    expect(await b.toStringWithImports({ prefix: '/* eslint-disable */' })).toMatchInlineSnapshot(`
+      "/* eslint-disable */
+      import { Bar } from 'bar';
+
+      class Foo extends Bar {}
+      "
+    `);
+  });
+
   it('dedups imports', async () => {
     const b = code`
       const a = ${imp('Bar@bar')};
