@@ -28,6 +28,7 @@ export function joinCode(chunks: Code[], opts: { on?: string; trim?: boolean } =
   for (let i = 0; i < chunks.length - 1; i++) {
     literals.push(on);
   }
+  literals.push('');
   if (trim) {
     chunks.forEach((c) => (c.trim = true));
   }

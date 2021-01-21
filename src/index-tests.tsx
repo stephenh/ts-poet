@@ -367,6 +367,24 @@ describe('code', () => {
     `);
   });
 
+  it('can join different lengths', async () => {
+    const b = code`
+      const a: ${joinCode([code`A`], { on: '|' })} = null!;
+      const b: ${joinCode([code`B1`, code`B2`], { on: '|' })} = null!;
+      const c: ${joinCode([], { on: '|' })} = null!;
+      const d: ${joinCode([code`D1`, code`D2`, code`D3`, code`D4`], { on: '|' })} = null!;
+    `;
+    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+      "
+
+            const a: A = null!;
+            const b: B1|B2 = null!;
+            const c:  = null!;
+            const d: D1|D2|D3|D4 = null!;
+          "
+    `);
+  });
+
   it('can format params', async () => {
     const params: Code[] = [];
     params.push(code`a: ${imp('Foo@foo')}`);
