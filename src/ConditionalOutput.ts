@@ -35,7 +35,7 @@ export class ConditionalOutput extends Node {
   }
 
   get childNodes(): unknown[] {
-    return [];
+    return [this.declarationSiteCode];
   }
 
   toCodeString(): string {

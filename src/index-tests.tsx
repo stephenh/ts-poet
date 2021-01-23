@@ -341,6 +341,22 @@ describe('code', () => {
     `);
   });
 
+  it('can force using the CJS default export in conditional output', async () => {
+    const Foo = imp('Foo@foo');
+    const maybeFoo = conditionalOutput('foo', code`const foo = ${Foo}`);
+    const b = code`
+      ${maybeFoo.ifUsed}
+      const foo1 = ${maybeFoo};
+    `;
+    expect(await b.toStringWithImports({ forceDefaultImport: ['foo'] })).toMatchInlineSnapshot(`
+      "import _m0 from 'foo';
+
+      const foo = _m0.Foo;
+      const foo1 = foo;
+      "
+    `);
+  });
+
   it('can join chunks', async () => {
     const chunks: Code[] = [];
     chunks.push(code`const a: ${imp('Foo@foo')};`);
