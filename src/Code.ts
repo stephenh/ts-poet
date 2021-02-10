@@ -205,6 +205,8 @@ function assignAliasesIfNeeded(defs: Def[], imports: Import[], ourModulePath: st
   const defNames = new Set<string>();
   defs.forEach((def) => defNames.add(def.symbol));
 
+  const importNames = new Map<string, Set<string>>();
+
   // A mapping of original to assigned alias, i.e. Foo@foo --> Foo2
   const assignedAliases: Record<string, string> = {};
   let j = 1;
@@ -214,7 +216,13 @@ function assignAliasesIfNeeded(defs: Def[], imports: Import[], ourModulePath: st
       i instanceof ImportsName &&
       !(sameModule(i.source, ourModulePath) || (i.definedIn && sameModule(i.definedIn, ourModulePath)))
     ) {
-      if (defNames.has(i.symbol)) {
+      if (!importNames.has(i.symbol)) {
+        importNames.set(i.symbol, new Set([i.source]));
+      }
+
+      importNames.get(i.symbol)?.add(i.source);
+
+      if (defNames.has(i.symbol) || (importNames.has(i.symbol) && (importNames.get(i.symbol)?.size ?? 0) > 1)) {
         // Look for an existing alias
         const key = `${i.symbol}@${i.source}`;
         let alias = assignedAliases[key];
