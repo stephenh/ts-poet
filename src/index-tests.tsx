@@ -158,9 +158,16 @@ describe('code', () => {
   });
 
   it('can interpolate object literals', async () => {
-    const obj = { a: 1, b: false };
+    const obj = {
+      a: 1,
+      b: false,
+      c: { d: 'a string', e: new Date(0) },
+    };
     const zaz = code`const foo = ${obj}`;
-    expect(await zaz.toStringWithImports()).toEqual('const foo = { a: 1, b: false };\n');
+    expect(await zaz.toStringWithImports()).toMatchInlineSnapshot(`
+      "const foo = { a: 1, b: false, c: { d: 'a string', e: '1970-01-01T00:00:00.000Z' } };
+      "
+    `);
   });
 
   it('can conditionally output helper methods', async () => {
