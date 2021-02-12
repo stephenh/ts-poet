@@ -281,6 +281,23 @@ describe('code', () => {
     `);
   });
 
+  it('avoids namespace collisions for imports', async () => {
+    const b = code`
+      const f1 = new ${imp('Foo@./foo')}();
+      const f2 = new ${imp('Foo@./bar')}();
+      const f3 = new ${imp('Foo@./bar')}();
+    `;
+    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+      "import { Foo } from './foo';
+      import { Foo as Foo1 } from './bar';
+
+      const f1 = new Foo();
+      const f2 = new Foo1();
+      const f3 = new Foo1();
+      "
+    `);
+  });
+
   it('can handle types defined in barrels', async () => {
     // Given we want to import Foo from an index file
     // And we know that it's actually defined in ./foo

@@ -202,10 +202,11 @@ async function maybePrettyWithConfig(input: string): Promise<string> {
 
 /** Finds any namespace collisions of a named import colliding with def and assigns the import an alias it. */
 function assignAliasesIfNeeded(defs: Def[], imports: Import[], ourModulePath: string): void {
-  const defNames = new Set<string>();
-  defs.forEach((def) => defNames.add(def.symbol));
+  // Keep track of used (whether declared or imported) symbols
+  const usedSymbols = new Set<string>();
 
-  const importNames = new Map<string, Set<string>>();
+  // Mark all locally-defined symbols as used
+  defs.forEach((def) => usedSymbols.add(def.symbol));
 
   // A mapping of original to assigned alias, i.e. Foo@foo --> Foo2
   const assignedAliases: Record<string, string> = {};
@@ -214,25 +215,24 @@ function assignAliasesIfNeeded(defs: Def[], imports: Import[], ourModulePath: st
   imports.forEach((i) => {
     if (
       i instanceof ImportsName &&
+      // Don't both aliasing imports from our own module
       !(sameModule(i.source, ourModulePath) || (i.definedIn && sameModule(i.definedIn, ourModulePath)))
     ) {
-      if (!importNames.has(i.symbol)) {
-        importNames.set(i.symbol, new Set([i.source]));
-      }
-
-      importNames.get(i.symbol)?.add(i.source);
-
-      if (defNames.has(i.symbol) || (importNames.has(i.symbol) && (importNames.get(i.symbol)?.size ?? 0) > 1)) {
-        // Look for an existing alias
-        const key = `${i.symbol}@${i.source}`;
+      const key = `${i.symbol}@${i.source}`;
+      if (usedSymbols.has(i.symbol)) {
         let alias = assignedAliases[key];
         if (!alias) {
           alias = `${i.symbol}${j++}`;
           assignedAliases[key] = alias;
         }
         // Move the original symbol over
-        i.sourceSymbol = i.symbol;
+        if (alias !== i.symbol) {
+          i.sourceSymbol = i.symbol;
+        }
         i.symbol = alias;
+      } else {
+        usedSymbols.add(i.symbol);
+        assignedAliases[key] = i.symbol;
       }
     }
   });
