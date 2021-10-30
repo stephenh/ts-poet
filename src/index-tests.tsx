@@ -68,6 +68,34 @@ describe('code', () => {
     `);
   });
 
+  it('can add type imports and concrete impls', async () => {
+    const a = imp('Foo@foo');
+    const b = imp('t:Foo@foo');
+    const c = code`
+      class Zaz extends ${a} implements ${b} {}
+    `;
+    expect(await c.toStringWithImports()).toMatchInlineSnapshot(`
+      "import { Foo } from 'foo';
+
+      class Zaz extends Foo implements Foo {}
+      "
+    `);
+  });
+
+  it('can add type imports and concrete impls that are renamed', async () => {
+    const a = imp('Foo@foo');
+    const b = imp('t:Foo@foo');
+    const c = code`
+      class ${def('Foo')} extends ${a} implements ${b} {}
+    `;
+    expect(await c.toStringWithImports()).toMatchInlineSnapshot(`
+      "import { Foo as Foo1 } from 'foo';
+
+      class Foo extends Foo1 implements Foo1 {}
+      "
+    `);
+  });
+
   it('can add a prefix before the imports', async () => {
     const b = code`
       class Foo extends ${imp('Bar@bar')} {}

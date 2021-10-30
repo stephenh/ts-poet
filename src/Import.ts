@@ -323,7 +323,13 @@ export function emitImports(imports: Import[], ourModulePath: string): string {
         }
       });
     }
-    const typeImports = unique(allNames.filter((i) => i.typeImport).map((it) => it.toImportPiece()));
+    const typeImports = unique(
+      allNames
+        .filter((i) => i.typeImport)
+        .map((it) => it.toImportPiece())
+        // If the `import type` is already used as a concrete import, just use that
+        .filter((p) => !names.includes(p))
+    );
     if (typeImports.length > 0) {
       result += `import type { ${typeImports.join(', ')} } from '${importPath}';\n`;
     }
