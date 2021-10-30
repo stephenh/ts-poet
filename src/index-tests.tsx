@@ -53,6 +53,21 @@ describe('code', () => {
     `);
   });
 
+  it('can add type imports', async () => {
+    const a = imp('Foo@foo');
+    const b = imp('t:Bar@foo');
+    const c = code`
+      class Zaz extends ${a} implements ${b} {}
+    `;
+    expect(await c.toStringWithImports()).toMatchInlineSnapshot(`
+      "import { Foo } from 'foo';
+      import type { Bar } from 'foo';
+
+      class Zaz extends Foo implements Bar {}
+      "
+    `);
+  });
+
   it('can add a prefix before the imports', async () => {
     const b = code`
       class Foo extends ${imp('Bar@bar')} {}

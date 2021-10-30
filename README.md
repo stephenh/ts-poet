@@ -66,6 +66,7 @@ Import Specs
 Given the primary goal of ts-poet is to manage imports for you, there are several ways of specifying imports to the `imp` function:
 
 * `imp("Observable@rxjs")` --> `import { Observable } from "rxjs"`
+* `imp("t:Observable@rxjs")` --> `import type { Observable } from "rxjs"`
 * `imp("Observable@./Api")` --> `import { Observable } from "./Api"`
 * `imp("Observable*./Api")` --> `import * as Observable from "./Api"`
 * `imp("Observable=./Api")` --> `import Observable from "./Api"`

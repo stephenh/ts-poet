@@ -67,6 +67,18 @@ describe('Import', () => {
     expect(emit(sym)).toMatchInlineSnapshot(`"import { SomeOtherSymbolDepth } from 'rxjs/Observable';"`);
   });
 
+  it('parsing named import: type import', () => {
+    const parsed = Import.from('t:Observable@rxjs/Observable');
+    expect(parsed).toBeInstanceOf(ImportsName);
+
+    const sym = parsed as ImportsName;
+    expect(sym.symbol).toEqual('Observable');
+    expect(sym.source).toEqual('rxjs/Observable');
+    expect(sym.typeImport).toEqual(true);
+
+    expect(emit(sym)).toMatchInlineSnapshot(`"import type { Observable } from 'rxjs/Observable';"`);
+  });
+
   it('parsing all import: exported symbol implied by module path', () => {
     const parsed = Import.from('*rxjs/Observable');
     expect(parsed).toBeInstanceOf(ImportsAll);

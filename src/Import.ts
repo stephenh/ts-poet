@@ -2,11 +2,12 @@ import _ from 'lodash';
 import Path from 'path';
 import { Node } from './Node';
 
+const typeImportMarker = '(?:t:)?';
 const fileNamePattern = '(?:[a-zA-Z0-9._-]+)';
 const modulePattern = `@?(?:(?:${fileNamePattern}(?:/${fileNamePattern})*))`;
 const identPattern = `(?:(?:[a-zA-Z][_a-zA-Z0-9.]*)|(?:[_a-zA-Z][_a-zA-Z0-9.]+))`;
 export const importType = '[*@+=]';
-const importPattern = `^(${identPattern})?(${importType})(${modulePattern})(?:#(${identPattern}))?`;
+const importPattern = `^(${typeImportMarker}${identPattern})?(${importType})(${modulePattern})(?:#(${identPattern}))?`;
 
 /**
  * Specifies a symbol and its related origin, either via import or implicit/local declaration.
@@ -49,14 +50,18 @@ export abstract class Import extends Node {
     const matched = spec.match(importPattern);
     if (matched != null) {
       const modulePath = matched[3];
-      const type = matched[2] || '@';
+      const kind = matched[2] || '@';
       const symbolName = matched[1] || _.last(modulePath.split('/')) || '';
       const targetName = matched[4];
-      switch (type) {
+      switch (kind) {
         case '*':
           return Import.importsAll(symbolName, modulePath);
         case '@':
-          return Import.importsName(symbolName, modulePath);
+          if (symbolName.startsWith('t:')) {
+            return Import.importsName(symbolName.substring(2), modulePath, true);
+          } else {
+            return Import.importsName(symbolName, modulePath, false);
+          }
         case '=':
           return Import.importsDefault(symbolName, modulePath);
         case '+':
@@ -64,7 +69,7 @@ export abstract class Import extends Node {
             ? Import.augmented(symbolName, modulePath, targetName)
             : Import.sideEffect(symbolName, modulePath);
         default:
-          throw new Error('Invalid type character');
+          throw new Error('Invalid import kind character');
       }
     }
     return Import.implicit(spec);
@@ -117,9 +122,10 @@ export abstract class Import extends Node {
    *
    * @param exportedName The symbol that is both exported and imported
    * @param from The module the symbol is exported from
+   * @param typeImport whether this is an `import type` import
    */
-  public static importsName(exportedName: string, from: string): Import {
-    return new ImportsName(exportedName, from);
+  public static importsName(exportedName: string, from: string, typeImport: boolean): Import {
+    return new ImportsName(exportedName, from, undefined, typeImport);
   }
 
   /**
@@ -205,8 +211,9 @@ export class ImportsName extends Imported {
    * @param symbol
    * @param source
    * @param sourceSymbol is the optional original symbol, i.e if we're renaming the symbol it is `Engine`
+   * @param typeImport whether this is an `import type` import
    */
-  constructor(symbol: string, source: string, public sourceSymbol?: string) {
+  constructor(symbol: string, source: string, public sourceSymbol?: string, public typeImport?: boolean) {
     super(symbol, source);
   }
 
@@ -277,6 +284,7 @@ export function emitImports(imports: Import[], ourModulePath: string): string {
     imports.filter(
       (it) =>
         it.source !== undefined &&
+        // Ignore imports that are in our own file
         !(it instanceof ImportsName && it.definedIn && sameModule(it.definedIn, ourModulePath))
     ),
     (it) => it.source
@@ -299,9 +307,11 @@ export function emitImports(imports: Import[], ourModulePath: string): string {
       }
     });
 
-    // Output named imports as a group
-    const names = unique(filterInstances(imports, ImportsName).map((it) => it.toImportPiece()));
+    // Partition named imported into `import type` vs. regular imports
+    const allNames = filterInstances(imports, ImportsName);
+    const names = unique(allNames.filter((i) => !i.typeImport).map((it) => it.toImportPiece()));
     const def = unique(filterInstances(imports, ImportsDefault).map((it) => it.symbol));
+    // Output named imports as a group
     if (names.length > 0 || def.length > 0) {
       const namesPart = names.length > 0 ? [`{ ${names.join(', ')} }`] : [];
       const defPart = def.length > 0 ? [def[0]] : [];
@@ -312,6 +322,10 @@ export function emitImports(imports: Import[], ourModulePath: string): string {
           augments.forEach((augment) => (result += `import '${augment.source}';\n`));
         }
       });
+    }
+    const typeImports = unique(allNames.filter((i) => i.typeImport).map((it) => it.toImportPiece()));
+    if (typeImports.length > 0) {
+      result += `import type { ${typeImports.join(', ')} } from '${importPath}';\n`;
     }
   });
 
