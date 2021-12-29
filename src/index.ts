@@ -2,12 +2,39 @@ import { Import } from './Import';
 import { Code, deepGenerate, Def } from './Code';
 import { Node } from './Node';
 import { ConditionalOutput } from './ConditionalOutput';
+import { isPlainObject } from './is-plain-object';
 export { Code } from './Code';
 export { Import } from './Import';
 
 /** A template literal to format code and auto-organize imports. */
 export function code(literals: TemplateStringsArray, ...placeholders: unknown[]): Code {
-  return new Code(literals, placeholders);
+  return new Code(
+    literals,
+    placeholders.map((p) => {
+      if (isPlainObject(p)) {
+        return literalOf(p as object);
+      } else {
+        return p;
+      }
+    })
+  );
+}
+
+export function literalOf(object: object): Node {
+  return new (class extends Node {
+    get childNodes(): unknown[] {
+      return Object.values(object).flat();
+    }
+
+    toCodeString(): string {
+      let code = '{';
+      Object.entries(object).forEach(([key, value]) => {
+        code += `${key} :${deepGenerate(value)},`;
+      });
+      code += '}';
+      return code;
+    }
+  })();
 }
 
 export function arrayOf(...elements: unknown[]): Node {

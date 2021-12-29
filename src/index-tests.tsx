@@ -380,6 +380,20 @@ describe('code', () => {
     `);
   });
 
+  it('can make literal maps', async () => {
+    const map = {
+      foo: code`1`,
+      bar: code`2 as ${imp('Foo@foo')}`,
+    };
+    const b = code`const map = ${map};`;
+    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+      "import { Foo } from 'foo';
+
+      const map = { foo: 1, bar: 2 as Foo };
+      "
+    `);
+  });
+
   it('can force using the CJS default export', async () => {
     const b = code`const types = [
       ${imp('Foo@foo')},
