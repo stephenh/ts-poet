@@ -509,4 +509,50 @@ describe('code', () => {
       "
     `);
   });
+
+  it('can oneline code', async () => {
+    // Given we have several snippets that were built with newlines
+    const a = code`
+      {
+        a: 1
+      }
+    `;
+    const b = code`
+      {
+        a: ${a},
+        b: 2,
+      }
+    `;
+    // When we use those snippets with `asOneline`
+    const c = code`
+      const c = ${b.asOneline()};
+      const d = 3;
+    `;
+    // Then it is output as a single line
+    expect(await c.toStringWithImports()).toMatchInlineSnapshot(`
+      "const c = { a: { a: 1 }, b: 2 };
+      const d = 3;
+      "
+    `);
+  });
+
+  it('can override prettier config code', async () => {
+    const long = 'abcdefghijklmnopqrstuvwxyz';
+    // Given one line of code that pretty would wrap with our default printWidth
+    const a = code`
+      const a = {
+        a: "${long}",
+        b: "${long}",
+        c: "${long}",
+        d: "${long}",
+      }
+    `.asOneline();
+    // When we format it with an overridden printWidth
+    const o = await a.toStringWithImports({ prettierOverrides: { printWidth: 1_000 } });
+    // Then it was not wrapped
+    expect(o).toMatchInlineSnapshot(`
+      "const a = { a: 'abcdefghijklmnopqrstuvwxyz', b: 'abcdefghijklmnopqrstuvwxyz', c: 'abcdefghijklmnopqrstuvwxyz', d: 'abcdefghijklmnopqrstuvwxyz' };
+      "
+    `);
+  });
 });

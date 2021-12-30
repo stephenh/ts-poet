@@ -1,6 +1,6 @@
 import { Node } from './Node';
 import { emitImports, ImportsName, sameModule, Import, ImportsDefault } from './Import';
-import prettier, { resolveConfig } from 'prettier';
+import prettier, { Options, resolveConfig } from 'prettier';
 import { isPlainObject } from './is-plain-object';
 import { ConditionalOutput, MaybeOutput } from './ConditionalOutput';
 import { code } from './index';
@@ -9,9 +9,22 @@ import { code } from './index';
 // so use a global var to capture this contextual state.
 let usedConditionals: ConditionalOutput[] = [];
 
+/** Options for `toStringWithImports`, i.e. for the top-level, per-file output. */
+export interface ToStringOpts {
+  /** The intended file name of this code; used to know whether we can skip import statements that would be from our own file. */
+  path?: string;
+  /** Modules to use a CommonJS-in-ESM destructure fix for. */
+  forceDefaultImport?: string[];
+  /** A top-of-file prefix, i.e. eslint disable. */
+  prefix?: string;
+  /** Optional per-file overrides for the prettier config, i.e. to use longer-than-normal line lengths. */
+  prettierOverrides?: Options;
+}
+
 export class Code extends Node {
   // Used by joinCode
   public trim: boolean = false;
+  private oneline: boolean = false;
 
   constructor(private literals: TemplateStringsArray, private placeholders: any[]) {
     super();
@@ -20,14 +33,11 @@ export class Code extends Node {
   /**
    * Returns the code with any necessary import statements prefixed.
    *
-   * `path` is the intended file name of this code; it is used to know whether we
-   * can skip import statements that would important from our own file.
-   *
    * This method will also use any local `.prettierrc` settings, hence needs
    * to return a `Promise<String>`.
    */
-  toStringWithImports(opts?: { path?: string; forceDefaultImport?: string[]; prefix?: string }): Promise<string> {
-    const { path = '', forceDefaultImport, prefix } = opts || {};
+  toStringWithImports(opts?: ToStringOpts): Promise<string> {
+    const { path = '', forceDefaultImport, prefix, prettierOverrides = {} } = opts || {};
     const ourModulePath = path.replace(/\.[tj]sx?/, '');
     if (forceDefaultImport) {
       this.deepReplaceNamedImports(forceDefaultImport);
@@ -39,7 +49,7 @@ export class Code extends Node {
     const importPart = emitImports(imports, ourModulePath);
     const bodyPart = this.generateCode();
     const maybePrefix = prefix ? `${prefix}\n` : '';
-    return maybePrettyWithConfig(maybePrefix + importPart + '\n' + bodyPart);
+    return maybePrettyWithConfig(maybePrefix + importPart + '\n' + bodyPart, prettierOverrides);
   }
 
   /**
@@ -51,13 +61,17 @@ export class Code extends Node {
     return maybePretty(this.generateCode());
   }
 
+  asOneline(): Code {
+    this.oneline = true;
+    return this;
+  }
+
   public get childNodes(): unknown[] {
     return this.placeholders;
   }
 
   toCodeString(): string {
-    const code = this.generateCode();
-    return this.trim ? code.trim() : code;
+    return this.generateCode();
   }
 
   private deepFindImports(): Import[] {
@@ -157,6 +171,12 @@ export class Code extends Node {
     }
     // add the last literal
     result += literals[literals.length - 1];
+    if (this.trim) {
+      result = result.trim();
+    }
+    if (this.oneline) {
+      result = result.replace(/\n/g, '');
+    }
     return result;
   }
 }
@@ -191,10 +211,10 @@ export function deepGenerate(object: unknown): string {
 
 const configPromise = resolveConfig('./');
 
-async function maybePrettyWithConfig(input: string): Promise<string> {
+async function maybePrettyWithConfig(input: string, options: Options): Promise<string> {
   try {
     const config = await configPromise;
-    return prettier.format(input.trim(), { parser: 'typescript', ...config });
+    return prettier.format(input.trim(), { parser: 'typescript', ...config, ...options });
   } catch (e) {
     return input; // assume it's invalid syntax and ignore
   }
