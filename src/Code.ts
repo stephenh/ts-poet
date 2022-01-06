@@ -1,6 +1,7 @@
 import { Node } from './Node';
 import { emitImports, ImportsName, sameModule, Import, ImportsDefault } from './Import';
 import prettier, { Options, resolveConfig } from 'prettier';
+import parserTypescript from 'prettier/parser-typescript';
 import { isPlainObject } from './is-plain-object';
 import { ConditionalOutput, MaybeOutput } from './ConditionalOutput';
 import { code } from './index';
@@ -209,12 +210,12 @@ export function deepGenerate(object: unknown): string {
   return result;
 }
 
-const configPromise = resolveConfig('./');
+const configPromise = resolveConfig?.('./');
 
 async function maybePrettyWithConfig(input: string, options: Options): Promise<string> {
   try {
     const config = await configPromise;
-    return prettier.format(input.trim(), { parser: 'typescript', ...config, ...options });
+    return prettier.format(input.trim(), { parser: 'typescript', plugins: [parserTypescript], ...config, ...options });
   } catch (e) {
     return input; // assume it's invalid syntax and ignore
   }
@@ -260,7 +261,7 @@ function assignAliasesIfNeeded(defs: Def[], imports: Import[], ourModulePath: st
 
 function maybePretty(input: string): string {
   try {
-    return prettier.format(input.trim(), { parser: 'typescript' });
+    return prettier.format(input.trim(), { parser: 'typescript', plugins: [parserTypescript] });
   } catch (e) {
     return input; // assume it's invalid syntax and ignore
   }
