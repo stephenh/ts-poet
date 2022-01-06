@@ -210,6 +210,8 @@ export function deepGenerate(object: unknown): string {
   return result;
 }
 
+// Use an optional call here in case we are using standalone prettier. This can happen when loaded through a CDN from
+// a browser (or Deno), because prettier has `"browser": "./standalone.js"` in it's package.json.
 const configPromise = resolveConfig?.('./');
 
 async function maybePrettyWithConfig(input: string, options: Options): Promise<string> {
