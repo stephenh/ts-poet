@@ -10,4 +10,15 @@ describe('standalone', () => {
       "
     `);
   });
+
+  it('supports jsx', async () => {
+    const b = code`
+      const a = <div
+       class="test">    Test</div>;
+    `;
+    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+      "const a = <div class=\\"test\\"> Test</div>;
+      "
+    `);
+  });
 });
