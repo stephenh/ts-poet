@@ -1,4 +1,4 @@
-import { arrayOf, Code, code, conditionalOutput, def, imp, joinCode } from '../src';
+import { arrayOf, Code, code, conditionalOutput, def, imp, joinCode, literalOf } from '../src';
 
 describe('code', () => {
   it('basic interpolation', () => {
@@ -391,6 +391,63 @@ describe('code', () => {
 
       const map = { foo: 1, bar: 2 as Foo };
       "
+    `);
+  });
+
+  it('can make literal objects', async () => {
+    const map = literalOf({
+      foo: code`1`,
+      bar: code`2 as ${imp('Foo@foo')}`,
+      'z-z': 'zaz',
+      zaz: { foo: code`3 as ${imp('Zaz@foo')}` },
+    });
+    const b = code`const map = ${map};`;
+    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+      "import { Foo } from 'foo';
+
+      const map = {foo :1,bar :2 as Foo,z-z :zaz,zaz :{\\"foo\\":{\\"literals\\":[\\"3 as \\",\\"\\"],\\"placeholders\\":[{\\"symbol\\":\\"Zaz\\",\\"source\\":\\"foo\\",\\"typeImport\\":false}],\\"trim\\":false,\\"oneline\\":false}},};"
+    `);
+  });
+
+  it('can mix literal objects and conditional output', async () => {
+    const helperMethod = conditionalOutput('foo', code`function foo() { return 1; }`);
+    const o = code`
+      module.exports = ${literalOf({ something: { method: code`${helperMethod}()` } })};
+      
+      ${helperMethod.ifUsed}
+    `;
+    expect(await o.toStringWithImports()).toMatchInlineSnapshot(`
+      "module.exports = {
+        something: {
+          method: {
+            literals: ['', '()'],
+            placeholders: [
+              {
+                usageSiteName: 'foo',
+                declarationSiteCode: {
+                  literals: ['function foo() { return 1; }'],
+                  placeholders: [],
+                  trim: false,
+                  oneline: false,
+                },
+              },
+            ],
+            trim: false,
+            oneline: false,
+          },
+        },
+      };
+      "
+    `);
+  });
+
+  it('can make literal strings', async () => {
+    const b = code`const str = ${literalOf('\n\r\v\t\b\f\u0000\xea\'"' as any)};`;
+    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+      "
+      const str = {0 :
+      ,1 :
+      ,2 :,3 :	,4 :,5 :,6 : ,7 :ê,8 :',9 :\\",};"
     `);
   });
 
