@@ -384,28 +384,15 @@ describe('code', () => {
     const map = {
       foo: code`1`,
       bar: code`2 as ${imp('Foo@foo')}`,
+      'z-z': 'zaz',
+      zaz: { foo: code`3 as ${imp('Zaz@foo')}` },
     };
     const b = code`const map = ${map};`;
     expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
-      "import { Foo } from 'foo';
+      "import { Foo, Zaz } from 'foo';
 
-      const map = { foo: 1, bar: 2 as Foo };
+      const map = { foo: 1, bar: 2 as Foo, 'z-z': 'zaz', zaz: { foo: 3 as Zaz } };
       "
-    `);
-  });
-
-  it('can make literal objects', async () => {
-    const map = literalOf({
-      foo: code`1`,
-      bar: code`2 as ${imp('Foo@foo')}`,
-      'z-z': 'zaz',
-      zaz: { foo: code`3 as ${imp('Zaz@foo')}` },
-    });
-    const b = code`const map = ${map};`;
-    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
-      "import { Foo } from 'foo';
-
-      const map = {foo :1,bar :2 as Foo,z-z :zaz,zaz :{\\"foo\\":{\\"literals\\":[\\"3 as \\",\\"\\"],\\"placeholders\\":[{\\"symbol\\":\\"Zaz\\",\\"source\\":\\"foo\\",\\"typeImport\\":false}],\\"trim\\":false,\\"oneline\\":false}},};"
     `);
   });
 
@@ -417,37 +404,20 @@ describe('code', () => {
       ${helperMethod.ifUsed}
     `;
     expect(await o.toStringWithImports()).toMatchInlineSnapshot(`
-      "module.exports = {
-        something: {
-          method: {
-            literals: ['', '()'],
-            placeholders: [
-              {
-                usageSiteName: 'foo',
-                declarationSiteCode: {
-                  literals: ['function foo() { return 1; }'],
-                  placeholders: [],
-                  trim: false,
-                  oneline: false,
-                },
-              },
-            ],
-            trim: false,
-            oneline: false,
-          },
-        },
-      };
+      "module.exports = { something: { method: foo() } };
+
+      function foo() {
+        return 1;
+      }
       "
     `);
   });
 
   it('can make literal strings', async () => {
-    const b = code`const str = ${literalOf('\n\r\v\t\b\f\u0000\xea\'"' as any)};`;
+    const b = code`const str = ${literalOf('\n\r\v\t\b\f\u0000\xea\'"')};`;
     expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+      "const str = '\\\\n\\\\r\\\\u000b\\\\t\\\\b\\\\f\\\\u0000ê\\\\'\\"';
       "
-      const str = {0 :
-      ,1 :
-      ,2 :,3 :	,4 :,5 :,6 : ,7 :ê,8 :',9 :\\",};"
     `);
   });
 
