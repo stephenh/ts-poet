@@ -137,6 +137,17 @@ And your output will have the `convertTimestamps` declaration only if one of the
 
 This helps cut down on unnecessary output in the code, and compiler/IDE warnings like unused functions.
 
+# Literals
+
+If you want to add a literal value, you can use `literalOf` and `arrayOf`:
+
+| code                              | output                    |
+| --------------------------------- | ------------------------- |
+| `let a = ${literalOf('foo')}`     | `let a = 'foo';`          |
+| `let a = ${arrayOf(1, 2, 3)}`     | `let a = [1, 2, 3];`      |
+| `let a = ${{foo: 'bar'}}`         | `let a = { foo: 'bar' };` |
+| `` let a = ${{foo: code`bar`}} `` | `let a = { foo: bar };`   |
+
 History
 =======
 

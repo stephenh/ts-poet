@@ -1,4 +1,4 @@
-import { arrayOf, Code, code, conditionalOutput, def, imp, joinCode } from '../src';
+import { arrayOf, Code, code, conditionalOutput, def, imp, joinCode, literalOf } from '../src';
 
 describe('code', () => {
   it('basic interpolation', () => {
@@ -384,12 +384,39 @@ describe('code', () => {
     const map = {
       foo: code`1`,
       bar: code`2 as ${imp('Foo@foo')}`,
+      'z-z': 'zaz',
+      zaz: { foo: code`3 as ${imp('Zaz@foo')}` },
     };
     const b = code`const map = ${map};`;
     expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
-      "import { Foo } from 'foo';
+      "import { Foo, Zaz } from 'foo';
 
-      const map = { foo: 1, bar: 2 as Foo };
+      const map = { foo: 1, bar: 2 as Foo, 'z-z': 'zaz', zaz: { foo: 3 as Zaz } };
+      "
+    `);
+  });
+
+  it('can mix literal objects and conditional output', async () => {
+    const helperMethod = conditionalOutput('foo', code`function foo() { return 1; }`);
+    const o = code`
+      module.exports = ${literalOf({ something: { method: code`${helperMethod}()` } })};
+      
+      ${helperMethod.ifUsed}
+    `;
+    expect(await o.toStringWithImports()).toMatchInlineSnapshot(`
+      "module.exports = { something: { method: foo() } };
+
+      function foo() {
+        return 1;
+      }
+      "
+    `);
+  });
+
+  it('can make literal strings', async () => {
+    const b = code`const str = ${literalOf('\n\r\v\t\b\f\u0000\xea\'"')};`;
+    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+      "const str = '\\\\n\\\\r\\\\u000b\\\\t\\\\b\\\\f\\\\u0000ê\\\\'\\"';
       "
     `);
   });

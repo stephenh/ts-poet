@@ -1,8 +1,9 @@
 import { Import } from './Import';
-import { Code, deepGenerate, Def } from './Code';
+import { Code, Def } from './Code';
 import { Node } from './Node';
 import { ConditionalOutput } from './ConditionalOutput';
 import { isPlainObject } from './is-plain-object';
+import { Literal } from './Literal';
 export { Code } from './Code';
 export { Import } from './Import';
 
@@ -20,33 +21,12 @@ export function code(literals: TemplateStringsArray, ...placeholders: unknown[])
   );
 }
 
-export function literalOf(object: object): Node {
-  return new (class extends Node {
-    get childNodes(): unknown[] {
-      return Object.values(object).flat();
-    }
-
-    toCodeString(): string {
-      let code = '{';
-      Object.entries(object).forEach(([key, value]) => {
-        code += `${key} :${deepGenerate(value)},`;
-      });
-      code += '}';
-      return code;
-    }
-  })();
+export function literalOf(object: unknown): Node {
+  return new Literal(object);
 }
 
 export function arrayOf(...elements: unknown[]): Node {
-  return new (class extends Node {
-    get childNodes(): unknown[] {
-      return elements;
-    }
-
-    toCodeString(): string {
-      return '[' + elements.map(deepGenerate).join(', ') + ']';
-    }
-  })();
+  return literalOf(elements);
 }
 
 export function joinCode(chunks: Code[], opts: { on?: string; trim?: boolean } = {}): Code {
