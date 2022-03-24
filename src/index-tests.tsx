@@ -465,6 +465,50 @@ describe('code', () => {
     `);
   });
 
+  it('can force using the CJS module export', async () => {
+    const b = code`const types = [
+      ${imp('Foo@foo')},
+      ${imp('Bar@bar')},
+      ${imp('Zaz@zaz')},
+    ];`;
+    expect(await b.toStringWithImports({ forceModuleImport: ['foo', 'bar'] })).toMatchInlineSnapshot(`
+      "import { Zaz } from 'zaz';
+      import * as _m0 from 'foo';
+      import * as _m1 from 'bar';
+
+      const types = [_m0.Foo, _m1.Bar, Zaz];
+      "
+    `);
+  });
+
+  it('can force using the CJS module export with arrays', async () => {
+    const b = code`const types = ${arrayOf(imp('Foo@foo'), imp('Bar@bar'), imp('Zaz@zaz'))};`;
+    expect(await b.toStringWithImports({ forceModuleImport: ['foo', 'bar'] })).toMatchInlineSnapshot(`
+      "import { Zaz } from 'zaz';
+      import * as _m0 from 'foo';
+      import * as _m1 from 'bar';
+
+      const types = [_m0.Foo, _m1.Bar, Zaz];
+      "
+    `);
+  });
+
+  it('can force using the CJS module export in conditional output', async () => {
+    const Foo = imp('Foo@foo');
+    const maybeFoo = conditionalOutput('foo', code`const foo = ${Foo}`);
+    const b = code`
+      ${maybeFoo.ifUsed}
+      const foo1 = ${maybeFoo};
+    `;
+    expect(await b.toStringWithImports({ forceModuleImport: ['foo'] })).toMatchInlineSnapshot(`
+      "import * as _m0 from 'foo';
+
+      const foo = _m0.Foo;
+      const foo1 = foo;
+      "
+    `);
+  });
+
   it('can join chunks', async () => {
     const chunks: Code[] = [];
     chunks.push(code`const a: ${imp('Foo@foo')};`);

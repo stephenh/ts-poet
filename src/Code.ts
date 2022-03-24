@@ -1,5 +1,5 @@
 import { Node } from './Node';
-import { emitImports, ImportsName, sameModule, Import, ImportsDefault } from './Import';
+import { emitImports, ImportsName, sameModule, Import, ImportsDefault, ImportsAll } from './Import';
 import prettier, { Options, resolveConfig } from 'prettier';
 import parserTypescript from 'prettier/parser-typescript';
 import { isPlainObject } from './is-plain-object';
@@ -16,6 +16,8 @@ export interface ToStringOpts {
   path?: string;
   /** Modules to use a CommonJS-in-ESM destructure fix for. */
   forceDefaultImport?: string[];
+  /** Modules to use a CommonJS-in-ESM destructure fix for. */
+  forceModuleImport?: string[];
   /** A top-of-file prefix, i.e. eslint disable. */
   prefix?: string;
   /** Optional per-file overrides for the prettier config, i.e. to use longer-than-normal line lengths. */
@@ -38,10 +40,10 @@ export class Code extends Node {
    * to return a `Promise<String>`.
    */
   toStringWithImports(opts?: ToStringOpts): Promise<string> {
-    const { path = '', forceDefaultImport, prefix, prettierOverrides = {} } = opts || {};
+    const { path = '', forceDefaultImport, forceModuleImport, prefix, prettierOverrides = {} } = opts || {};
     const ourModulePath = path.replace(/\.[tj]sx?/, '');
-    if (forceDefaultImport) {
-      this.deepReplaceNamedImports(forceDefaultImport);
+    if (forceDefaultImport || forceModuleImport) {
+      this.deepReplaceNamedImports(forceDefaultImport || [], forceModuleImport || []);
     }
     usedConditionals = this.deepConditionalOutput();
     const imports = this.deepFindImports();
@@ -132,7 +134,7 @@ export class Code extends Node {
     return used;
   }
 
-  private deepReplaceNamedImports(forceDefaultImport: string[]): void {
+  private deepReplaceNamedImports(forceDefaultImport: string[], forceModuleImport: string[]): void {
     // Keep a map of module name --> symbol we're importing, i.e. protobufjs/simple is _m1
     const assignedNames: Record<string, string> = {};
     function getName(source: string): string {
@@ -154,6 +156,9 @@ export class Code extends Node {
           if (maybeImp instanceof ImportsName && forceDefaultImport.includes(maybeImp.source)) {
             const name = getName(maybeImp.source);
             array[i] = code`${new ImportsDefault(name, maybeImp.source)}.${maybeImp.sourceSymbol || maybeImp.symbol}`;
+          } else if (maybeImp instanceof ImportsName && forceModuleImport.includes(maybeImp.source)) {
+            const name = getName(maybeImp.source);
+            array[i] = code`${new ImportsAll(name, maybeImp.source)}.${maybeImp.sourceSymbol || maybeImp.symbol}`;
           }
         }
         todo = [...todo, ...placeholder.childNodes];
