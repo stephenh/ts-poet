@@ -8,6 +8,8 @@ const modulePattern = `@?(?:(?:${fileNamePattern}(?:/${fileNamePattern})*))`;
 const identPattern = `(?:(?:[a-zA-Z][_a-zA-Z0-9.]*)|(?:[_a-zA-Z][_a-zA-Z0-9.]+))`;
 export const importType = '[*@+=]';
 const importPattern = `^(${typeImportMarker}${identPattern})?(${importType})(${modulePattern})(?:#(${identPattern}))?`;
+const sourceIdentPattern = `(?:(?:${identPattern}:)?)`;
+const sourceImportPattern = `^(${typeImportMarker}${sourceIdentPattern}${identPattern})?(@)(${modulePattern})(?:#(${identPattern}))?`;
 
 /**
  * Specifies a symbol and its related origin, either via import or implicit/local declaration.
@@ -47,7 +49,10 @@ export abstract class Import extends Node {
    * @return Parsed symbol specification
    */
   public static from(spec: string): Import {
-    const matched = spec.match(importPattern);
+    let matched = spec.match(importPattern);
+    if (matched === null) {
+      matched = spec.match(sourceImportPattern);
+    }
     if (matched != null) {
       const modulePath = matched[3];
       const kind = matched[2] || '@';
@@ -57,11 +62,17 @@ export abstract class Import extends Node {
         case '*':
           return Import.importsAll(symbolName, modulePath);
         case '@':
-          if (symbolName.startsWith('t:')) {
-            return Import.importsName(symbolName.substring(2), modulePath, true);
+          const isTypeImport = symbolName.startsWith('t:');
+          let exportedNames;
+          if (isTypeImport) {
+            exportedNames = symbolName.substring(2).split(':');
           } else {
-            return Import.importsName(symbolName, modulePath, false);
+            exportedNames = symbolName.split(':');
           }
+
+          const exportedName = exportedNames.pop();
+          const sourceExportedName = exportedNames[0];
+          return Import.importsName(exportedName!, modulePath, isTypeImport, sourceExportedName);
         case '=':
           return Import.importsDefault(symbolName, modulePath);
         case '+':
@@ -124,8 +135,13 @@ export abstract class Import extends Node {
    * @param from The module the symbol is exported from
    * @param typeImport whether this is an `import type` import
    */
-  public static importsName(exportedName: string, from: string, typeImport: boolean): Import {
-    return new ImportsName(exportedName, from, undefined, typeImport);
+  public static importsName(
+    exportedName: string,
+    from: string,
+    typeImport: boolean,
+    sourceExportedName?: string
+  ): Import {
+    return new ImportsName(exportedName, from, sourceExportedName, typeImport);
   }
 
   /**

@@ -268,11 +268,13 @@ describe('code', () => {
   it('can double nest lists', async () => {
     const method1 = code`foo(): ${imp('Foo@foo')} { return "foo"; }`;
     const method2 = code`bar(): ${imp('Bar@bar')} { return "bar"; }`;
-    const methods = [method1, method2];
+    const method3 = code`footer(): ${imp('Footer:SelfFooter@footer')} { return "footer"; }`;
+    const methods = [method1, method2, method3];
     const zaz = code`class Zaz { ${[methods]} }`;
     expect(await zaz.toStringWithImports()).toMatchInlineSnapshot(`
       "import { Foo } from 'foo';
       import { Bar } from 'bar';
+      import { Footer as SelfFooter } from 'footer';
 
       class Zaz {
         foo(): Foo {
@@ -280,6 +282,9 @@ describe('code', () => {
         }
         bar(): Bar {
           return 'bar';
+        }
+        footer(): SelfFooter {
+          return 'footer';
         }
       }
       "
