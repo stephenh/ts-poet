@@ -149,6 +149,31 @@ describe('Import', () => {
     expect(maybeRelativePath('./zaz/Zaz', './foo/Foo')).toEqual('../foo/Foo');
   });
 
+  it('import an export with a more convenient alias', () => {
+    const parsed = Import.from('Observable:CustomizedObservable@packages/override-properties/Observable');
+    expect(parsed).toBeInstanceOf(ImportsName);
+
+    const sym = parsed as ImportsName;
+    expect(sym.symbol).toEqual('CustomizedObservable');
+    expect(sym.source).toEqual('packages/override-properties/Observable');
+
+    expect(emit(sym)).toMatchInlineSnapshot(
+      `"import { Observable as CustomizedObservable } from 'packages/override-properties/Observable';"`
+    );
+
+    // type import
+    const typeImportParsed = Import.from('t:Observable:CustomizedObservable@packages/override-properties/Observable');
+    expect(typeImportParsed).toBeInstanceOf(ImportsName);
+
+    const typeSym = typeImportParsed as ImportsName;
+    expect(typeSym.symbol).toEqual('CustomizedObservable');
+    expect(typeSym.source).toEqual('packages/override-properties/Observable');
+
+    expect(emit(typeSym)).toMatchInlineSnapshot(
+      `"import type { Observable as CustomizedObservable } from 'packages/override-properties/Observable';"`
+    );
+  });
+
   function emit(spec: Import): string {
     return emitImports([spec], '').trim();
   }
