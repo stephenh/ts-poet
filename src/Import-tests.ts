@@ -145,6 +145,20 @@ describe('Import', () => {
     expect(maybeRelativePath('zaz/Zaz', './foo/Foo')).toEqual('../foo/Foo');
   });
 
+  it('can interpret importMappings', () => {
+    const parsed = Import.from('Empty@./google/protobuf/empty');
+    expect(parsed).toBeInstanceOf(ImportsName);
+
+    const sym = parsed as ImportsName;
+    expect(sym.symbol).toEqual('Empty');
+    expect(sym.source).toEqual('./google/protobuf/empty');
+
+    const importMappings = { './google/protobuf/empty': './external/protoapis/google/protobuf/empty' }
+    expect(emit(sym, importMappings)).toMatchInlineSnapshot(
+      `"import { Empty } from './external/protoapis/google/protobuf/empty';"`
+    );
+  });
+
   it('can handle relative imports with a current directory', () => {
     expect(maybeRelativePath('./zaz/Zaz', './foo/Foo')).toEqual('../foo/Foo');
   });
@@ -174,7 +188,7 @@ describe('Import', () => {
     );
   });
 
-  function emit(spec: Import): string {
-    return emitImports([spec], '').trim();
+  function emit(spec: Import, importMappings = {}): string {
+    return emitImports([spec], '', importMappings).trim();
   }
 });

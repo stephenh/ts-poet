@@ -22,6 +22,8 @@ export interface ToStringOpts {
   prefix?: string;
   /** Optional per-file overrides for the prettier config, i.e. to use longer-than-normal line lengths. */
   prettierOverrides?: Options;
+  /** optional importMappings */
+  importMappings?: { [key: string]: string };
 }
 
 export class Code extends Node {
@@ -40,7 +42,7 @@ export class Code extends Node {
    * to return a `Promise<String>`.
    */
   toStringWithImports(opts?: ToStringOpts): Promise<string> {
-    const { path = '', forceDefaultImport, forceModuleImport, prefix, prettierOverrides = {} } = opts || {};
+    const { path = '', forceDefaultImport, forceModuleImport, prefix, prettierOverrides = {}, importMappings = {} } = opts || {};
     const ourModulePath = path.replace(/\.[tj]sx?/, '');
     if (forceDefaultImport || forceModuleImport) {
       this.deepReplaceNamedImports(forceDefaultImport || [], forceModuleImport || []);
@@ -49,7 +51,7 @@ export class Code extends Node {
     const imports = this.deepFindImports();
     const defs = this.deepFindDefs();
     assignAliasesIfNeeded(defs, imports, ourModulePath);
-    const importPart = emitImports(imports, ourModulePath);
+    const importPart = emitImports(imports, ourModulePath, importMappings);
     const bodyPart = this.generateCode();
     const maybePrefix = prefix ? `${prefix}\n` : '';
     return maybePrettyWithConfig(maybePrefix + importPart + '\n' + bodyPart, prettierOverrides);
