@@ -286,7 +286,7 @@ export class SideEffect extends Imported {
 }
 
 /** Generates the `import ...` lines for the given `imports`. */
-export function emitImports(imports: Import[], ourModulePath: string): string {
+export function emitImports(imports: Import[], ourModulePath: string, importMappings: { [key: string]: string }): string {
   if (imports.length == 0) {
     return '';
   }
@@ -311,6 +311,9 @@ export function emitImports(imports: Import[], ourModulePath: string): string {
     // Skip imports from the current module
     if (sameModule(ourModulePath, modulePath)) {
       return;
+    }
+    if (modulePath in importMappings) {
+      modulePath = importMappings[modulePath];
     }
     const importPath = maybeRelativePath(ourModulePath, modulePath);
 
