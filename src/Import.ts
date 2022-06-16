@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import Path from 'path';
+import * as path from 'path';
 import { Node } from './Node';
 
 const typeImportMarker = '(?:t:)?';
@@ -374,20 +374,18 @@ export function maybeRelativePath(outputPath: string, importPath: string): strin
   if (!importPath.startsWith('./')) {
     return importPath;
   }
-  // Drop the `./` prefix from the outputPath if it exists.
-  const basePath = outputPath.replace(/^.\//, '');
-  // Ideally we'd use a path library to do all this.
-  const numberOfDirs = basePath.split('').filter((l) => l === '/').length;
-  if (numberOfDirs === 0) {
-    return importPath;
+  importPath = path.normalize(importPath);
+  outputPath = path.normalize(outputPath);
+  const outputPathDir = path.dirname(outputPath);
+  let relativePath = path.relative(outputPathDir, importPath);
+  if (!relativePath.startsWith('.')) {
+    // ensure the js compiler recognizes this is a relative path.
+    relativePath = './' + relativePath;
   }
-  // Make an array of `..` to get our importPath to the root directory.
-  const a: string[] = new Array(numberOfDirs);
-  const prefix = a.fill('..', 0, numberOfDirs).join('/');
-  return prefix + importPath.substring(1);
+  return relativePath;
 }
 
 /** Checks if `path1 === path2` despite minor path differences like `./foo` and `foo`. */
 export function sameModule(path1: string, path2: string): boolean {
-  return path1 === path2 || Path.resolve(path1) === Path.resolve(path2);
+  return path1 === path2 || path.resolve(path1) === path.resolve(path2);
 }
