@@ -377,7 +377,7 @@ export function maybeRelativePath(outputPath: string, importPath: string): strin
   importPath = path.normalize(importPath);
   outputPath = path.normalize(outputPath);
   const outputPathDir = path.dirname(outputPath);
-  let relativePath = path.relative(outputPathDir, importPath);
+  let relativePath = path.relative(outputPathDir, importPath).split(path.sep).join(path.posix.sep);
   if (!relativePath.startsWith('.')) {
     // ensure the js compiler recognizes this is a relative path.
     relativePath = './' + relativePath;
