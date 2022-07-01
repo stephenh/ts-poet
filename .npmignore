@@ -11,4 +11,6 @@ build/docs
 **/*-tests.*
 coverage
 .nyc_output
+.circleci
+.idea
 *.log
