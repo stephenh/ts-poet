@@ -387,5 +387,8 @@ export function maybeRelativePath(outputPath: string, importPath: string): strin
 
 /** Checks if `path1 === path2` despite minor path differences like `./foo` and `foo`. */
 export function sameModule(path1: string, path2: string): boolean {
-  return path1 === path2 || path.resolve(path1) === path.resolve(path2);
+  // TypeScript: import paths ending in .js and .ts are resolved to the .ts file.
+  // Check the base paths (without the .js or .ts suffix).
+  const [basePath1, basePath2] = [path1, path2].map((p) => p.replace(/\.[tj]sx?/, ''));
+  return basePath1 === basePath2 || path.resolve(basePath1) === path.resolve(basePath2);
 }
