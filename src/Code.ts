@@ -42,7 +42,14 @@ export class Code extends Node {
    * to return a `Promise<String>`.
    */
   toStringWithImports(opts?: ToStringOpts): Promise<string> {
-    const { path = '', forceDefaultImport, forceModuleImport, prefix, prettierOverrides = {}, importMappings = {} } = opts || {};
+    const {
+      path = '',
+      forceDefaultImport,
+      forceModuleImport,
+      prefix,
+      prettierOverrides = {},
+      importMappings = {},
+    } = opts || {};
     const ourModulePath = path.replace(/\.[tj]sx?/, '');
     if (forceDefaultImport || forceModuleImport) {
       this.deepReplaceNamedImports(forceDefaultImport || [], forceModuleImport || []);

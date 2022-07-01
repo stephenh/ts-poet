@@ -286,7 +286,11 @@ export class SideEffect extends Imported {
 }
 
 /** Generates the `import ...` lines for the given `imports`. */
-export function emitImports(imports: Import[], ourModulePath: string, importMappings: { [key: string]: string }): string {
+export function emitImports(
+  imports: Import[],
+  ourModulePath: string,
+  importMappings: { [key: string]: string }
+): string {
   if (imports.length == 0) {
     return '';
   }
@@ -363,7 +367,7 @@ export function emitImports(imports: Import[], ourModulePath: string, importMapp
 type Constructor<T> = new (...args: any[]) => T;
 
 function filterInstances<T, U>(list: T[], t: Constructor<U>): U[] {
-  return (list.filter((e) => e instanceof t) as unknown) as U[];
+  return list.filter((e) => e instanceof t) as unknown as U[];
 }
 
 function unique<T>(list: T[]): T[] {

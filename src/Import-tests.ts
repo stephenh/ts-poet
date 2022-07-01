@@ -153,7 +153,7 @@ describe('Import', () => {
     expect(sym.symbol).toEqual('Empty');
     expect(sym.source).toEqual('./google/protobuf/empty');
 
-    const importMappings = { './google/protobuf/empty': './external/protoapis/google/protobuf/empty' }
+    const importMappings = { './google/protobuf/empty': './external/protoapis/google/protobuf/empty' };
     expect(emit(sym, importMappings)).toMatchInlineSnapshot(
       `"import { Empty } from './external/protoapis/google/protobuf/empty';"`
     );
