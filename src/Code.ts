@@ -1,10 +1,10 @@
-import { Node } from './Node';
-import { emitImports, ImportsName, sameModule, Import, ImportsDefault, ImportsAll } from './Import';
-import prettier, { Options, resolveConfig } from 'prettier';
-import parserTypescript from 'prettier/parser-typescript';
-import { isPlainObject } from './is-plain-object';
-import { ConditionalOutput, MaybeOutput } from './ConditionalOutput';
-import { code } from './index';
+import { Node } from "./Node";
+import { emitImports, ImportsName, sameModule, Import, ImportsDefault, ImportsAll } from "./Import";
+import prettier, { Options, resolveConfig } from "prettier";
+import parserTypescript from "prettier/parser-typescript";
+import { isPlainObject } from "./is-plain-object";
+import { ConditionalOutput, MaybeOutput } from "./ConditionalOutput";
+import { code } from "./index";
 
 // We only have a single top-level Code.toStringWithImports running at a time,
 // so use a global var to capture this contextual state.
@@ -42,8 +42,15 @@ export class Code extends Node {
    * to return a `Promise<String>`.
    */
   toStringWithImports(opts?: ToStringOpts): Promise<string> {
-    const { path = '', forceDefaultImport, forceModuleImport, prefix, prettierOverrides = {}, importMappings = {} } = opts || {};
-    const ourModulePath = path.replace(/\.[tj]sx?/, '');
+    const {
+      path = "",
+      forceDefaultImport,
+      forceModuleImport,
+      prefix,
+      prettierOverrides = {},
+      importMappings = {},
+    } = opts || {};
+    const ourModulePath = path.replace(/\.[tj]sx?/, "");
     if (forceDefaultImport || forceModuleImport) {
       this.deepReplaceNamedImports(forceDefaultImport || [], forceModuleImport || []);
     }
@@ -53,8 +60,8 @@ export class Code extends Node {
     assignAliasesIfNeeded(defs, imports, ourModulePath);
     const importPart = emitImports(imports, ourModulePath, importMappings);
     const bodyPart = this.generateCode();
-    const maybePrefix = prefix ? `${prefix}\n` : '';
-    return maybePrettyWithConfig(maybePrefix + importPart + '\n' + bodyPart, prettierOverrides);
+    const maybePrefix = prefix ? `${prefix}\n` : "";
+    return maybePrettyWithConfig(maybePrefix + importPart + "\n" + bodyPart, prettierOverrides);
   }
 
   /**
@@ -172,7 +179,7 @@ export class Code extends Node {
 
   private generateCode(): string {
     const { literals, placeholders } = this;
-    let result = '';
+    let result = "";
     // interleave the literals with the placeholders
     for (let i = 0; i < placeholders.length; i++) {
       result += literals[i] + deepGenerate(placeholders[i]);
@@ -183,14 +190,14 @@ export class Code extends Node {
       result = result.trim();
     }
     if (this.oneline) {
-      result = result.replace(/\n/g, '');
+      result = result.replace(/\n/g, "");
     }
     return result;
   }
 }
 
 export function deepGenerate(object: unknown): string {
-  let result = '';
+  let result = "";
   let todo: unknown[] = [object];
   while (todo.length > 0) {
     const current = todo.shift();
@@ -203,7 +210,7 @@ export function deepGenerate(object: unknown): string {
         result += current.code.toCodeString();
       }
     } else if (current === null) {
-      result += 'null';
+      result += "null";
     } else if (current !== undefined) {
       if (isPlainObject(current)) {
         result += JSON.stringify(current);
@@ -211,7 +218,7 @@ export function deepGenerate(object: unknown): string {
         result += (current as any).toString();
       }
     } else {
-      result += 'undefined';
+      result += "undefined";
     }
   }
   return result;
@@ -219,12 +226,12 @@ export function deepGenerate(object: unknown): string {
 
 // Use an optional call here in case we are using standalone prettier. This can happen when loaded through a CDN from
 // a browser (or Deno), because prettier has `"browser": "./standalone.js"` in it's package.json.
-const configPromise = resolveConfig?.('./');
+const configPromise = resolveConfig?.("./");
 
 async function maybePrettyWithConfig(input: string, options: Options): Promise<string> {
   try {
     const config = await configPromise;
-    return prettier.format(input.trim(), { parser: 'typescript', plugins: [parserTypescript], ...config, ...options });
+    return prettier.format(input.trim(), { parser: "typescript", plugins: [parserTypescript], ...config, ...options });
   } catch (e) {
     return input; // assume it's invalid syntax and ignore
   }
@@ -270,7 +277,7 @@ function assignAliasesIfNeeded(defs: Def[], imports: Import[], ourModulePath: st
 
 function maybePretty(input: string): string {
   try {
-    return prettier.format(input.trim(), { parser: 'typescript', plugins: [parserTypescript] });
+    return prettier.format(input.trim(), { parser: "typescript", plugins: [parserTypescript] });
   } catch (e) {
     return input; // assume it's invalid syntax and ignore
   }

@@ -8,7 +8,8 @@
     "prepare": "yarn build && yarn test",
     "test": "yarn jest",
     "build": "yarn tsc",
-    "lint": "yarn tslint --project ."
+    "lint": "yarn tslint --project .",
+    "format": "prettier --write 'src/**/*.{ts,tsx}'"
   },
   "repository": {
     "type": "git",

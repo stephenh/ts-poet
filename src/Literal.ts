@@ -1,6 +1,6 @@
-import { Node } from './Node';
-import { MaybeOutput } from './ConditionalOutput';
-import { isPlainObject } from './is-plain-object';
+import { Node } from "./Node";
+import { MaybeOutput } from "./ConditionalOutput";
+import { isPlainObject } from "./is-plain-object";
 
 type Token = string | Node | MaybeOutput;
 
@@ -22,38 +22,38 @@ export class Literal extends Node {
   toCodeString(): string {
     return this.tokens
       .map((node) => {
-        if (typeof node === 'string') return node;
+        if (typeof node === "string") return node;
         if (node instanceof Node) return node.toCodeString();
-        return '';
+        return "";
       })
-      .join(' ');
+      .join(" ");
   }
 }
 
 function flatten(o: unknown): Token[] {
-  if (typeof o === 'undefined') {
-    return ['undefined'];
+  if (typeof o === "undefined") {
+    return ["undefined"];
   }
-  if (typeof o === 'object' && o != null) {
+  if (typeof o === "object" && o != null) {
     if (o instanceof Node || o instanceof MaybeOutput) {
       return [o];
     } else if (Array.isArray(o)) {
-      const nodes: Token[] = ['['];
+      const nodes: Token[] = ["["];
       for (let i = 0; i < o.length; i++) {
-        if (i !== 0) nodes.push(',');
+        if (i !== 0) nodes.push(",");
         nodes.push(...flatten(o[i]));
       }
-      nodes.push(']');
+      nodes.push("]");
       return nodes;
     } else if (isPlainObject(o)) {
-      const nodes: Token[] = ['{'];
+      const nodes: Token[] = ["{"];
       const entries = Object.entries(o);
       for (let i = 0; i < entries.length; i++) {
-        if (i !== 0) nodes.push(',');
+        if (i !== 0) nodes.push(",");
         const [key, value] = entries[i];
-        nodes.push(JSON.stringify(key), ':', ...flatten(value));
+        nodes.push(JSON.stringify(key), ":", ...flatten(value));
       }
-      nodes.push('}');
+      nodes.push("}");
       return nodes;
     }
   }

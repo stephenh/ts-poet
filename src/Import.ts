@@ -1,12 +1,12 @@
-import _ from 'lodash';
-import * as path from 'path';
-import { Node } from './Node';
+import _ from "lodash";
+import * as path from "path";
+import { Node } from "./Node";
 
-const typeImportMarker = '(?:t:)?';
-const fileNamePattern = '(?:[a-zA-Z0-9._-]+)';
+const typeImportMarker = "(?:t:)?";
+const fileNamePattern = "(?:[a-zA-Z0-9._-]+)";
 const modulePattern = `@?(?:(?:${fileNamePattern}(?:/${fileNamePattern})*))`;
 const identPattern = `(?:(?:[a-zA-Z][_a-zA-Z0-9.]*)|(?:[_a-zA-Z][_a-zA-Z0-9.]+))`;
-export const importType = '[*@+=]';
+export const importType = "[*@+=]";
 const importPattern = `^(${typeImportMarker}${identPattern})?(${importType})(${modulePattern})(?:#(${identPattern}))?`;
 const sourceIdentPattern = `(?:(?:${identPattern}:)?)`;
 const sourceImportPattern = `^(${typeImportMarker}${sourceIdentPattern}${identPattern})?(@)(${modulePattern})(?:#(${identPattern}))?`;
@@ -55,39 +55,39 @@ export abstract class Import extends Node {
     }
     if (matched != null) {
       const modulePath = matched[3];
-      const kind = matched[2] || '@';
-      const symbolName = matched[1] || _.last(modulePath.split('/')) || '';
+      const kind = matched[2] || "@";
+      const symbolName = matched[1] || _.last(modulePath.split("/")) || "";
       const targetName = matched[4];
       switch (kind) {
-        case '*':
+        case "*":
           return Import.importsAll(symbolName, modulePath);
-        case '@':
-          const isTypeImport = symbolName.startsWith('t:');
+        case "@":
+          const isTypeImport = symbolName.startsWith("t:");
           let exportedNames;
           if (isTypeImport) {
-            exportedNames = symbolName.substring(2).split(':');
+            exportedNames = symbolName.substring(2).split(":");
           } else {
-            exportedNames = symbolName.split(':');
+            exportedNames = symbolName.split(":");
           }
 
           const exportedName = exportedNames.pop();
           const sourceExportedName = exportedNames[0];
           return Import.importsName(exportedName!, modulePath, isTypeImport, sourceExportedName);
-        case '=':
+        case "=":
           return Import.importsDefault(symbolName, modulePath);
-        case '+':
+        case "+":
           return targetName
             ? Import.augmented(symbolName, modulePath, targetName)
             : Import.sideEffect(symbolName, modulePath);
         default:
-          throw new Error('Invalid import kind character');
+          throw new Error("Invalid import kind character");
       }
     }
     return Import.implicit(spec);
   }
 
   public static fromMaybeString(spec: string | Import): Import {
-    return typeof spec === 'string' ? Import.from(spec) : spec;
+    return typeof spec === "string" ? Import.from(spec) : spec;
   }
 
   /**
@@ -286,12 +286,16 @@ export class SideEffect extends Imported {
 }
 
 /** Generates the `import ...` lines for the given `imports`. */
-export function emitImports(imports: Import[], ourModulePath: string, importMappings: { [key: string]: string }): string {
+export function emitImports(
+  imports: Import[],
+  ourModulePath: string,
+  importMappings: { [key: string]: string }
+): string {
   if (imports.length == 0) {
-    return '';
+    return "";
   }
 
-  let result = '';
+  let result = "";
 
   const augmentImports = _.groupBy(filterInstances(imports, Augmented), (a) => a.augmented);
 
@@ -332,9 +336,9 @@ export function emitImports(imports: Import[], ourModulePath: string, importMapp
     const def = unique(filterInstances(imports, ImportsDefault).map((it) => it.symbol));
     // Output named imports as a group
     if (names.length > 0 || def.length > 0) {
-      const namesPart = names.length > 0 ? [`{ ${names.join(', ')} }`] : [];
+      const namesPart = names.length > 0 ? [`{ ${names.join(", ")} }`] : [];
       const defPart = def.length > 0 ? [def[0]] : [];
-      result += `import ${[...defPart, ...namesPart].join(', ')} from '${importPath}';\n`;
+      result += `import ${[...defPart, ...namesPart].join(", ")} from '${importPath}';\n`;
       [...names, ...def].forEach((name) => {
         const augments = augmentImports[name];
         if (augments) {
@@ -350,7 +354,7 @@ export function emitImports(imports: Import[], ourModulePath: string, importMapp
         .filter((p) => !names.includes(p))
     );
     if (typeImports.length > 0) {
-      result += `import type { ${typeImports.join(', ')} } from '${importPath}';\n`;
+      result += `import type { ${typeImports.join(", ")} } from '${importPath}';\n`;
     }
   });
 
@@ -363,7 +367,7 @@ export function emitImports(imports: Import[], ourModulePath: string, importMapp
 type Constructor<T> = new (...args: any[]) => T;
 
 function filterInstances<T, U>(list: T[], t: Constructor<U>): U[] {
-  return (list.filter((e) => e instanceof t) as unknown) as U[];
+  return list.filter((e) => e instanceof t) as unknown as U[];
 }
 
 function unique<T>(list: T[]): T[] {
@@ -371,16 +375,16 @@ function unique<T>(list: T[]): T[] {
 }
 
 export function maybeRelativePath(outputPath: string, importPath: string): string {
-  if (!importPath.startsWith('./')) {
+  if (!importPath.startsWith("./")) {
     return importPath;
   }
   importPath = path.normalize(importPath);
   outputPath = path.normalize(outputPath);
   const outputPathDir = path.dirname(outputPath);
   let relativePath = path.relative(outputPathDir, importPath).split(path.sep).join(path.posix.sep);
-  if (!relativePath.startsWith('.')) {
+  if (!relativePath.startsWith(".")) {
     // ensure the js compiler recognizes this is a relative path.
-    relativePath = './' + relativePath;
+    relativePath = "./" + relativePath;
   }
   return relativePath;
 }
@@ -389,6 +393,6 @@ export function maybeRelativePath(outputPath: string, importPath: string): strin
 export function sameModule(path1: string, path2: string): boolean {
   // TypeScript: import paths ending in .js and .ts are resolved to the .ts file.
   // Check the base paths (without the .js or .ts suffix).
-  const [basePath1, basePath2] = [path1, path2].map((p) => p.replace(/\.[tj]sx?/, ''));
+  const [basePath1, basePath2] = [path1, path2].map((p) => p.replace(/\.[tj]sx?/, ""));
   return basePath1 === basePath2 || path.resolve(basePath1) === path.resolve(basePath2);
 }
