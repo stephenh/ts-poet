@@ -194,8 +194,7 @@ describe("code", () => {
       "import { Foo } from \\"foo\\";
       import { Bar } from \\"bar\\";
 
-      const types = Foo,
-        Bar;
+      const types = Foo, Bar;
       "
     `);
   });
@@ -208,7 +207,11 @@ describe("code", () => {
     };
     const zaz = code`const foo = ${obj}`;
     expect(await zaz.toStringWithImports()).toMatchInlineSnapshot(`
-      "const foo = { a: 1, b: false, c: { d: \\"a string\\", e: \\"1970-01-01T00:00:00.000Z\\" } };
+      "const foo = {
+        \\"a\\": 1,
+        \\"b\\": false,
+        \\"c\\": { \\"d\\": \\"a string\\", \\"e\\": \\"1970-01-01T00:00:00.000Z\\" },
+      };
       "
     `);
   });
@@ -396,7 +399,12 @@ describe("code", () => {
     expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
       "import { Foo, Zaz } from \\"foo\\";
 
-      const map = { foo: 1, bar: 2 as Foo, \\"z-z\\": \\"zaz\\", zaz: { foo: 3 as Zaz } };
+      const map = {
+        \\"foo\\": 1,
+        \\"bar\\": 2 as Foo,
+        \\"z-z\\": \\"zaz\\",
+        \\"zaz\\": { \\"foo\\": 3 as Zaz },
+      };
       "
     `);
   });
@@ -409,7 +417,7 @@ describe("code", () => {
       ${helperMethod.ifUsed}
     `;
     expect(await o.toStringWithImports()).toMatchInlineSnapshot(`
-      "module.exports = { something: { method: foo() } };
+      "module.exports = { \\"something\\": { \\"method\\": foo() } };
 
       function foo() {
         return 1;
@@ -437,7 +445,11 @@ describe("code", () => {
       import _m0 from \\"foo\\";
       import _m1 from \\"bar\\";
 
-      const types = [_m0.Foo, _m1.Bar, Zaz];
+      const types = [
+        _m0.Foo,
+        _m1.Bar,
+        Zaz,
+      ];
       "
     `);
   });
@@ -481,7 +493,11 @@ describe("code", () => {
       import * as _m0 from \\"foo\\";
       import * as _m1 from \\"bar\\";
 
-      const types = [_m0.Foo, _m1.Bar, Zaz];
+      const types = [
+        _m0.Foo,
+        _m1.Bar,
+        Zaz,
+      ];
       "
     `);
   });
@@ -624,7 +640,7 @@ describe("code", () => {
       }
     `.asOneline();
     // When we format it with an overridden printWidth
-    const o = await a.toStringWithImports({ prettierOverrides: { printWidth: 1_000 } });
+    const o = await a.toStringWithImports({ dprintOptions: { lineWidth: 1000 } });
     // Then it was not wrapped
     expect(o).toMatchInlineSnapshot(`
       "const a = { a: \\"abcdefghijklmnopqrstuvwxyz\\", b: \\"abcdefghijklmnopqrstuvwxyz\\", c: \\"abcdefghijklmnopqrstuvwxyz\\", d: \\"abcdefghijklmnopqrstuvwxyz\\" };

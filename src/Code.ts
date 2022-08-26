@@ -1,10 +1,11 @@
 import { Node } from "./Node";
 import { emitImports, ImportsName, sameModule, Import, ImportsDefault, ImportsAll } from "./Import";
-import prettier, { Options, resolveConfig } from "prettier";
-import parserTypescript from "prettier/parser-typescript";
 import { isPlainObject } from "./is-plain-object";
 import { ConditionalOutput, MaybeOutput } from "./ConditionalOutput";
 import { code } from "./index";
+import dprint from "dprint-node";
+
+export type Options = Exclude<Parameters<typeof dprint.format>[2], undefined>;
 
 // We only have a single top-level Code.toStringWithImports running at a time,
 // so use a global var to capture this contextual state.
@@ -20,8 +21,8 @@ export interface ToStringOpts {
   forceModuleImport?: string[];
   /** A top-of-file prefix, i.e. eslint disable. */
   prefix?: string;
-  /** Optional per-file overrides for the prettier config, i.e. to use longer-than-normal line lengths. */
-  prettierOverrides?: Options;
+  /** dprint config settings. */
+  dprintOptions?: Options;
   /** optional importMappings */
   importMappings?: { [key: string]: string };
 }
@@ -35,21 +36,9 @@ export class Code extends Node {
     super();
   }
 
-  /**
-   * Returns the code with any necessary import statements prefixed.
-   *
-   * This method will also use any local `.prettierrc` settings, hence needs
-   * to return a `Promise<String>`.
-   */
+  /** Returns the code with any necessary import statements prefixed. */
   toStringWithImports(opts?: ToStringOpts): Promise<string> {
-    const {
-      path = "",
-      forceDefaultImport,
-      forceModuleImport,
-      prefix,
-      prettierOverrides = {},
-      importMappings = {},
-    } = opts || {};
+    const { path = "", forceDefaultImport, forceModuleImport, prefix, dprintOptions = {}, importMappings = {} } = opts || {};
     const ourModulePath = path.replace(/\.[tj]sx?/, "");
     if (forceDefaultImport || forceModuleImport) {
       this.deepReplaceNamedImports(forceDefaultImport || [], forceModuleImport || []);
@@ -61,7 +50,7 @@ export class Code extends Node {
     const importPart = emitImports(imports, ourModulePath, importMappings);
     const bodyPart = this.generateCode();
     const maybePrefix = prefix ? `${prefix}\n` : "";
-    return maybePrettyWithConfig(maybePrefix + importPart + "\n" + bodyPart, prettierOverrides);
+    return Promise.resolve(maybePretty(maybePrefix + importPart + "\n" + bodyPart, dprintOptions));
   }
 
   /**
@@ -224,19 +213,6 @@ export function deepGenerate(object: unknown): string {
   return result;
 }
 
-// Use an optional call here in case we are using standalone prettier. This can happen when loaded through a CDN from
-// a browser (or Deno), because prettier has `"browser": "./standalone.js"` in it's package.json.
-const configPromise = resolveConfig?.("./");
-
-async function maybePrettyWithConfig(input: string, options: Options): Promise<string> {
-  try {
-    const config = await configPromise;
-    return prettier.format(input.trim(), { parser: "typescript", plugins: [parserTypescript], ...config, ...options });
-  } catch (e) {
-    return input; // assume it's invalid syntax and ignore
-  }
-}
-
 /** Finds any namespace collisions of a named import colliding with def and assigns the import an alias it. */
 function assignAliasesIfNeeded(defs: Def[], imports: Import[], ourModulePath: string): void {
   // Keep track of used (whether declared or imported) symbols
@@ -275,9 +251,17 @@ function assignAliasesIfNeeded(defs: Def[], imports: Import[], ourModulePath: st
   });
 }
 
-function maybePretty(input: string): string {
+// This default options are both "pretty-ish" plus also suite the ts-poet pre-formatted
+// output which is all bunched together, so we want to force braces / force new lines.
+const baseOptions: Options = {
+  useTabs: false,
+  useBraces: "always",
+  singleBodyPosition: "nextLine",
+};
+
+function maybePretty(input: string, options?: Options): string {
   try {
-    return prettier.format(input.trim(), { parser: "typescript", plugins: [parserTypescript] });
+    return dprint.format("file.ts", input.trim(), { ...baseOptions, ...options });
   } catch (e) {
     return input; // assume it's invalid syntax and ignore
   }

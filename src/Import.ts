@@ -1,6 +1,6 @@
-import _ from "lodash";
 import * as path from "path";
 import { Node } from "./Node";
+import { last, groupBy } from "./utils";
 
 const typeImportMarker = "(?:t:)?";
 const fileNamePattern = "(?:[a-zA-Z0-9._-]+)";
@@ -56,7 +56,7 @@ export abstract class Import extends Node {
     if (matched != null) {
       const modulePath = matched[3];
       const kind = matched[2] || "@";
-      const symbolName = matched[1] || _.last(modulePath.split("/")) || "";
+      const symbolName = matched[1] || last(modulePath.split("/")) || "";
       const targetName = matched[4];
       switch (kind) {
         case "*":
@@ -297,17 +297,17 @@ export function emitImports(
 
   let result = "";
 
-  const augmentImports = _.groupBy(filterInstances(imports, Augmented), (a) => a.augmented);
+  const augmentImports = groupBy(filterInstances(imports, Augmented), (a) => a.augmented);
 
   // Group the imports by source module they're imported from
-  const importsByModule = _.groupBy(
+  const importsByModule = groupBy(
     imports.filter(
       (it) =>
         it.source !== undefined &&
         // Ignore imports that are in our own file
         !(it instanceof ImportsName && it.definedIn && sameModule(it.definedIn, ourModulePath))
     ),
-    (it) => it.source
+    (it) => it.source!
   );
 
   // Output each source module as one line
@@ -358,7 +358,7 @@ export function emitImports(
     }
   });
 
-  const sideEffectImports = _.groupBy(filterInstances(imports, SideEffect), (a) => a.source);
+  const sideEffectImports = groupBy(filterInstances(imports, SideEffect), (a) => a.source);
   Object.keys(sideEffectImports).forEach((it) => (result += `import '${it}';\n`));
 
   return result;
