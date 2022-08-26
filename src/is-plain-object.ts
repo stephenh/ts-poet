@@ -18,12 +18,12 @@ export function isPlainObject(o: unknown): boolean {
   if (!isObject(ctor.prototype)) return false;
 
   // If constructor does not have an Object-specific method
-  if (!ctor.prototype.hasOwnProperty('isPrototypeOf')) return false;
+  if (!ctor.prototype.hasOwnProperty("isPrototypeOf")) return false;
 
   // Most likely a plain Object
   return true;
 }
 
 function isObject(o: unknown): boolean {
-  return Object.prototype.toString.call(o) === '[object Object]';
+  return Object.prototype.toString.call(o) === "[object Object]";
 }

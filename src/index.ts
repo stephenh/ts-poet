@@ -1,11 +1,11 @@
-import { Import } from './Import';
-import { Code, Def } from './Code';
-import { Node } from './Node';
-import { ConditionalOutput } from './ConditionalOutput';
-import { isPlainObject } from './is-plain-object';
-import { Literal } from './Literal';
-export { Code } from './Code';
-export { Import } from './Import';
+import { Import } from "./Import";
+import { Code, Def } from "./Code";
+import { Node } from "./Node";
+import { ConditionalOutput } from "./ConditionalOutput";
+import { isPlainObject } from "./is-plain-object";
+import { Literal } from "./Literal";
+export { Code } from "./Code";
+export { Import } from "./Import";
 
 /** A template literal to format code and auto-organize imports. */
 export function code(literals: TemplateStringsArray, ...placeholders: unknown[]): Code {
@@ -30,12 +30,12 @@ export function arrayOf(...elements: unknown[]): Node {
 }
 
 export function joinCode(chunks: Code[], opts: { on?: string; trim?: boolean } = {}): Code {
-  const { on = '', trim = true } = opts;
-  const literals: string[] = [''];
+  const { on = "", trim = true } = opts;
+  const literals: string[] = [""];
   for (let i = 0; i < chunks.length - 1; i++) {
     literals.push(on);
   }
-  literals.push('');
+  literals.push("");
   if (trim) {
     chunks.forEach((c) => (c.trim = true));
   }
