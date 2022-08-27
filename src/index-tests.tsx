@@ -436,11 +436,7 @@ describe("code", () => {
       import _m0 from \\"foo\\";
       import { Zaz } from \\"zaz\\";
 
-      const types = [
-        _m0.Foo,
-        _m1.Bar,
-        Zaz,
-      ];
+      const types = [_m0.Foo, _m1.Bar, Zaz];
       "
     `);
   });
@@ -484,11 +480,7 @@ describe("code", () => {
       import * as _m0 from \\"foo\\";
       import { Zaz } from \\"zaz\\";
 
-      const types = [
-        _m0.Foo,
-        _m1.Bar,
-        Zaz,
-      ];
+      const types = [_m0.Foo, _m1.Bar, Zaz];
       "
     `);
   });

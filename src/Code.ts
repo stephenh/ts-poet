@@ -262,12 +262,15 @@ function assignAliasesIfNeeded(defs: Def[], imports: Import[], ourModulePath: st
   });
 }
 
-// This default options are both "pretty-ish" plus also suite the ts-poet pre-formatted
+// This default options are both "prettier-ish" plus also suite the ts-poet pre-formatted
 // output which is all bunched together, so we want to force braces / force new lines.
 const baseOptions: DPrintOptions = {
   useTabs: false,
   useBraces: "always",
   singleBodyPosition: "nextLine",
+  "arrowFunction.useParentheses": "force",
+  // For some reason dprint seems to wrap lines "before it should" w/o this set (?)
+  preferSingleLine: true,
 };
 
 function maybePretty(input: string, options?: DPrintOptions): string {
