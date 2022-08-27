@@ -142,8 +142,8 @@ describe("code", () => {
     const method2 = code`bar(): ${imp("Bar@bar")} { return "bar"; }`;
     const zaz = code`class Zaz { ${method1} ${method2} }`;
     expect(await zaz.toStringWithImports()).toMatchInlineSnapshot(`
-      "import { Foo } from \\"foo\\";
-      import { Bar } from \\"bar\\";
+      "import { Bar } from \\"bar\\";
+      import { Foo } from \\"foo\\";
 
       class Zaz {
         foo(): Foo {
@@ -162,8 +162,8 @@ describe("code", () => {
     const method2 = code`bar(): ${imp("Bar@bar")} { return "bar"; }`;
     const zaz = code`class Zaz { ${[method1, method2]} }`;
     expect(await zaz.toStringWithImports()).toMatchInlineSnapshot(`
-      "import { Foo } from \\"foo\\";
-      import { Bar } from \\"bar\\";
+      "import { Bar } from \\"bar\\";
+      import { Foo } from \\"foo\\";
 
       class Zaz {
         foo(): Foo {
@@ -191,8 +191,8 @@ describe("code", () => {
   it("can nest lists of imports", async () => {
     const b = code`const types = ${[imp("Foo@foo"), ", ", imp("Bar@bar")]};`;
     expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
-      "import { Foo } from \\"foo\\";
-      import { Bar } from \\"bar\\";
+      "import { Bar } from \\"bar\\";
+      import { Foo } from \\"foo\\";
 
       const types = Foo, Bar;
       "
@@ -207,11 +207,7 @@ describe("code", () => {
     };
     const zaz = code`const foo = ${obj}`;
     expect(await zaz.toStringWithImports()).toMatchInlineSnapshot(`
-      "const foo = {
-        \\"a\\": 1,
-        \\"b\\": false,
-        \\"c\\": { \\"d\\": \\"a string\\", \\"e\\": \\"1970-01-01T00:00:00.000Z\\" },
-      };
+      "const foo = { \\"a\\": 1, \\"b\\": false, \\"c\\": { \\"d\\": \\"a string\\", \\"e\\": \\"1970-01-01T00:00:00.000Z\\" } };
       "
     `);
   });
@@ -275,8 +271,8 @@ describe("code", () => {
     const methods = [method1, method2, method3];
     const zaz = code`class Zaz { ${[methods]} }`;
     expect(await zaz.toStringWithImports()).toMatchInlineSnapshot(`
-      "import { Foo } from \\"foo\\";
-      import { Bar } from \\"bar\\";
+      "import { Bar } from \\"bar\\";
+      import { Foo } from \\"foo\\";
       import { Footer as SelfFooter } from \\"footer\\";
 
       class Zaz {
@@ -346,9 +342,9 @@ describe("code", () => {
       const f3 = new ${imp("Foo@./bar")}();
     `;
     expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
-      "import { Foo } from \\"./foo\\";
-      import { Foo as Foo1 } from \\"./bar\\";
-
+      "import { Foo as Foo1 } from \\"./bar\\";
+      import { Foo } from \\"./foo\\";
+      
       const f1 = new Foo();
       const f2 = new Foo1();
       const f3 = new Foo1();
@@ -380,8 +376,8 @@ describe("code", () => {
   it("can make literal arrays", async () => {
     const b = code`const types = ${arrayOf(imp("Foo@foo"), imp("Bar@bar"))};`;
     expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
-      "import { Foo } from \\"foo\\";
-      import { Bar } from \\"bar\\";
+      "import { Bar } from \\"bar\\";
+      import { Foo } from \\"foo\\";
 
       const types = [Foo, Bar];
       "
@@ -399,12 +395,7 @@ describe("code", () => {
     expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
       "import { Foo, Zaz } from \\"foo\\";
 
-      const map = {
-        \\"foo\\": 1,
-        \\"bar\\": 2 as Foo,
-        \\"z-z\\": \\"zaz\\",
-        \\"zaz\\": { \\"foo\\": 3 as Zaz },
-      };
+      const map = { \\"foo\\": 1, \\"bar\\": 2 as Foo, \\"z-z\\": \\"zaz\\", \\"zaz\\": { \\"foo\\": 3 as Zaz } };
       "
     `);
   });
@@ -441,9 +432,9 @@ describe("code", () => {
       ${imp("Zaz@zaz")},
     ];`;
     expect(await b.toStringWithImports({ forceDefaultImport: ["foo", "bar"] })).toMatchInlineSnapshot(`
-      "import { Zaz } from \\"zaz\\";
+      "import _m1 from \\"bar\\";
       import _m0 from \\"foo\\";
-      import _m1 from \\"bar\\";
+      import { Zaz } from \\"zaz\\";
 
       const types = [
         _m0.Foo,
@@ -457,9 +448,9 @@ describe("code", () => {
   it("can force using the CJS default export with arrays", async () => {
     const b = code`const types = ${arrayOf(imp("Foo@foo"), imp("Bar@bar"), imp("Zaz@zaz"))};`;
     expect(await b.toStringWithImports({ forceDefaultImport: ["foo", "bar"] })).toMatchInlineSnapshot(`
-      "import { Zaz } from \\"zaz\\";
+      "import _m1 from \\"bar\\";
       import _m0 from \\"foo\\";
-      import _m1 from \\"bar\\";
+      import { Zaz } from \\"zaz\\";
 
       const types = [_m0.Foo, _m1.Bar, Zaz];
       "
@@ -489,9 +480,9 @@ describe("code", () => {
       ${imp("Zaz@zaz")},
     ];`;
     expect(await b.toStringWithImports({ forceModuleImport: ["foo", "bar"] })).toMatchInlineSnapshot(`
-      "import { Zaz } from \\"zaz\\";
+      "import * as _m1 from \\"bar\\";
       import * as _m0 from \\"foo\\";
-      import * as _m1 from \\"bar\\";
+      import { Zaz } from \\"zaz\\";
 
       const types = [
         _m0.Foo,
@@ -505,9 +496,9 @@ describe("code", () => {
   it("can force using the CJS module export with arrays", async () => {
     const b = code`const types = ${arrayOf(imp("Foo@foo"), imp("Bar@bar"), imp("Zaz@zaz"))};`;
     expect(await b.toStringWithImports({ forceModuleImport: ["foo", "bar"] })).toMatchInlineSnapshot(`
-      "import { Zaz } from \\"zaz\\";
+      "import * as _m1 from \\"bar\\";
       import * as _m0 from \\"foo\\";
-      import * as _m1 from \\"bar\\";
+      import { Zaz } from \\"zaz\\";
 
       const types = [_m0.Foo, _m1.Bar, Zaz];
       "
@@ -536,8 +527,8 @@ describe("code", () => {
     chunks.push(code`const b: ${imp("Bar@bar")};`);
     const b = joinCode(chunks);
     expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
-      "import { Foo } from \\"foo\\";
-      import { Bar } from \\"bar\\";
+      "import { Bar } from \\"bar\\";
+      import { Foo } from \\"foo\\";
 
       const a: Foo;
       const b: Bar;

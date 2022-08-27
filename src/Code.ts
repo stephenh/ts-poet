@@ -3,9 +3,13 @@ import { emitImports, ImportsName, sameModule, Import, ImportsDefault, ImportsAl
 import { isPlainObject } from "./is-plain-object";
 import { ConditionalOutput, MaybeOutput } from "./ConditionalOutput";
 import { code } from "./index";
-import dprint from "dprint-node";
 
-export type Options = Exclude<Parameters<typeof dprint.format>[2], undefined>;
+import { createFromBuffer } from "@dprint/formatter";
+import { getBuffer } from "@dprint/typescript";
+
+export type DPrintOptions = Record<string, unknown>;
+
+const formatter = createFromBuffer(getBuffer());
 
 // We only have a single top-level Code.toStringWithImports running at a time,
 // so use a global var to capture this contextual state.
@@ -22,7 +26,7 @@ export interface ToStringOpts {
   /** A top-of-file prefix, i.e. eslint disable. */
   prefix?: string;
   /** dprint config settings. */
-  dprintOptions?: Options;
+  dprintOptions?: DPrintOptions;
   /** optional importMappings */
   importMappings?: { [key: string]: string };
 }
@@ -38,7 +42,14 @@ export class Code extends Node {
 
   /** Returns the code with any necessary import statements prefixed. */
   toStringWithImports(opts?: ToStringOpts): Promise<string> {
-    const { path = "", forceDefaultImport, forceModuleImport, prefix, dprintOptions = {}, importMappings = {} } = opts || {};
+    const {
+      path = "",
+      forceDefaultImport,
+      forceModuleImport,
+      prefix,
+      dprintOptions = {},
+      importMappings = {},
+    } = opts || {};
     const ourModulePath = path.replace(/\.[tj]sx?/, "");
     if (forceDefaultImport || forceModuleImport) {
       this.deepReplaceNamedImports(forceDefaultImport || [], forceModuleImport || []);
@@ -253,15 +264,15 @@ function assignAliasesIfNeeded(defs: Def[], imports: Import[], ourModulePath: st
 
 // This default options are both "pretty-ish" plus also suite the ts-poet pre-formatted
 // output which is all bunched together, so we want to force braces / force new lines.
-const baseOptions: Options = {
+const baseOptions: DPrintOptions = {
   useTabs: false,
   useBraces: "always",
   singleBodyPosition: "nextLine",
 };
 
-function maybePretty(input: string, options?: Options): string {
+function maybePretty(input: string, options?: DPrintOptions): string {
   try {
-    return dprint.format("file.ts", input.trim(), { ...baseOptions, ...options });
+    return formatter.formatText("file.ts", input.trim(), { ...baseOptions, ...options });
   } catch (e) {
     return input; // assume it's invalid syntax and ignore
   }
