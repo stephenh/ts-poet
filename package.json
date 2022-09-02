@@ -35,7 +35,6 @@
     "typescript": "^4.8.2"
   },
   "dependencies": {
-    "@dprint/formatter": "^0.2.0",
-    "@dprint/typescript": "^0.71.2"
+    "dprint-node": "^1.0.7"
   }
 }

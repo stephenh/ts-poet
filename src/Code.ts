@@ -3,13 +3,9 @@ import { emitImports, ImportsName, sameModule, Import, ImportsDefault, ImportsAl
 import { isPlainObject } from "./is-plain-object";
 import { ConditionalOutput, MaybeOutput } from "./ConditionalOutput";
 import { code } from "./index";
+import dprint from "dprint-node";
 
-import { createFromBuffer } from "@dprint/formatter";
-import { getBuffer } from "@dprint/typescript";
-
-export type DPrintOptions = Record<string, unknown>;
-
-const formatter = createFromBuffer(getBuffer());
+export type DPrintOptions = Exclude<Parameters<typeof dprint.format>[2], never>;
 
 // We only have a single top-level Code.toStringWithImports running at a time,
 // so use a global var to capture this contextual state.
@@ -265,13 +261,16 @@ const baseOptions: DPrintOptions = {
   useBraces: "always",
   singleBodyPosition: "nextLine",
   "arrowFunction.useParentheses": "force",
+  // dprint-node uses `node: true`, which we want to undo
+  "module.sortImportDeclarations": "caseSensitive",
+  lineWidth: 120,
   // For some reason dprint seems to wrap lines "before it should" w/o this set (?)
   preferSingleLine: true,
 };
 
 function maybePretty(input: string, options?: DPrintOptions): string {
   try {
-    return formatter.formatText("file.ts", input.trim(), { ...baseOptions, ...options });
+    return dprint.format("file.ts", input.trim(), { ...baseOptions, ...options });
   } catch (e) {
     return input; // assume it's invalid syntax and ignore
   }
