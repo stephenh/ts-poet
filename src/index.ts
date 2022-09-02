@@ -6,6 +6,7 @@ import { isPlainObject } from "./is-plain-object";
 import { Literal } from "./Literal";
 export { Code } from "./Code";
 export { Import } from "./Import";
+export { saveFiles, SaveFilesOpts, CodegenFile } from "./saveFiles";
 
 /** A template literal to format code and auto-organize imports. */
 export function code(literals: TemplateStringsArray, ...placeholders: unknown[]): Code {
