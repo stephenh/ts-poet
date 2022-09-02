@@ -4,19 +4,19 @@ describe("code", () => {
   it("basic interpolation", () => {
     const foo = "delicious";
     const a = code`${foo} taco`;
-    expect(a.toString()).toEqual("delicious taco");
+    expect(a.toCodeString()).toEqual("delicious taco");
   });
 
   it("basic interpolation of booleans", () => {
     const foo = false;
     const a = code`${foo} taco`;
-    expect(a.toString()).toEqual("false taco");
+    expect(a.toCodeString()).toEqual("false taco");
   });
 
   it("basic interpolation of null", () => {
     const foo = null;
     const a = code`${foo} taco`;
-    expect(a.toString()).toEqual("null taco");
+    expect(a.toCodeString()).toEqual("null taco");
   });
 
   it("is pretty", () => {
@@ -35,8 +35,10 @@ describe("code", () => {
     const b = code`
       class Foo extends ${imp("Bar@bar")} {}
     `;
-    expect(await b.toString()).toMatchInlineSnapshot(`
-      "class Foo extends Bar {}
+    expect(b.toString()).toMatchInlineSnapshot(`
+      "import { Bar } from \\"bar\\";
+
+      class Foo extends Bar {}
       "
     `);
   });
@@ -45,7 +47,7 @@ describe("code", () => {
     const b = code`
       class Foo extends ${imp("Bar@bar")} {}
     `;
-    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await b.toString()).toMatchInlineSnapshot(`
       "import { Bar } from \\"bar\\";
 
       class Foo extends Bar {}
@@ -59,7 +61,7 @@ describe("code", () => {
     const c = code`
       class Zaz extends ${a} implements ${b} {}
     `;
-    expect(await c.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(c.toString()).toMatchInlineSnapshot(`
       "import { Foo } from \\"foo\\";
       import type { Bar } from \\"foo\\";
 
@@ -74,7 +76,7 @@ describe("code", () => {
     const c = code`
       class Zaz extends ${a} implements ${b} {}
     `;
-    expect(await c.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(c.toString()).toMatchInlineSnapshot(`
       "import { Foo } from \\"foo\\";
 
       class Zaz extends Foo implements Foo {}
@@ -88,7 +90,7 @@ describe("code", () => {
     const c = code`
       class ${def("Foo")} extends ${a} implements ${b} {}
     `;
-    expect(await c.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(c.toString()).toMatchInlineSnapshot(`
       "import { Foo as Foo1 } from \\"foo\\";
 
       class Foo extends Foo1 implements Foo1 {}
@@ -100,7 +102,7 @@ describe("code", () => {
     const b = code`
       class Foo extends ${imp("Bar@bar")} {}
     `;
-    expect(await b.toStringWithImports({ prefix: "/* eslint-disable */" })).toMatchInlineSnapshot(`
+    expect(await b.toString({ prefix: "/* eslint-disable */" })).toMatchInlineSnapshot(`
       "/* eslint-disable */
       import { Bar } from \\"bar\\";
 
@@ -114,7 +116,7 @@ describe("code", () => {
       const a = ${imp("Bar@bar")};
       const b = ${imp("Bar@bar")};
     `;
-    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await b.toString()).toMatchInlineSnapshot(`
       "import { Bar } from \\"bar\\";
 
       const a = Bar;
@@ -128,7 +130,7 @@ describe("code", () => {
       const a = ${imp("Bar*bar")};
       const b = ${imp("Bar*bar")};
     `;
-    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await b.toString()).toMatchInlineSnapshot(`
       "import * as Bar from \\"bar\\";
 
       const a = Bar;
@@ -141,7 +143,7 @@ describe("code", () => {
     const method1 = code`foo(): ${imp("Foo@foo")} { return "foo"; }`;
     const method2 = code`bar(): ${imp("Bar@bar")} { return "bar"; }`;
     const zaz = code`class Zaz { ${method1} ${method2} }`;
-    expect(await zaz.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await zaz.toString()).toMatchInlineSnapshot(`
       "import { Bar } from \\"bar\\";
       import { Foo } from \\"foo\\";
 
@@ -161,7 +163,7 @@ describe("code", () => {
     const method1 = code`foo(): ${imp("Foo@foo")} { return "foo"; }`;
     const method2 = code`bar(): ${imp("Bar@bar")} { return "bar"; }`;
     const zaz = code`class Zaz { ${[method1, method2]} }`;
-    expect(await zaz.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await zaz.toString()).toMatchInlineSnapshot(`
       "import { Bar } from \\"bar\\";
       import { Foo } from \\"foo\\";
 
@@ -179,18 +181,18 @@ describe("code", () => {
 
   it("can nest lists of strings", async () => {
     const zaz = code`${["a", "b"]}`;
-    expect(await zaz.toStringWithImports()).toEqual("ab;\n");
+    expect(await zaz.toString()).toEqual("ab;\n");
   });
 
   it("can nest iterables", async () => {
     const obj = { a: 1, b: 2 };
     const zaz = code`${Object.values(obj).map((i) => i + 1)}`;
-    expect(await zaz.toStringWithImports()).toEqual("23;\n");
+    expect(await zaz.toString()).toEqual("23;\n");
   });
 
   it("can nest lists of imports", async () => {
     const b = code`const types = ${[imp("Foo@foo"), ", ", imp("Bar@bar")]};`;
-    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await b.toString()).toMatchInlineSnapshot(`
       "import { Bar } from \\"bar\\";
       import { Foo } from \\"foo\\";
 
@@ -206,7 +208,7 @@ describe("code", () => {
       c: { d: "a string", e: new Date(0) },
     };
     const zaz = code`const foo = ${obj}`;
-    expect(await zaz.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await zaz.toString()).toMatchInlineSnapshot(`
       "const foo = { \\"a\\": 1, \\"b\\": false, \\"c\\": { \\"d\\": \\"a string\\", \\"e\\": \\"1970-01-01T00:00:00.000Z\\" } };
       "
     `);
@@ -219,7 +221,7 @@ describe("code", () => {
       
       ${helperMethod.ifUsed}
     `;
-    expect(await o.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await o.toString()).toMatchInlineSnapshot(`
       "const a = foo();
 
       function foo() {
@@ -235,7 +237,7 @@ describe("code", () => {
       const a = notFoo();
       ${helperMethod.ifUsed}
     `;
-    expect(await o.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await o.toString()).toMatchInlineSnapshot(`
       "const a = notFoo();
       "
     `);
@@ -250,7 +252,7 @@ describe("code", () => {
       ${a.ifUsed}
       ${b.ifUsed}
     `;
-    expect(await o.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await o.toString()).toMatchInlineSnapshot(`
       "import { Foo } from \\"./foo\\";
 
       const foo = b();
@@ -270,7 +272,7 @@ describe("code", () => {
     const method3 = code`footer(): ${imp("Footer:SelfFooter@footer")} { return "footer"; }`;
     const methods = [method1, method2, method3];
     const zaz = code`class Zaz { ${[methods]} }`;
-    expect(await zaz.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await zaz.toString()).toMatchInlineSnapshot(`
       "import { Bar } from \\"bar\\";
       import { Foo } from \\"foo\\";
       import { Footer as SelfFooter } from \\"footer\\";
@@ -293,7 +295,7 @@ describe("code", () => {
   it("will use relative imports", async () => {
     const method1 = code`foo(): ${imp("Foo@./foo/Foo")} { return "foo"; }`;
     const zaz = code`class Zaz { ${method1} }`;
-    expect(await zaz.toStringWithImports({ path: "./zaz/Zaz" })).toMatchInlineSnapshot(`
+    expect(await zaz.toString({ path: "./zaz/Zaz" })).toMatchInlineSnapshot(`
       "import { Foo } from \\"../foo/Foo\\";
 
       class Zaz {
@@ -307,7 +309,7 @@ describe("code", () => {
 
   it("will skip same file imports", async () => {
     const b = code`const f = ${imp("Foo@./foo")};`;
-    expect(await b.toStringWithImports({ path: "foo.ts" })).toMatchInlineSnapshot(`
+    expect(await b.toString({ path: "foo.ts" })).toMatchInlineSnapshot(`
       "const f = Foo;
       "
     `);
@@ -323,7 +325,7 @@ describe("code", () => {
       const f3 = new ${imp("Foo@./zaz")}();
     `;
     // Then we get a Foo alias.
-    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await b.toString()).toMatchInlineSnapshot(`
       "import { Foo as Foo1 } from \\"./bar\\";
       import { Foo as Foo2 } from \\"./zaz\\";
 
@@ -341,7 +343,7 @@ describe("code", () => {
       const f2 = new ${imp("Foo@./bar")}();
       const f3 = new ${imp("Foo@./bar")}();
     `;
-    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await b.toString()).toMatchInlineSnapshot(`
       "import { Foo as Foo1 } from \\"./bar\\";
       import { Foo } from \\"./foo\\";
       
@@ -363,7 +365,7 @@ describe("code", () => {
       const f2 = new ${imp("Foo@./bar")}();
     `;
     // Then we don't need an import for f1
-    expect(await b.toStringWithImports({ path: "foo.ts" })).toMatchInlineSnapshot(`
+    expect(await b.toString({ path: "foo.ts" })).toMatchInlineSnapshot(`
       "import { Foo as Foo1 } from \\"./bar\\";
 
       const Foo = {};
@@ -375,7 +377,7 @@ describe("code", () => {
 
   it("can make literal arrays", async () => {
     const b = code`const types = ${arrayOf(imp("Foo@foo"), imp("Bar@bar"))};`;
-    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await b.toString()).toMatchInlineSnapshot(`
       "import { Bar } from \\"bar\\";
       import { Foo } from \\"foo\\";
 
@@ -392,7 +394,7 @@ describe("code", () => {
       zaz: { foo: code`3 as ${imp("Zaz@foo")}` },
     };
     const b = code`const map = ${map};`;
-    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await b.toString()).toMatchInlineSnapshot(`
       "import { Foo, Zaz } from \\"foo\\";
 
       const map = { \\"foo\\": 1, \\"bar\\": 2 as Foo, \\"z-z\\": \\"zaz\\", \\"zaz\\": { \\"foo\\": 3 as Zaz } };
@@ -407,7 +409,7 @@ describe("code", () => {
       
       ${helperMethod.ifUsed}
     `;
-    expect(await o.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await o.toString()).toMatchInlineSnapshot(`
       "module.exports = { \\"something\\": { \\"method\\": foo() } };
 
       function foo() {
@@ -419,7 +421,7 @@ describe("code", () => {
 
   it("can make literal strings", async () => {
     const b = code`const str = ${literalOf("\n\r\v\t\b\f\u0000\xea'\"")};`;
-    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await b.toString()).toMatchInlineSnapshot(`
       "const str = \\"\\\\n\\\\r\\\\u000b\\\\t\\\\b\\\\f\\\\u0000ê'\\\\\\"\\";
       "
     `);
@@ -431,7 +433,7 @@ describe("code", () => {
       ${imp("Bar@bar")},
       ${imp("Zaz@zaz")},
     ];`;
-    expect(await b.toStringWithImports({ forceDefaultImport: ["foo", "bar"] })).toMatchInlineSnapshot(`
+    expect(await b.toString({ forceDefaultImport: ["foo", "bar"] })).toMatchInlineSnapshot(`
       "import _m1 from \\"bar\\";
       import _m0 from \\"foo\\";
       import { Zaz } from \\"zaz\\";
@@ -443,7 +445,7 @@ describe("code", () => {
 
   it("can force using the CJS default export with arrays", async () => {
     const b = code`const types = ${arrayOf(imp("Foo@foo"), imp("Bar@bar"), imp("Zaz@zaz"))};`;
-    expect(await b.toStringWithImports({ forceDefaultImport: ["foo", "bar"] })).toMatchInlineSnapshot(`
+    expect(await b.toString({ forceDefaultImport: ["foo", "bar"] })).toMatchInlineSnapshot(`
       "import _m1 from \\"bar\\";
       import _m0 from \\"foo\\";
       import { Zaz } from \\"zaz\\";
@@ -460,7 +462,7 @@ describe("code", () => {
       ${maybeFoo.ifUsed}
       const foo1 = ${maybeFoo};
     `;
-    expect(await b.toStringWithImports({ forceDefaultImport: ["foo"] })).toMatchInlineSnapshot(`
+    expect(await b.toString({ forceDefaultImport: ["foo"] })).toMatchInlineSnapshot(`
       "import _m0 from \\"foo\\";
 
       const foo = _m0.Foo;
@@ -475,7 +477,7 @@ describe("code", () => {
       ${imp("Bar@bar")},
       ${imp("Zaz@zaz")},
     ];`;
-    expect(await b.toStringWithImports({ forceModuleImport: ["foo", "bar"] })).toMatchInlineSnapshot(`
+    expect(await b.toString({ forceModuleImport: ["foo", "bar"] })).toMatchInlineSnapshot(`
       "import * as _m1 from \\"bar\\";
       import * as _m0 from \\"foo\\";
       import { Zaz } from \\"zaz\\";
@@ -487,7 +489,7 @@ describe("code", () => {
 
   it("can force using the CJS module export with arrays", async () => {
     const b = code`const types = ${arrayOf(imp("Foo@foo"), imp("Bar@bar"), imp("Zaz@zaz"))};`;
-    expect(await b.toStringWithImports({ forceModuleImport: ["foo", "bar"] })).toMatchInlineSnapshot(`
+    expect(await b.toString({ forceModuleImport: ["foo", "bar"] })).toMatchInlineSnapshot(`
       "import * as _m1 from \\"bar\\";
       import * as _m0 from \\"foo\\";
       import { Zaz } from \\"zaz\\";
@@ -504,7 +506,7 @@ describe("code", () => {
       ${maybeFoo.ifUsed}
       const foo1 = ${maybeFoo};
     `;
-    expect(await b.toStringWithImports({ forceModuleImport: ["foo"] })).toMatchInlineSnapshot(`
+    expect(await b.toString({ forceModuleImport: ["foo"] })).toMatchInlineSnapshot(`
       "import * as _m0 from \\"foo\\";
 
       const foo = _m0.Foo;
@@ -518,7 +520,7 @@ describe("code", () => {
     chunks.push(code`const a: ${imp("Foo@foo")};`);
     chunks.push(code`const b: ${imp("Bar@bar")};`);
     const b = joinCode(chunks);
-    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await b.toString()).toMatchInlineSnapshot(`
       "import { Bar } from \\"bar\\";
       import { Foo } from \\"foo\\";
 
@@ -541,7 +543,7 @@ describe("code", () => {
       }
     `);
     const b = joinCode(chunks);
-    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await b.toString()).toMatchInlineSnapshot(`
       "if (true) {
         console.log(\\"asdf\\");
       }
@@ -559,7 +561,7 @@ describe("code", () => {
       const c: ${joinCode([], { on: "|" })} = null!;
       const d: ${joinCode([code`D1`, code`D2`, code`D3`, code`D4`], { on: "|" })} = null!;
     `;
-    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await b.toString()).toMatchInlineSnapshot(`
       "
 
             const a: A = null!;
@@ -575,7 +577,7 @@ describe("code", () => {
     params.push(code`a: ${imp("Foo@foo")}`);
     params.push(code`b: string`);
     const b = code`function foo(${joinCode(params, { on: "," })}) { return 1; }`;
-    expect(await b.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(await b.toString()).toMatchInlineSnapshot(`
       "import { Foo } from \\"foo\\";
 
       function foo(a: Foo, b: string) {
@@ -604,7 +606,7 @@ describe("code", () => {
       const d = 3;
     `;
     // Then it is output as a single line
-    expect(await c.toStringWithImports()).toMatchInlineSnapshot(`
+    expect(c.toString()).toMatchInlineSnapshot(`
       "const c = { a: { a: 1 }, b: 2 };
       const d = 3;
       "
@@ -623,7 +625,7 @@ describe("code", () => {
       }
     `.asOneline();
     // When we format it with an overridden printWidth
-    const o = await a.toStringWithImports({ dprintOptions: { lineWidth: 1000 } });
+    const o = await a.toString({ dprintOptions: { lineWidth: 1000 } });
     // Then it was not wrapped
     expect(o).toMatchInlineSnapshot(`
       "const a = { a: \\"abcdefghijklmnopqrstuvwxyz\\", b: \\"abcdefghijklmnopqrstuvwxyz\\", c: \\"abcdefghijklmnopqrstuvwxyz\\", d: \\"abcdefghijklmnopqrstuvwxyz\\" };

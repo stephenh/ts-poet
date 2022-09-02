@@ -27,6 +27,8 @@ export interface ToStringOpts {
   prefix?: string;
   /** dprint config settings. */
   dprintOptions?: DPrintOptions;
+  /** Whether to format the source or not. */
+  format?: boolean;
   /** optional importMappings */
   importMappings?: { [key: string]: string };
 }
@@ -35,42 +37,19 @@ export class Code extends Node {
   // Used by joinCode
   public trim: boolean = false;
   private oneline: boolean = false;
+  // Cache the results of `toString` / `toStringWithImports` since we're immutable. Both of these
+  // are the unformatted version, with the rationale that callers might call `.toString
+  private code: string | undefined;
+  private codeWithImports: string | undefined;
 
   constructor(private literals: TemplateStringsArray, private placeholders: any[]) {
     super();
   }
 
-  /** Returns the code with any necessary import statements prefixed. */
-  toStringWithImports(opts?: ToStringOpts): Promise<string> {
-    const {
-      path = "",
-      forceDefaultImport,
-      forceModuleImport,
-      prefix,
-      dprintOptions = {},
-      importMappings = {},
-    } = opts || {};
-    const ourModulePath = path.replace(/\.[tj]sx?/, "");
-    if (forceDefaultImport || forceModuleImport) {
-      this.deepReplaceNamedImports(forceDefaultImport || [], forceModuleImport || []);
-    }
-    usedConditionals = this.deepConditionalOutput();
-    const imports = this.deepFindImports();
-    const defs = this.deepFindDefs();
-    assignAliasesIfNeeded(defs, imports, ourModulePath);
-    const importPart = emitImports(imports, ourModulePath, importMappings);
-    const bodyPart = this.generateCode();
-    const maybePrefix = prefix ? `${prefix}\n` : "";
-    return Promise.resolve(maybePretty(maybePrefix + importPart + "\n" + bodyPart, dprintOptions));
-  }
-
-  /**
-   * Returns the formatted code, without any imports.
-   *
-   * Note that we don't use `.prettierrc` b/c that requires async I/O to resolve.
-   */
-  toString(): string {
-    return maybePretty(this.generateCode());
+  /** Returns the formatted code, with imports. */
+  toString(opts: ToStringOpts = {}): string {
+    this.codeWithImports ??= this.generateCodeWithImports(opts);
+    return opts.format === false ? this.codeWithImports : maybePretty(this.codeWithImports, opts.dprintOptions);
   }
 
   asOneline(): Code {
@@ -82,8 +61,9 @@ export class Code extends Node {
     return this.placeholders;
   }
 
+  /** Returns the unformatted, import-less code. */
   toCodeString(): string {
-    return this.generateCode();
+    return (this.code ??= this.generateCode());
   }
 
   private deepFindImports(): Import[] {
@@ -193,6 +173,22 @@ export class Code extends Node {
       result = result.replace(/\n/g, "");
     }
     return result;
+  }
+
+  private generateCodeWithImports(opts: ToStringOpts): string {
+    const { path = "", forceDefaultImport, forceModuleImport, prefix, importMappings = {} } = opts || {};
+    const ourModulePath = path.replace(/\.[tj]sx?/, "");
+    if (forceDefaultImport || forceModuleImport) {
+      this.deepReplaceNamedImports(forceDefaultImport || [], forceModuleImport || []);
+    }
+    usedConditionals = this.deepConditionalOutput();
+    const imports = this.deepFindImports();
+    const defs = this.deepFindDefs();
+    assignAliasesIfNeeded(defs, imports, ourModulePath);
+    const importPart = emitImports(imports, ourModulePath, importMappings);
+    const bodyPart = this.generateCode();
+    const maybePrefix = prefix ? `${prefix}\n` : "";
+    return maybePrefix + importPart + "\n" + bodyPart;
   }
 }
 
