@@ -62,61 +62,36 @@ export class Code extends Node {
     return (this.code ??= this.generateCode());
   }
 
-  private deepFindImports(): Import[] {
-    const imports: Import[] = [];
-    let todo: unknown[] = [this];
-    while (todo.length > 0) {
-      const placeholder = todo.shift();
-      if (placeholder instanceof Import) {
-        imports.push(placeholder);
-      } else if (placeholder instanceof Node) {
-        todo = [...todo, ...placeholder.childNodes];
-      } else if (placeholder instanceof MaybeOutput) {
-        if (usedConditionals.includes(placeholder.parent)) {
-          todo = [...todo, placeholder.code];
-        }
-      } else if (Array.isArray(placeholder)) {
-        todo = [...todo, ...placeholder];
-      }
-    }
-    return imports;
-  }
-
-  private deepFindDefs(): Def[] {
-    const defs: Def[] = [];
-    let todo: unknown[] = [this];
-    while (todo.length > 0) {
-      const placeholder = todo.shift();
-      if (placeholder instanceof Def) {
-        defs.push(placeholder);
-      } else if (placeholder instanceof Node) {
-        todo = [...todo, ...placeholder.childNodes];
-      } else if (placeholder instanceof MaybeOutput) {
-        if (usedConditionals.includes(placeholder.parent)) {
-          todo = [...todo, placeholder.code];
-        }
-      } else if (Array.isArray(placeholder)) {
-        todo = [...todo, ...placeholder];
-      }
-    }
-    return defs;
-  }
-
-  private deepConditionalOutput(): ConditionalOutput[] {
+  private deepFindAll(): [ConditionalOutput[], Import[], Def[]] {
     const used: ConditionalOutput[] = [];
-    let todo: unknown[] = [this];
+    const imports: Import[] = [];
+    const defs: Def[] = [];
+    const todo: unknown[] = [this];
+
     while (todo.length > 0) {
       const placeholder = todo.shift();
+
+      if (placeholder instanceof Node) {
+        todo.push(...placeholder.childNodes);
+      } else if (Array.isArray(placeholder)) {
+        todo.push(...placeholder);
+      }
+
       if (placeholder instanceof ConditionalOutput) {
         used.push(placeholder);
-        todo = [...todo, ...placeholder.declarationSiteCode.childNodes];
-      } else if (placeholder instanceof Node) {
-        todo = [...todo, ...placeholder.childNodes];
-      } else if (Array.isArray(placeholder)) {
-        todo = [...todo, ...placeholder];
+        todo.push(...placeholder.declarationSiteCode.childNodes);
+      } else if (placeholder instanceof Import) {
+        imports.push(placeholder);
+      } else if (placeholder instanceof Def) {
+        defs.push(placeholder);
+      } else if (placeholder instanceof MaybeOutput) {
+        if (usedConditionals.includes(placeholder.parent)) {
+          todo.push(placeholder.code);
+        }
       }
     }
-    return used;
+
+    return [used, imports, defs];
   }
 
   private deepReplaceNamedImports(forceDefaultImport: string[], forceModuleImport: string[]): void {
@@ -131,7 +106,7 @@ export class Code extends Node {
       return name;
     }
 
-    let todo: unknown[] = [this];
+    const todo: unknown[] = [this];
     while (todo.length > 0) {
       const placeholder = todo.shift();
       if (placeholder instanceof Node) {
@@ -146,9 +121,9 @@ export class Code extends Node {
             array[i] = code`${new ImportsAll(name, maybeImp.source)}.${maybeImp.sourceSymbol || maybeImp.symbol}`;
           }
         }
-        todo = [...todo, ...placeholder.childNodes];
+        todo.push(...placeholder.childNodes);
       } else if (Array.isArray(placeholder)) {
-        todo = [...todo, ...placeholder];
+        todo.push(...placeholder);
       }
     }
   }
@@ -177,9 +152,8 @@ export class Code extends Node {
     if (forceDefaultImport || forceModuleImport) {
       this.deepReplaceNamedImports(forceDefaultImport || [], forceModuleImport || []);
     }
-    usedConditionals = this.deepConditionalOutput();
-    const imports = this.deepFindImports();
-    const defs = this.deepFindDefs();
+    const [used, imports, defs] = this.deepFindAll();
+    usedConditionals = used;
     assignAliasesIfNeeded(defs, imports, ourModulePath);
     const importPart = emitImports(imports, ourModulePath, importMappings);
     const bodyPart = this.generateCode();
@@ -194,7 +168,7 @@ export function deepGenerate(object: unknown): string {
   while (todo.length > 0) {
     const current = todo.shift();
     if (Array.isArray(current)) {
-      todo = [...todo, ...current];
+      todo.push(...current);
     } else if (current instanceof Node) {
       result += current.toCodeString();
     } else if (current instanceof MaybeOutput) {
