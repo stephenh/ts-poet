@@ -1,11 +1,11 @@
 import { Node } from "./Node";
-import { MaybeOutput } from "./ConditionalOutput";
+import { ConditionalOutput, MaybeOutput } from "./ConditionalOutput";
 import { isPlainObject } from "./is-plain-object";
 
 type Token = string | Node | MaybeOutput;
 
 /**
- * A literal source representation of the provided object
+ * A literal source representation of the provided object.
  */
 export class Literal extends Node {
   private readonly tokens: Token[];
@@ -19,11 +19,11 @@ export class Literal extends Node {
     return this.tokens;
   }
 
-  toCodeString(): string {
+  toCodeString(used: ConditionalOutput[]): string {
     return this.tokens
       .map((node) => {
         if (typeof node === "string") return node;
-        if (node instanceof Node) return node.toCodeString();
+        if (node instanceof Node) return node.toCodeString(used);
         return "";
       })
       .join(" ");
