@@ -7,11 +7,7 @@ import dprint from "dprint-node";
 
 export type DPrintOptions = Exclude<Parameters<typeof dprint.format>[2], never>;
 
-// We only have a single top-level Code.toStringWithImports running at a time,
-// so use a global var to capture this contextual state.
-let usedConditionals: ConditionalOutput[] = [];
-
-/** Options for `toStringWithImports`, i.e. for the top-level, per-file output. */
+/** Options for `toString`, i.e. for the top-level, per-file output. */
 export interface ToStringOpts {
   /** The intended file name of this code; used to know whether we can skip import statements that would be from our own file. */
   path?: string;
@@ -33,8 +29,7 @@ export class Code extends Node {
   // Used by joinCode
   public trim: boolean = false;
   private oneline: boolean = false;
-  // Cache the results of `toString` / `toStringWithImports` since we're immutable. Both of these
-  // are the unformatted version, with the rationale that callers might call `.toString
+  // Cache the unformatted results of `toString` since we're immutable.
   private code: string | undefined;
   private codeWithImports: string | undefined;
 
@@ -57,9 +52,13 @@ export class Code extends Node {
     return this.placeholders;
   }
 
-  /** Returns the unformatted, import-less code. */
-  toCodeString(): string {
-    return (this.code ??= this.generateCode());
+  /**
+   * Returns the unformatted, import-less code.
+   *
+   * This is an internal API, see `toString` for the public API.
+   */
+  toCodeString(used: ConditionalOutput[]): string {
+    return (this.code ??= this.generateCode(used));
   }
 
   private deepFindAll(): [ConditionalOutput[], Import[], Def[]] {
@@ -86,7 +85,7 @@ export class Code extends Node {
       } else if (placeholder instanceof Def) {
         defs.push(placeholder);
       } else if (placeholder instanceof MaybeOutput) {
-        if (usedConditionals.includes(placeholder.parent)) {
+        if (used.includes(placeholder.parent)) {
           todo.push(placeholder.code);
         }
       }
@@ -131,12 +130,12 @@ export class Code extends Node {
     }
   }
 
-  private generateCode(): string {
+  private generateCode(used: ConditionalOutput[]): string {
     const { literals, placeholders } = this;
     let result = "";
     // interleave the literals with the placeholders
     for (let i = 0; i < placeholders.length; i++) {
-      result += literals[i] + deepGenerate(placeholders[i]);
+      result += literals[i] + deepGenerate(used, placeholders[i]);
     }
     // add the last literal
     result += literals[literals.length - 1];
@@ -156,16 +155,15 @@ export class Code extends Node {
       this.deepReplaceNamedImports(forceDefaultImport || [], forceModuleImport || []);
     }
     const [used, imports, defs] = this.deepFindAll();
-    usedConditionals = used;
     assignAliasesIfNeeded(defs, imports, ourModulePath);
     const importPart = emitImports(imports, ourModulePath, importMappings);
-    const bodyPart = this.generateCode();
+    const bodyPart = this.generateCode(used);
     const maybePrefix = prefix ? `${prefix}\n` : "";
     return maybePrefix + importPart + "\n" + bodyPart;
   }
 }
 
-export function deepGenerate(object: unknown): string {
+export function deepGenerate(used: ConditionalOutput[], object: unknown): string {
   let result = "";
   let todo: unknown[] = [object];
   let i = 0;
@@ -174,10 +172,10 @@ export function deepGenerate(object: unknown): string {
     if (Array.isArray(current)) {
       todo.push(...current);
     } else if (current instanceof Node) {
-      result += current.toCodeString();
+      result += current.toCodeString(used);
     } else if (current instanceof MaybeOutput) {
-      if (usedConditionals.includes(current.parent)) {
-        result += current.code.toCodeString();
+      if (used.includes(current.parent)) {
+        result += current.code.toCodeString(used);
       }
     } else if (current === null) {
       result += "null";

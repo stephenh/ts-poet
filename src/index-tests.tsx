@@ -4,19 +4,19 @@ describe("code", () => {
   it("basic interpolation", () => {
     const foo = "delicious";
     const a = code`${foo} taco`;
-    expect(a.toCodeString()).toEqual("delicious taco");
+    expect(a.toCodeString([])).toEqual("delicious taco");
   });
 
   it("basic interpolation of booleans", () => {
     const foo = false;
     const a = code`${foo} taco`;
-    expect(a.toCodeString()).toEqual("false taco");
+    expect(a.toCodeString([])).toEqual("false taco");
   });
 
   it("basic interpolation of null", () => {
     const foo = null;
     const a = code`${foo} taco`;
-    expect(a.toCodeString()).toEqual("null taco");
+    expect(a.toCodeString([])).toEqual("null taco");
   });
 
   it("is pretty", () => {
