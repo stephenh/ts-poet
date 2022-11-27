@@ -67,9 +67,10 @@ export class Code extends Node {
     const imports: Import[] = [];
     const defs: Def[] = [];
     const todo: unknown[] = [this];
+    let i = 0;
 
-    while (todo.length > 0) {
-      const placeholder = todo.shift();
+    while (i < todo.length) {
+      const placeholder = todo[i++];
 
       if (placeholder instanceof Node) {
         todo.push(...placeholder.childNodes);
@@ -107,18 +108,20 @@ export class Code extends Node {
     }
 
     const todo: unknown[] = [this];
-    while (todo.length > 0) {
-      const placeholder = todo.shift();
+    let i = 0;
+
+    while (i < todo.length) {
+      const placeholder = todo[i++];
       if (placeholder instanceof Node) {
         const array = placeholder.childNodes;
-        for (let i = 0; i < array.length; i++) {
-          const maybeImp = array[i]!;
+        for (let j = 0; j < array.length; j++) {
+          const maybeImp = array[j]!;
           if (maybeImp instanceof ImportsName && forceDefaultImport.includes(maybeImp.source)) {
             const name = getName(maybeImp.source);
-            array[i] = code`${new ImportsDefault(name, maybeImp.source)}.${maybeImp.sourceSymbol || maybeImp.symbol}`;
+            array[j] = code`${new ImportsDefault(name, maybeImp.source)}.${maybeImp.sourceSymbol || maybeImp.symbol}`;
           } else if (maybeImp instanceof ImportsName && forceModuleImport.includes(maybeImp.source)) {
             const name = getName(maybeImp.source);
-            array[i] = code`${new ImportsAll(name, maybeImp.source)}.${maybeImp.sourceSymbol || maybeImp.symbol}`;
+            array[j] = code`${new ImportsAll(name, maybeImp.source)}.${maybeImp.sourceSymbol || maybeImp.symbol}`;
           }
         }
         todo.push(...placeholder.childNodes);
@@ -165,8 +168,9 @@ export class Code extends Node {
 export function deepGenerate(object: unknown): string {
   let result = "";
   let todo: unknown[] = [object];
-  while (todo.length > 0) {
-    const current = todo.shift();
+  let i = 0;
+  while (i < todo.length) {
+    const current = todo[i++];
     if (Array.isArray(current)) {
       todo.push(...current);
     } else if (current instanceof Node) {
