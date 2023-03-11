@@ -121,6 +121,9 @@ export class Code extends Node {
           } else if (maybeImp instanceof ImportsName && forceModuleImport.includes(maybeImp.source)) {
             const name = getName(maybeImp.source);
             array[j] = code`${new ImportsAll(name, maybeImp.source)}.${maybeImp.sourceSymbol || maybeImp.symbol}`;
+          } else if (maybeImp instanceof ImportsDefault && forceModuleImport.includes(maybeImp.source)) {
+            // Change `import DataLoader from "dataloader"` to `import * as DataLoader from "dataloader"`
+            array[j] = new ImportsAll(maybeImp.symbol, maybeImp.source);
           }
         }
         todo.push(...placeholder.childNodes);
