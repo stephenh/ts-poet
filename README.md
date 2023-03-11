@@ -58,15 +58,17 @@ I.e. the primary value provided by ts-poet is:
 
 1. "Auto import" only actually-used symbols
 
-  I.e. if you use `imp` to define the modules/imports you need in your generated code, ts-poet will create the import stanza at the top of the file.
+   I.e. if you use `imp` to define the modules/imports you need in your generated code, ts-poet will create the import stanza at the top of the file.
 
-  This can seem fairly minor, but it facilitates decomposition of your code generation code, so that you can have multiple levels of helper methods/etc. that can return `code` template literals that embed both the code itself as well as the import types.
+   This can seem minor, but it facilitates decomposition of your code generation code, so that you can have multiple levels of helper methods/etc. that can return `code` template literals that embed both the code itself and the necessary type imports.
   
-   And when the final file is generated, ts-poet will collect and emit the necessary imports.
+    And when the final file is generated, ts-poet will collect and emit the necessary imports.
 
 2. Includes any other conditional output (see later), as/if needed.
 
-3. Formats the output with prettier (using your local `.prettierrc` if it exists)
+3. Formats the output with [dprint-node](https://github.com/devongovett/dprint-node)
+
+   (ts-poet originally used prettier, but prettier is dramatically slower than dprint-node, and had become the bottleneck in several projects' code generation steps. So now we use dprint-node configured to generate "prettier-ish" output.)
 
 Import Specs
 ============
@@ -149,6 +151,40 @@ If you want to add a literal value, you can use `literalOf` and `arrayOf`:
 | `let a = ${arrayOf(1, 2, 3)}`     | `let a = [1, 2, 3];`      |
 | `let a = ${{foo: 'bar'}}`         | `let a = { foo: 'bar' };` |
 | `` let a = ${{foo: code`bar`}} `` | `let a = { foo: bar };`   |
+
+# esModuleInterop Support
+
+Unfortunately some dependencies need different imports based on your project's `esModuleInterop` setting.
+
+For example, with protobufjs, the `Reader` symbol is imported differently:
+
+```typescript
+// With esModuleInterop: true, need to use default import
+// import m1 from "protobufjs"
+// let r1: m1.Reader = ...
+const r1 = imp("Reader@protobufjs")
+
+// With esModuleInterop: false, need to use module star import
+// import * as m1 from "protobufjs"
+// let r1: m1.Reader = ...
+const r2 = imp("Reader@protobufjs")
+```
+
+For these scenarios, you can use `forceDefaultImport` or `forceModuleImport`:
+
+```ts
+const Reader = imp("Reader@protobufjs")
+const c = code`let r1: ${Reader} = ...`
+const esModuleInterop = fromYourConfig();
+console.log(c.toString(
+  esModuleInterop
+    ? { forceDefaultImport: ["protobufjs"] }
+    : { forceModuleImport: ["protobufjs"] }
+));
+```
+
+This is most useful for frameworks that generate code, and have to support downstream projects that might have either `esModuleInterop` setting.
+
 
 History
 =======
