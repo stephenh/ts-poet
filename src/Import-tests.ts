@@ -67,6 +67,16 @@ describe("Import", () => {
     expect(emit(sym)).toMatchInlineSnapshot(`"import { SomeOtherSymbolDepth } from 'rxjs/Observable';"`);
   });
 
+  it("parsing named import: exported symbol explicit, source is implied namespaced module", () => {
+    const parsed = Import.from("SomeOtherSymbolDepth@@lexical/react");
+    expect(parsed).toBeInstanceOf(ImportsName);
+
+    const sym = parsed as ImportsName;
+    expect(sym.symbol).toEqual("SomeOtherSymbolDepth");
+    expect(sym.source).toEqual("@lexical/react");
+    expect(emit(sym)).toMatchInlineSnapshot(`"import { SomeOtherSymbolDepth } from '@lexical/react';"`);
+  });
+
   it("parsing named import: type import", () => {
     const parsed = Import.from("t:Observable@rxjs/Observable");
     expect(parsed).toBeInstanceOf(ImportsName);
