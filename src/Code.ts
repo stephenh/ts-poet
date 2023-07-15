@@ -15,6 +15,8 @@ export interface ToStringOpts {
   forceDefaultImport?: string[];
   /** Modules to use a CommonJS-in-ESM destructure fix for. */
   forceModuleImport?: string[];
+  /** Modules to use the TypeScript-specific "import via require" fix. */
+  forceRequireImport?: string[];
   /** A top-of-file prefix, i.e. eslint disable. */
   prefix?: string;
   /** dprint config settings. */
@@ -152,14 +154,21 @@ export class Code extends Node {
   }
 
   private generateCodeWithImports(opts: ToStringOpts): string {
-    const { path = "", forceDefaultImport, forceModuleImport, prefix, importMappings = {} } = opts || {};
+    const {
+      path = "",
+      forceDefaultImport,
+      forceModuleImport,
+      forceRequireImport = [],
+      prefix,
+      importMappings = {},
+    } = opts || {};
     const ourModulePath = path.replace(/\.[tj]sx?/, "");
     if (forceDefaultImport || forceModuleImport) {
       this.deepReplaceNamedImports(forceDefaultImport || [], forceModuleImport || []);
     }
     const [used, imports, defs] = this.deepFindAll();
     assignAliasesIfNeeded(defs, imports, ourModulePath);
-    const importPart = emitImports(imports, ourModulePath, importMappings);
+    const importPart = emitImports(imports, ourModulePath, importMappings, forceRequireImport);
     const bodyPart = this.generateCode(used);
     const maybePrefix = prefix ? `${prefix}\n` : "";
     return maybePrefix + importPart + "\n" + bodyPart;

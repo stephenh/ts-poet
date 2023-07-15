@@ -531,6 +531,18 @@ describe("code", () => {
     `);
   });
 
+  it("can force using the CJS require import for default exports", () => {
+    const b = code`const types = [
+      ${imp("Long=long")},
+    ];`;
+    expect(b.toString({ forceRequireImport: ["long"] })).toMatchInlineSnapshot(`
+      "import Long = require(\\"long\\");
+
+      const types = [Long];
+      "
+    `);
+  });
+
   it("can join chunks", () => {
     const chunks: Code[] = [];
     chunks.push(code`const a: ${imp("Foo@foo")};`);

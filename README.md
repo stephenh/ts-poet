@@ -185,6 +185,13 @@ console.log(c.toString(
 
 This is most useful for frameworks that generate code, and have to support downstream projects that might have either `esModuleInterop` setting.
 
+Similarly, you can force the [import require](https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require) syntax:
+
+```ts
+const Long = imp("Long=long")
+console.log(c.toString({ forceRequireImport: ["long"] }));
+// outputs import Long = require("long")
+```
 
 History
 =======

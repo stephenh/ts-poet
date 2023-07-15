@@ -226,7 +226,7 @@ export class ImportsName extends Imported {
   /**
    * @param symbol
    * @param source
-   * @param sourceSymbol is the optional original symbol, i.e if we're renaming the symbol it is `Engine`
+   * @param sourceSymbol is the optional original symbol, i.e. if we're renaming the symbol it is `Engine`
    * @param typeImport whether this is an `import type` import
    */
   constructor(symbol: string, source: string, public sourceSymbol?: string, public typeImport?: boolean) {
@@ -289,7 +289,8 @@ export class SideEffect extends Imported {
 export function emitImports(
   imports: Import[],
   ourModulePath: string,
-  importMappings: { [key: string]: string }
+  importMappings: { [key: string]: string },
+  forceRequireImports: string[]
 ): string {
   if (imports.length == 0) {
     return "";
@@ -334,8 +335,10 @@ export function emitImports(
     const allNames = filterInstances(imports, ImportsName);
     const names = unique(allNames.filter((i) => !i.typeImport).map((it) => it.toImportPiece()));
     const def = unique(filterInstances(imports, ImportsDefault).map((it) => it.symbol));
-    // Output named imports as a group
-    if (names.length > 0 || def.length > 0) {
+    if (forceRequireImports.includes(modulePath) && def.length > 0) {
+      result += `import ${def[0]} = require('${importPath}');\n`;
+    } else if (names.length > 0 || def.length > 0) {
+      // Output named imports as a group
       const namesPart = names.length > 0 ? [`{ ${names.join(", ")} }`] : [];
       const defPart = def.length > 0 ? [def[0]] : [];
       result += `import ${[...defPart, ...namesPart].join(", ")} from '${importPath}';\n`;

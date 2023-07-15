@@ -198,7 +198,7 @@ describe("Import", () => {
     );
   });
 
-  function emit(spec: Import, importMappings = {}): string {
-    return emitImports([spec], "", importMappings).trim();
+  function emit(spec: Import, importMappings = {}, forceRequireImports = []): string {
+    return emitImports([spec], "", importMappings, forceRequireImports).trim();
   }
 });
