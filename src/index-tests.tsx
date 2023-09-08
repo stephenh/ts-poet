@@ -36,7 +36,7 @@ describe("code", () => {
       class Foo extends ${imp("Bar@bar")} {}
     `;
     expect(b.toString()).toMatchInlineSnapshot(`
-      "import { Bar } from \\"bar\\";
+      "import { Bar } from "bar";
 
       class Foo extends Bar {}
       "
@@ -48,7 +48,7 @@ describe("code", () => {
       class Foo extends ${imp("Bar@bar")} {}
     `;
     expect(b.toString()).toMatchInlineSnapshot(`
-      "import { Bar } from \\"bar\\";
+      "import { Bar } from "bar";
 
       class Foo extends Bar {}
       "
@@ -62,8 +62,8 @@ describe("code", () => {
       class Zaz extends ${a} implements ${b} {}
     `;
     expect(c.toString()).toMatchInlineSnapshot(`
-      "import { Foo } from \\"foo\\";
-      import type { Bar } from \\"foo\\";
+      "import { Foo } from "foo";
+      import type { Bar } from "foo";
 
       class Zaz extends Foo implements Bar {}
       "
@@ -77,7 +77,7 @@ describe("code", () => {
       class Zaz extends ${a} implements ${b} {}
     `;
     expect(c.toString()).toMatchInlineSnapshot(`
-      "import { Foo } from \\"foo\\";
+      "import { Foo } from "foo";
 
       class Zaz extends Foo implements Foo {}
       "
@@ -91,7 +91,7 @@ describe("code", () => {
       class ${def("Foo")} extends ${a} implements ${b} {}
     `;
     expect(c.toString()).toMatchInlineSnapshot(`
-      "import { Foo as Foo1 } from \\"foo\\";
+      "import { Foo as Foo1 } from "foo";
 
       class Foo extends Foo1 implements Foo1 {}
       "
@@ -104,7 +104,7 @@ describe("code", () => {
     `;
     expect(b.toString({ prefix: "/* eslint-disable */" })).toMatchInlineSnapshot(`
       "/* eslint-disable */
-      import { Bar } from \\"bar\\";
+      import { Bar } from "bar";
 
       class Foo extends Bar {}
       "
@@ -117,7 +117,7 @@ describe("code", () => {
       const b = ${imp("Bar@bar")};
     `;
     expect(b.toString()).toMatchInlineSnapshot(`
-      "import { Bar } from \\"bar\\";
+      "import { Bar } from "bar";
 
       const a = Bar;
       const b = Bar;
@@ -131,7 +131,7 @@ describe("code", () => {
       const b = ${imp("Bar*bar")};
     `;
     expect(b.toString()).toMatchInlineSnapshot(`
-      "import * as Bar from \\"bar\\";
+      "import * as Bar from "bar";
 
       const a = Bar;
       const b = Bar;
@@ -144,15 +144,15 @@ describe("code", () => {
     const method2 = code`bar(): ${imp("Bar@bar")} { return "bar"; }`;
     const zaz = code`class Zaz { ${method1} ${method2} }`;
     expect(zaz.toString()).toMatchInlineSnapshot(`
-      "import { Bar } from \\"bar\\";
-      import { Foo } from \\"foo\\";
+      "import { Bar } from "bar";
+      import { Foo } from "foo";
 
       class Zaz {
         foo(): Foo {
-          return \\"foo\\";
+          return "foo";
         }
         bar(): Bar {
-          return \\"bar\\";
+          return "bar";
         }
       }
       "
@@ -164,15 +164,15 @@ describe("code", () => {
     const method2 = code`bar(): ${imp("Bar@bar")} { return "bar"; }`;
     const zaz = code`class Zaz { ${[method1, method2]} }`;
     expect(zaz.toString()).toMatchInlineSnapshot(`
-      "import { Bar } from \\"bar\\";
-      import { Foo } from \\"foo\\";
+      "import { Bar } from "bar";
+      import { Foo } from "foo";
 
       class Zaz {
         foo(): Foo {
-          return \\"foo\\";
+          return "foo";
         }
         bar(): Bar {
-          return \\"bar\\";
+          return "bar";
         }
       }
       "
@@ -193,8 +193,8 @@ describe("code", () => {
   it("can nest lists of imports", () => {
     const b = code`const types = ${[imp("Foo@foo"), ", ", imp("Bar@bar")]};`;
     expect(b.toString()).toMatchInlineSnapshot(`
-      "import { Bar } from \\"bar\\";
-      import { Foo } from \\"foo\\";
+      "import { Bar } from "bar";
+      import { Foo } from "foo";
 
       const types = Foo, Bar;
       "
@@ -209,7 +209,7 @@ describe("code", () => {
     };
     const zaz = code`const foo = ${obj}`;
     expect(zaz.toString()).toMatchInlineSnapshot(`
-      "const foo = { \\"a\\": 1, \\"b\\": false, \\"c\\": { \\"d\\": \\"a string\\", \\"e\\": \\"1970-01-01T00:00:00.000Z\\" } };
+      "const foo = { "a": 1, "b": false, "c": { "d": "a string", "e": "1970-01-01T00:00:00.000Z" } };
       "
     `);
   });
@@ -253,7 +253,7 @@ describe("code", () => {
       ${b.ifUsed}
     `;
     expect(o.toString()).toMatchInlineSnapshot(`
-      "import { Foo } from \\"./foo\\";
+      "import { Foo } from "./foo";
 
       const foo = b();
       function a(): Foo {
@@ -273,19 +273,19 @@ describe("code", () => {
     const methods = [method1, method2, method3];
     const zaz = code`class Zaz { ${[methods]} }`;
     expect(zaz.toString()).toMatchInlineSnapshot(`
-      "import { Bar } from \\"bar\\";
-      import { Foo } from \\"foo\\";
-      import { Footer as SelfFooter } from \\"footer\\";
+      "import { Bar } from "bar";
+      import { Foo } from "foo";
+      import { Footer as SelfFooter } from "footer";
 
       class Zaz {
         foo(): Foo {
-          return \\"foo\\";
+          return "foo";
         }
         bar(): Bar {
-          return \\"bar\\";
+          return "bar";
         }
         footer(): SelfFooter {
-          return \\"footer\\";
+          return "footer";
         }
       }
       "
@@ -296,11 +296,11 @@ describe("code", () => {
     const method1 = code`foo(): ${imp("Foo@./foo/Foo")} { return "foo"; }`;
     const zaz = code`class Zaz { ${method1} }`;
     expect(zaz.toString({ path: "./zaz/Zaz" })).toMatchInlineSnapshot(`
-      "import { Foo } from \\"../foo/Foo\\";
+      "import { Foo } from "../foo/Foo";
 
       class Zaz {
         foo(): Foo {
-          return \\"foo\\";
+          return "foo";
         }
       }
       "
@@ -326,8 +326,8 @@ describe("code", () => {
     `;
     // Then we get a Foo alias.
     expect(b.toString()).toMatchInlineSnapshot(`
-      "import { Foo as Foo1 } from \\"./bar\\";
-      import { Foo as Foo2 } from \\"./zaz\\";
+      "import { Foo as Foo1 } from "./bar";
+      import { Foo as Foo2 } from "./zaz";
 
       const Foo = {};
       const f1 = new Foo1();
@@ -344,9 +344,9 @@ describe("code", () => {
       const f3 = new ${imp("Foo@./bar")}();
     `;
     expect(b.toString()).toMatchInlineSnapshot(`
-      "import { Foo as Foo1 } from \\"./bar\\";
-      import { Foo } from \\"./foo\\";
-      
+      "import { Foo as Foo1 } from "./bar";
+      import { Foo } from "./foo";
+
       const f1 = new Foo();
       const f2 = new Foo1();
       const f3 = new Foo1();
@@ -366,7 +366,7 @@ describe("code", () => {
     `;
     // Then we don't need an import for f1
     expect(b.toString({ path: "foo.ts" })).toMatchInlineSnapshot(`
-      "import { Foo as Foo1 } from \\"./bar\\";
+      "import { Foo as Foo1 } from "./bar";
 
       const Foo = {};
       const f1 = new Foo();
@@ -378,8 +378,8 @@ describe("code", () => {
   it("can make literal arrays", () => {
     const b = code`const types = ${arrayOf(imp("Foo@foo"), imp("Bar@bar"))};`;
     expect(b.toString()).toMatchInlineSnapshot(`
-      "import { Bar } from \\"bar\\";
-      import { Foo } from \\"foo\\";
+      "import { Bar } from "bar";
+      import { Foo } from "foo";
 
       const types = [Foo, Bar];
       "
@@ -395,9 +395,9 @@ describe("code", () => {
     };
     const b = code`const map = ${map};`;
     expect(b.toString()).toMatchInlineSnapshot(`
-      "import { Foo, Zaz } from \\"foo\\";
+      "import { Foo, Zaz } from "foo";
 
-      const map = { \\"foo\\": 1, \\"bar\\": 2 as Foo, \\"z-z\\": \\"zaz\\", \\"zaz\\": { \\"foo\\": 3 as Zaz } };
+      const map = { "foo": 1, "bar": 2 as Foo, "z-z": "zaz", "zaz": { "foo": 3 as Zaz } };
       "
     `);
   });
@@ -410,7 +410,7 @@ describe("code", () => {
       ${helperMethod.ifUsed}
     `;
     expect(o.toString()).toMatchInlineSnapshot(`
-      "module.exports = { \\"something\\": { \\"method\\": foo() } };
+      "module.exports = { "something": { "method": foo() } };
 
       function foo() {
         return 1;
@@ -422,7 +422,7 @@ describe("code", () => {
   it("can make literal strings", () => {
     const b = code`const str = ${literalOf("\n\r\v\t\b\f\u0000\xea'\"")};`;
     expect(b.toString()).toMatchInlineSnapshot(`
-      "const str = \\"\\\\n\\\\r\\\\u000b\\\\t\\\\b\\\\f\\\\u0000ê'\\\\\\"\\";
+      "const str = "\\n\\r\\u000b\\t\\b\\f\\u0000ê'\\"";
       "
     `);
   });
@@ -434,9 +434,9 @@ describe("code", () => {
       ${imp("Zaz@zaz")},
     ];`;
     expect(b.toString({ forceDefaultImport: ["foo", "bar"] })).toMatchInlineSnapshot(`
-      "import _m1 from \\"bar\\";
-      import _m0 from \\"foo\\";
-      import { Zaz } from \\"zaz\\";
+      "import _m1 from "bar";
+      import _m0 from "foo";
+      import { Zaz } from "zaz";
 
       const types = [_m0.Foo, _m1.Bar, Zaz];
       "
@@ -446,9 +446,9 @@ describe("code", () => {
   it("can force using the CJS default export with arrays", () => {
     const b = code`const types = ${arrayOf(imp("Foo@foo"), imp("Bar@bar"), imp("Zaz@zaz"))};`;
     expect(b.toString({ forceDefaultImport: ["foo", "bar"] })).toMatchInlineSnapshot(`
-      "import _m1 from \\"bar\\";
-      import _m0 from \\"foo\\";
-      import { Zaz } from \\"zaz\\";
+      "import _m1 from "bar";
+      import _m0 from "foo";
+      import { Zaz } from "zaz";
 
       const types = [_m0.Foo, _m1.Bar, Zaz];
       "
@@ -463,7 +463,7 @@ describe("code", () => {
       const foo1 = ${maybeFoo};
     `;
     expect(b.toString({ forceDefaultImport: ["foo"] })).toMatchInlineSnapshot(`
-      "import _m0 from \\"foo\\";
+      "import _m0 from "foo";
 
       const foo = _m0.Foo;
       const foo1 = foo;
@@ -478,9 +478,9 @@ describe("code", () => {
       ${imp("Zaz@zaz")},
     ];`;
     expect(b.toString({ forceModuleImport: ["foo", "bar"] })).toMatchInlineSnapshot(`
-      "import * as _m1 from \\"bar\\";
-      import * as _m0 from \\"foo\\";
-      import { Zaz } from \\"zaz\\";
+      "import * as _m1 from "bar";
+      import * as _m0 from "foo";
+      import { Zaz } from "zaz";
 
       const types = [_m0.Foo, _m1.Bar, Zaz];
       "
@@ -490,9 +490,9 @@ describe("code", () => {
   it("can force using the CJS module export with arrays", () => {
     const b = code`const types = ${arrayOf(imp("Foo@foo"), imp("Bar@bar"), imp("Zaz@zaz"))};`;
     expect(b.toString({ forceModuleImport: ["foo", "bar"] })).toMatchInlineSnapshot(`
-      "import * as _m1 from \\"bar\\";
-      import * as _m0 from \\"foo\\";
-      import { Zaz } from \\"zaz\\";
+      "import * as _m1 from "bar";
+      import * as _m0 from "foo";
+      import { Zaz } from "zaz";
 
       const types = [_m0.Foo, _m1.Bar, Zaz];
       "
@@ -507,7 +507,7 @@ describe("code", () => {
       const foo1 = ${maybeFoo};
     `;
     expect(b.toString({ forceModuleImport: ["foo"] })).toMatchInlineSnapshot(`
-      "import * as _m0 from \\"foo\\";
+      "import * as _m0 from "foo";
 
       const foo = _m0.Foo;
       const foo1 = foo;
@@ -522,9 +522,9 @@ describe("code", () => {
       ${imp("Zaz=zaz")},
     ];`;
     expect(b.toString({ forceModuleImport: ["foo", "bar"] })).toMatchInlineSnapshot(`
-      "import * as Bar from \\"bar\\";
-      import * as Foo from \\"foo\\";
-      import Zaz from \\"zaz\\";
+      "import * as Bar from "bar";
+      import * as Foo from "foo";
+      import Zaz from "zaz";
 
       const types = [Foo, Bar, Zaz];
       "
@@ -536,7 +536,7 @@ describe("code", () => {
       ${imp("Long=long")},
     ];`;
     expect(b.toString({ forceRequireImport: ["long"] })).toMatchInlineSnapshot(`
-      "import Long = require(\\"long\\");
+      "import Long = require("long");
 
       const types = [Long];
       "
@@ -548,7 +548,7 @@ describe("code", () => {
       ${imp("Author@./Author.js")},
     ];`;
     expect(b.toString()).toMatchInlineSnapshot(`
-      "import { Author } from \\"./Author.js\\";
+      "import { Author } from "./Author.js";
 
       const types = [Author];
       "
@@ -560,7 +560,7 @@ describe("code", () => {
       ${imp("Author@./Author.js")},
     ];`;
     expect(b.toString({ importExtensions: false })).toMatchInlineSnapshot(`
-      "import { Author } from \\"./Author\\";
+      "import { Author } from "./Author";
 
       const types = [Author];
       "
@@ -573,8 +573,8 @@ describe("code", () => {
       ${imp("Book@./Book.jsx")},
     ];`;
     expect(b.toString({ importExtensions: "ts" })).toMatchInlineSnapshot(`
-      "import { Author } from \\"./Author.ts\\";
-      import { Book } from \\"./Book.tsx\\";
+      "import { Author } from "./Author.ts";
+      import { Book } from "./Book.tsx";
 
       const types = [Author, Book];
       "
@@ -587,8 +587,8 @@ describe("code", () => {
       ${imp("Book@./Book.tsx")},
     ];`;
     expect(b.toString({ importExtensions: "js" })).toMatchInlineSnapshot(`
-      "import { Author } from \\"./Author.js\\";
-      import { Book } from \\"./Book.jsx\\";
+      "import { Author } from "./Author.js";
+      import { Book } from "./Book.jsx";
 
       const types = [Author, Book];
       "
@@ -601,8 +601,8 @@ describe("code", () => {
     chunks.push(code`const b: ${imp("Bar@bar")};`);
     const b = joinCode(chunks);
     expect(b.toString()).toMatchInlineSnapshot(`
-      "import { Bar } from \\"bar\\";
-      import { Foo } from \\"foo\\";
+      "import { Bar } from "bar";
+      import { Foo } from "foo";
 
       const a: Foo;
       const b: Bar;
@@ -625,10 +625,10 @@ describe("code", () => {
     const b = joinCode(chunks);
     expect(b.toString()).toMatchInlineSnapshot(`
       "if (true) {
-        console.log(\\"asdf\\");
+        console.log("asdf");
       }
       if (true) {
-        console.log(\\"asdf\\");
+        console.log("asdf");
       }
       "
     `);
@@ -658,7 +658,7 @@ describe("code", () => {
     params.push(code`b: string`);
     const b = code`function foo(${joinCode(params, { on: "," })}) { return 1; }`;
     expect(b.toString()).toMatchInlineSnapshot(`
-      "import { Foo } from \\"foo\\";
+      "import { Foo } from "foo";
 
       function foo(a: Foo, b: string) {
         return 1;
@@ -708,7 +708,7 @@ describe("code", () => {
     const o = a.toString({ dprintOptions: { lineWidth: 1000 } });
     // Then it was not wrapped
     expect(o).toMatchInlineSnapshot(`
-      "const a = { a: \\"abcdefghijklmnopqrstuvwxyz\\", b: \\"abcdefghijklmnopqrstuvwxyz\\", c: \\"abcdefghijklmnopqrstuvwxyz\\", d: \\"abcdefghijklmnopqrstuvwxyz\\" };
+      "const a = { a: "abcdefghijklmnopqrstuvwxyz", b: "abcdefghijklmnopqrstuvwxyz", c: "abcdefghijklmnopqrstuvwxyz", d: "abcdefghijklmnopqrstuvwxyz" };
       "
     `);
   });

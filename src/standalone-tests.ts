@@ -21,7 +21,7 @@ describe("standalone", () => {
        class="test">    Test</div>;
     `;
     expect(b.toString()).toMatchInlineSnapshot(`
-      "const a = <div class=\\"test\\">Test</div>;
+      "const a = <div class="test">Test</div>;
       "
     `);
   });
