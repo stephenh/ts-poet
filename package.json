@@ -8,7 +8,6 @@
     "prepare": "yarn build && yarn test",
     "test": "yarn jest",
     "build": "yarn tsc",
-    "lint": "yarn tslint --project .",
     "format": "prettier --write './src/**/(*.ts|*.tsx|*.html|*.css)'"
   },
   "repository": {
@@ -23,11 +22,6 @@
     "@types/lodash": "^4.14.137",
     "@types/mock-fs": "^4.13.1",
     "@types/node": "^12.7.2",
-    "@typescript-eslint/eslint-plugin": "^2.0.0",
-    "@typescript-eslint/parser": "^2.0.0",
-    "eslint": "^6.2.2",
-    "eslint-config-prettier": "^6.1.0",
-    "eslint-plugin-prettier": "^3.1.0",
     "jest": "^26.6.3",
     "mock-fs": "^5.1.4",
     "prettier": "^2.7.1",
