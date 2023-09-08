@@ -7,9 +7,9 @@ const fileNamePattern = "(?:[a-zA-Z0-9._-]+)";
 const modulePattern = `@?(?:(?:${fileNamePattern}(?:/${fileNamePattern})*))`;
 const identPattern = `(?:(?:[a-zA-Z][_a-zA-Z0-9.]*)|(?:[_a-zA-Z][_a-zA-Z0-9.]+))`;
 export const importType = "[*@+=]";
-const importPattern = `^(${typeImportMarker}${identPattern})?(${importType})(${modulePattern})(?:#(${identPattern}))?`;
+const importPattern = `^(${typeImportMarker}${identPattern})?(${importType})(${modulePattern})`;
 const sourceIdentPattern = `(?:(?:${identPattern}:)?)`;
-const sourceImportPattern = `^(${typeImportMarker}${sourceIdentPattern}${identPattern})?(@)(${modulePattern})(?:#(${identPattern}))?`;
+const sourceImportPattern = `^(${typeImportMarker}${sourceIdentPattern}${identPattern})?(@)(${modulePattern})`;
 
 /**
  * Specifies a symbol and its related origin, either via import or implicit/local declaration.
@@ -21,7 +21,7 @@ export abstract class Import extends Node {
    * import variation. If the spec to parse does not follow the proper format
    * an implicit symbol is created from the unparsed spec.
    *
-   * Pattern: `symbolName? importType modulePath (#<augmentedSymbolName>)?`
+   * Pattern: `symbolName? importType modulePath`
    *
    * Where:
    *
@@ -30,19 +30,11 @@ export abstract class Import extends Node {
    *    - `@` is a named import
    *       - `Foo@bar` becomes `import { Foo } from 'bar'`
    *    - `*` is a star import,
-   *       - `*Foo` becomes `import * as Foo from 'Foo'`
    *       - `Foo*foo` becomes `import * as Foo from 'foo'`
    *    - `+` is an implicit import
    *       - E.g. `Foo+foo` becomes `import 'foo'`
    * - `modulePath` is a path
    *    - E.g. `<filename>(/<filename)*`
-   * - augmentedSymbolName = `[a-zA-Z0-9_]+`
-   *
-   *        Any valid symbol name that represents the symbol that is being augmented. For example,
-   *        the import `rxjs/add/observable/from` attaches the `from` method to the `Observable` class.
-   *        To import it correctly the spec should be `+rxjs/add/observable/from#Observable`. Adding this
-   *        parameter to augmented imports ensures they are output only when the symbol being augmented
-   *        is actually used.
    *
    *
    * @param spec Symbol spec to parse.
@@ -56,8 +48,7 @@ export abstract class Import extends Node {
     if (matched != null) {
       const modulePath = matched[3];
       const kind = matched[2] || "@";
-      const symbolName = matched[1] || last(modulePath.split("/")) || "";
-      const targetName = matched[4];
+      const symbolName = matched[1] || "";
       switch (kind) {
         case "*":
           return Import.importsAll(symbolName, modulePath);
@@ -76,9 +67,7 @@ export abstract class Import extends Node {
         case "=":
           return Import.importsDefault(symbolName, modulePath);
         case "+":
-          return targetName
-            ? Import.augmented(symbolName, modulePath, targetName)
-            : Import.sideEffect(symbolName, modulePath);
+          return Import.sideEffect(symbolName, modulePath);
         default:
           throw new Error("Invalid import kind character");
       }
@@ -142,20 +131,6 @@ export abstract class Import extends Node {
     sourceExportedName?: string
   ): Import {
     return new ImportsName(exportedName, from, sourceExportedName, typeImport);
-  }
-
-  /**
-   * Creates a symbol that is brought in by a whole module import
-   * that "augments" an existing symbol.
-   *
-   * e.g. `import 'rxjs/add/operator/flatMap'`
-   *
-   * @param symbolName The augmented symbol to be imported
-   * @param from The entire import that does the augmentation
-   * @param target The symbol that is augmented
-   */
-  public static augmented(symbolName: string, from: string, target: string): Import {
-    return new Augmented(symbolName, from, target);
   }
 
   /**
@@ -263,18 +238,6 @@ export class ImportsAll extends Imported {
 }
 
 /**
- * A symbol that is brought in by a whole module import
- * that "augments" an existing symbol.
- *
- * e.g. `import 'rxjs/add/operator/flatMap'`
- */
-export class Augmented extends Imported {
-  constructor(symbol: string, source: string, public augmented: string) {
-    super(symbol, source);
-  }
-}
-
-/**
  * A symbol that is brought in as a side effect of an import.
  *
  * E.g. `from("Foo+mocha")` will add `import 'mocha'`
@@ -290,15 +253,14 @@ export function emitImports(
   imports: Import[],
   ourModulePath: string,
   importMappings: { [key: string]: string },
-  forceRequireImports: string[]
+  forceRequireImports: string[],
+  importExtensions: boolean | "js" | "ts"
 ): string {
   if (imports.length == 0) {
     return "";
   }
 
   let result = "";
-
-  const augmentImports = groupBy(filterInstances(imports, Augmented), (a) => a.augmented);
 
   // Group the imports by source module they're imported from
   const importsByModule = groupBy(
@@ -314,21 +276,15 @@ export function emitImports(
   // Output each source module as one line
   Object.entries(importsByModule).forEach(([modulePath, imports]) => {
     // Skip imports from the current module
-    if (sameModule(ourModulePath, modulePath)) {
-      return;
-    }
+    if (sameModule(ourModulePath, modulePath)) return;
     if (modulePath in importMappings) {
       modulePath = importMappings[modulePath];
     }
-    const importPath = maybeRelativePath(ourModulePath, modulePath);
+    const importPath = maybeAdjustExtension(maybeRelativePath(ourModulePath, modulePath), importExtensions);
 
     // Output star imports individually
     unique(filterInstances(imports, ImportsAll).map((i) => i.symbol)).forEach((symbol) => {
       result += `import * as ${symbol} from '${importPath}';\n`;
-      const augments = augmentImports[symbol];
-      if (augments) {
-        augments.forEach((augment) => (result += `import '${augment.source}';\n`));
-      }
     });
 
     // Partition named imported into `import type` vs. regular imports
@@ -342,12 +298,6 @@ export function emitImports(
       const namesPart = names.length > 0 ? [`{ ${names.join(", ")} }`] : [];
       const defPart = def.length > 0 ? [def[0]] : [];
       result += `import ${[...defPart, ...namesPart].join(", ")} from '${importPath}';\n`;
-      [...names, ...def].forEach((name) => {
-        const augments = augmentImports[name];
-        if (augments) {
-          augments.forEach((augment) => (result += `import '${augment.source}';\n`));
-        }
-      });
     }
     const typeImports = unique(
       allNames
@@ -392,10 +342,31 @@ export function maybeRelativePath(outputPath: string, importPath: string): strin
   return relativePath;
 }
 
+const tsRe = /\.ts?/;
+const tsxRe = /\.tsx?/;
+const jsRe = /\.js?/;
+const jsxRe = /\.jsx?/;
+
+function maybeAdjustExtension(path: string, importExtensions: boolean | "js" | "ts"): string {
+  if (importExtensions === true) {
+    return path;
+  } else if (importExtensions === false) {
+    return path.replace(extensionRegex, "");
+  } else if (importExtensions === "js") {
+    return path.replace(tsRe, ".js").replace(tsxRe, ".jsx");
+  } else if (importExtensions === "ts") {
+    return path.replace(jsRe, ".ts").replace(jsxRe, ".tsx");
+  } else {
+    throw new Error("Unsupported importExtensions value ${importExtensions}");
+  }
+}
+
+const extensionRegex = /\.[tj]sx?/;
+
 /** Checks if `path1 === path2` despite minor path differences like `./foo` and `foo`. */
 export function sameModule(path1: string, path2: string): boolean {
   // TypeScript: import paths ending in .js and .ts are resolved to the .ts file.
   // Check the base paths (without the .js or .ts suffix).
-  const [basePath1, basePath2] = [path1, path2].map((p) => p.replace(/\.[tj]sx?/, ""));
+  const [basePath1, basePath2] = [path1, path2].map((p) => p.replace(extensionRegex, ""));
   return basePath1 === basePath2 || path.resolve(basePath1) === path.resolve(basePath2);
 }

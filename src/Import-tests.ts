@@ -1,40 +1,9 @@
-import {
-  Augmented,
-  emitImports,
-  ImportsAll,
-  ImportsDefault,
-  ImportsName,
-  maybeRelativePath,
-  SideEffect,
-  Import,
-} from "./Import";
+import { emitImports, ImportsAll, ImportsDefault, ImportsName, maybeRelativePath, SideEffect, Import } from "./Import";
 
 describe("Import", () => {
   it("parsing implicitly defined (non-imported) symbols", () => {
     const parsed = Import.from("Some.Symbol.Depth");
     expect(parsed.symbol).toEqual("Some.Symbol.Depth");
-  });
-
-  it("parsing named import: exported symbol implied by module path", () => {
-    const parsed = Import.from("@rxjs/Observable");
-    expect(parsed).toBeInstanceOf(ImportsName);
-
-    const sym = parsed as ImportsName;
-    expect(sym.symbol).toEqual("Observable");
-    expect(sym.source).toEqual("rxjs/Observable");
-
-    expect(emit(sym)).toMatchInlineSnapshot(`"import { Observable } from 'rxjs/Observable';"`);
-  });
-
-  it("parsing named import: exported symbol implied by generated module path", () => {
-    const parsed = Import.from("@Api");
-    expect(parsed).toBeInstanceOf(ImportsName);
-
-    const sym = parsed as ImportsName;
-    expect(sym.symbol).toEqual("Api");
-    expect(sym.source).toEqual("Api");
-
-    expect(emit(sym)).toMatchInlineSnapshot(`"import { Api } from 'Api';"`);
   });
 
   it("parsing named import: exported symbol explicit, source relative to current dir", () => {
@@ -89,16 +58,6 @@ describe("Import", () => {
     expect(emit(sym)).toMatchInlineSnapshot(`"import type { Observable } from 'rxjs/Observable';"`);
   });
 
-  it("parsing all import: exported symbol implied by module path", () => {
-    const parsed = Import.from("*rxjs/Observable");
-    expect(parsed).toBeInstanceOf(ImportsAll);
-
-    const sym = parsed as ImportsAll;
-    expect(sym.symbol).toEqual("Observable");
-    expect(sym.source).toEqual("rxjs/Observable");
-    expect(emit(sym)).toMatchInlineSnapshot(`"import * as Observable from 'rxjs/Observable';"`);
-  });
-
   it("parsing all import: exported symbol explicit, source is implied module", () => {
     const parsed = Import.from("SomeOther*rxjs/Observable");
     expect(parsed).toBeInstanceOf(ImportsAll);
@@ -127,28 +86,6 @@ describe("Import", () => {
     expect(sym.symbol).toEqual("describe");
     expect(sym.source).toEqual("mocha");
     expect(emit(sym)).toMatchInlineSnapshot(`"import 'mocha';"`);
-  });
-
-  it("parsing augmentation import: exported symbol implied by module path", () => {
-    const parsed = Import.from("+rxjs/add/operator/toPromise#Observable");
-    expect(parsed).toBeInstanceOf(Augmented);
-
-    const sym = parsed as Augmented;
-    expect(sym.symbol).toEqual("toPromise");
-    expect(sym.source).toEqual("rxjs/add/operator/toPromise");
-    expect(sym.augmented).toEqual("Observable");
-    expect(emit(sym)).toMatchInlineSnapshot(`""`);
-  });
-
-  it("parsing augmentation import: exported symbol explicit", () => {
-    const parsed = Import.from("SomeSymbol+rxjs/add/operator/toPromise#Observable");
-    expect(parsed).toBeInstanceOf(Augmented);
-
-    const sym = parsed as Augmented;
-    expect(sym.symbol).toEqual("SomeSymbol");
-    expect(sym.source).toEqual("rxjs/add/operator/toPromise");
-    expect(sym.augmented).toEqual("Observable");
-    expect(emit(sym)).toMatchInlineSnapshot(`""`);
   });
 
   it("can handle relative imports", () => {
@@ -198,7 +135,12 @@ describe("Import", () => {
     );
   });
 
-  function emit(spec: Import, importMappings = {}, forceRequireImports = []): string {
-    return emitImports([spec], "", importMappings, forceRequireImports).trim();
+  function emit(
+    spec: Import,
+    importMappings = {},
+    forceRequireImports = [],
+    importExtensions: boolean | "js" | "ts" = true
+  ): string {
+    return emitImports([spec], "", importMappings, forceRequireImports, importExtensions).trim();
   }
 });
