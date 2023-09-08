@@ -543,6 +543,58 @@ describe("code", () => {
     `);
   });
 
+  it("can use ESM file paths", () => {
+    const b = code`const types = [
+      ${imp("Author@./Author.js")},
+    ];`;
+    expect(b.toString()).toMatchInlineSnapshot(`
+      "import { Author } from \\"./Author.js\\";
+
+      const types = [Author];
+      "
+    `);
+  });
+
+  it("can drop ESM file paths", () => {
+    const b = code`const types = [
+      ${imp("Author@./Author.js")},
+    ];`;
+    expect(b.toString({ importExtensions: false })).toMatchInlineSnapshot(`
+      "import { Author } from \\"./Author\\";
+
+      const types = [Author];
+      "
+    `);
+  });
+
+  it("can rewrite ESM file paths to ts", () => {
+    const b = code`const types = [
+      ${imp("Author@./Author.js")},
+      ${imp("Book@./Book.jsx")},
+    ];`;
+    expect(b.toString({ importExtensions: "ts" })).toMatchInlineSnapshot(`
+      "import { Author } from \\"./Author.ts\\";
+      import { Book } from \\"./Book.tsx\\";
+
+      const types = [Author, Book];
+      "
+    `);
+  });
+
+  it("can rewrite ESM file paths to js", () => {
+    const b = code`const types = [
+      ${imp("Author@./Author.ts")},
+      ${imp("Book@./Book.tsx")},
+    ];`;
+    expect(b.toString({ importExtensions: "js" })).toMatchInlineSnapshot(`
+      "import { Author } from \\"./Author.js\\";
+      import { Book } from \\"./Book.jsx\\";
+
+      const types = [Author, Book];
+      "
+    `);
+  });
+
   it("can join chunks", () => {
     const chunks: Code[] = [];
     chunks.push(code`const a: ${imp("Foo@foo")};`);

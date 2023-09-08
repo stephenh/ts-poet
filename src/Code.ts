@@ -11,12 +11,14 @@ export type DPrintOptions = Exclude<Parameters<typeof dprint.format>[2], never>;
 export interface ToStringOpts {
   /** The intended file name of this code; used to know whether we can skip import statements that would be from our own file. */
   path?: string;
-  /** Modules to use a CommonJS-in-ESM destructure fix for. */
+  /** Modules to use a CommonJS-in-ESM destructure fix for, i.e. `Foo@foo` -> `import m from "foo"; m.Foo`. */
   forceDefaultImport?: string[];
-  /** Modules to use a CommonJS-in-ESM destructure fix for. */
+  /** Modules to use a CommonJS-in-ESM destructure fix for, i.e. `Foo@foo` -> `import * as m from "foo"; m.Foo`. */
   forceModuleImport?: string[];
-  /** Modules to use the TypeScript-specific "import via require" fix. */
+  /** Modules to use the TypeScript-specific "import via require" fix, i.e. `Long=long` -> `import Long = require("long")`. */
   forceRequireImport?: string[];
+  /** How to handle file extensions in imports, i.e. `import { Foo } from "./foo";` vs `import { Foo } from "./foo.js";`. */
+  importExtensions?: boolean | "ts" | "js";
   /** A top-of-file prefix, i.e. eslint disable. */
   prefix?: string;
   /** dprint config settings. */
@@ -159,6 +161,7 @@ export class Code extends Node {
       forceDefaultImport,
       forceModuleImport,
       forceRequireImport = [],
+      importExtensions = true,
       prefix,
       importMappings = {},
     } = opts || {};
@@ -168,7 +171,7 @@ export class Code extends Node {
     }
     const [used, imports, defs] = this.deepFindAll();
     assignAliasesIfNeeded(defs, imports, ourModulePath);
-    const importPart = emitImports(imports, ourModulePath, importMappings, forceRequireImport);
+    const importPart = emitImports(imports, ourModulePath, importMappings, forceRequireImport, importExtensions);
     const bodyPart = this.generateCode(used);
     const maybePrefix = prefix ? `${prefix}\n` : "";
     return maybePrefix + importPart + "\n" + bodyPart;

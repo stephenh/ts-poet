@@ -75,17 +75,14 @@ Import Specs
 
 Given the primary goal of ts-poet is to manage imports for you, there are several ways of specifying imports to the `imp` function:
 
-* `imp("Observable@rxjs")` --> `import { Observable } from "rxjs"`
-* `imp("Observable:CustomizedObservable@rxjs")` --> `import { Observable as CustomizedObservable } from "rxjs"`
-* `imp("t:Observable@rxjs")` --> `import type { Observable } from "rxjs"`
-* `imp("t:Observable:CustomizedObservable@rxjs")` --> `import type { Observable as CustomizedObservable } from "rxjs"`
+* `imp("Observable@rxjs")` --> `import { Observable } from "rxjs"` (named import)
 * `imp("Observable@./Api")` --> `import { Observable } from "./Api"`
-* `imp("Observable*./Api")` --> `import * as Observable from "./Api"`
-* `imp("Observable=./Api")` --> `import Observable from "./Api"`
-* `imp("@rxjs/Observable")` --> `import { Observable } from "rxjs/Observable"`
-* `imp("*rxjs/Observable")` --> `import * as Observable from "rxjs/Observable"`
-* `imp("@Api")` --> `import { Api } from "Api"`
-* `imp("describe+mocha")` --> `import "mocha"`
+* `imp("Observable:Obs@rxjs")` --> `import { Observable as Obs } from "rxjs"` (renamed import)
+* `imp("t:Observable@rxjs")` --> `import type { Observable } from "rxjs"` (type import)
+* `imp("t:Observable:Obs@rxjs")` --> `import type { Observable as Obs } from "rxjs"`
+* `imp("api*./Api")` --> `import * as api from "./Api"` (namespace import)
+* `imp("api=./Api")` --> `import api from "./Api"` (default import)
+* `imp("describe+mocha")` --> `import "mocha"` (implicit import)
 
 ### Avoiding Import Conflicts
 
@@ -185,7 +182,7 @@ console.log(c.toString(
 
 This is most useful for frameworks that generate code, and have to support downstream projects that might have either `esModuleInterop` setting.
 
-Similarly, you can force the [import require](https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require) syntax:
+Similarly, you can force the [import require](https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require) syntax, to support projects that use the pre-default exports `export =` typing syntax, to export a single symbol:
 
 ```ts
 const Long = imp("Long=long")
