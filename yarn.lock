@@ -1448,12 +1448,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dprint-node@npm:^1.0.7":
-  version: 1.0.7
-  resolution: "dprint-node@npm:1.0.7"
+"dprint-node@npm:^1.0.8":
+  version: 1.0.8
+  resolution: "dprint-node@npm:1.0.8"
   dependencies:
     detect-libc: "npm:^1.0.3"
-  checksum: b86c71303cf66e0e95273c31fda11404f152c1db708f4c18f1efd6c02dca4d001e63c42169df74afe521ec166f53e564e423300350c8a5c7994df9e81b19d474
+  checksum: c4d33416ca5cf37918abb6247d62d7442aacaf0c7cf2936592c33598b7a4823edac23ac5ef4fecfb5f95d6306ce289c2c282a2ee864885678b1b08b89490b325
   languageName: node
   linkType: hard
 
@@ -3559,7 +3559,7 @@ __metadata:
     "@types/lodash": "npm:^4.14.137"
     "@types/mock-fs": "npm:^4.13.1"
     "@types/node": "npm:^12.7.2"
-    dprint-node: "npm:^1.0.7"
+    dprint-node: "npm:^1.0.8"
     jest: "npm:^29.6.4"
     mock-fs: "npm:^5.2.0"
     prettier: "npm:2.8.8"
