@@ -49,30 +49,28 @@ import { code, imp } from "ts-poet";
 // Use `imp` to declare an import that will conditionally auto-imported
 const Observable = imp("@rxjs/Observable");
 
-// Optionally create helper consts/methods to incrementally create output 
-const greet = code`
+// Optionally create helper consts/methods to better organize
+// the code generator logic
+const greetMethod = code`
   greet(): ${Observable}<string> {
-    return ${Observable}.from(\`Hello $name\`);
+    return ${Observable}.from(\`Hello ${name}\`);
   }
 `;
 
 // Combine all of the output (note no imports are at the top, they'll be auto-added)
 const greeter = code`
-export class Greeter {
-
-  private name: string;
-
-  constructor(private name: string) {
+  export class Greeter {
+    private name: string;
+    constructor(name: string) {
+      this.name = name;
+    }
+    ${greetMethod}
   }
-
-  ${greet}
-}
 `;
 
 // Generate the full output, with imports
 const output = greeter.toString();
 ```
-
 
 Import Specs
 ============
