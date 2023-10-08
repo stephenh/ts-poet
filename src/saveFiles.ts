@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import { dirname } from "path";
-import { Code, DPrintOptions, ToStringOpts } from "./Code";
+import { Code, ToStringOpts } from "./Code";
 import { createHash } from "crypto";
 
 export interface CodegenFile {
