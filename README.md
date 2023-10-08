@@ -51,7 +51,7 @@ export class Greeter {
 `;
 
 // Generate the full output, with imports
-const output = greeter.toStringWithImports("Greeter");
+const output = greeter.toString();
 ```
 
 I.e. the primary value provided by ts-poet is:
