@@ -47,13 +47,13 @@ And this is the code to generate it with ts-poet:
 import { code, imp } from "ts-poet";
 
 // Use `imp` to declare an import that will conditionally auto-imported
-const Observable = imp("@rxjs/Observable");
+const Observable = imp("Observable@rxjs");
 
 // Optionally create helper consts/methods to better organize
 // the code generator logic
 const greetMethod = code`
   greet(): ${Observable}<string> {
-    return ${Observable}.from(\`Hello ${name}\`);
+    return ${Observable}.from(\`Hello \${this.name}\`);
   }
 `;
 
