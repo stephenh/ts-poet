@@ -22,7 +22,7 @@ It lets you generate code as "just strings" (no need to tediously create a low-l
 
    Like the external schema has a `Message` table/resource, so we want to generate a `class Message { ... }` type, but `Message` is also the name of a symbol used by our library itself, i.e. `import { Message } from runtime-library` for doing like `Message.encode` or `Message.decode` calls as part of our implementation.
 
-   With ts-poet, if you declare the symbols in your generated output as `class ${def("Message")}`, ts-poet will give namespace preference to those definitions, and automatically rewrite the `Message` import to `import { Message as Message1 } from runtime-library`.
+   With ts-poet, if you declare the symbols in your generated output as `class ${def("Message")}`, ts-poet will give namespace preference to those definitions, and automatically rewrite the `Message` import to `import { Message as Message1 } from runtime-library`, both at the declaration site, as well as the usage sites, i.e. `${Message}.encode(...)` in the generated output will automatically become `Message1.encode(...)` to reflect the rewritten symbol name.
 
 3. Includes any other conditional output (see later), as/if needed.
 
