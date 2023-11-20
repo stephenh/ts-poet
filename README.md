@@ -6,19 +6,27 @@ Overview
 
 ts-poet is a TypeScript code generator that is a small wrapper around [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals).
 
-It lets you generate code basically as "just strings" (no need to re-create a low-level AST), but then also:
+It lets you generate code as "just strings" (no need to tediously create a low-level AST), but then also:
 
 1. "Auto imports" only the types/symbols that are actually used in the output
 
-   I.e. you use `const Foo = imp("Foo@foo")` to define the imports you need in your generated code, and ts-poet will create the import stanza at the top of the file.
+   I.e. you use `const Foo = imp("Foo@foo")` to define the imports you need in your generated code, use them like `function printFoo(foo: ${Foo}): void` in your `code` template strings, and then ts-poet creates the entire import stanza of `import { Foo } from foo` at the top of your generated output.
 
-   This can seem minor, but lets you break up/decompose your code generation logic, so that you can have multiple levels of helper methods/etc. that can return `code` template literals that embed both the code itself and the necessary type imports.
+   This freedom, to not worry about what symbols you do/do not need make "import ..." lines for, lets you break up/decompose your code generation logic, so that you can have multiple levels of helper methods/etc. that can return `code` template literals that embed both the code itself and the necessary type imports.
 
    And when the final file is generated, ts-poet will collect and emit the necessary imports.
 
-2. Includes any other conditional output (see later), as/if needed.
+2. Automatically avoids import symbol collisions.
 
-3. Formats the output with [dprint-node](https://github.com/devongovett/dprint-node), an extremely fast formatter with "basically prettier-ish" output.
+   If you're generating types from an external schema, you'll occassionally run into naming conflicts where the external schema has a name that conflicts with your library's own internal name.
+
+   Like the external schema has a `Message` table/resource, so we want to generate a `class Message { ... }` type, but `Message` is also the name of a symbol used by our library itself, i.e. `import { Message } from runtime-library` for doing like `Message.encode` or `Message.decode` calls as part of our implementation.
+
+   With ts-poet, if you declare the symbols in your generated output as `class ${def("Message")}`, ts-poet will give namespace preference to those definitions, and automatically rewrite the `Message` import to `import { Message as Message1 } from runtime-library`.
+
+3. Includes any other conditional output (see later), as/if needed.
+
+4. Formats the output with [dprint-node](https://github.com/devongovett/dprint-node), an extremely fast formatter with "basically prettier-ish" output.
 
    ts-poet originally used prettier directly, but it became the bottleneck for multiple projects that use ts-poet for their code generation, even with caching to only format actually-changed output, so we switched to dprint and saw dramatic speedups.
 
