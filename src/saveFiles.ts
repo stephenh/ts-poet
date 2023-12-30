@@ -71,7 +71,7 @@ export async function saveFiles(opts: SaveFilesOpts): Promise<void> {
       } else if (!exists) {
         await fs.writeFile(path, contentToString(file, {}));
       }
-    })
+    }),
   );
 }
 
@@ -102,6 +102,6 @@ function sha1(content: string): string {
 async function trueIfResolved(p: Promise<unknown>): Promise<boolean> {
   return p.then(
     () => true,
-    () => false
+    () => false,
   );
 }

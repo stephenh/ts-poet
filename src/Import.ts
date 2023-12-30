@@ -128,7 +128,7 @@ export abstract class Import extends Node {
     exportedName: string,
     from: string,
     typeImport: boolean,
-    sourceExportedName?: string
+    sourceExportedName?: string,
   ): Import {
     return new ImportsName(exportedName, from, sourceExportedName, typeImport);
   }
@@ -183,7 +183,10 @@ export class Implicit extends Import {
 /** Common base class for imported symbols. */
 export abstract class Imported extends Import {
   /** The symbol is the imported symbol, i.e. `BarClass`, and source is the path it comes from. */
-  protected constructor(public symbol: string, public source: string) {
+  protected constructor(
+    public symbol: string,
+    public source: string,
+  ) {
     super(source);
   }
 }
@@ -204,7 +207,12 @@ export class ImportsName extends Imported {
    * @param sourceSymbol is the optional original symbol, i.e. if we're renaming the symbol it is `Engine`
    * @param typeImport whether this is an `import type` import
    */
-  constructor(symbol: string, source: string, public sourceSymbol?: string, public typeImport?: boolean) {
+  constructor(
+    symbol: string,
+    source: string,
+    public sourceSymbol?: string,
+    public typeImport?: boolean,
+  ) {
     super(symbol, source);
   }
 
@@ -254,7 +262,7 @@ export function emitImports(
   ourModulePath: string,
   importMappings: { [key: string]: string },
   forceRequireImports: string[],
-  importExtensions: boolean | "js" | "ts"
+  importExtensions: boolean | "js" | "ts",
 ): string {
   if (imports.length == 0) {
     return "";
@@ -268,9 +276,9 @@ export function emitImports(
       (it) =>
         it.source !== undefined &&
         // Ignore imports that are in our own file
-        !(it instanceof ImportsName && it.definedIn && sameModule(it.definedIn, ourModulePath))
+        !(it instanceof ImportsName && it.definedIn && sameModule(it.definedIn, ourModulePath)),
     ),
-    (it) => it.source!
+    (it) => it.source!,
   );
 
   // Output each source module as one line
@@ -304,7 +312,7 @@ export function emitImports(
         .filter((i) => i.typeImport)
         .map((it) => it.toImportPiece())
         // If the `import type` is already used as a concrete import, just use that
-        .filter((p) => !names.includes(p))
+        .filter((p) => !names.includes(p)),
     );
     if (typeImports.length > 0) {
       result += `import type { ${typeImports.join(", ")} } from '${importPath}';\n`;

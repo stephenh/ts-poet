@@ -18,7 +18,7 @@ export function code(literals: TemplateStringsArray, ...placeholders: unknown[])
       } else {
         return p;
       }
-    })
+    }),
   );
 }
 

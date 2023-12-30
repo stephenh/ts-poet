@@ -102,7 +102,7 @@ describe("Import", () => {
 
     const importMappings = { "./google/protobuf/empty": "./external/protoapis/google/protobuf/empty" };
     expect(emit(sym, importMappings)).toMatchInlineSnapshot(
-      `"import { Empty } from './external/protoapis/google/protobuf/empty';"`
+      `"import { Empty } from './external/protoapis/google/protobuf/empty';"`,
     );
   });
 
@@ -119,7 +119,7 @@ describe("Import", () => {
     expect(sym.source).toEqual("packages/override-properties/Observable");
 
     expect(emit(sym)).toMatchInlineSnapshot(
-      `"import { Observable as CustomizedObservable } from 'packages/override-properties/Observable';"`
+      `"import { Observable as CustomizedObservable } from 'packages/override-properties/Observable';"`,
     );
 
     // type import
@@ -131,7 +131,7 @@ describe("Import", () => {
     expect(typeSym.source).toEqual("packages/override-properties/Observable");
 
     expect(emit(typeSym)).toMatchInlineSnapshot(
-      `"import type { Observable as CustomizedObservable } from 'packages/override-properties/Observable';"`
+      `"import type { Observable as CustomizedObservable } from 'packages/override-properties/Observable';"`,
     );
   });
 
@@ -139,7 +139,7 @@ describe("Import", () => {
     spec: Import,
     importMappings = {},
     forceRequireImports = [],
-    importExtensions: boolean | "js" | "ts" = true
+    importExtensions: boolean | "js" | "ts" = true,
   ): string {
     return emitImports([spec], "", importMappings, forceRequireImports, importExtensions).trim();
   }

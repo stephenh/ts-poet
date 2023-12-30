@@ -35,7 +35,10 @@ export class ConditionalOutput extends Node {
   // A given ConditionalOutput const could be used in multiple code
   // parents, and so we don't want to use instance state to store
   // "should I be output or not", b/c it depends on the containing tree.
-  constructor(public usageSiteName: string, public declarationSiteCode: Code) {
+  constructor(
+    public usageSiteName: string,
+    public declarationSiteCode: Code,
+  ) {
     super();
   }
 
@@ -54,5 +57,8 @@ export class ConditionalOutput extends Node {
 }
 
 export class MaybeOutput {
-  constructor(public parent: ConditionalOutput, public code: Code) {}
+  constructor(
+    public parent: ConditionalOutput,
+    public code: Code,
+  ) {}
 }

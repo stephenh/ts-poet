@@ -37,7 +37,10 @@ export class Code extends Node {
   private code: string | undefined;
   private codeWithImports: string | undefined;
 
-  constructor(private literals: TemplateStringsArray, private placeholders: any[]) {
+  constructor(
+    private literals: TemplateStringsArray,
+    private placeholders: any[],
+  ) {
     super();
   }
 
