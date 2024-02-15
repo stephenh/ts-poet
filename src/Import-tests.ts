@@ -110,6 +110,10 @@ describe("Import", () => {
     expect(maybeRelativePath("./zaz/Zaz", "./foo/Foo")).toEqual("../foo/Foo");
   });
 
+  it("can handle relative imports where importing file is in a folder with the same name as file it is importing in a folder above it", () => {
+    expect(maybeRelativePath("./foo/bar", "./foo")).toEqual("../foo");
+  });
+
   it("import an export with a more convenient alias", () => {
     const parsed = Import.from("Observable:CustomizedObservable@packages/override-properties/Observable");
     expect(parsed).toBeInstanceOf(ImportsName);

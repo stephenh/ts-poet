@@ -1,4 +1,4 @@
-import { code } from "./index";
+import { code, imp } from "./index";
 
 // When loaded from a CDN, most of them will use the standalone version of prettier because it has
 // `"browser": "./standalone.js"` (and also "unpkg") in it's package.json. These tests verify basic functionality in
@@ -24,5 +24,13 @@ describe("standalone", () => {
       "const a = <div class="test">Test</div>;
       "
     `);
+  });
+
+  it("test", async () => {
+    let b = code`${imp("Simple@./ui")}`;
+    expect(b.toString({ path: "ui/simple.ts" })).toContain('"../ui"');
+
+    b = code`${imp("Simpleton@./another/path/to/ui")}`;
+    expect(b.toString({ path: "another/path/to/ui/simple.ts" })).toContain('"../ui"');
   });
 });
