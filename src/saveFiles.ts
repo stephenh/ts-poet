@@ -69,7 +69,7 @@ export async function saveFiles(opts: SaveFilesOpts): Promise<void> {
           await fs.writeFile(path, prefix + String(initialLength + lengthLength + pad) + suffix);
         }
       } else if (!exists) {
-        await fs.writeFile(path, contentToString(file, {}));
+        await fs.writeFile(path, contentToString(file, toStringOpts));
       }
     }),
   );
