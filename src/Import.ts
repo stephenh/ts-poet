@@ -356,10 +356,10 @@ export function maybeRelativePath(outputPath: string, importPath: string): strin
   return relativePath;
 }
 
-const tsRe = /\.ts?/;
-const tsxRe = /\.tsx?/;
-const jsRe = /\.js?/;
-const jsxRe = /\.jsx?/;
+const tsRe = /\.ts$/;
+const tsxRe = /\.tsx$/;
+const jsRe = /\.js$/;
+const jsxRe = /\.jsx$/;
 
 function maybeAdjustExtension(path: string, importExtensions: boolean | "js" | "ts"): string {
   if (importExtensions === true) {
