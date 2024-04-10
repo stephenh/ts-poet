@@ -545,10 +545,10 @@ describe("code", () => {
 
   it("can use ESM file paths", () => {
     const b = code`const types = [
-      ${imp("Author@./Author.js")},
+      ${imp("Author@./Author.types.js")},
     ];`;
     expect(b.toString()).toMatchInlineSnapshot(`
-      "import { Author } from "./Author.js";
+      "import { Author } from "./Author.types.js";
 
       const types = [Author];
       "
@@ -557,10 +557,10 @@ describe("code", () => {
 
   it("can drop ESM file paths", () => {
     const b = code`const types = [
-      ${imp("Author@./Author.js")},
+      ${imp("Author@./Author.types.js")},
     ];`;
     expect(b.toString({ importExtensions: false })).toMatchInlineSnapshot(`
-      "import { Author } from "./Author";
+      "import { Author } from "./Author.types";
 
       const types = [Author];
       "
@@ -569,12 +569,12 @@ describe("code", () => {
 
   it("can rewrite ESM file paths to ts", () => {
     const b = code`const types = [
-      ${imp("Author@./Author.js")},
-      ${imp("Book@./Book.jsx")},
+      ${imp("Author@./Author.types.js")},
+      ${imp("Book@./Book.types.jsx")},
     ];`;
     expect(b.toString({ importExtensions: "ts" })).toMatchInlineSnapshot(`
-      "import { Author } from "./Author.ts";
-      import { Book } from "./Book.tsx";
+      "import { Author } from "./Author.types.ts";
+      import { Book } from "./Book.types.tsx";
 
       const types = [Author, Book];
       "
@@ -583,12 +583,12 @@ describe("code", () => {
 
   it("can rewrite ESM file paths to js", () => {
     const b = code`const types = [
-      ${imp("Author@./Author.ts")},
-      ${imp("Book@./Book.tsx")},
+      ${imp("Author@./Author.types.ts")},
+      ${imp("Book@./Book.types.tsx")},
     ];`;
     expect(b.toString({ importExtensions: "js" })).toMatchInlineSnapshot(`
-      "import { Author } from "./Author.js";
-      import { Book } from "./Book.jsx";
+      "import { Author } from "./Author.types.js";
+      import { Book } from "./Book.types.jsx";
 
       const types = [Author, Book];
       "
