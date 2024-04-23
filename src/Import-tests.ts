@@ -139,6 +139,68 @@ describe("Import", () => {
     );
   });
 
+  it("can handle module spec with square brackets", () => {
+    const parsed = Import.from("handler@./route/[name]/index");
+    expect(parsed).toBeInstanceOf(ImportsName);
+
+    const sym = parsed as ImportsName;
+    expect(sym.symbol).toEqual("handler");
+    expect(sym.source).toEqual("./route/[name]/index");
+    expect(emit(sym)).toMatchInlineSnapshot(`"import { handler } from './route/[name]/index';"`);
+  });
+
+  it("can handle module spec with parenthesis", () => {
+    const parsed = Import.from("handler@./route/(group)/index");
+    expect(parsed).toBeInstanceOf(ImportsName);
+
+    const sym = parsed as ImportsName;
+    expect(sym.symbol).toEqual("handler");
+    expect(sym.source).toEqual("./route/(group)/index");
+    expect(emit(sym)).toMatchInlineSnapshot(`"import { handler } from './route/(group)/index';"`);
+  });
+
+  it("can handle module spec with unusual characters", () => {
+    const parsed = Import.from("handler@./route{/:name+}?/:path*");
+    expect(parsed).toBeInstanceOf(ImportsName);
+
+    const sym = parsed as ImportsName;
+    expect(sym.symbol).toEqual("handler");
+    expect(sym.source).toEqual("./route{/:name+}?/:path*");
+    expect(emit(sym)).toMatchInlineSnapshot(`"import { handler } from './route{/:name+}?/:path*';"`);
+  });
+
+  it("can handle a http URL module spec", () => {
+    const parsed = Import.from("something@http://example.com/something");
+    expect(parsed).toBeInstanceOf(ImportsName);
+
+    const sym = parsed as ImportsName;
+    expect(sym.symbol).toEqual("something");
+    expect(sym.source).toEqual("http://example.com/something");
+    expect(emit(sym)).toMatchInlineSnapshot(`"import { something } from 'http://example.com/something';"`);
+  });
+
+  it("can handle a node: module spec", () => {
+    const parsed = Import.from("URL@node:url");
+    expect(parsed).toBeInstanceOf(ImportsName);
+
+    const sym = parsed as ImportsName;
+    expect(sym.symbol).toEqual("URL");
+    expect(sym.source).toEqual("node:url");
+    expect(emit(sym)).toMatchInlineSnapshot(`"import { URL } from 'node:url';"`);
+  });
+
+  it("can handle a jsr: module spec", () => {
+    const parsed = Import.from("assertEquals@jsr:/@std/assert@^0.223.0/assert-equals");
+    expect(parsed).toBeInstanceOf(ImportsName);
+
+    const sym = parsed as ImportsName;
+    expect(sym.symbol).toEqual("assertEquals");
+    expect(sym.source).toEqual("jsr:/@std/assert@^0.223.0/assert-equals");
+    expect(emit(sym)).toMatchInlineSnapshot(
+      `"import { assertEquals } from 'jsr:/@std/assert@^0.223.0/assert-equals';"`,
+    );
+  });
+
   function emit(
     spec: Import,
     importMappings = {},

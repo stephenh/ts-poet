@@ -3,8 +3,7 @@ import { Node } from "./Node";
 import { last, groupBy } from "./utils";
 
 const typeImportMarker = "(?:t:)?";
-const fileNamePattern = "(?:[a-zA-Z0-9._-]+)";
-const modulePattern = `@?(?:(?:${fileNamePattern}(?:/${fileNamePattern})*))`;
+const modulePattern = `.+`;
 const identPattern = `(?:(?:[a-zA-Z][_a-zA-Z0-9.]*)|(?:[_a-zA-Z][_a-zA-Z0-9.]+))`;
 export const importType = "[*@+=]";
 const importPattern = `^(${typeImportMarker}${identPattern})?(${importType})(${modulePattern})`;
