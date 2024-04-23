@@ -62,8 +62,7 @@ describe("code", () => {
       class Zaz extends ${a} implements ${b} {}
     `;
     expect(c.toString()).toMatchInlineSnapshot(`
-      "import { Foo } from "foo";
-      import type { Bar } from "foo";
+      "import { type Bar, Foo } from "foo";
 
       class Zaz extends Foo implements Bar {}
       "

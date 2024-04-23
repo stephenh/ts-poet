@@ -55,7 +55,7 @@ describe("Import", () => {
     expect(sym.source).toEqual("rxjs/Observable");
     expect(sym.typeImport).toEqual(true);
 
-    expect(emit(sym)).toMatchInlineSnapshot(`"import type { Observable } from 'rxjs/Observable';"`);
+    expect(emit(sym)).toMatchInlineSnapshot(`"import { type Observable } from 'rxjs/Observable';"`);
   });
 
   it("parsing all import: exported symbol explicit, source is implied module", () => {
@@ -135,7 +135,7 @@ describe("Import", () => {
     expect(typeSym.source).toEqual("packages/override-properties/Observable");
 
     expect(emit(typeSym)).toMatchInlineSnapshot(
-      `"import type { Observable as CustomizedObservable } from 'packages/override-properties/Observable';"`,
+      `"import { type Observable as CustomizedObservable } from 'packages/override-properties/Observable';"`,
     );
   });
 

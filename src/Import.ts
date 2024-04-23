@@ -216,7 +216,8 @@ export class ImportsName extends Imported {
   }
 
   public toImportPiece(): string {
-    return this.sourceSymbol ? `${this.sourceSymbol} as ${this.symbol}` : this.symbol;
+    const maybeTypePrefix = this.typeImport ? "type " : "";
+    return maybeTypePrefix + (this.sourceSymbol ? `${this.sourceSymbol} as ${this.symbol}` : this.symbol);
   }
 }
 
@@ -295,26 +296,19 @@ export function emitImports(
     });
 
     // Partition named imported into `import type` vs. regular imports
-    const allNames = filterInstances(imports, ImportsName);
-    const names = unique(allNames.filter((i) => !i.typeImport).map((it) => it.toImportPiece()));
-    const def = unique(filterInstances(imports, ImportsDefault).map((it) => it.symbol));
-    if (forceRequireImports.includes(modulePath) && def.length > 0) {
-      result += `import ${def[0]} = require('${importPath}');\n`;
-    } else if (names.length > 0 || def.length > 0) {
+    const symbolImports = filterInstancesAnd(imports, ImportsName, (it) => !it.typeImport);
+    const typeImports = filterInstancesAnd(imports, ImportsName, (it) => {
+      return !!it.typeImport && !symbolImports.some((s) => s.symbol === it.symbol);
+    });
+    const namedImports = unique([...typeImports, ...symbolImports].map((it) => it.toImportPiece()));
+    const defaultImports = unique(filterInstances(imports, ImportsDefault).map((it) => it.symbol));
+    if (forceRequireImports.includes(modulePath) && defaultImports.length > 0) {
+      result += `import ${defaultImports[0]} = require('${importPath}');\n`;
+    } else if (namedImports.length > 0 || defaultImports.length > 0) {
       // Output named imports as a group
-      const namesPart = names.length > 0 ? [`{ ${names.join(", ")} }`] : [];
-      const defPart = def.length > 0 ? [def[0]] : [];
+      const namesPart = namedImports.length > 0 ? [`{ ${namedImports.join(", ")} }`] : [];
+      const defPart = defaultImports.length > 0 ? [defaultImports[0]] : [];
       result += `import ${[...defPart, ...namesPart].join(", ")} from '${importPath}';\n`;
-    }
-    const typeImports = unique(
-      allNames
-        .filter((i) => i.typeImport)
-        .map((it) => it.toImportPiece())
-        // If the `import type` is already used as a concrete import, just use that
-        .filter((p) => !names.includes(p)),
-    );
-    if (typeImports.length > 0) {
-      result += `import type { ${typeImports.join(", ")} } from '${importPath}';\n`;
     }
   });
 
@@ -328,6 +322,10 @@ type Constructor<T> = new (...args: any[]) => T;
 
 function filterInstances<T, U>(list: T[], t: Constructor<U>): U[] {
   return list.filter((e) => e instanceof t) as unknown as U[];
+}
+
+function filterInstancesAnd<T, U>(list: T[], t: Constructor<U>, fn: (value: U) => boolean): U[] {
+  return list.filter((e) => e instanceof t && fn(e)) as unknown as U[];
 }
 
 function unique<T>(list: T[]): T[] {
