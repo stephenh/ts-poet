@@ -80,6 +80,13 @@ const greeter = code`
 const output = greeter.toString();
 ```
 
+Formatting Output
+=================
+
+By default, we configure `dprint-node` with settings that attempt to match prettier, given that we assume most projects are using prettier for their formatting.
+
+If you'd like to customize the settings, the `Code.toString({ ... })` method takes a `dprintOptions` that you can pass any of dprint's many [formatting options](https://dprint.dev/plugins/typescript/config/).
+
 Import Specs
 ============
 
