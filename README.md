@@ -83,9 +83,15 @@ const output = greeter.toString();
 Formatting Output
 =================
 
-By default, we configure `dprint-node` with settings that attempt to match prettier, given that we assume most projects are using prettier for their formatting.
+By default, we configure `dprint-node` with "prettier-ish" settings that attempt to match prettier, given that we assume most projects are using prettier for their formatting.
 
-If you'd like to customize the settings, the `Code.toString({ ... })` method takes a `dprintOptions` that you can pass any of dprint's many [formatting options](https://dprint.dev/plugins/typescript/config/).
+If you'd like to customize the settings, you can either:
+
+* If using `ts-poet` programmatically, you can pass the `dprintOptions` key to `Code.toString({ ... })`, or
+
+* If using `ts-poet` via another library (like [Joist](https://joist-orm.io/)), you can create a `.dprint.json` file that should get picked up automatically (see the [dprint docs](https://dprint.dev/setup/#hidden-config-file))
+
+For either option, the [dprint config](https://dprint.dev/plugins/typescript/config/) covers the available formatting options.
 
 Import Specs
 ============
