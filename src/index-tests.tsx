@@ -110,6 +110,19 @@ describe("code", () => {
     `);
   });
 
+  it("can use child symbols/namespaced types", () => {
+    const txn = imp("Knex.Transaction@knex");
+    const b = code`
+      const txn: ${txn} = null!;
+    `;
+    expect(b.toString()).toMatchInlineSnapshot(`
+      "import { Knex } from "knex";
+
+      const txn: Knex.Transaction = null!;
+      "
+    `);
+  });
+
   it("dedups imports", () => {
     const b = code`
       const a = ${imp("Bar@bar")};
@@ -711,4 +724,17 @@ describe("code", () => {
       "
     `);
   });
+  //
+  // it("can do parameter decorators", () => {
+  //   const params = [
+  //     code`@Param() param1: string`,
+  //     code`@Param() param2: number`,
+  //   ];
+  //   const a = code`
+  //     export interface Foo {
+  //       methodCall(${joinCode(params, { on: ", "})}): void;
+  //     }
+  //   `;
+  //   expect(a.toCodeString([])).toEqual("delicious taco");
+  // });
 });
