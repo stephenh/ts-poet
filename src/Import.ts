@@ -4,11 +4,12 @@ import { last, groupBy } from "./utils";
 
 const typeImportMarker = "(?:t:)?";
 const modulePattern = `.+`;
-const identPattern = `(?:(?:[a-zA-Z][_a-zA-Z0-9.]*)|(?:[_a-zA-Z][_a-zA-Z0-9.]+))`;
+const identPattern = `(?:(?:[a-zA-Z][_a-zA-Z0-9]*)|(?:[_a-zA-Z][_a-zA-Z0-9]+))`;
 export const importType = "[*@+=]";
-const importPattern = `^(${typeImportMarker}${identPattern})?(${importType})(${modulePattern})`;
+const importPattern = `^(${typeImportMarker}${identPattern})(\\.${identPattern})?(${importType})(${modulePattern})`;
+// This is for doing `SourceSymbol:ImportSymbol`
 const sourceIdentPattern = `(?:(?:${identPattern}:)?)`;
-const sourceImportPattern = `^(${typeImportMarker}${sourceIdentPattern}${identPattern})?(@)(${modulePattern})`;
+const sourceImportPattern = `^(${typeImportMarker}${sourceIdentPattern}${identPattern})(\\.${identPattern})?(@)(${modulePattern})`;
 
 /**
  * Specifies a symbol and its related origin, either via import or implicit/local declaration.
@@ -45,8 +46,9 @@ export abstract class Import extends Node {
       matched = spec.match(sourceImportPattern);
     }
     if (matched != null) {
-      const modulePath = matched[3];
-      const kind = matched[2] || "@";
+      const modulePath = matched[4];
+      const childSymbol = matched[2]?.substring(1) || undefined; // I.e. `Transaction` in `Knex.Transaction
+      const kind = matched[3] || "@";
       const symbolName = matched[1] || "";
       switch (kind) {
         case "*":
@@ -62,7 +64,7 @@ export abstract class Import extends Node {
 
           const exportedName = exportedNames.pop();
           const sourceExportedName = exportedNames[0];
-          return Import.importsName(exportedName!, modulePath, isTypeImport, sourceExportedName);
+          return Import.importsName(exportedName!, modulePath, isTypeImport, sourceExportedName, childSymbol);
         case "=":
           return Import.importsDefault(symbolName, modulePath);
         case "+":
@@ -117,19 +119,23 @@ export abstract class Import extends Node {
    * Creates an import of a single named symbol from the module's exported
    * symbols.
    *
-   * e.g. `import { Engine } from 'templates';`
+   * - e.g. `import { Engine } from 'templates';`
+   * - e.g. `import { Foo as Bar } from 'templates';`
    *
    * @param exportedName The symbol that is both exported and imported
    * @param from The module the symbol is exported from
    * @param typeImport whether this is an `import type` import
+   * @param sourceSymbol The symbol as exported from the module, i.e. if we're doing a `Foo as Bar` rename
+   * @param childSymbol The additional `Transaction` symbol in a `Knex.Transaction` import
    */
   public static importsName(
     exportedName: string,
     from: string,
     typeImport: boolean,
-    sourceExportedName?: string,
+    sourceSymbol?: string,
+    childSymbol?: string
   ): Import {
-    return new ImportsName(exportedName, from, sourceExportedName, typeImport);
+    return new ImportsName(exportedName, from, sourceSymbol, typeImport, childSymbol);
   }
 
   /**
@@ -205,12 +211,14 @@ export class ImportsName extends Imported {
    * @param source
    * @param sourceSymbol is the optional original symbol, i.e. if we're renaming the symbol it is `Engine`
    * @param typeImport whether this is an `import type` import
+   * @param childSymbol the `Transaction` in a `Knex.Transaction`
    */
   constructor(
     symbol: string,
     source: string,
     public sourceSymbol?: string,
     public typeImport?: boolean,
+    public childSymbol?: string,
   ) {
     super(symbol, source);
   }
@@ -218,6 +226,10 @@ export class ImportsName extends Imported {
   public toImportPiece(): string {
     const maybeTypePrefix = this.typeImport ? "type " : "";
     return maybeTypePrefix + (this.sourceSymbol ? `${this.sourceSymbol} as ${this.symbol}` : this.symbol);
+  }
+
+  public toCodeString(): string {
+    return this.childSymbol ? `${this.symbol}.${this.childSymbol}` : this.symbol;
   }
 }
 

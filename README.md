@@ -101,6 +101,7 @@ Given the primary goal of ts-poet is managing imports, there are several ways of
 * `imp("Observable@rxjs")` --> `import { Observable } from "rxjs"` (named import)
 * `imp("Observable@./Api")` --> `import { Observable } from "./Api"`
 * `imp("Observable:Obs@rxjs")` --> `import { Observable as Obs } from "rxjs"` (renamed import)
+* `imp("Knex.Transaction@knex")` --> `import { Knex } from "knex"` (named import)
 * `imp("t:Observable@rxjs")` --> `import type { Observable } from "rxjs"` (type import)
 * `imp("t:Observable:Obs@rxjs")` --> `import type { Observable as Obs } from "rxjs"`
 * `imp("api*./Api")` --> `import * as api from "./Api"` (namespace import)
