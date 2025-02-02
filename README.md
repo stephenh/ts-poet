@@ -182,6 +182,48 @@ And your output will have the `convertTimestamps` declaration only if one of the
 
 This helps cut down on unnecessary output in the code, and compiler/IDE warnings like unused functions.
 
+## utils file
+
+Sometimes the generated utilities are repeated in different files, and it makes sense to put them in a separate file.
+
+To do this, you can specify that all helpers are imported from a separate module:
+
+```ts
+const convertTimestamps = conditionalOutput(
+  "convertTimestamps",
+  code`function convertTimestamps(value: any) { ...impl... }`,
+);
+
+const output = code`
+  const timestamp = ${convertTimestamps}(...)
+`;
+
+const stringResult = output.toString({
+  conditionalUtils: './utils.ts'
+})
+```
+As a result, the code will be generated as if the helper had been imported.
+
+Generating the content itself for the `utils.ts` file will look something like this:
+
+```ts
+import { generateConditionalsUtils, code } from 'ts-poet'
+
+// get a list of all the helpers used in the code
+const utils = output.collectConditionalOutputs()
+
+// Create code that includes all helpers and their dependencies
+const utilsCode = generateConditionalsUtils(utils)
+
+const utilsCodeWithExport = code`
+${utilsCode}
+
+export {
+  ${utils.map(({ usageSiteName }) => usageSiteName).join(', ')}
+}
+`
+```
+
 # Literals
 
 If you want to add a literal value, you can use `literalOf` and `arrayOf`:
