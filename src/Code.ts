@@ -27,6 +27,11 @@ export interface ToStringOpts {
   format?: boolean;
   /** optional importMappings */
   importMappings?: { [key: string]: string };
+  /** 
+  * The file path (relative or absolute) to the utilities module from which all `ConditionalOutput` imports will be sourced. 
+  * If specified, all `ConditionalOutput` instances will be replaced with imports from this file instead of their original locations. 
+  */
+  conditionalUtils?: string;
 }
 
 export class Code extends Node {
@@ -68,7 +73,21 @@ export class Code extends Node {
     return (this.code ??= this.generateCode(used));
   }
 
-  private deepFindAll(): [ConditionalOutput[], Import[], Def[]] {
+  /**
+  * Recursively collects all `ConditionalOutput` instances used within this `Code` block.
+  */
+  collectConditionalOutputs(): ConditionalOutput[] {
+    return this.placeholders
+      .map(placeholder => {
+      if (placeholder instanceof ConditionalOutput) return placeholder
+      if (placeholder instanceof Code) return placeholder.collectConditionalOutputs()
+      return null
+    })
+    .flat()
+    .filter((val: any): val is ConditionalOutput => !!val)
+  }
+
+  private deepFindAll(utilsUrl?: string): [ConditionalOutput[], Import[], Def[]] {
     const used: ConditionalOutput[] = [];
     const imports: Import[] = [];
     const defs: Def[] = [];
@@ -77,6 +96,11 @@ export class Code extends Node {
 
     while (i < todo.length) {
       const placeholder = todo[i++];
+
+      if (utilsUrl && placeholder instanceof ConditionalOutput) {
+        imports.push(Import.importsName(placeholder.usageSiteName, utilsUrl, placeholder.isType))
+        continue;
+      }
 
       if (placeholder instanceof Node) {
         todo.push(...placeholder.childNodes);
@@ -172,7 +196,7 @@ export class Code extends Node {
     if (forceDefaultImport || forceModuleImport) {
       this.deepReplaceNamedImports(forceDefaultImport || [], forceModuleImport || []);
     }
-    const [used, imports, defs] = this.deepFindAll();
+    const [used, imports, defs] = this.deepFindAll(opts.conditionalUtils);
     assignAliasesIfNeeded(defs, imports, ourModulePath);
     const importPart = emitImports(imports, ourModulePath, importMappings, forceRequireImport, importExtensions);
     const bodyPart = this.generateCode(used);

@@ -58,6 +58,21 @@ export function def(symbol: string): Def {
 }
 
 /** Creates a conditionally-output code snippet. */
-export function conditionalOutput(usageSite: string, declarationSite: Code): ConditionalOutput {
-  return new ConditionalOutput(usageSite, declarationSite);
+export function conditionalOutput(usageSite: string, declarationSite: Code, isType?: boolean): ConditionalOutput {
+  return new ConditionalOutput(usageSite, declarationSite, isType);
+}
+
+/** Generates a `Code` block containing the provided `ConditionalOutput` declarations along with all their dependencies. */
+export function generateConditionalsUtils(used: ConditionalOutput[]): Code {
+  const mainChunk = joinCode([
+    ...used.map(({declarationSiteCode }) => declarationSiteCode)
+  ], {on: '\n', trim: false})
+
+  const uniqueOutputs = [...new Set(mainChunk.collectConditionalOutputs())]
+    .filter(output => !used.includes(output))
+
+  return joinCode([
+    ...uniqueOutputs.map(output => code`${output.ifUsed}`),
+    mainChunk,
+  ], {on: '\n'})
 }
