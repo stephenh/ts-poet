@@ -27,10 +27,10 @@ export interface ToStringOpts {
   format?: boolean;
   /** optional importMappings */
   importMappings?: { [key: string]: string };
-  /** 
-  * The file path (relative or absolute) to the utilities module from which all `ConditionalOutput` imports will be sourced. 
-  * If specified, all `ConditionalOutput` instances will be replaced with imports from this file instead of their original locations. 
-  */
+  /**
+   * The file path (relative or absolute) to the utilities module from which all `ConditionalOutput` imports will be sourced.
+   * If specified, all `ConditionalOutput` instances will be replaced with imports from this file instead of their original locations.
+   */
   conditionalUtils?: string;
 }
 
@@ -74,17 +74,17 @@ export class Code extends Node {
   }
 
   /**
-  * Recursively collects all `ConditionalOutput` instances used within this `Code` block.
-  */
+   * Recursively collects all `ConditionalOutput` instances used within this `Code` block.
+   */
   collectConditionalOutputs(): ConditionalOutput[] {
     return this.placeholders
-      .map(placeholder => {
-      if (placeholder instanceof ConditionalOutput) return placeholder
-      if (placeholder instanceof Code) return placeholder.collectConditionalOutputs()
-      return null
-    })
-    .flat()
-    .filter((val: any): val is ConditionalOutput => !!val)
+      .map((placeholder) => {
+        if (placeholder instanceof ConditionalOutput) return placeholder;
+        if (placeholder instanceof Code) return placeholder.collectConditionalOutputs();
+        return null;
+      })
+      .flat()
+      .filter((val: any): val is ConditionalOutput => !!val);
   }
 
   private deepFindAll(utilsUrl?: string): [ConditionalOutput[], Import[], Def[]] {
@@ -98,7 +98,7 @@ export class Code extends Node {
       const placeholder = todo[i++];
 
       if (utilsUrl && placeholder instanceof ConditionalOutput) {
-        imports.push(Import.importsName(placeholder.usageSiteName, utilsUrl, placeholder.isType))
+        imports.push(Import.importsName(placeholder.usageSiteName, utilsUrl, placeholder.isType));
         continue;
       }
 

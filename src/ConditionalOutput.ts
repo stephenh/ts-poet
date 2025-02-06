@@ -13,7 +13,7 @@ import { Code } from "./Code";
  * to output the declaration conditionally only if `someHelper` has been
  * seen in the tree.
  *
- * Additionally, if the `conditionalUtils` option is provided when calling 
+ * Additionally, if the `conditionalUtils` option is provided when calling
  * `toString()`, all `ConditionalOutput` instances will be imported from the specified file.
  *
  * The `isType` flag (optional) determines whether the helper should be imported as a TypeScript type when using `conditionalUtils`.
@@ -43,7 +43,7 @@ export class ConditionalOutput extends Node {
   constructor(
     public usageSiteName: string,
     public declarationSiteCode: Code,
-    public isType: boolean = false
+    public isType: boolean = false,
   ) {
     super();
   }
