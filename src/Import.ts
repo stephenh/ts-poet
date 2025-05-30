@@ -133,7 +133,7 @@ export abstract class Import extends Node {
     from: string,
     typeImport: boolean,
     sourceSymbol?: string,
-    childSymbol?: string
+    childSymbol?: string,
   ): Import {
     return new ImportsName(exportedName, from, sourceSymbol, typeImport, childSymbol);
   }
@@ -223,8 +223,8 @@ export class ImportsName extends Imported {
     super(symbol, source);
   }
 
-  public toImportPiece(): string {
-    const maybeTypePrefix = this.typeImport ? "type " : "";
+  public toImportPiece(skipTypeImport = false): string {
+    const maybeTypePrefix = this.typeImport && !skipTypeImport ? "type " : "";
     return maybeTypePrefix + (this.sourceSymbol ? `${this.sourceSymbol} as ${this.symbol}` : this.symbol);
   }
 
@@ -312,7 +312,12 @@ export function emitImports(
     const typeImports = filterInstancesAnd(imports, ImportsName, (it) => {
       return !!it.typeImport && !symbolImports.some((s) => s.symbol === it.symbol);
     });
-    const namedImports = unique([...typeImports, ...symbolImports].map((it) => it.toImportPiece()));
+    // Use `import type { ... }` for module declaration files, see
+    // https://github.com/stephenh/ts-proto/issues/1184#issuecomment-2910635357
+    const useSingleTypeImport = typeImports.length > 0 && symbolImports.length === 0;
+    const namedImports = useSingleTypeImport
+      ? unique(typeImports.map((it) => it.toImportPiece(true)))
+      : unique([...typeImports, ...symbolImports].map((it) => it.toImportPiece()));
     const defaultImports = unique(filterInstances(imports, ImportsDefault).map((it) => it.symbol));
     if (forceRequireImports.includes(modulePath) && defaultImports.length > 0) {
       result += `import ${defaultImports[0]} = require('${importPath}');\n`;
@@ -320,7 +325,9 @@ export function emitImports(
       // Output named imports as a group
       const namesPart = namedImports.length > 0 ? [`{ ${namedImports.join(", ")} }`] : [];
       const defPart = defaultImports.length > 0 ? [defaultImports[0]] : [];
-      result += `import ${[...defPart, ...namesPart].join(", ")} from '${importPath}';\n`;
+      result += `import ${useSingleTypeImport ? "type " : ""} ${[...defPart, ...namesPart].join(
+        ", ",
+      )} from '${importPath}';\n`;
     }
   });
 
