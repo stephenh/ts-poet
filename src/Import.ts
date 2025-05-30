@@ -325,7 +325,7 @@ export function emitImports(
       // Output named imports as a group
       const namesPart = namedImports.length > 0 ? [`{ ${namedImports.join(", ")} }`] : [];
       const defPart = defaultImports.length > 0 ? [defaultImports[0]] : [];
-      result += `import ${useSingleTypeImport ? "type " : ""} ${[...defPart, ...namesPart].join(
+      result += `import${useSingleTypeImport ? " type" : ""} ${[...defPart, ...namesPart].join(
         ", ",
       )} from '${importPath}';\n`;
     }
