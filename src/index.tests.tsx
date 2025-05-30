@@ -97,6 +97,21 @@ describe("code", () => {
     `);
   });
 
+  it("can add single type prefix for type imports from d.ts files", () => {
+    const a = imp("t:Foo@foo.d.ts");
+    const b = imp("t:Bar@foo.d.ts");
+    const c = code`
+      class Zaz implements ${a}, ${b} {}
+    `;
+    expect(c.toString()).toMatchInlineSnapshot(`
+      "import type { Bar, Foo } from "foo.d.ts";
+
+      class Zaz implements Foo, Bar {}
+      "
+    `);
+  });
+
+
   it("can add a prefix before the imports", () => {
     const b = code`
       class Foo extends ${imp("Bar@bar")} {}

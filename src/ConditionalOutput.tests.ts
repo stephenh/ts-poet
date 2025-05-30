@@ -17,7 +17,7 @@ describe("conditional outputs in the utilities file", () => {
     const codeChunk = code`declare const id: ${util}`;
 
     expect(codeChunk.toString({ conditionalUtils: "./utils.ts" })).toBe(
-      'import { type SomeId } from "./utils.ts";\n\ndeclare const id: SomeId;\n',
+      'import type { SomeId } from "./utils.ts";\n\ndeclare const id: SomeId;\n',
     );
   });
 
