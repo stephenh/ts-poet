@@ -904,15 +904,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mock-fs@npm:^4.13.1":
-  version: 4.13.1
-  resolution: "@types/mock-fs@npm:4.13.1"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10/d81f3315473ffb3a82e384a43d0d4abede80f7e6da012a62bcae623aa53699f328385644f7e008ff0571af9fa09321df533effe42917e37667debf18d528c69b
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:*, @types/node@npm:^20.19.5":
   version: 20.19.19
   resolution: "@types/node@npm:20.19.19"
@@ -2898,10 +2889,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mock-fs@npm:^5.2.0":
-  version: 5.2.0
-  resolution: "mock-fs@npm:5.2.0"
-  checksum: 10/4d00b0fb285de8406a47899f63ebbd64ad3def34daa05c54f0e046b2789a91fdd95d2de0fe732370d939ab8279f863a4c033bd798e4e8be1dac620171ce1c7dd
+"mock-fs@npm:^5.5.0":
+  version: 5.5.0
+  resolution: "mock-fs@npm:5.5.0"
+  checksum: 10/f40f0ea4b0b0f79f2218a2ea64b55b756989a262ebe4aac7b4fb6d8757866c35f59a2740adb114a91854ab7a091378702facd5ba750f051cbc795622c685e415
   languageName: node
   linkType: hard
 
@@ -3617,11 +3608,10 @@ __metadata:
   resolution: "ts-poet@workspace:."
   dependencies:
     "@types/jest": "npm:^30.0.0"
-    "@types/mock-fs": "npm:^4.13.1"
     "@types/node": "npm:^20.19.5"
     dprint-node: "npm:^1.0.8"
     jest: "npm:^30.2.0"
-    mock-fs: "npm:^5.2.0"
+    mock-fs: "npm:^5.5.0"
     prettier: "npm:^3.1.1"
     ts-jest: "npm:^29.4.4"
     typescript: "npm:^5.3.3"
