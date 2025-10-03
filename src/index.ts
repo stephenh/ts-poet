@@ -64,15 +64,12 @@ export function conditionalOutput(usageSite: string, declarationSite: Code, isTy
 
 /** Generates a `Code` block containing the provided `ConditionalOutput` declarations along with all their dependencies. */
 export function generateConditionalsUtils(used: ConditionalOutput[]): Code {
-  const mainChunk = joinCode([
-    ...used.map(({declarationSiteCode }) => declarationSiteCode)
-  ], {on: '\n', trim: false})
+  const mainChunk = joinCode([...used.map(({ declarationSiteCode }) => declarationSiteCode)], {
+    on: "\n",
+    trim: false,
+  });
 
-  const uniqueOutputs = [...new Set(mainChunk.collectConditionalOutputs())]
-    .filter(output => !used.includes(output))
+  const uniqueOutputs = [...new Set(mainChunk.collectConditionalOutputs())].filter((output) => !used.includes(output));
 
-  return joinCode([
-    ...uniqueOutputs.map(output => code`${output.ifUsed}`),
-    mainChunk,
-  ], {on: '\n'})
+  return joinCode([...uniqueOutputs.map((output) => code`${output.ifUsed}`), mainChunk], { on: "\n" });
 }
