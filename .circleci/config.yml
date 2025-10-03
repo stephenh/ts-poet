@@ -15,13 +15,6 @@ jobs:
       - image: cimg/node:24.9.0
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-      - run: yarn install
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+      - node/install-packages:
+          package-manager: yarn
       - run: yarn test
