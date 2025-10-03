@@ -12,7 +12,6 @@ coverage
 .circleci
 .idea
 *.log
-.eslintrc.js
 jest.config.js
 .nvmrc
 bench.js
