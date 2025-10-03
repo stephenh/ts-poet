@@ -16,5 +16,5 @@ jobs:
     steps:
       - checkout
       - node/install-packages:
-          package-manager: yarn
+          pkg-manager: yarn
       - run: yarn test
