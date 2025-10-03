@@ -872,12 +872,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.10.6":
-  version: 20.10.6
-  resolution: "@types/node@npm:20.10.6"
+"@types/node@npm:^20.19.5":
+  version: 20.19.19
+  resolution: "@types/node@npm:20.19.19"
   dependencies:
-    undici-types: "npm:~5.26.4"
-  checksum: 10/08471220d3cbbb6669835c4b78541edf5eface8f2c2e36c550cfa4ff73da73071c90e200a06359fac25d6564127597c23e178128058fb676824ec23d5178a017
+    undici-types: "npm:~6.21.0"
+  checksum: 10/0230dadfe83f1aa6a5e4aad5e00a6ee3501bd539f19024b40ac198afcb4e21e3ab8b8f47c4765e5c537a1da1e53dcb41cd5549aa48efc686c9542cc9841663bb
   languageName: node
   linkType: hard
 
@@ -3656,7 +3656,7 @@ __metadata:
   dependencies:
     "@types/jest": "npm:^29.5.11"
     "@types/mock-fs": "npm:^4.13.1"
-    "@types/node": "npm:^20.10.6"
+    "@types/node": "npm:^20.19.5"
     dprint-node: "npm:^1.0.8"
     jest: "npm:^29.7.0"
     mock-fs: "npm:^5.2.0"
