@@ -1,9 +1,18 @@
-version: 2
+version: 2.1
+
+orbs:
+  node: circleci/node@7
+
+workflows:
+  version: 2.1
+  build:
+    jobs:
+      - build
+
 jobs:
   build:
     docker:
-      - image: cimg/node:20.5.0
-    working_directory: ~/repo
+      - image: cimg/node:24.9.0
     steps:
       - checkout
       - restore_cache:
