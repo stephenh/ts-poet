@@ -1,9 +1,8 @@
+const { createDefaultPreset } = require('ts-jest');
+
 module.exports = {
+  ...createDefaultPreset(),
   clearMocks: true,
-  moduleFileExtensions: ["ts", "tsx", "js"],
   testEnvironment: "node",
   testMatch: ["<rootDir>/src/**/*.tests.+(ts|tsx|js)"],
-  transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest",
-  },
 };
