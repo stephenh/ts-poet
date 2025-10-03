@@ -111,7 +111,6 @@ describe("code", () => {
     `);
   });
 
-
   it("can add a prefix before the imports", () => {
     const b = code`
       class Foo extends ${imp("Bar@bar")} {}
