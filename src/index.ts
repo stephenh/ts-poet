@@ -5,6 +5,7 @@ import { ConditionalOutput } from "./ConditionalOutput";
 import { isPlainObject } from "./is-plain-object";
 import { Literal } from "./Literal";
 export { Code } from "./Code";
+export type { FormatOptions, ToStringOpts } from "./Code";
 export { Import } from "./Import";
 export { saveFiles, SaveFilesOpts, CodegenFile } from "./saveFiles";
 
