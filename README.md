@@ -26,9 +26,9 @@ It lets you generate code as "just strings" (no need to tediously create a low-l
 
 3. Includes any other conditional output (see later), as/if needed.
 
-4. Formats the output with [dprint-node](https://github.com/devongovett/dprint-node), an extremely fast formatter with "basically prettier-ish" output.
+4. Formats the output with [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html), an extremely fast Prettier-compatible formatter.
 
-   ts-poet originally used prettier directly, but it became the bottleneck for multiple projects that use ts-poet for their code generation, even with caching to only format actually-changed output, so we switched to dprint and saw dramatic speedups.
+   ts-poet originally used prettier directly, but it became the bottleneck for multiple projects that use ts-poet for their code generation. We switched first to dprint-node, and now to oxfmt for even better performance and Prettier compatibility.
 
 Example
 =======
@@ -83,15 +83,19 @@ const output = greeter.toString();
 Formatting Output
 =================
 
-By default, we configure `dprint-node` with "prettier-ish" settings that attempt to match prettier, given that we assume most projects are using prettier for their formatting.
+By default, we configure [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) with Prettier-compatible settings.
 
-If you'd like to customize the settings, you can either:
+Note: since oxfmt's API is async, formatting is available via `Code.toStringAsync()` which returns a `Promise<string>`. The synchronous `Code.toString()` returns the unformatted output with imports.
 
-* If using `ts-poet` programmatically, you can pass the `dprintOptions` key to `Code.toString({ ... })`, or
+If you'd like to customize the settings, you can pass the `formatOptions` key to `Code.toStringAsync({ ... })`:
 
-* If using `ts-poet` via another library (like [Joist](https://joist-orm.io/)), you can create a `.dprint.json` file that should get picked up automatically (see the [dprint docs](https://dprint.dev/setup/#hidden-config-file))
+```typescript
+const output = await greeter.toStringAsync({
+  formatOptions: { printWidth: 100, semi: false },
+});
+```
 
-For either option, the [dprint config](https://dprint.dev/plugins/typescript/config/) covers the available formatting options.
+For the full list of available options, see the [oxfmt config reference](https://oxc.rs/docs/guide/usage/formatter/config-file-reference.html).
 
 Import Specs
 ============

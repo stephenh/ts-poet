@@ -2,13 +2,14 @@
   "name": "ts-poet",
   "version": "6.12.0",
   "description": "code generation DSL for TypeScript",
+  "type": "module",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
     "prepare": "yarn build && yarn test",
-    "test": "yarn jest",
+    "test": "NODE_OPTIONS='--experimental-vm-modules' yarn jest",
     "build": "yarn tsc",
-    "format": "prettier --write './src/**/(*.ts|*.tsx|*.html|*.css)'"
+    "format": "oxfmt --write './src/**/(*.ts|*.tsx|*.html|*.css)'"
   },
   "repository": {
     "type": "git",
@@ -23,12 +24,11 @@
     "@types/node": "^20.19.19",
     "jest": "^30.2.0",
     "mock-fs": "^5.5.0",
-    "prettier": "^3.6.2",
     "ts-jest": "^29.4.4",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "dprint-node": "^1.0.8"
+    "oxfmt": "^0.40.0"
   },
   "packageManager": "yarn@4.10.3"
 }

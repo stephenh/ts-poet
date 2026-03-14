@@ -3,9 +3,23 @@ import { emitImports, ImportsName, sameModule, Import, ImportsDefault, ImportsAl
 import { isPlainObject } from "./is-plain-object";
 import { ConditionalOutput, MaybeOutput } from "./ConditionalOutput";
 import { code } from "./index";
-import dprint from "dprint-node";
-
-export type DPrintOptions = Exclude<Parameters<typeof dprint.format>[2], never>;
+/** Format options passed to oxfmt. */
+export interface FormatOptions {
+  printWidth?: number;
+  tabWidth?: number;
+  useTabs?: boolean;
+  semi?: boolean;
+  singleQuote?: boolean;
+  quoteProps?: "as-needed" | "consistent" | "preserve";
+  jsxSingleQuote?: boolean;
+  trailingComma?: "all" | "es5" | "none";
+  bracketSpacing?: boolean;
+  bracketSameLine?: boolean;
+  arrowParens?: "always" | "avoid";
+  endOfLine?: "lf" | "crlf" | "cr";
+  singleAttributePerLine?: boolean;
+  [key: string]: unknown;
+}
 
 /** Options for `toString`, i.e. for the top-level, per-file output. */
 export interface ToStringOpts {
@@ -21,8 +35,8 @@ export interface ToStringOpts {
   importExtensions?: boolean | "ts" | "js";
   /** A top-of-file prefix, i.e. eslint disable. */
   prefix?: string;
-  /** dprint config settings. */
-  dprintOptions?: DPrintOptions;
+  /** oxfmt format options. */
+  formatOptions?: FormatOptions;
   /** Whether to format the source or not. */
   format?: boolean;
   /** optional importMappings */
@@ -49,10 +63,17 @@ export class Code extends Node {
     super();
   }
 
-  /** Returns the formatted code, with imports. */
+  /** Returns the unformatted code, with imports. */
   toString(opts: ToStringOpts = {}): string {
     this.codeWithImports ??= this.generateCodeWithImports(opts);
-    return opts.format === false ? this.codeWithImports : maybePretty(this.codeWithImports, opts.dprintOptions);
+    return this.codeWithImports;
+  }
+
+  /** Returns the formatted code, with imports. */
+  async toStringAsync(opts: ToStringOpts = {}): Promise<string> {
+    this.codeWithImports ??= this.generateCodeWithImports(opts);
+    if (opts.format === false) return this.codeWithImports;
+    return maybePretty(this.codeWithImports, opts.formatOptions);
   }
 
   asOneline(): Code {
@@ -272,23 +293,16 @@ function assignAliasesIfNeeded(defs: Def[], imports: Import[], ourModulePath: st
   });
 }
 
-// This default options are both "prettier-ish" plus also suite the ts-poet pre-formatted
-// output which is all bunched together, so we want to force braces / force new lines.
-const baseOptions: DPrintOptions = {
-  useTabs: false,
-  useBraces: "always",
-  singleBodyPosition: "nextLine",
-  "arrowFunction.useParentheses": "force",
-  // dprint-node uses `node: true`, which we want to undo
-  "module.sortImportDeclarations": "caseSensitive",
-  lineWidth: 120,
-  // For some reason dprint seems to wrap lines "before it should" w/o this set (?)
-  preferSingleLine: true,
+const baseOptions: FormatOptions = {
+  printWidth: 120,
+  arrowParens: "always",
 };
 
-function maybePretty(input: string, options?: DPrintOptions): string {
+async function maybePretty(input: string, options?: FormatOptions): Promise<string> {
   try {
-    return dprint.format("file.ts", input.trim(), { ...baseOptions, ...options });
+    const { format } = await import("oxfmt");
+    const { code } = await format("file.ts", input.trim(), { ...baseOptions, ...options });
+    return code;
   } catch (e) {
     return input; // assume it's invalid syntax and ignore
   }
