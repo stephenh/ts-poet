@@ -1,7 +1,7 @@
-const { createDefaultPreset } = require('ts-jest');
+const { createDefaultEsmPreset } = require('ts-jest');
 
 module.exports = {
-  ...createDefaultPreset(),
+  ...createDefaultEsmPreset(),
   clearMocks: true,
   testEnvironment: "node",
   testMatch: ["<rootDir>/src/**/*.tests.+(ts|tsx|js)"],

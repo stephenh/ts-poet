@@ -298,14 +298,9 @@ const baseOptions: FormatOptions = {
   arrowParens: "always",
 };
 
-// Use Function to prevent bundlers/transformers from converting import() to require()
-const dynamicImport = new Function("modulePath", "return import(modulePath)") as (
-  modulePath: string,
-) => Promise<typeof import("oxfmt")>;
-
 async function maybePretty(input: string, options?: FormatOptions): Promise<string> {
   try {
-    const { format } = await dynamicImport("oxfmt");
+    const { format } = await import("oxfmt");
     const { code } = await format("file.ts", input.trim(), { ...baseOptions, ...options });
     return code;
   } catch (e) {
