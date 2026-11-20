@@ -16,3 +16,4 @@ jest.config.js
 .nvmrc
 bench.js
 .yarn
+/.jj/
