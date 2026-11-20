@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@7
+  node: circleci/node@7.2.1
 
 workflows:
   version: 2.1
@@ -12,9 +12,11 @@ workflows:
 jobs:
   build:
     docker:
-      - image: cimg/node:20.19.5
+      - image: cimg/node:26.13.1
     steps:
       - checkout
       - node/install-packages:
           pkg-manager: yarn
+          override-ci-command: yarn install --immutable
+      - run: yarn build
       - run: yarn test
