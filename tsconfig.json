@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
     "target": "ES2018",
-    "module": "commonjs",
+    "module": "node16",
     "declaration": true,
     "strict": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
+    "isolatedModules": true,
+    "rootDir": "src",
     "outDir": "build",
-    "baseUrl": ".",
+    "types": ["jest", "node"],
     "skipLibCheck": true
   },
   "include": ["src"]
