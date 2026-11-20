@@ -351,6 +351,7 @@ function unique<T>(list: T[]): T[] {
   return [...new Set(list)];
 }
 
+/** Resolves project-relative module paths from the output file's directory. */
 export function maybeRelativePath(outputPath: string, importPath: string): string {
   if (!importPath.startsWith("./")) {
     return importPath;
@@ -358,13 +359,12 @@ export function maybeRelativePath(outputPath: string, importPath: string): strin
   importPath = path.normalize(importPath);
   outputPath = path.normalize(outputPath);
   const outputPathDir = path.dirname(outputPath);
-  if (outputPathDir === importPath) {
-    // importing a file that is named the same thing as the directory the file doing the importing is in.
-    // e.g. importing `./foo` from `./foo/index.ts`
-    // the import statement should read `../foo` not `./`
-    return ".." + path.sep + path.basename(importPath);
-  }
-  let relativePath = path.relative(outputPathDir, importPath).split(path.sep).join(path.posix.sep);
+  // Resolve the parent directory separately so a module named like an ancestor keeps its filename.
+  // E.g. importing `./foo` from `./foo/bar/index.ts` should read `../../foo`, not `..`.
+  let relativePath = path
+    .join(path.relative(outputPathDir, path.dirname(importPath)), path.basename(importPath))
+    .split(path.sep)
+    .join(path.posix.sep);
   if (!relativePath.startsWith(".")) {
     // ensure the js compiler recognizes this is a relative path.
     relativePath = "./" + relativePath;

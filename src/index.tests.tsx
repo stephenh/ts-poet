@@ -751,4 +751,13 @@ describe("code", () => {
   //   `;
   //   expect(a.toCodeString([])).toEqual("delicious taco");
   // });
+
+  it("imports an extensionless module whose name matches an ancestor directory", () => {
+    // Given a reference to foo.ts next to the foo directory
+    const snippet = code`export const value = ${imp("Foo@./foo")};`;
+    // When generating a file nested inside the foo directory
+    const result = snippet.toString({ path: "./foo/bar/consumer.ts" });
+    // Then the generated import points to foo.ts rather than the foo directory
+    expect(result).toEqual('import { Foo } from "../../foo";\n\nexport const value = Foo;\n');
+  });
 });
