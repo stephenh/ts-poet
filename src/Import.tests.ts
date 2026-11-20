@@ -201,6 +201,24 @@ describe("Import", () => {
     );
   });
 
+  it("preserves a module name that matches a higher ancestor directory", () => {
+    // Given a module named foo alongside the foo directory
+    const importPath = "./foo";
+    // When importing from two directories below the module
+    const result = maybeRelativePath("./foo/bar/consumer.ts", importPath);
+    // Then the import names the module rather than the ancestor directory
+    expect(result).toEqual("../../foo");
+  });
+
+  it("preserves a module name that matches a more distant ancestor directory", () => {
+    // Given a module named foo alongside the foo directory
+    const importPath = "./foo";
+    // When importing from three directories below the module
+    const result = maybeRelativePath("./foo/bar/baz/consumer.ts", importPath);
+    // Then the import names the module rather than the ancestor directory
+    expect(result).toEqual("../../../foo");
+  });
+
   function emit(
     spec: Import,
     importMappings = {},
